@@ -2,38 +2,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
 
 :root {
-  --bg-primary: #0E1320;
-  --bg-secondary: #141B2D;
-  --bg-card: #1B2438;
-  --bg-hover: #1F2A40;
+  --bg-primary: #070B14;
+  --bg-secondary: #0D1425;
+  --bg-card: #111827;
   --accent: #5B8DEF;
-  --accent-hover: #4A7DE0;
-  --accent-muted: rgba(91,141,239,0.15);
-  --accent-glow: rgba(91,141,239,0.3);
   --teal: #22D4A8;
-  --teal-muted: rgba(34,212,168,0.15);
   --gold: #F0B429;
-  --gold-muted: rgba(240,180,41,0.15);
   --purple: #8B5CF6;
-  --purple-muted: rgba(139,92,246,0.15);
   --red: #F05A5A;
-  --red-muted: rgba(240,90,90,0.12);
-  --text-primary: #E8EEFF;
+  --text-primary: #F0F4FF;
   --text-secondary: #7A90B0;
   --text-muted: #3D5070;
   --border: rgba(255,255,255,0.07);
   --border-active: rgba(91,141,239,0.5);
   --font-display: 'Syne', sans-serif;
   --font-body: 'DM Sans', sans-serif;
-  --shadow: 0 4px 24px rgba(0,0,0,0.4);
-  --gradient-accent: linear-gradient(135deg, #5B8DEF 0%, #22D4A8 100%);
+  --grad-main: linear-gradient(135deg, #5B8DEF 0%, #22D4A8 100%);
+  --grad-purple: linear-gradient(135deg, #8B5CF6 0%, #5B8DEF 100%);
+  --grad-gold: linear-gradient(135deg, #F0B429 0%, #F97316 100%);
+  --grad-bg: linear-gradient(145deg, #111827 0%, #0D1425 100%);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
-  background: var(--bg-primary) !important;
-  color: var(--text-primary) !important;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.6;
@@ -41,27 +35,23 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1,h2,h3,h4,h5 { font-family: var(--font-display); color: var(--text-primary); }
-p, span, div, td, th, li { color: inherit; }
+h1,h2,h3 { font-family: var(--font-display); color: var(--text-primary); }
 a { color: inherit; text-decoration: none; }
 button { cursor: pointer; font-family: var(--font-body); }
-input, textarea, select { font-family: var(--font-body); background: var(--bg-card) !important; color: var(--text-primary) !important; border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; outline: none; width: 100%; }
+input, textarea, select {
+  font-family: var(--font-body);
+  background: rgba(255,255,255,0.04) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+}
 input::placeholder, textarea::placeholder { color: var(--text-muted); }
-input:focus, textarea:focus { border-color: var(--accent); }
+input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+select option { background: #111827; color: #F0F4FF; }
 
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
-
-.card { background: var(--bg-card) !important; border: 1px solid var(--border); border-radius: 16px; color: var(--text-primary) !important; }
-.card:hover { border-color: var(--border-active); transform: translateY(-1px); box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 40px rgba(91,141,239,0.08); transition: all .2s; }
-
-.btn-primary { background: var(--gradient-accent); border: none; border-radius: 10px; padding: 10px 20px; color: #fff; font-weight: 700; font-size: 14px; font-family: var(--font-display); box-shadow: 0 4px 16px rgba(91,141,239,0.35); transition: all .2s; }
-.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(91,141,239,0.5); }
-
-.badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
-.badge-teal { background: var(--teal-muted); color: var(--teal); }
-.badge-accent { background: var(--accent-muted); color: var(--accent); }
-.badge-gold { background: var(--gold-muted); color: var(--gold); }
-.badge-red { background: var(--red-muted); color: var(--red); }
-.badge-muted { background: rgba(255,255,255,0.05); color: var(--text-muted); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
