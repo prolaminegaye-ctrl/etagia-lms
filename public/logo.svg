@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 100" width="320" height="100">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 90" width="300" height="90">
   <defs>
     <linearGradient id="eGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#7C3AED"/>
@@ -12,47 +12,45 @@
       <stop offset="0%" style="stop-color:#EC4899"/>
       <stop offset="100%" style="stop-color:#F97316"/>
     </linearGradient>
-    <linearGradient id="sGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#EC4899"/>
-      <stop offset="100%" style="stop-color:#F97316"/>
-    </linearGradient>
   </defs>
 
-  <!-- Stylized E - 3 horizontal bars with rounded ends -->
-  <rect x="8" y="14" width="36" height="9" rx="4.5" fill="url(#eGrad)"/>
-  <rect x="8" y="30" width="28" height="8" rx="4" fill="url(#eGrad)" opacity="0.85"/>
-  <rect x="8" y="46" width="36" height="9" rx="4.5" fill="url(#eGrad)"/>
+  <!-- Stylized E -->
+  <rect x="6" y="12" width="34" height="9" rx="4.5" fill="url(#eGrad)"/>
+  <rect x="6" y="27" width="26" height="8" rx="4" fill="url(#eGrad)" opacity="0.85"/>
+  <rect x="6" y="42" width="34" height="9" rx="4.5" fill="url(#eGrad)"/>
 
-  <!-- "tagia" text in dark navy -->
-  <text x="56" y="57" 
-    font-family="Georgia, 'Times New Roman', serif" 
-    font-size="46" 
+  <!-- "tagia" in WHITE -->
+  <text x="50" y="52"
+    font-family="Georgia, serif"
+    font-size="44"
     font-weight="700"
-    fill="#0F1B3D"
+    fill="#FFFFFF"
     letter-spacing="-1">tagia</text>
 
-  <!-- Small leaf/accent on the 'i' dot -->
-  <ellipse cx="191" cy="12" rx="5" ry="7" fill="url(#sGrad)" transform="rotate(-20, 191, 12)"/>
+  <!-- Leaf accent on i -->
+  <ellipse cx="182" cy="11" rx="4" ry="6" fill="#EC4899" transform="rotate(-20 182 11)"/>
 
-  <!-- LMS subtitle with lines -->
-  <line x1="62" y1="74" x2="88" y2="74" stroke="url(#lmsLeft)" stroke-width="2" stroke-linecap="round"/>
-  <text x="92" y="80" 
-    font-family="Arial, sans-serif" 
-    font-size="16" 
+  <!-- LMS line left -->
+  <line x1="56" y1="68" x2="80" y2="68" stroke="url(#lmsLeft)" stroke-width="2" stroke-linecap="round"/>
+  <!-- LMS text -->
+  <text x="84" y="74"
+    font-family="Arial, sans-serif"
+    font-size="15"
     font-weight="700"
-    fill="url(#lmsLeft)"
-    letter-spacing="5">L</text>
-  <text x="107" y="80" 
-    font-family="Arial, sans-serif" 
-    font-size="16" 
+    fill="#3B82F6"
+    letter-spacing="6">L</text>
+  <text x="100" y="74"
+    font-family="Arial, sans-serif"
+    font-size="15"
     font-weight="700"
     fill="#EC4899"
-    letter-spacing="5">M</text>
-  <text x="124" y="80" 
-    font-family="Arial, sans-serif" 
-    font-size="16" 
+    letter-spacing="6">M</text>
+  <text x="117" y="74"
+    font-family="Arial, sans-serif"
+    font-size="15"
     font-weight="700"
-    fill="url(#lmsRight)"
-    letter-spacing="5">S</text>
-  <line x1="143" y1="74" x2="172" y2="74" stroke="url(#lmsRight)" stroke-width="2" stroke-linecap="round"/>
+    fill="#F97316"
+    letter-spacing="6">S</text>
+  <!-- LMS line right -->
+  <line x1="134" y1="68" x2="160" y2="68" stroke="url(#lmsRight)" stroke-width="2" stroke-linecap="round"/>
 </svg>
