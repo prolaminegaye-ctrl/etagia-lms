@@ -1,0 +1,12 @@
+'use client'
+export default function Page() {
+  return (
+    <div>
+      <h1 style={{fontSize:'26px',fontWeight:'700',marginBottom:'2rem',fontFamily:'var(--font-display)'}}>users</h1>
+      <div style={{background:'#fff',border:'1px solid var(--border)',borderRadius:'16px',padding:'3rem',textAlign:'center',boxShadow:'var(--shadow)'}}>
+        <div style={{fontSize:'48px',marginBottom:'1rem'}}>🚧</div>
+        <p style={{color:'var(--text-secondary)'}}>Module en cours de développement</p>
+      </div>
+    </div>
+  )
+}

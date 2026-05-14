@@ -1,53 +1,44 @@
-import Anthropic from '@anthropic-ai/sdk'
 import { NextRequest, NextResponse } from 'next/server'
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
-    const raw = Array.isArray(body?.messages) ? body.messages : []
-
-    const messages = raw
-      .filter((m: any) => m && typeof m.content === 'string' && m.content.trim().length > 0)
-      .map((m: any) => ({
-        role: m.role === 'assistant' ? 'assistant' as const : 'user' as const,
-        content: m.content.trim()
-      }))
-
-    if (messages.length === 0) {
-      return NextResponse.json({ error: 'Aucun message valide' }, { status: 400 })
+    const apiKey = process.env.ANTHROPIC_API_KEY
+    if (!apiKey) {
+      return NextResponse.json({ error: 'Clé API Anthropic manquante. Ajoutez ANTHROPIC_API_KEY dans les variables Vercel.' }, { status: 500 })
     }
 
-    const stream = await client.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 800,
-      system: "Tu es l'AI Tutor d'ETAGIA, plateforme EdTech pour l'Afrique francophone. Réponds toujours en français, de façon claire, pédagogique et encourageante. Maximum 300 mots par réponse.",
-      messages,
-      stream: true,
+    const body = await req.json()
+    const raw = Array.isArray(body?.messages) ? body.messages : []
+    const messages = raw
+      .filter((m: any) => m?.content && String(m.content).trim().length > 0)
+      .map((m: any) => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: String(m.content).trim() }))
+
+    if (messages.length === 0) {
+      return NextResponse.json({ error: 'Message vide' }, { status: 400 })
+    }
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 800,
+        stream: true,
+        system: "Tu es l'AI Tutor d'ETAGIA, plateforme EdTech pour l'Afrique francophone. Réponds en français, de façon claire, pédagogique et encourageante. Maximum 300 mots.",
+        messages,
+      })
     })
 
-    const encoder = new TextEncoder()
-    const readable = new ReadableStream({
-      async start(controller) {
-        try {
-          for await (const event of stream) {
-            if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
-              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ delta: { text: event.delta.text } })}\n\n`))
-            }
-            if (event.type === 'message_stop') {
-              controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-              controller.close()
-            }
-          }
-        } catch (streamErr: any) {
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: streamErr.message })}\n\n`))
-          controller.close()
-        }
-      }
-    })
+    if (!response.ok) {
+      const err = await response.text()
+      return NextResponse.json({ error: err }, { status: response.status })
+    }
 
-    return new Response(readable, {
+    return new Response(response.body, {
       headers: {
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
@@ -55,7 +46,6 @@ export async function POST(req: NextRequest) {
       }
     })
   } catch (err: any) {
-    console.error('[AI Tutor Error]', err?.message)
-    return NextResponse.json({ error: err?.message ?? 'Erreur serveur' }, { status: 500 })
+    return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }
