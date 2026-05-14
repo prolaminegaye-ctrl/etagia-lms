@@ -1,0 +1,6 @@
+{
+  "framework": "nextjs",
+  "name": "v0-etagia-lms",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next"
+}
