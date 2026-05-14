@@ -1,27 +1,33 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600&display=swap');
 
 :root {
-  --bg-primary: #F4F6FA;
-  --bg-secondary: #EBEEF5;
-  --bg-card: #FFFFFF;
-  --bg-hover: #F0F3FA;
-  --accent: #4A7FF5;
-  --accent-hover: #3A6FE5;
-  --accent-muted: rgba(74,127,245,0.10);
-  --teal: #0FA878;
-  --teal-muted: rgba(15,168,120,0.10);
-  --gold: #C49A2A;
-  --gold-muted: rgba(196,154,42,0.10);
-  --red: #E05252;
-  --text-primary: #111827;
-  --text-secondary: #6B7280;
-  --text-muted: #9CA3AF;
-  --border: rgba(0,0,0,0.08);
-  --border-hover: rgba(0,0,0,0.15);
+  --bg-primary: #0F1219;
+  --bg-secondary: #161C28;
+  --bg-card: #1A2235;
+  --bg-hover: #1F2A3D;
+  --accent: #5B8DEF;
+  --accent-hover: #4A7DE0;
+  --accent-muted: rgba(91,141,239,0.12);
+  --accent-glow: rgba(91,141,239,0.25);
+  --teal: #22D4A8;
+  --teal-muted: rgba(34,212,168,0.12);
+  --gold: #F0B429;
+  --gold-muted: rgba(240,180,41,0.12);
+  --purple: #8B5CF6;
+  --purple-muted: rgba(139,92,246,0.12);
+  --red: #F05A5A;
+  --text-primary: #EDF2FF;
+  --text-secondary: #8899B4;
+  --text-muted: #4A5568;
+  --border: rgba(255,255,255,0.06);
+  --border-active: rgba(91,141,239,0.4);
   --font-display: 'Syne', sans-serif;
   --font-body: 'DM Sans', sans-serif;
-  --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.3);
+  --shadow-glow: 0 0 40px rgba(91,141,239,0.1);
+  --gradient-accent: linear-gradient(135deg, #5B8DEF 0%, #22D4A8 100%);
+  --gradient-card: linear-gradient(145deg, #1E2A40 0%, #161C28 100%);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -42,4 +48,15 @@ h1, h2, h3, h4, h5 { font-family: var(--font-display); }
 
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+a { color: inherit; }
+button { cursor: pointer; }
+
+.card-hover:hover {
+  border-color: var(--border-active) !important;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card), var(--shadow-glow) !important;
+  transition: all .2s ease;
+}
