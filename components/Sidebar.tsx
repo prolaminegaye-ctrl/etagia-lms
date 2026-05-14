@@ -16,6 +16,7 @@ const navFormateur = [
   { href: '/formateur/creer', icon: '✦', label: "Créer un cours", badge: 'IA' },
   { href: '/formateur/import', icon: '↑', label: 'Importer SCORM/H5P' },
   { href: '/formateur/cours', icon: '◈', label: 'Mes cours' },
+  { href: '/formateur/viewer', icon: '👁', label: 'Visualiseur' },
   { href: '/formateur/apprenants', icon: '◎', label: 'Apprenants' },
   { href: '/formateur/stats', icon: '〜', label: 'Statistiques' },
 ]
