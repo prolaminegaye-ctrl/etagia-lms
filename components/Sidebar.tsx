@@ -45,7 +45,7 @@ export default function Sidebar({ role = 'apprenant' }: { role?: string }) {
       {/* Logo */}
       <div style={{ padding: '1.25rem', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <Link href="/dashboard" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <img src="/logo.png" alt="ETAGIA" style={{ height: '38px', width: 'auto' }} />
+          <img src="/logo.svg" alt="ETAGIA" style={{ height: '38px', width: 'auto' }} />
         </Link>
         <div style={{ marginTop: '6px', fontSize: '10px', color: 'rgba(255,255,255,0.25)', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
           EdTech · Afrique francophone
