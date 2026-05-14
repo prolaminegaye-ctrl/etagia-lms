@@ -38,7 +38,7 @@ export default function CreerCours() {
     if (!info.title) return
     setBusy(true); setAiError(''); setAiLog('Connexion à l\'IA...')
     try {
-      const res = await fetch('/api/ai-tutor', {
+      const res = await fetch(`/api/generate-course`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
