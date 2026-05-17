@@ -1,9 +1,9 @@
 'use client'
 
 const kpis = [
-  { label: 'Utilisateurs total', value: '1 248', icon: '◎', color: '#FF5722', grad: 'linear-gradient(135deg,#FF5722,#FFB300)', delta: '+12 ce mois' },
+  { label: 'Utilisateurs total', value: '1 248', icon: '◎', color: '#E8651A', grad: 'linear-gradient(135deg,#E8651A,#D4A017)', delta: '+12 ce mois' },
   { label: 'Cours publiés', value: '47', icon: '◈', color: '#00BFA5', grad: 'linear-gradient(135deg,#00BFA5,#7C3AED)', delta: '+3 cette semaine' },
-  { label: 'Organisations', value: '8', icon: '▦', color: '#FFB300', grad: 'linear-gradient(135deg,#FFB300,#FF5722)', delta: '2 actives' },
+  { label: 'Organisations', value: '8', icon: '▦', color: '#FFB300', grad: 'linear-gradient(135deg,#D4A017,#E8651A)', delta: '2 actives' },
   { label: 'Taux complétion', value: '71%', icon: '✦', color: '#7C3AED', grad: 'linear-gradient(135deg,#7C3AED,#00BFA5)', delta: '+4% ce mois' },
 ]
 
@@ -22,7 +22,7 @@ export default function AdminPage() {
           <h1 style={{ fontSize: '26px', fontWeight: '800', color: '#1C1917', fontFamily: 'Syne,sans-serif', marginBottom: '4px' }}>Panel Admin</h1>
           <p style={{ color: '#A8A29E', fontSize: '14px' }}>Vue globale de la plateforme ETAGIA LMS</p>
         </div>
-        <span style={{ background: 'linear-gradient(135deg,#FF5722,#FFB300)', color: '#fff', fontSize: '12px', fontWeight: '700', padding: '7px 16px', borderRadius: '20px', boxShadow: '0 4px 14px rgba(255,87,34,0.30)' }}>
+        <span style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', color: '#fff', fontSize: '12px', fontWeight: '700', padding: '7px 16px', borderRadius: '20px', boxShadow: '0 4px 14px rgba(232,101,26,0.30)' }}>
           ⚙️ Super Admin
         </span>
       </div>
@@ -74,11 +74,11 @@ export default function AdminPage() {
           <h2 style={{ fontSize: '16px', fontWeight: '700', marginBottom: '1rem', color: '#1C1917', fontFamily: 'Syne,sans-serif' }}>Actions rapides</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
             {[
-              { href: '/admin/users', label: 'Gérer les utilisateurs', icon: '◎', color: '#FF5722' },
+              { href: '/admin/users', label: 'Gérer les utilisateurs', icon: '◎', color: '#E8651A' },
               { href: '/admin/cours', label: 'Gérer les cours', icon: '◈', color: '#00BFA5' },
               { href: '/admin/orgs', label: 'Gérer les organisations', icon: '▦', color: '#FFB300' },
               { href: '/admin/analytics', label: 'Analytics', icon: '〜', color: '#7C3AED' },
-              { href: '/admin/export', label: 'Export CSV', icon: '📊', color: '#FF5722' },
+              { href: '/admin/export', label: 'Export CSV', icon: '📊', color: '#E8651A' },
             ].map(a => (
               <a key={a.href} href={a.href}
                 style={{ background: '#FFFFFF', border: '1.5px solid rgba(28,25,23,0.07)', borderRadius: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px', padding: '13px 16px', transition: 'all .15s', boxShadow: '0 1px 6px rgba(28,25,23,0.04)' }}

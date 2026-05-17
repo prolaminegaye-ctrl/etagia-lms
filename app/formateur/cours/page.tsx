@@ -28,7 +28,7 @@ export default function FormateurCoursPage() {
           <h1 style={{fontSize:'24px',fontWeight:'800',background:'linear-gradient(135deg,#1C1917,#E8651A)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Mes cours</h1>
           <p style={{color:'#A8A29E',fontSize:'13px',marginTop:'3px'}}>{cours.length} cours · {cours.filter(c=>c.status==='Publié').length} publiés · {cours.reduce((a,c)=>a+c.enrolled,0)} apprenants total</p>
         </div>
-        <button onClick={()=>router.push('/formateur/creer')} style={{background:'linear-gradient(135deg,#FF5722,#FFB300)',border:'none',borderRadius:'12px',padding:'11px 22px',color:'#fff',fontWeight:'700',fontSize:'14px',cursor:'pointer',boxShadow:'0 4px 16px rgba(232,101,26,0.30)'}}>
+        <button onClick={()=>router.push('/formateur/creer')} style={{background:'linear-gradient(135deg,#E8651A,#D4A017)',border:'none',borderRadius:'12px',padding:'11px 22px',color:'#fff',fontWeight:'700',fontSize:'14px',cursor:'pointer',boxShadow:'0 4px 16px rgba(232,101,26,0.30)'}}>
           ✦ Créer un cours
         </button>
       </div>
@@ -74,7 +74,7 @@ export default function FormateurCoursPage() {
                 {c.status==='Brouillon'&&(
                   <>
                     <button onClick={()=>router.push('/formateur/creer')} style={{background:'rgba(28,25,23,0.06)',border:'1px solid rgba(28,25,23,0.10)',borderRadius:'10px',padding:'9px 16px',color:'#E8651A',fontSize:'13px',fontWeight:'600',cursor:'pointer',textAlign:'center'}}>✏️ Continuer</button>
-                    <button onClick={()=>setConfirm({id:c.id,action:'publish'})} style={{background:'linear-gradient(135deg,#FF5722,#FFB300)',border:'none',borderRadius:'10px',padding:'9px 16px',color:'#fff',fontSize:'13px',fontWeight:'700',cursor:'pointer',textAlign:'center'}}>🚀 Publier</button>
+                    <button onClick={()=>setConfirm({id:c.id,action:'publish'})} style={{background:'linear-gradient(135deg,#E8651A,#D4A017)',border:'none',borderRadius:'10px',padding:'9px 16px',color:'#fff',fontSize:'13px',fontWeight:'700',cursor:'pointer',textAlign:'center'}}>🚀 Publier</button>
                   </>
                 )}
                 {c.status==='Publié'&&(
@@ -106,7 +106,7 @@ export default function FormateurCoursPage() {
             </p>
             <div style={{display:'flex',gap:'10px',justifyContent:'center'}}>
               <button onClick={()=>setConfirm(null)} style={{background:'#FAF9F7',border:'1px solid rgba(28,25,23,0.07)',borderRadius:'10px',padding:'10px 20px',color:'#A8A29E',fontSize:'14px',cursor:'pointer'}}>Annuler</button>
-              <button onClick={()=>{confirm.action==='publish'?publish(confirm.id):archive(confirm.id);setConfirm(null)}} style={{background:confirm.action==='publish'?'linear-gradient(135deg,#FF5722,#FFB300)':'linear-gradient(135deg,#F05A5A,#C0392B)',border:'none',borderRadius:'10px',padding:'10px 20px',color:'#fff',fontWeight:'700',fontSize:'14px',cursor:'pointer'}}>
+              <button onClick={()=>{confirm.action==='publish'?publish(confirm.id):archive(confirm.id);setConfirm(null)}} style={{background:confirm.action==='publish'?'linear-gradient(135deg,#E8651A,#D4A017)':'linear-gradient(135deg,#F05A5A,#C0392B)',border:'none',borderRadius:'10px',padding:'10px 20px',color:'#fff',fontWeight:'700',fontSize:'14px',cursor:'pointer'}}>
                 {confirm.action==='publish'?'Publier':'Archiver'}
               </button>
             </div>

@@ -15,9 +15,9 @@ const defaultUsers: User[] = [
 const emptyUser: Partial<User> = { name:'', email:'', role:'Apprenant', org:'ETAGIA', status:'Actif', courses:0, joined:'' }
 
 const S = {
-  inp: { background:'rgba(123,92,245,0.06)', color:'#1C1917', border:'1px solid rgba(28,25,23,0.09)', borderRadius:'10px', padding:'9px 12px', width:'100%', fontSize:'14px', fontFamily:'inherit', outline:'none' } as React.CSSProperties,
+  inp: { background:'rgba(232,101,26,0.06)', color:'#1C1917', border:'1px solid rgba(28,25,23,0.09)', borderRadius:'10px', padding:'9px 12px', width:'100%', fontSize:'14px', fontFamily:'inherit', outline:'none' } as React.CSSProperties,
   lbl: { fontSize:'11px', color:'#A8A29E', display:'block', marginBottom:'5px', fontWeight:'700', textTransform:'uppercase' as const, letterSpacing:'0.7px' },
-  btn: { background:'linear-gradient(135deg,#FF5722,#FFB300)', border:'none', borderRadius:'10px', padding:'10px 20px', color:'#fff', fontWeight:'700', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
+  btn: { background:'linear-gradient(135deg,#E8651A,#D4A017)', border:'none', borderRadius:'10px', padding:'10px 20px', color:'#fff', fontWeight:'700', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
   cancel: { background:'#FAF9F7', border:'1px solid rgba(28,25,23,0.07)', borderRadius:'10px', padding:'10px 18px', color:'#A8A29E', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
 }
 
@@ -49,7 +49,7 @@ export default function UsersPage() {
   const confirmDelete = () => { setUsers(p => p.filter(u => u.id!==sel?.id)); setModal(null) }
   const toggleStatus = (id: string) => setUsers(p => p.map(u => u.id===id ? {...u, status: u.status==='Actif'?'Inactif':'Actif'} : u))
 
-  const roleColors: Record<string,string> = { Admin:'#FFB300', Formateur:'#FF5722', Apprenant:'#00BFA5' }
+  const roleColors: Record<string,string> = { Admin:'#FFB300', Formateur:'#E8651A', Apprenant:'#00BFA5' }
 
   return (
     <div>
@@ -64,7 +64,7 @@ export default function UsersPage() {
       <div style={{display:'flex',gap:'10px',marginBottom:'1.5rem',flexWrap:'wrap'}}>
         <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="🔍 Rechercher nom ou email..." style={{...S.inp,flex:1,minWidth:'200px',padding:'11px 16px'}} />
         {['Tous','Admin','Formateur','Apprenant'].map(r=>(
-          <button key={r} onClick={()=>setFilterRole(r)} style={{padding:'8px 16px',borderRadius:'20px',fontSize:'12px',fontWeight:'600',border:`1px solid ${filterRole===r?'rgba(123,92,245,0.5)':'rgba(28,25,23,0.08)'}`,background:filterRole===r?'rgba(28,25,23,0.08)':'transparent',color:filterRole===r?'#E8651A':'#A8A29E',cursor:'pointer'}}>
+          <button key={r} onClick={()=>setFilterRole(r)} style={{padding:'8px 16px',borderRadius:'20px',fontSize:'12px',fontWeight:'600',border:`1px solid ${filterRole===r?'rgba(232,101,26,0.5)':'rgba(28,25,23,0.08)'}`,background:filterRole===r?'rgba(28,25,23,0.08)':'transparent',color:filterRole===r?'#E8651A':'#A8A29E',cursor:'pointer'}}>
             {r}
           </button>
         ))}
@@ -81,12 +81,12 @@ export default function UsersPage() {
           </thead>
           <tbody>
             {filtered.map((u,i)=>(
-              <tr key={u.id} style={{borderBottom:i<filtered.length-1?'1px solid rgba(123,92,245,0.07)':'none',transition:'background .15s'}}
-                onMouseEnter={e=>(e.currentTarget as HTMLElement).style.background='rgba(123,92,245,0.04)'}
+              <tr key={u.id} style={{borderBottom:i<filtered.length-1?'1px solid rgba(28,25,23,0.07)':'none',transition:'background .15s'}}
+                onMouseEnter={e=>(e.currentTarget as HTMLElement).style.background='rgba(232,101,26,0.04)'}
                 onMouseLeave={e=>(e.currentTarget as HTMLElement).style.background='transparent'}>
                 <td style={{padding:'14px'}}>
                   <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
-                    <div style={{width:'34px',height:'34px',borderRadius:'50%',background:`${roleColors[u.role]||'#FF5722'}22`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'13px',fontWeight:'700',color:roleColors[u.role]||'#E8651A',flexShrink:0}}>
+                    <div style={{width:'34px',height:'34px',borderRadius:'50%',background:`${roleColors[u.role]||'#E8651A'}22`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'13px',fontWeight:'700',color:roleColors[u.role]||'#E8651A',flexShrink:0}}>
                       {u.name.charAt(0)}
                     </div>
                     <div>
@@ -96,7 +96,7 @@ export default function UsersPage() {
                   </div>
                 </td>
                 <td style={{padding:'14px'}}>
-                  <span style={{fontSize:'11px',fontWeight:'700',padding:'3px 10px',borderRadius:'20px',background:`${roleColors[u.role]||'#FF5722'}22`,color:roleColors[u.role]||'#E8651A'}}>{u.role}</span>
+                  <span style={{fontSize:'11px',fontWeight:'700',padding:'3px 10px',borderRadius:'20px',background:`${roleColors[u.role]||'#E8651A'}22`,color:roleColors[u.role]||'#E8651A'}}>{u.role}</span>
                 </td>
                 <td style={{padding:'14px',fontSize:'13px',color:'#A8A29E'}}>{u.org}</td>
                 <td style={{padding:'14px',fontSize:'14px',fontWeight:'700',color:'#E8651A'}}>{u.courses}</td>
@@ -144,7 +144,7 @@ export default function UsersPage() {
               </div>
             </div>
             {modal==='add'&&(
-              <div style={{background:'rgba(123,92,245,0.06)',border:'1px solid rgba(28,25,23,0.08)',borderRadius:'10px',padding:'10px 14px',marginBottom:'1.5rem',fontSize:'12px',color:'#A8A29E'}}>
+              <div style={{background:'rgba(232,101,26,0.06)',border:'1px solid rgba(28,25,23,0.08)',borderRadius:'10px',padding:'10px 14px',marginBottom:'1.5rem',fontSize:'12px',color:'#A8A29E'}}>
                 📧 Un email d'invitation sera envoyé à l'adresse indiquée
               </div>
             )}

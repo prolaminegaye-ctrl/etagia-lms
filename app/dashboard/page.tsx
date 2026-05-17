@@ -2,14 +2,14 @@
 import { useRouter } from 'next/navigation'
 
 const kpis = [
-  { label: 'Cours en cours', value: '4', color: '#FF5722', grad: 'linear-gradient(135deg,#E8651A,#D4A017)', delta: '+1 ce mois', icon: '📚' },
+  { label: 'Cours en cours', value: '4', color: '#E8651A', grad: 'linear-gradient(135deg,#E8651A,#D4A017)', delta: '+1 ce mois', icon: '📚' },
   { label: 'Progression', value: '68%', color: '#00BFA5', grad: 'linear-gradient(135deg,#00BFA5,#7C3AED)', delta: '+5% semaine', icon: '📈' },
-  { label: 'Score moyen', value: '82/100', color: '#FFB300', grad: 'linear-gradient(135deg,#FFB300,#FF5722)', delta: 'Top 15%', icon: '🏆' },
+  { label: 'Score moyen', value: '82/100', color: '#FFB300', grad: 'linear-gradient(135deg,#D4A017,#E8651A)', delta: 'Top 15%', icon: '🏆' },
   { label: 'Heures semaine', value: '12h', color: '#7C3AED', grad: 'linear-gradient(135deg,#7C3AED,#00BFA5)', delta: 'Obj: 15h', icon: '⏱' },
 ]
 
 const courses = [
-  { title: 'Data Science avec Python', progress: 72, cat: 'Tech', color: '#FF5722', done: 17, total: 24 },
+  { title: 'Data Science avec Python', progress: 72, cat: 'Tech', color: '#E8651A', done: 17, total: 24 },
   { title: 'Marketing Digital Afrique', progress: 45, cat: 'Business', color: '#00BFA5', done: 8, total: 18 },
   { title: 'Leadership & Management', progress: 30, cat: 'Soft Skills', color: '#FFB300', done: 4, total: 12 },
 ]
@@ -17,7 +17,7 @@ const courses = [
 const reco = [
   { title: 'IA Générative pour pros', tag: 'Nouveau', color: '#7C3AED', emoji: '🤖' },
   { title: 'Comptabilité SME Afrique', tag: 'Populaire', color: '#00BFA5', emoji: '💼' },
-  { title: 'Pitch & Fundraising', tag: 'Tendance', color: '#FF5722', emoji: '🚀' },
+  { title: 'Pitch & Fundraising', tag: 'Tendance', color: '#E8651A', emoji: '🚀' },
 ]
 
 export default function DashboardPage() {
@@ -25,7 +25,7 @@ export default function DashboardPage() {
   return (
     <div>
       {/* Hero */}
-      <div style={{ marginBottom: '2rem', padding: '2rem', borderRadius: '24px', background: 'linear-gradient(135deg,#FF5722 0%,#FFB300 100%)', position: 'relative', overflow: 'hidden', boxShadow: '0 8px 32px rgba(232,101,26,0.26)' }}>
+      <div style={{ marginBottom: '2rem', padding: '2rem', borderRadius: '24px', background: 'linear-gradient(135deg,#E8651A 0%,#FFB300 100%)', position: 'relative', overflow: 'hidden', boxShadow: '0 8px 32px rgba(232,101,26,0.26)' }}>
         <div style={{ position: 'absolute', top: '-80px', right: '-60px', width: '280px', height: '280px', borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: '-50px', left: '20%', width: '200px', height: '200px', borderRadius: '50%', background: 'rgba(0,0,0,0.08)', pointerEvents: 'none' }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
@@ -87,7 +87,7 @@ export default function DashboardPage() {
           {reco.map(r => (
             <div key={r.title} onClick={() => router.push('/cours')}
               style={{ background: '#FFFFFF', border: '1.5px solid rgba(28,25,23,0.07)', borderRadius: '14px', padding: '13px 15px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '0.6rem', transition: 'all .15s', boxShadow: '0 1px 6px rgba(28,25,23,0.04)' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#FFF5F2'; (e.currentTarget as HTMLElement).style.borderColor = '#FF572222' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#FFF5F2'; (e.currentTarget as HTMLElement).style.borderColor = '#E8651A22' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#FFFFFF'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(28,25,23,0.07)' }}>
               <span style={{ fontSize: '22px' }}>{r.emoji}</span>
               <span style={{ flex: 1, fontWeight: '500', fontSize: '13px', color: '#1C1917' }}>{r.title}</span>

@@ -10,8 +10,8 @@ type CourseData = { introduction?: string; objectifs_generaux?: string[]; prereq
 const g = () => Math.random().toString(36).slice(2, 8)
 const S = {
   card: { background: '#FFFFFF', border: '1px solid rgba(28,25,23,0.07)', borderRadius: '16px' } as React.CSSProperties,
-  inp: { background: 'rgba(123,92,245,0.06)', color: '#1C1917', border: '1px solid rgba(28,25,23,0.09)', borderRadius: '10px', padding: '10px 14px', width: '100%', fontSize: '14px', fontFamily: 'inherit', outline: 'none' } as React.CSSProperties,
-  btn: { background: 'linear-gradient(135deg,#FF5722,#FFB300)', border: 'none', borderRadius: '10px', padding: '10px 20px', color: '#fff', fontWeight: '700', fontSize: '14px', cursor: 'pointer' } as React.CSSProperties,
+  inp: { background: 'rgba(232,101,26,0.06)', color: '#1C1917', border: '1px solid rgba(28,25,23,0.09)', borderRadius: '10px', padding: '10px 14px', width: '100%', fontSize: '14px', fontFamily: 'inherit', outline: 'none' } as React.CSSProperties,
+  btn: { background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '10px', padding: '10px 20px', color: '#fff', fontWeight: '700', fontSize: '14px', cursor: 'pointer' } as React.CSSProperties,
   lbl: { fontSize: '11px', color: '#A8A29E', display: 'block', marginBottom: '5px', fontWeight: '700', textTransform: 'uppercase' as const, letterSpacing: '0.7px' },
 }
 const blockTypes = [
@@ -78,7 +78,7 @@ export default function CreerCours() {
   if (published) return (
     <div style={{textAlign:'center',padding:'4rem 2rem'}}>
       <div style={{fontSize:'64px',marginBottom:'1.5rem'}}>🎉</div>
-      <h1 style={{fontSize:'28px',fontWeight:'800',marginBottom:'8px',background:'linear-gradient(135deg,#E8651A,#FFB300)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Cours publié avec succès !</h1>
+      <h1 style={{fontSize:'28px',fontWeight:'800',marginBottom:'8px',background:'linear-gradient(135deg,#E8651A,#D4A017)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Cours publié avec succès !</h1>
       <p style={{color:'#A8A29E',marginBottom:'2rem'}}>"{info.title}" · {modules.length} modules · Visible pour vos apprenants</p>
       <div style={{display:'flex',gap:'12px',justifyContent:'center'}}>
         <button style={S.btn} onClick={()=>router.push('/formateur/cours')}>Voir mes cours →</button>
@@ -90,7 +90,7 @@ export default function CreerCours() {
   return (
     <div>
       {/* Header */}
-      <div style={{marginBottom:'1.5rem',padding:'1.25rem 1.5rem',...S.card,background:'linear-gradient(135deg,rgba(28,25,23,0.06),rgba(224,64,160,0.05))',border:'1px solid rgba(28,25,23,0.09)'}}>
+      <div style={{marginBottom:'1.5rem',padding:'1.25rem 1.5rem',...S.card,background:'linear-gradient(135deg,rgba(28,25,23,0.06),rgba(0,191,165,0.06))',border:'1px solid rgba(28,25,23,0.09)'}}>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
           <div>
             <h1 style={{fontSize:'22px',fontWeight:'800',background:'linear-gradient(135deg,#1C1917,#E8651A)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>✦ Créer un cours</h1>
@@ -98,7 +98,7 @@ export default function CreerCours() {
           </div>
           <div style={{display:'flex',gap:'6px'}}>
             {['Infos','Méthode','Modules & Activités','Publier'].map((s,i)=>(
-              <div key={i} onClick={()=>i<step&&setStep(i)} style={{padding:'5px 12px',borderRadius:'20px',fontSize:'11px',fontWeight:'700',background:step===i?'linear-gradient(135deg,#FF5722,#FFB300)':'rgba(28,25,23,0.05)',color:step===i?'#fff':'#57534E',cursor:i<step?'pointer':'default'}}>{i+1}. {s}</div>
+              <div key={i} onClick={()=>i<step&&setStep(i)} style={{padding:'5px 12px',borderRadius:'20px',fontSize:'11px',fontWeight:'700',background:step===i?'linear-gradient(135deg,#E8651A,#D4A017)':'rgba(28,25,23,0.05)',color:step===i?'#fff':'#57534E',cursor:i<step?'pointer':'default'}}>{i+1}. {s}</div>
             ))}
           </div>
         </div>
@@ -139,11 +139,11 @@ export default function CreerCours() {
             </div>
           )}
           {aiLog&&<div style={{background:'rgba(28,25,23,0.05)',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'12px',padding:'1rem',marginBottom:'1rem',display:'flex',gap:'10px',alignItems:'center'}}>
-            <div style={{width:'18px',height:'18px',borderRadius:'50%',border:'2px solid #FF5722',borderTopColor:'transparent',animation:'spin 1s linear infinite',flexShrink:0}} />
+            <div style={{width:'18px',height:'18px',borderRadius:'50%',border:'2px solid #E8651A',borderTopColor:'transparent',animation:'spin 1s linear infinite',flexShrink:0}} />
             <span style={{fontSize:'13px',color:'#E8651A'}}>{aiLog}</span>
           </div>}
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1.5rem'}}>
-            <button onClick={genAI} disabled={busy} style={{...S.card,padding:'2rem',cursor:busy?'not-allowed':'pointer',border:'1px solid rgba(123,92,245,0.35)',background:'linear-gradient(145deg,rgba(28,25,23,0.06),rgba(224,64,160,0.05))',textAlign:'left',opacity:busy?0.8:1}}>
+            <button onClick={genAI} disabled={busy} style={{...S.card,padding:'2rem',cursor:busy?'not-allowed':'pointer',border:'1px solid rgba(232,101,26,0.30)',background:'linear-gradient(145deg,rgba(28,25,23,0.06),rgba(0,191,165,0.06))',textAlign:'left',opacity:busy?0.8:1}}>
               <div style={{fontSize:'36px',marginBottom:'12px'}}>✦</div>
               <div style={{fontSize:'17px',fontWeight:'800',color:'#E8651A',marginBottom:'8px'}}>{busy?'Génération...':'IA Ingénieur Pédagogique'}</div>
               <p style={{fontSize:'13px',color:'#A8A29E',lineHeight:'1.7',marginBottom:'10px'}}>Structure complète générée : objectifs SMART, contenus, <strong style={{color:'#E8651A'}}>activités engageantes</strong> (études de cas, mises en situation), quiz formatifs, évaluation sommative.</p>
@@ -152,9 +152,9 @@ export default function CreerCours() {
                   <span key={t} style={{fontSize:'10px',background:'rgba(28,25,23,0.08)',color:'#E8651A',padding:'2px 8px',borderRadius:'20px',fontWeight:'600'}}>{t}</span>
                 ))}
               </div>
-              <div style={{fontSize:'13px',fontWeight:'700',background:'linear-gradient(135deg,#E8651A,#FFB300)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>⚡ Recommandé — 30 secondes →</div>
+              <div style={{fontSize:'13px',fontWeight:'700',background:'linear-gradient(135deg,#E8651A,#D4A017)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>⚡ Recommandé — 30 secondes →</div>
             </button>
-            <button onClick={addMod} disabled={busy} style={{...S.card,padding:'2rem',cursor:'pointer',border:'1px solid rgba(224,64,160,0.3)',background:'linear-gradient(145deg,rgba(224,64,160,0.06),rgba(123,92,245,0.03))',textAlign:'left'}}>
+            <button onClick={addMod} disabled={busy} style={{...S.card,padding:'2rem',cursor:'pointer',border:'1px solid rgba(0,191,165,0.30)',background:'linear-gradient(145deg,rgba(232,101,26,0.06),rgba(232,101,26,0.03))',textAlign:'left'}}>
               <div style={{fontSize:'36px',marginBottom:'12px'}}>🏗️</div>
               <div style={{fontSize:'17px',fontWeight:'800',color:'#FFB300',marginBottom:'8px'}}>Créer manuellement</div>
               <p style={{fontSize:'13px',color:'#A8A29E',lineHeight:'1.7',marginBottom:'12px'}}>Construisez chaque module. Ajoutez textes, vidéos, PDFs, <strong style={{color:'#FFB300'}}>activités pratiques</strong>, quiz, HTML interactif et H5P.</p>
@@ -170,7 +170,7 @@ export default function CreerCours() {
         <div>
           {/* Course overview */}
           {courseData&&(
-            <div style={{...S.card,padding:'1.5rem',marginBottom:'1.5rem',background:'linear-gradient(135deg,rgba(28,25,23,0.05),rgba(224,64,160,0.04))',border:'1px solid rgba(28,25,23,0.09)'}}>
+            <div style={{...S.card,padding:'1.5rem',marginBottom:'1.5rem',background:'linear-gradient(135deg,rgba(28,25,23,0.05),rgba(232,101,26,0.04))',border:'1px solid rgba(28,25,23,0.09)'}}>
               {courseData.introduction&&<p style={{color:'#A8A29E',fontSize:'13px',fontStyle:'italic',marginBottom:'1rem'}}>{courseData.introduction}</p>}
               {courseData.objectifs_generaux&&(
                 <div style={{marginBottom:'1rem'}}>
@@ -205,8 +205,8 @@ export default function CreerCours() {
 
           {modules.map((mod,mi)=>(
             <div key={mod.id} style={{...S.card,marginBottom:'0.75rem',overflow:'hidden'}}>
-              <div style={{padding:'1rem 1.25rem',display:'flex',alignItems:'center',gap:'12px',cursor:'pointer',background:open===mod.id?'rgba(123,92,245,0.06)':'transparent',borderBottom:open===mod.id?'1px solid rgba(28,25,23,0.06)':'none'}} onClick={()=>setOpen(open===mod.id?null:mod.id)}>
-                <div style={{width:'30px',height:'30px',borderRadius:'50%',background:'linear-gradient(135deg,#FF5722,#FFB300)',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:'800',color:'#fff',fontSize:'12px',flexShrink:0}}>{mi+1}</div>
+              <div style={{padding:'1rem 1.25rem',display:'flex',alignItems:'center',gap:'12px',cursor:'pointer',background:open===mod.id?'rgba(232,101,26,0.06)':'transparent',borderBottom:open===mod.id?'1px solid rgba(28,25,23,0.06)':'none'}} onClick={()=>setOpen(open===mod.id?null:mod.id)}>
+                <div style={{width:'30px',height:'30px',borderRadius:'50%',background:'linear-gradient(135deg,#E8651A,#D4A017)',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:'800',color:'#fff',fontSize:'12px',flexShrink:0}}>{mi+1}</div>
                 <div style={{flex:1}}>
                   <div style={{fontWeight:'600',fontSize:'14px',color:'#1C1917'}}>{mod.title}</div>
                   <div style={{fontSize:'11px',color:'#A8A29E'}}>{mod.objectif&&<span style={{color:'#00BFA5'}}>🎯 {mod.objectif.slice(0,60)}... · </span>}{mod.blocks.length} blocs · {mod.duration}</div>
@@ -268,7 +268,7 @@ export default function CreerCours() {
                                 <button onClick={()=>refs.current[blk.id]?.click()} style={{background:'rgba(28,25,23,0.06)',border:'none',borderRadius:'6px',padding:'4px 10px',color:'#E8651A',fontSize:'11px',cursor:'pointer'}}>Remplacer</button>
                               </div>
                             ):(
-                              <button onClick={()=>refs.current[blk.id]?.click()} style={{width:'100%',background:'rgba(123,92,245,0.04)',border:'2px dashed rgba(28,25,23,0.09)',borderRadius:'10px',padding:'14px',color:'#E8651A',fontWeight:'600',fontSize:'13px',cursor:'pointer'}}>
+                              <button onClick={()=>refs.current[blk.id]?.click()} style={{width:'100%',background:'rgba(232,101,26,0.04)',border:'2px dashed rgba(28,25,23,0.09)',borderRadius:'10px',padding:'14px',color:'#E8651A',fontWeight:'600',fontSize:'13px',cursor:'pointer'}}>
                                 ☁️ Uploader {blk.type==='video'?'une vidéo':blk.type==='pdf'?'un PDF':'un fichier H5P'}
                               </button>
                             )}
@@ -287,7 +287,7 @@ export default function CreerCours() {
                       </div>
                     </div>
                   ):(
-                    <button onClick={()=>setAddBlk(mod.id)} style={{width:'100%',background:'rgba(123,92,245,0.06)',border:'1px dashed rgba(28,25,23,0.09)',borderRadius:'10px',padding:'10px',color:'#E8651A',fontWeight:'600',fontSize:'12px',cursor:'pointer'}}>
+                    <button onClick={()=>setAddBlk(mod.id)} style={{width:'100%',background:'rgba(232,101,26,0.06)',border:'1px dashed rgba(28,25,23,0.09)',borderRadius:'10px',padding:'10px',color:'#E8651A',fontWeight:'600',fontSize:'12px',cursor:'pointer'}}>
                       + Ajouter un bloc (texte · activité · vidéo · PDF · quiz · HTML · H5P)
                     </button>
                   )}

@@ -34,9 +34,9 @@ export default function AdminCoursPage() {
   const toggleStatus = (id: string) => setCours(p => p.map(c => c.id===id ? {...c, status: c.status==='Publié'?'Archivé':'Publié'} : c))
 
   const S = {
-    inp: { background:'rgba(123,92,245,0.06)', color:'#1C1917', border:'1px solid rgba(28,25,23,0.09)', borderRadius:'10px', padding:'9px 12px', width:'100%', fontSize:'14px', fontFamily:'inherit', outline:'none' } as React.CSSProperties,
+    inp: { background:'rgba(232,101,26,0.06)', color:'#1C1917', border:'1px solid rgba(28,25,23,0.09)', borderRadius:'10px', padding:'9px 12px', width:'100%', fontSize:'14px', fontFamily:'inherit', outline:'none' } as React.CSSProperties,
     lbl: { fontSize:'11px', color:'#A8A29E', display:'block', marginBottom:'5px', fontWeight:'700', textTransform:'uppercase' as const, letterSpacing:'0.7px' },
-    btn: { background:'linear-gradient(135deg,#FF5722,#FFB300)', border:'none', borderRadius:'10px', padding:'10px 20px', color:'#fff', fontWeight:'700', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
+    btn: { background:'linear-gradient(135deg,#E8651A,#D4A017)', border:'none', borderRadius:'10px', padding:'10px 20px', color:'#fff', fontWeight:'700', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
     cancel: { background:'#FAF9F7', border:'1px solid rgba(28,25,23,0.07)', borderRadius:'10px', padding:'10px 18px', color:'#A8A29E', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
   }
 
@@ -54,7 +54,7 @@ export default function AdminCoursPage() {
       <div style={{display:'flex',gap:'10px',marginBottom:'1.5rem',flexWrap:'wrap'}}>
         <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="🔍 Rechercher..." style={{...S.inp,flex:1,minWidth:'200px',padding:'11px 16px'}} />
         {['Tous','Publié','Brouillon','Tech','Business','Finance'].map(f=>(
-          <button key={f} onClick={()=>setFilter(f)} style={{padding:'8px 16px',borderRadius:'20px',fontSize:'12px',fontWeight:'600',border:`1px solid ${filter===f?'rgba(123,92,245,0.5)':'rgba(28,25,23,0.08)'}`,background:filter===f?'rgba(28,25,23,0.08)':'transparent',color:filter===f?'#E8651A':'#A8A29E',cursor:'pointer'}}>
+          <button key={f} onClick={()=>setFilter(f)} style={{padding:'8px 16px',borderRadius:'20px',fontSize:'12px',fontWeight:'600',border:`1px solid ${filter===f?'rgba(232,101,26,0.5)':'rgba(28,25,23,0.08)'}`,background:filter===f?'rgba(28,25,23,0.08)':'transparent',color:filter===f?'#E8651A':'#A8A29E',cursor:'pointer'}}>
             {f}
           </button>
         ))}
@@ -72,8 +72,8 @@ export default function AdminCoursPage() {
           </thead>
           <tbody>
             {filtered.map((c,i)=>(
-              <tr key={c.id} style={{borderBottom:i<filtered.length-1?'1px solid rgba(123,92,245,0.07)':'none',transition:'background .15s'}}
-                onMouseEnter={e=>(e.currentTarget as HTMLElement).style.background='rgba(123,92,245,0.04)'}
+              <tr key={c.id} style={{borderBottom:i<filtered.length-1?'1px solid rgba(28,25,23,0.07)':'none',transition:'background .15s'}}
+                onMouseEnter={e=>(e.currentTarget as HTMLElement).style.background='rgba(232,101,26,0.04)'}
                 onMouseLeave={e=>(e.currentTarget as HTMLElement).style.background='transparent'}>
                 <td style={{padding:'14px'}}>
                   <div style={{fontWeight:'600',fontSize:'13px',color:'#1C1917',marginBottom:'2px'}}>{c.title}</div>
@@ -85,7 +85,7 @@ export default function AdminCoursPage() {
                 <td style={{padding:'14px'}}>
                   <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
                     <div style={{flex:1,height:'4px',background:'rgba(28,25,23,0.06)',borderRadius:'2px',overflow:'hidden'}}>
-                      <div style={{height:'100%',width:`${c.completion}%`,background:'linear-gradient(90deg,#FF5722,#FFB300)',borderRadius:'2px'}} />
+                      <div style={{height:'100%',width:`${c.completion}%`,background:'linear-gradient(90deg,#E8651A,#FFB300)',borderRadius:'2px'}} />
                     </div>
                     <span style={{fontSize:'12px',color:'#E8651A',fontWeight:'600',minWidth:'30px'}}>{c.completion}%</span>
                   </div>

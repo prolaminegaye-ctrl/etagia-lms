@@ -2,7 +2,7 @@
 import { useState } from 'react'
 
 const PLUGINS = [
-  { id:'edugears', name:'EduGears AI', version:'1.4.0', protocol:'LTI 1.3 Advantage', status:'actif', icon:'🤖', color:'#FF5722', tools:10,
+  { id:'edugears', name:'EduGears AI', version:'1.4.0', protocol:'LTI 1.3 Advantage', status:'actif', icon:'🤖', color:'#E8651A', tools:10,
     desc:'Suite complète d\'outils pédagogiques IA — génération de cours, quiz adaptatifs, tuteur conversationnel, notation automatique.',
     config:{ claimCode:'EG-4UGR-MVU9', issuer:'https://etagia-lms.vercel.app', clientId:'7c4a2b1e-9f3d-4e8a-b5c6-3a2d1f0e8b7c', authLoginUrl:'https://lti-api.edugears.ai/lti/auth', authTokenUrl:'https://lti-api.edugears.ai/lti/token', keySetUrl:'https://etagia-lms.vercel.app/lti/certs' } },
   { id:'scorm', name:'SCORM Runtime', version:'2.1.0', protocol:'SCORM 1.2 / 2004', status:'actif', icon:'📦', color:'#00BFA5', tools:1,
@@ -25,17 +25,17 @@ export default function AdminPluginsPage() {
   return (
     <div>
       <div style={{marginBottom:'2rem',padding:'2rem',background:'linear-gradient(135deg,#12100E 0%,#1C1714 100%)',borderRadius:'24px',boxShadow:'0 8px 32px rgba(0,0,0,0.20)',position:'relative',overflow:'hidden'}}>
-        <div style={{position:'absolute',top:'-50px',right:'-30px',width:'180px',height:'180px',borderRadius:'50%',background:'rgba(255,87,34,0.08)',pointerEvents:'none'}}/>
-        <div style={{display:'inline-block',background:'rgba(255,87,34,0.18)',border:'1px solid rgba(255,87,34,0.30)',borderRadius:'8px',padding:'3px 10px',fontSize:'10px',fontWeight:'700',color:'#FF7043',marginBottom:'10px',letterSpacing:'1px',position:'relative'}}>INTÉGRATIONS LTI</div>
+        <div style={{position:'absolute',top:'-50px',right:'-30px',width:'180px',height:'180px',borderRadius:'50%',background:'rgba(232,101,26,0.08)',pointerEvents:'none'}}/>
+        <div style={{display:'inline-block',background:'rgba(232,101,26,0.18)',border:'1px solid rgba(232,101,26,0.30)',borderRadius:'8px',padding:'3px 10px',fontSize:'10px',fontWeight:'700',color:'#FF7043',marginBottom:'10px',letterSpacing:'1px',position:'relative'}}>INTÉGRATIONS LTI</div>
         <h1 style={{fontSize:'22px',fontWeight:'800',color:'#F5F0E8',fontFamily:'Syne,sans-serif',marginBottom:'4px',position:'relative'}}>Plugins & Intégrations LTI</h1>
         <p style={{color:'rgba(245,240,232,0.50)',fontSize:'13px',position:'relative'}}>Gérez les plugins installés et leurs configurations LTI 1.3</p>
       </div>
 
       <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1rem',marginBottom:'2rem'}}>
         {[
-          {l:'Plugins installés',v:'2',c:'#FF5722',grad:'linear-gradient(135deg,#FF5722,#FFB300)'},
+          {l:'Plugins installés',v:'2',c:'#E8651A',grad:'linear-gradient(135deg,#E8651A,#D4A017)'},
           {l:'Plugins actifs',v:'2',c:'#00BFA5',grad:'linear-gradient(135deg,#00BFA5,#7C3AED)'},
-          {l:'Protocoles',v:'LTI · SCORM',c:'#FFB300',grad:'linear-gradient(135deg,#FFB300,#FF5722)'},
+          {l:'Protocoles',v:'LTI · SCORM',c:'#FFB300',grad:'linear-gradient(135deg,#D4A017,#E8651A)'},
           {l:'Outils IA',v:'10',c:'#7C3AED',grad:'linear-gradient(135deg,#7C3AED,#00BFA5)'},
         ].map(k=>(
           <div key={k.l} style={{...card,padding:'1.25rem',position:'relative',overflow:'hidden'}}>
@@ -96,7 +96,7 @@ export default function AdminPluginsPage() {
               </div>
             ))}
             <div style={{display:'flex',gap:'10px',marginTop:'1rem',paddingTop:'1rem',borderTop:'1.5px solid rgba(28,25,23,0.06)'}}>
-              {[{l:'Deep Linking ✓',c:'#FF5722'},{l:'Grade Passback ✓',c:'#FFB300'},{l:'● Actif',c:'#00BFA5'}].map(item=>(
+              {[{l:'Deep Linking ✓',c:'#E8651A'},{l:'Grade Passback ✓',c:'#FFB300'},{l:'● Actif',c:'#00BFA5'}].map(item=>(
                 <div key={item.l} style={{flex:1,background:item.c+'10',border:`1.5px solid ${item.c}25`,borderRadius:'10px',padding:'10px',textAlign:'center'}}>
                   <div style={{fontSize:'12px',color:item.c,fontWeight:'700'}}>{item.l}</div>
                 </div>

@@ -2,20 +2,20 @@
 import { useRouter } from 'next/navigation'
 
 const stats = [
-  { label: 'Cours publiés', value: '3', color: '#FF5722', grad: 'linear-gradient(135deg,#FF5722,#FFB300)' },
+  { label: 'Cours publiés', value: '3', color: '#E8651A', grad: 'linear-gradient(135deg,#E8651A,#D4A017)' },
   { label: 'Apprenants', value: '127', color: '#00BFA5', grad: 'linear-gradient(135deg,#00BFA5,#7C3AED)' },
-  { label: 'Taux complétion', value: '74%', color: '#FFB300', grad: 'linear-gradient(135deg,#FFB300,#FF5722)' },
+  { label: 'Taux complétion', value: '74%', color: '#FFB300', grad: 'linear-gradient(135deg,#D4A017,#E8651A)' },
   { label: 'Score moyen', value: '81/100', color: '#7C3AED', grad: 'linear-gradient(135deg,#7C3AED,#00BFA5)' },
 ]
 
 const actions = [
-  { href: '/formateur/creer', icon: '✦', label: "Créer un cours avec l'IA", desc: 'Génère structure + contenu HTML + PDF en 30s', color: '#FF5722', badge: 'IA' },
+  { href: '/formateur/creer', icon: '✦', label: "Créer un cours avec l'IA", desc: 'Génère structure + contenu HTML + PDF en 30s', color: '#E8651A', badge: 'IA' },
   { href: '/formateur/import', icon: '↑', label: 'Importer SCORM / H5P', desc: 'Upload et conversion automatique', color: '#00BFA5', badge: null },
   { href: '/formateur/apprenants', icon: '◎', label: 'Voir les apprenants', desc: 'Progression et résultats détaillés', color: '#FFB300', badge: null },
 ]
 
 const mesCours = [
-  { title: 'Data Science avec Python', apprenants: 54, completion: 72, status: 'Publié', color: '#FF5722' },
+  { title: 'Data Science avec Python', apprenants: 54, completion: 72, status: 'Publié', color: '#E8651A' },
   { title: 'Marketing Digital Afrique', apprenants: 43, completion: 58, status: 'Publié', color: '#00BFA5' },
   { title: 'Leadership & Management', apprenants: 30, completion: 45, status: 'Brouillon', color: '#FFB300' },
 ]
@@ -26,10 +26,10 @@ export default function FormateurPage() {
     <div>
       {/* Hero */}
       <div style={{ marginBottom: '2rem', padding: '2rem', borderRadius: '24px', background: 'linear-gradient(135deg,#12100E 0%,#1C1714 100%)', position: 'relative', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}>
-        <div style={{ position: 'absolute', top: '-60px', right: '-40px', width: '220px', height: '220px', borderRadius: '50%', background: 'rgba(255,87,34,0.10)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '-60px', right: '-40px', width: '220px', height: '220px', borderRadius: '50%', background: 'rgba(232,101,26,0.10)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: '-40px', left: '25%', width: '160px', height: '160px', borderRadius: '50%', background: 'rgba(0,191,165,0.08)', pointerEvents: 'none' }} />
         <div style={{ position: 'relative' }}>
-          <div style={{ display: 'inline-block', background: 'rgba(255,87,34,0.18)', border: '1px solid rgba(255,87,34,0.30)', borderRadius: '8px', padding: '3px 10px', fontSize: '10px', fontWeight: '700', color: '#FF7043', marginBottom: '10px', letterSpacing: '1px' }}>ESPACE FORMATEUR</div>
+          <div style={{ display: 'inline-block', background: 'rgba(232,101,26,0.18)', border: '1px solid rgba(232,101,26,0.30)', borderRadius: '8px', padding: '3px 10px', fontSize: '10px', fontWeight: '700', color: '#FF7043', marginBottom: '10px', letterSpacing: '1px' }}>ESPACE FORMATEUR</div>
           <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#F5F0E8', fontFamily: 'Syne,sans-serif', marginBottom: '6px' }}>Bonjour, Formateur 👨‍🏫</h1>
           <p style={{ color: 'rgba(245,240,232,0.55)', fontSize: '14px' }}>Gérez vos cours, suivez vos apprenants et créez du contenu avec l&apos;IA</p>
         </div>
@@ -77,7 +77,7 @@ export default function FormateurPage() {
               <div style={{ fontSize: '12px', color: '#A8A29E' }}>{c.apprenants} apprenants · {c.completion}% complétion</div>
             </div>
             <span style={{ fontSize: '11px', fontWeight: '700', padding: '4px 12px', borderRadius: '20px', background: c.status === 'Publié' ? 'rgba(0,191,165,0.12)' : 'rgba(255,179,0,0.12)', color: c.status === 'Publié' ? '#00BFA5' : '#CC8800' }}>{c.status}</span>
-            <button onClick={() => router.push('/formateur/cours')} style={{ background: 'linear-gradient(135deg,#FF5722,#FFB300)', border: 'none', borderRadius: '9px', padding: '8px 18px', color: '#fff', fontSize: '12px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 3px 12px rgba(255,87,34,0.25)' }}>Gérer →</button>
+            <button onClick={() => router.push('/formateur/cours')} style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '9px', padding: '8px 18px', color: '#fff', fontSize: '12px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 3px 12px rgba(232,101,26,0.25)' }}>Gérer →</button>
           </div>
         ))}
       </div>

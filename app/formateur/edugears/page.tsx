@@ -2,13 +2,13 @@
 import { useState } from 'react'
 
 const AI_TOOLS = [
-  { id: 'course-modules', icon: '🧩', label: 'Modules de cours IA', desc: 'Génère automatiquement un plan de cours structuré avec modules et objectifs pédagogiques.', color: '#FF5722', category: 'Création' },
+  { id: 'course-modules', icon: '🧩', label: 'Modules de cours IA', desc: 'Génère automatiquement un plan de cours structuré avec modules et objectifs pédagogiques.', color: '#E8651A', category: 'Création' },
   { id: 'quiz', icon: '❓', label: 'Quiz & Évaluations', desc: 'Crée des questionnaires adaptatifs avec QCM, questions ouvertes et feedback automatique.', color: '#00BFA5', category: 'Évaluation' },
   { id: 'slides', icon: '🖼', label: 'Diapositives IA', desc: 'Produit des présentations visuelles prêtes à l\'emploi à partir d\'un sujet ou d\'un texte.', color: '#5B8DEF', category: 'Création' },
   { id: 'grading', icon: '📊', label: 'Notation automatique', desc: 'Corrige et note les travaux des apprenants avec retours personnalisés et rubrique IA.', color: '#FFB300', category: 'Évaluation' },
   { id: 'tutor', icon: '🎓', label: 'Tuteur conversationnel', desc: 'Assistant pédagogique qui répond aux questions des apprenants en temps réel, 24h/24.', color: '#FFB300', category: 'Accompagnement' },
   { id: 'study-guide', icon: '📖', label: 'Fiche de révision', desc: 'Synthétise un contenu en fiches de révision concises, organisées par thèmes clés.', color: '#00BFA5', category: 'Révision' },
-  { id: 'worksheet', icon: '✏️', label: 'Exercices pratiques', desc: 'Génère des exercices progressifs adaptés au niveau et aux lacunes de l\'apprenant.', color: '#FF5722', category: 'Pratique' },
+  { id: 'worksheet', icon: '✏️', label: 'Exercices pratiques', desc: 'Génère des exercices progressifs adaptés au niveau et aux lacunes de l\'apprenant.', color: '#E8651A', category: 'Pratique' },
   { id: 'lesson-planner', icon: '📅', label: 'Plan de cours', desc: 'Planifie une séquence pédagogique complète avec timing, ressources et jalons.', color: '#5B8DEF', category: 'Création' },
   { id: 'assistant', icon: '🤖', label: 'Assistant pédagogique', desc: 'Aide à rédiger des consignes, scénarios, objectifs SMART et grilles d\'évaluation.', color: '#FFB300', category: 'Assistance' },
   { id: 'curriculum', icon: '🗺', label: 'Curriculum intelligent', desc: 'Conçoit un programme de formation complet aligné sur des référentiels de compétences.', color: '#FFB300', category: 'Stratégie' },
@@ -37,7 +37,7 @@ export default function EduGearsPage() {
   return (
     <div>
       <div style={{ marginBottom: '2rem', padding: '1.5rem', background: 'linear-gradient(135deg,rgba(28,25,23,0.07),rgba(34,212,168,0.06))', border: '1px solid rgba(28,25,23,0.09)', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-        <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'linear-gradient(135deg,#FF5722,#00BFA5)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', flexShrink: 0 }}>🤖</div>
+        <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'linear-gradient(135deg,#E8651A,#00BFA5)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', flexShrink: 0 }}>🤖</div>
         <div style={{ flex: 1 }}>
           <h1 style={{ fontSize: '22px', fontWeight: '800', background: 'linear-gradient(135deg,#1C1917,#E8651A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '4px' }}>EduGears AI</h1>
           <p style={{ color: '#A8A29E', fontSize: '13px' }}>10 outils d'intelligence artificielle pédagogique · LTI 1.3 Advantage</p>
@@ -60,7 +60,7 @@ export default function EduGearsPage() {
           <div style={{ background: '#FFFFFF', border: '1px solid rgba(28,25,23,0.08)', borderRadius: '16px', overflow: 'hidden', position: 'relative' }}>
             {launching && (
               <div style={{ position: 'absolute', inset: 0, background: 'rgba(13,10,26,0.85)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 10, gap: '16px' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: '3px solid rgba(28,25,23,0.09)', borderTopColor: '#FF5722', animation: 'spin 0.8s linear infinite' }} />
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', border: '3px solid rgba(28,25,23,0.09)', borderTopColor: '#E8651A', animation: 'spin 0.8s linear infinite' }} />
                 <div style={{ color: '#E8651A', fontSize: '14px', fontWeight: '600' }}>Lancement de {currentTool?.label}…</div>
               </div>
             )}
@@ -72,7 +72,7 @@ export default function EduGearsPage() {
         <div>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
             {CATEGORIES.map(cat => (
-              <button key={cat} onClick={() => setFilter(cat)} style={{ background: filter === cat ? 'linear-gradient(135deg,#FF5722,#5B8DEF)' : 'rgba(28,25,23,0.05)', border: filter === cat ? 'none' : '1px solid rgba(28,25,23,0.09)', borderRadius: '8px', padding: '7px 14px', color: filter === cat ? '#fff' : '#A8A29E', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}>{cat}</button>
+              <button key={cat} onClick={() => setFilter(cat)} style={{ background: filter === cat ? 'linear-gradient(135deg,#E8651A,#5B8DEF)' : 'rgba(28,25,23,0.05)', border: filter === cat ? 'none' : '1px solid rgba(28,25,23,0.09)', borderRadius: '8px', padding: '7px 14px', color: filter === cat ? '#fff' : '#A8A29E', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}>{cat}</button>
             ))}
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))', gap: '1rem' }}>
@@ -91,7 +91,7 @@ export default function EduGearsPage() {
               </div>
             ))}
           </div>
-          <div style={{ marginTop: '2rem', padding: '1rem 1.25rem', background: 'rgba(123,92,245,0.05)', border: '1px solid rgba(28,25,23,0.08)', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ marginTop: '2rem', padding: '1rem 1.25rem', background: 'rgba(232,101,26,0.05)', border: '1px solid rgba(28,25,23,0.08)', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '18px' }}>💡</span>
             <div>
               <div style={{ fontSize: '12.5px', color: '#E8651A', fontWeight: '600', marginBottom: '2px' }}>Intégration LTI 1.3 Advantage</div>

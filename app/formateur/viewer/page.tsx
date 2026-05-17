@@ -140,7 +140,7 @@ export default function ViewerPage() {
   return (
     <div style={{height:'calc(100vh - 3rem)',display:'flex',flexDirection:'column'}}>
       {/* Header */}
-      <div style={{marginBottom:'1rem',padding:'1rem 1.5rem',background:'linear-gradient(135deg,rgba(28,25,23,0.07),rgba(224,64,160,0.06))',border:'1px solid rgba(28,25,23,0.10)',borderRadius:'16px',display:'flex',alignItems:'center',gap:'1rem',flexWrap:'wrap'}}>
+      <div style={{marginBottom:'1rem',padding:'1rem 1.5rem',background:'linear-gradient(135deg,rgba(28,25,23,0.07),rgba(232,101,26,0.06))',border:'1px solid rgba(28,25,23,0.10)',borderRadius:'16px',display:'flex',alignItems:'center',gap:'1rem',flexWrap:'wrap'}}>
         <div style={{flex:1,minWidth:'200px'}}>
           <h1 style={{fontSize:'18px',fontWeight:'800',background:'linear-gradient(135deg,#1C1917,#E8651A)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>
             👁 Visualiseur e-learning
@@ -156,7 +156,7 @@ export default function ViewerPage() {
           {launchUrl && (
             <a href={launchUrl} target="_blank" rel="noreferrer" style={{background:'rgba(28,25,23,0.06)',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'8px',padding:'7px 14px',color:'#E8651A',fontSize:'12px',fontWeight:'600'}}>⤢ Plein écran</a>
           )}
-          <button onClick={()=>inputRef.current?.click()} style={{background:'linear-gradient(135deg,#FF5722,#FFB300)',border:'none',borderRadius:'8px',padding:'8px 16px',color:'#fff',fontWeight:'700',fontSize:'13px',cursor:'pointer'}}>
+          <button onClick={()=>inputRef.current?.click()} style={{background:'linear-gradient(135deg,#E8651A,#D4A017)',border:'none',borderRadius:'8px',padding:'8px 16px',color:'#fff',fontWeight:'700',fontSize:'13px',cursor:'pointer'}}>
             {launchUrl?'📁 Autre fichier':'📁 Ouvrir un fichier'}
           </button>
         </div>
@@ -170,7 +170,7 @@ export default function ViewerPage() {
             <span style={{color:'#E8651A',fontWeight:'700'}}>{progress}%</span>
           </div>
           <div style={{height:'6px',background:'rgba(28,25,23,0.06)',borderRadius:'3px',overflow:'hidden'}}>
-            <div style={{height:'100%',width:`${progress}%`,background:'linear-gradient(90deg,#FF5722,#FFB300)',borderRadius:'3px',transition:'width .2s'}} />
+            <div style={{height:'100%',width:`${progress}%`,background:'linear-gradient(90deg,#E8651A,#FFB300)',borderRadius:'3px',transition:'width .2s'}} />
           </div>
         </div>
       )}
@@ -179,7 +179,7 @@ export default function ViewerPage() {
 
       {!loading&&!launchUrl&&!error&&(
         <div onClick={()=>inputRef.current?.click()} style={{flex:1,background:'#FFFFFF',border:'2px dashed rgba(28,25,23,0.09)',borderRadius:'16px',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',cursor:'pointer',transition:'all .2s'}}
-          onMouseEnter={e=>(e.currentTarget as HTMLElement).style.borderColor='rgba(123,92,245,0.5)'}
+          onMouseEnter={e=>(e.currentTarget as HTMLElement).style.borderColor='rgba(232,101,26,0.5)'}
           onMouseLeave={e=>(e.currentTarget as HTMLElement).style.borderColor='rgba(28,25,23,0.09)'}>
           <div style={{fontSize:'56px',marginBottom:'1.5rem'}}>📦</div>
           <div style={{fontWeight:'700',fontSize:'18px',color:'#1C1917',marginBottom:'8px'}}>Ouvrir un contenu e-learning</div>

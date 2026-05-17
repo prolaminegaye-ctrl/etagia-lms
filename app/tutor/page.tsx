@@ -114,7 +114,7 @@ export default function TutorPage() {
   return (
     <div style={{display:'flex',flexDirection:'column',height:'calc(100vh - 4rem)'}}>
       {/* Header */}
-      <div style={{marginBottom:'1rem',padding:'1rem 1.5rem',background:'linear-gradient(135deg,rgba(28,25,23,0.07),rgba(224,64,160,0.06))',border:'1px solid rgba(28,25,23,0.10)',borderRadius:'16px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+      <div style={{marginBottom:'1rem',padding:'1rem 1.5rem',background:'linear-gradient(135deg,rgba(28,25,23,0.07),rgba(232,101,26,0.06))',border:'1px solid rgba(28,25,23,0.10)',borderRadius:'16px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
         <div>
           <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
             <h1 style={{fontSize:'20px',fontWeight:'800',color:'#1C1917'}}>✦ AI Tutor</h1>
@@ -173,9 +173,9 @@ export default function TutorPage() {
           {msgs.map((m,i)=>(
             <div key={i} style={{display:'flex',justifyContent:m.role==='user'?'flex-end':'flex-start',marginBottom:'1rem'}}>
               {m.role==='assistant'&&(
-                <div style={{width:'32px',height:'32px',borderRadius:'50%',background:'linear-gradient(135deg,#FF5722,#FFB300)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'14px',color:'#fff',marginRight:'10px',flexShrink:0,marginTop:'4px'}}>✦</div>
+                <div style={{width:'32px',height:'32px',borderRadius:'50%',background:'linear-gradient(135deg,#E8651A,#D4A017)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'14px',color:'#fff',marginRight:'10px',flexShrink:0,marginTop:'4px'}}>✦</div>
               )}
-              <div style={{maxWidth:'75%',padding:'10px 14px',borderRadius:m.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px',background:m.role==='user'?'linear-gradient(135deg,#FF5722,#FFB300)':'rgba(28,25,23,0.05)',border:m.role==='assistant'?'1px solid rgba(28,25,23,0.08)':'none',color:'#1C1917',fontSize:'14px',lineHeight:'1.6',whiteSpace:'pre-wrap'}}>
+              <div style={{maxWidth:'75%',padding:'10px 14px',borderRadius:m.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px',background:m.role==='user'?'linear-gradient(135deg,#E8651A,#D4A017)':'rgba(28,25,23,0.05)',border:m.role==='assistant'?'1px solid rgba(28,25,23,0.08)':'none',color:'#1C1917',fontSize:'14px',lineHeight:'1.6',whiteSpace:'pre-wrap'}}>
                 {m.content||(loading&&i===msgs.length-1?<span style={{opacity:0.5}}>●●●</span>:null)}
               </div>
             </div>
@@ -185,7 +185,7 @@ export default function TutorPage() {
 
         <div style={{padding:'1rem',borderTop:'1px solid rgba(28,25,23,0.06)',display:'flex',gap:'8px',flexDirection:'column'}}>
           {doc&&(
-            <div style={{fontSize:'12px',color:'#E8651A',background:'rgba(123,92,245,0.06)',borderRadius:'8px',padding:'6px 10px',display:'flex',alignItems:'center',gap:'6px'}}>
+            <div style={{fontSize:'12px',color:'#E8651A',background:'rgba(232,101,26,0.06)',borderRadius:'8px',padding:'6px 10px',display:'flex',alignItems:'center',gap:'6px'}}>
               <span>📎</span><span style={{flex:1}}>{doc.name} sera analysé avec votre question</span>
               <button onClick={removeDoc} style={{background:'none',border:'none',color:'#F05A5A',cursor:'pointer',fontSize:'12px'}}>✕</button>
             </div>
@@ -193,8 +193,8 @@ export default function TutorPage() {
           <div style={{display:'flex',gap:'8px'}}>
             <button onClick={()=>fileRef.current?.click()} style={{background:'rgba(28,25,23,0.05)',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'10px',padding:'10px 12px',color:'#E8651A',fontSize:'18px',cursor:'pointer',flexShrink:0}} title="Joindre un PDF">📎</button>
             <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==='Enter'&&!e.shiftKey&&send()} placeholder={doc?`Question sur "${doc.name}"...`:"Posez votre question..."} disabled={loading}
-              style={{flex:1,background:'rgba(123,92,245,0.06)',color:'#1C1917',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'10px',padding:'10px 14px',fontSize:'14px',fontFamily:'inherit',outline:'none'}} />
-            <button onClick={()=>send()} disabled={loading||!input.trim()} style={{background:'linear-gradient(135deg,#FF5722,#FFB300)',border:'none',borderRadius:'10px',padding:'10px 18px',color:'#fff',fontSize:'14px',fontWeight:'700',cursor:'pointer',opacity:loading||!input.trim()?0.6:1,boxShadow:'0 4px 12px rgba(123,92,245,0.4)',flexShrink:0}}>
+              style={{flex:1,background:'rgba(232,101,26,0.06)',color:'#1C1917',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'10px',padding:'10px 14px',fontSize:'14px',fontFamily:'inherit',outline:'none'}} />
+            <button onClick={()=>send()} disabled={loading||!input.trim()} style={{background:'linear-gradient(135deg,#E8651A,#D4A017)',border:'none',borderRadius:'10px',padding:'10px 18px',color:'#fff',fontSize:'14px',fontWeight:'700',cursor:'pointer',opacity:loading||!input.trim()?0.6:1,boxShadow:'0 4px 12px rgba(232,101,26,0.35)',flexShrink:0}}>
               Envoyer
             </button>
           </div>

@@ -6,7 +6,7 @@ const completions = [8,18,25,38,44]
 const maxVal = Math.max(...inscriptions)
 
 const topCours = [
-  { title:'Data Science avec Python', enrolled:54, completion:72, satisfaction:4.8, color:'#FF5722' },
+  { title:'Data Science avec Python', enrolled:54, completion:72, satisfaction:4.8, color:'#E8651A' },
   { title:'Marketing Digital Afrique', enrolled:43, completion:58, satisfaction:4.6, color:'#00BFA5' },
   { title:'Leadership & Management', enrolled:30, completion:45, satisfaction:4.5, color:'#FFB300' },
 ]
@@ -22,7 +22,7 @@ const card: React.CSSProperties = { background:'#FFFFFF', border:'1.5px solid rg
 export default function StatsPage() {
   return (
     <div>
-      <div style={{marginBottom:'2rem',padding:'2rem',background:'linear-gradient(135deg,#FF5722 0%,#FFB300 100%)',borderRadius:'24px',boxShadow:'0 8px 32px rgba(255,87,34,0.28)',position:'relative',overflow:'hidden'}}>
+      <div style={{marginBottom:'2rem',padding:'2rem',background:'linear-gradient(135deg,#E8651A 0%,#FFB300 100%)',borderRadius:'24px',boxShadow:'0 8px 32px rgba(232,101,26,0.28)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:'-60px',right:'-40px',width:'200px',height:'200px',borderRadius:'50%',background:'rgba(255,255,255,0.08)',pointerEvents:'none'}}/>
         <h1 style={{fontSize:'24px',fontWeight:'800',color:'#FFFFFF',fontFamily:'Syne,sans-serif',position:'relative'}}>Statistiques</h1>
         <p style={{color:'rgba(255,255,255,0.80)',fontSize:'13px',marginTop:'4px',position:'relative'}}>Tableau de bord pédagogique · Mis à jour en temps réel</p>
@@ -30,9 +30,9 @@ export default function StatsPage() {
 
       <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1rem',marginBottom:'2rem'}}>
         {[
-          {l:'Apprenants total',v:'127',delta:'+12 ce mois',c:'#FF5722',grad:'linear-gradient(135deg,#FF5722,#FFB300)'},
+          {l:'Apprenants total',v:'127',delta:'+12 ce mois',c:'#E8651A',grad:'linear-gradient(135deg,#E8651A,#D4A017)'},
           {l:'Taux complétion',v:'71%',delta:'+4% ce mois',c:'#00BFA5',grad:'linear-gradient(135deg,#00BFA5,#7C3AED)'},
-          {l:'Satisfaction',v:'4.7/5',delta:'⭐ Excellent',c:'#FFB300',grad:'linear-gradient(135deg,#FFB300,#FF5722)'},
+          {l:'Satisfaction',v:'4.7/5',delta:'⭐ Excellent',c:'#FFB300',grad:'linear-gradient(135deg,#D4A017,#E8651A)'},
           {l:'Heures de formation',v:'1 248h',delta:'+180h semaine',c:'#7C3AED',grad:'linear-gradient(135deg,#7C3AED,#00BFA5)'},
         ].map(k=>(
           <div key={k.l} style={{...card,padding:'1.25rem',position:'relative',overflow:'hidden'}}>
@@ -50,9 +50,9 @@ export default function StatsPage() {
           <div style={{display:'flex',alignItems:'flex-end',gap:'16px',height:'140px'}}>
             {months.map((m,i)=>(
               <div key={m} style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',gap:'6px'}}>
-                <div style={{fontSize:'11px',color:'#FF5722',fontWeight:'700'}}>{inscriptions[i]}</div>
+                <div style={{fontSize:'11px',color:'#E8651A',fontWeight:'700'}}>{inscriptions[i]}</div>
                 <div style={{width:'100%',display:'flex',gap:'3px',alignItems:'flex-end',height:'100px'}}>
-                  <div style={{flex:1,background:'linear-gradient(180deg,#FF5722,#FF572288)',borderRadius:'4px 4px 0 0',height:`${(inscriptions[i]/maxVal)*100}%`}}/>
+                  <div style={{flex:1,background:'linear-gradient(180deg,#E8651A,#D4A017)',borderRadius:'4px 4px 0 0',height:`${(inscriptions[i]/maxVal)*100}%`}}/>
                   <div style={{flex:1,background:'linear-gradient(180deg,#00BFA5,#00BFA588)',borderRadius:'4px 4px 0 0',height:`${(completions[i]/maxVal)*100}%`}}/>
                 </div>
                 <div style={{fontSize:'11px',color:'#A8A29E'}}>{m}</div>
@@ -60,7 +60,7 @@ export default function StatsPage() {
             ))}
           </div>
           <div style={{display:'flex',gap:'16px',marginTop:'14px'}}>
-            <div style={{display:'flex',gap:'6px',alignItems:'center'}}><div style={{width:'10px',height:'10px',borderRadius:'2px',background:'#FF5722'}}/><span style={{fontSize:'11px',color:'#A8A29E'}}>Inscrits</span></div>
+            <div style={{display:'flex',gap:'6px',alignItems:'center'}}><div style={{width:'10px',height:'10px',borderRadius:'2px',background:'#E8651A'}}/><span style={{fontSize:'11px',color:'#A8A29E'}}>Inscrits</span></div>
             <div style={{display:'flex',gap:'6px',alignItems:'center'}}><div style={{width:'10px',height:'10px',borderRadius:'2px',background:'#00BFA5'}}/><span style={{fontSize:'11px',color:'#A8A29E'}}>Complétions</span></div>
           </div>
         </div>
@@ -70,8 +70,8 @@ export default function StatsPage() {
           <div style={{display:'flex',alignItems:'flex-end',gap:'8px',height:'120px'}}>
             {activities.map(a=>(
               <div key={a.day} style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',gap:'4px'}}>
-                <div style={{fontSize:'10px',color:'#FF5722',fontWeight:'700'}}>{a.val}</div>
-                <div style={{width:'100%',background:`linear-gradient(180deg,#FFB300,#FF5722)`,borderRadius:'4px 4px 0 0',height:`${(a.val/maxAct)*90}px`,minHeight:'4px'}}/>
+                <div style={{fontSize:'10px',color:'#E8651A',fontWeight:'700'}}>{a.val}</div>
+                <div style={{width:'100%',background:`linear-gradient(180deg,#D4A017,#E8651A)`,borderRadius:'4px 4px 0 0',height:`${(a.val/maxAct)*90}px`,minHeight:'4px'}}/>
                 <div style={{fontSize:'10px',color:'#A8A29E'}}>{a.day}</div>
               </div>
             ))}
