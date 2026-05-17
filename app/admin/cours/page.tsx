@@ -34,18 +34,18 @@ export default function AdminCoursPage() {
   const toggleStatus = (id: string) => setCours(p => p.map(c => c.id===id ? {...c, status: c.status==='Publié'?'Archivé':'Publié'} : c))
 
   const S = {
-    inp: { background:'rgba(123,92,245,0.06)', color:'#F0EEFF', border:'1px solid rgba(123,92,245,0.2)', borderRadius:'10px', padding:'9px 12px', width:'100%', fontSize:'14px', fontFamily:'inherit', outline:'none' } as React.CSSProperties,
-    lbl: { fontSize:'11px', color:'#8B7BAE', display:'block', marginBottom:'5px', fontWeight:'700', textTransform:'uppercase' as const, letterSpacing:'0.7px' },
+    inp: { background:'rgba(123,92,245,0.06)', color:'#1C1917', border:'1px solid rgba(28,25,23,0.09)', borderRadius:'10px', padding:'9px 12px', width:'100%', fontSize:'14px', fontFamily:'inherit', outline:'none' } as React.CSSProperties,
+    lbl: { fontSize:'11px', color:'#A8A29E', display:'block', marginBottom:'5px', fontWeight:'700', textTransform:'uppercase' as const, letterSpacing:'0.7px' },
     btn: { background:'linear-gradient(135deg,#FF5722,#FFB300)', border:'none', borderRadius:'10px', padding:'10px 20px', color:'#fff', fontWeight:'700', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
-    cancel: { background:'#FAF9F7', border:'1px solid rgba(28,25,23,0.07)', borderRadius:'10px', padding:'10px 18px', color:'#8B7BAE', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
+    cancel: { background:'#FAF9F7', border:'1px solid rgba(28,25,23,0.07)', borderRadius:'10px', padding:'10px 18px', color:'#A8A29E', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
   }
 
   return (
     <div>
-      <div style={{marginBottom:'2rem',padding:'1.5rem',background:'linear-gradient(135deg,rgba(123,92,245,0.1),rgba(34,212,168,0.05))',border:'1px solid rgba(123,92,245,0.2)',borderRadius:'20px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+      <div style={{marginBottom:'2rem',padding:'1.5rem',background:'linear-gradient(135deg,rgba(28,25,23,0.06),rgba(34,212,168,0.05))',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'20px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
         <div>
-          <h1 style={{fontSize:'24px',fontWeight:'800',background:'linear-gradient(135deg,#F0EEFF,#A78BF8)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Gestion des cours</h1>
-          <p style={{color:'#8B7BAE',fontSize:'13px',marginTop:'3px'}}>{cours.length} cours · {cours.filter(c=>c.status==='Publié').length} publiés · {cours.reduce((a,c)=>a+c.enrolled,0)} inscrits</p>
+          <h1 style={{fontSize:'24px',fontWeight:'800',background:'linear-gradient(135deg,#1C1917,#E8651A)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Gestion des cours</h1>
+          <p style={{color:'#A8A29E',fontSize:'13px',marginTop:'3px'}}>{cours.length} cours · {cours.filter(c=>c.status==='Publié').length} publiés · {cours.reduce((a,c)=>a+c.enrolled,0)} inscrits</p>
         </div>
         <button onClick={()=>router.push('/formateur/creer')} style={S.btn}>+ Créer un cours</button>
       </div>
@@ -54,19 +54,19 @@ export default function AdminCoursPage() {
       <div style={{display:'flex',gap:'10px',marginBottom:'1.5rem',flexWrap:'wrap'}}>
         <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="🔍 Rechercher..." style={{...S.inp,flex:1,minWidth:'200px',padding:'11px 16px'}} />
         {['Tous','Publié','Brouillon','Tech','Business','Finance'].map(f=>(
-          <button key={f} onClick={()=>setFilter(f)} style={{padding:'8px 16px',borderRadius:'20px',fontSize:'12px',fontWeight:'600',border:`1px solid ${filter===f?'rgba(123,92,245,0.5)':'rgba(123,92,245,0.15)'}`,background:filter===f?'rgba(123,92,245,0.15)':'transparent',color:filter===f?'#A78BF8':'#8B7BAE',cursor:'pointer'}}>
+          <button key={f} onClick={()=>setFilter(f)} style={{padding:'8px 16px',borderRadius:'20px',fontSize:'12px',fontWeight:'600',border:`1px solid ${filter===f?'rgba(123,92,245,0.5)':'rgba(28,25,23,0.08)'}`,background:filter===f?'rgba(28,25,23,0.08)':'transparent',color:filter===f?'#E8651A':'#A8A29E',cursor:'pointer'}}>
             {f}
           </button>
         ))}
       </div>
 
       {/* Table */}
-      <div style={{background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(123,92,245,0.12)',borderRadius:'16px',overflow:'hidden'}}>
+      <div style={{background:'#FFFFFF',border:'1px solid rgba(28,25,23,0.07)',borderRadius:'16px',overflow:'hidden'}}>
         <table style={{width:'100%',borderCollapse:'collapse'}}>
           <thead>
-            <tr style={{borderBottom:'1px solid rgba(123,92,245,0.1)',background:'#FAF9F7'}}>
+            <tr style={{borderBottom:'1px solid rgba(28,25,23,0.06)',background:'#FAF9F7'}}>
               {['Cours','Auteur','Catégorie','Inscrits','Complétion','Statut','Actions'].map(h=>(
-                <th key={h} style={{padding:'12px 14px',textAlign:'left',fontSize:'10px',fontWeight:'700',color:'#4A3D6A',textTransform:'uppercase',letterSpacing:'0.8px'}}>{h}</th>
+                <th key={h} style={{padding:'12px 14px',textAlign:'left',fontSize:'10px',fontWeight:'700',color:'#57534E',textTransform:'uppercase',letterSpacing:'0.8px'}}>{h}</th>
               ))}
             </tr>
           </thead>
@@ -76,18 +76,18 @@ export default function AdminCoursPage() {
                 onMouseEnter={e=>(e.currentTarget as HTMLElement).style.background='rgba(123,92,245,0.04)'}
                 onMouseLeave={e=>(e.currentTarget as HTMLElement).style.background='transparent'}>
                 <td style={{padding:'14px'}}>
-                  <div style={{fontWeight:'600',fontSize:'13px',color:'#F0EEFF',marginBottom:'2px'}}>{c.title}</div>
-                  <div style={{fontSize:'11px',color:'#4A3D6A'}}>{c.modules} modules · {c.duration}</div>
+                  <div style={{fontWeight:'600',fontSize:'13px',color:'#1C1917',marginBottom:'2px'}}>{c.title}</div>
+                  <div style={{fontSize:'11px',color:'#57534E'}}>{c.modules} modules · {c.duration}</div>
                 </td>
-                <td style={{padding:'14px',fontSize:'13px',color:'#8B7BAE'}}>{c.author}</td>
-                <td style={{padding:'14px'}}><span style={{fontSize:'11px',fontWeight:'600',padding:'3px 8px',borderRadius:'6px',background:'rgba(123,92,245,0.1)',color:'#A78BF8'}}>{c.category}</span></td>
-                <td style={{padding:'14px',fontSize:'14px',fontWeight:'700',color:'#A78BF8'}}>{c.enrolled}</td>
+                <td style={{padding:'14px',fontSize:'13px',color:'#A8A29E'}}>{c.author}</td>
+                <td style={{padding:'14px'}}><span style={{fontSize:'11px',fontWeight:'600',padding:'3px 8px',borderRadius:'6px',background:'rgba(28,25,23,0.06)',color:'#E8651A'}}>{c.category}</span></td>
+                <td style={{padding:'14px',fontSize:'14px',fontWeight:'700',color:'#E8651A'}}>{c.enrolled}</td>
                 <td style={{padding:'14px'}}>
                   <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
-                    <div style={{flex:1,height:'4px',background:'rgba(123,92,245,0.1)',borderRadius:'2px',overflow:'hidden'}}>
+                    <div style={{flex:1,height:'4px',background:'rgba(28,25,23,0.06)',borderRadius:'2px',overflow:'hidden'}}>
                       <div style={{height:'100%',width:`${c.completion}%`,background:'linear-gradient(90deg,#FF5722,#FFB300)',borderRadius:'2px'}} />
                     </div>
-                    <span style={{fontSize:'12px',color:'#A78BF8',fontWeight:'600',minWidth:'30px'}}>{c.completion}%</span>
+                    <span style={{fontSize:'12px',color:'#E8651A',fontWeight:'600',minWidth:'30px'}}>{c.completion}%</span>
                   </div>
                 </td>
                 <td style={{padding:'14px'}}>
@@ -97,7 +97,7 @@ export default function AdminCoursPage() {
                 </td>
                 <td style={{padding:'14px'}}>
                   <div style={{display:'flex',gap:'5px'}}>
-                    <button onClick={()=>openEdit(c)} style={{background:'rgba(123,92,245,0.1)',border:'none',borderRadius:'6px',padding:'5px 10px',color:'#A78BF8',fontSize:'11px',fontWeight:'600',cursor:'pointer'}}>✏️ Éditer</button>
+                    <button onClick={()=>openEdit(c)} style={{background:'rgba(28,25,23,0.06)',border:'none',borderRadius:'6px',padding:'5px 10px',color:'#E8651A',fontSize:'11px',fontWeight:'600',cursor:'pointer'}}>✏️ Éditer</button>
                     <button onClick={()=>toggleStatus(c.id)} style={{background:'rgba(34,212,168,0.08)',border:'none',borderRadius:'6px',padding:'5px 10px',color:'#00BFA5',fontSize:'11px',cursor:'pointer'}}>⇄</button>
                     <button onClick={()=>openDelete(c)} style={{background:'rgba(240,90,90,0.08)',border:'none',borderRadius:'6px',padding:'5px 8px',color:'#F05A5A',fontSize:'11px',cursor:'pointer'}}>🗑</button>
                   </div>
@@ -106,14 +106,14 @@ export default function AdminCoursPage() {
             ))}
           </tbody>
         </table>
-        {filtered.length===0&&<div style={{padding:'3rem',textAlign:'center',color:'#4A3D6A'}}>Aucun cours trouvé</div>}
+        {filtered.length===0&&<div style={{padding:'3rem',textAlign:'center',color:'#57534E'}}>Aucun cours trouvé</div>}
       </div>
 
       {/* Edit modal */}
       {modal==='edit'&&(
         <div style={{position:'fixed',inset:0,background:'#FAF9F7',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
-          <div style={{background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(123,92,245,0.25)',borderRadius:'20px',padding:'2rem',width:'100%',maxWidth:'500px'}}>
-            <h2 style={{fontSize:'18px',fontWeight:'800',color:'#F0EEFF',marginBottom:'1.5rem'}}>✏️ Modifier le cours</h2>
+          <div style={{background:'#FFFFFF',border:'1px solid rgba(28,25,23,0.10)',borderRadius:'20px',padding:'2rem',width:'100%',maxWidth:'500px'}}>
+            <h2 style={{fontSize:'18px',fontWeight:'800',color:'#1C1917',marginBottom:'1.5rem'}}>✏️ Modifier le cours</h2>
             <div style={{display:'flex',flexDirection:'column',gap:'1rem',marginBottom:'1.5rem'}}>
               <div><label style={S.lbl}>Titre</label><input style={S.inp} value={form.title||''} onChange={e=>setForm({...form,title:e.target.value})} /></div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem'}}>
@@ -139,10 +139,10 @@ export default function AdminCoursPage() {
 
       {modal==='delete'&&(
         <div style={{position:'fixed',inset:0,background:'#FAF9F7',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100}}>
-          <div style={{background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(240,90,90,0.3)',borderRadius:'20px',padding:'2.5rem',textAlign:'center',maxWidth:'400px',margin:'1rem'}}>
+          <div style={{background:'#FFFFFF',border:'1px solid rgba(240,90,90,0.3)',borderRadius:'20px',padding:'2.5rem',textAlign:'center',maxWidth:'400px',margin:'1rem'}}>
             <div style={{fontSize:'48px',marginBottom:'1rem'}}>⚠️</div>
             <h2 style={{fontSize:'18px',fontWeight:'800',color:'#F05A5A',marginBottom:'8px'}}>Supprimer "{sel?.title}" ?</h2>
-            <p style={{color:'#8B7BAE',fontSize:'13px',marginBottom:'2rem'}}>Action irréversible. Les {sel?.enrolled} apprenants inscrits perdront l&apos;accès.</p>
+            <p style={{color:'#A8A29E',fontSize:'13px',marginBottom:'2rem'}}>Action irréversible. Les {sel?.enrolled} apprenants inscrits perdront l&apos;accès.</p>
             <div style={{display:'flex',gap:'10px',justifyContent:'center'}}>
               <button onClick={()=>setModal(null)} style={S.cancel}>Annuler</button>
               <button onClick={confirmDelete} style={{...S.btn,background:'linear-gradient(135deg,#F05A5A,#C0392B)'}}>Supprimer</button>

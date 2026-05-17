@@ -63,7 +63,7 @@ export default function Sidebar({ role = 'apprenant' }: { role?: string }) {
             <Link key={r} href={href} style={{
               flex: 1, textAlign: 'center', padding: '6px 2px', borderRadius: '7px',
               fontSize: '10px', fontWeight: '700', transition: 'all .15s',
-              background: role === r ? 'linear-gradient(135deg,#FF5722,#FFB300)' : 'transparent',
+              background: role === r ? 'linear-gradient(135deg,#E8651A,#D4A017)' : 'transparent',
               color: role === r ? '#FFFFFF' : 'rgba(245,240,232,0.40)',
               textDecoration: 'none',
             }}>{label}</Link>
@@ -80,11 +80,11 @@ export default function Sidebar({ role = 'apprenant' }: { role?: string }) {
             <Link key={item.href} href={item.href} style={{
               display: 'flex', alignItems: 'center', gap: '10px',
               padding: '9px 10px', borderRadius: '10px', marginBottom: '1px',
-              background: active ? 'rgba(255,87,34,0.16)' : 'transparent',
-              color: active ? '#FF7043' : 'rgba(245,240,232,0.50)',
+              background: active ? 'rgba(232,101,26,0.14)' : 'transparent',
+              color: active ? '#EB7035' : 'rgba(245,240,232,0.50)',
               fontSize: '13.5px', fontWeight: active ? '600' : '400',
               transition: 'all .15s',
-              borderLeft: active ? '2.5px solid #FF5722' : '2.5px solid transparent',
+              borderLeft: active ? '2.5px solid #E8651A' : '2.5px solid transparent',
               textDecoration: 'none',
             }}>
               <span style={{ fontSize: '15px' }}>{item.icon}</span>
@@ -93,7 +93,7 @@ export default function Sidebar({ role = 'apprenant' }: { role?: string }) {
                 <span style={{
                   fontSize: '9px', borderRadius: '5px', padding: '2px 6px', fontWeight: '800',
                   background: active ? 'rgba(255,87,34,0.25)' : 'rgba(255,255,255,0.08)',
-                  color: active ? '#FF7043' : 'rgba(245,240,232,0.50)'
+                  color: active ? '#EB7035' : 'rgba(245,240,232,0.50)'
                 }}>{(item as any).badge}</span>
               )}
             </Link>
@@ -102,10 +102,10 @@ export default function Sidebar({ role = 'apprenant' }: { role?: string }) {
       </nav>
 
       {/* Streak banner */}
-      <div style={{ margin: '0 0.625rem 0.625rem', background: 'linear-gradient(135deg,rgba(255,87,34,0.18),rgba(255,179,0,0.12))', border: '1px solid rgba(255,87,34,0.22)', borderRadius: '12px', padding: '10px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div style={{ margin: '0 0.625rem 0.625rem', background: 'linear-gradient(135deg,rgba(232,101,26,0.15),rgba(255,179,0,0.12))', border: '1px solid rgba(232,101,26,0.18)', borderRadius: '12px', padding: '10px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
         <span style={{ fontSize: '20px' }}>🔥</span>
         <div>
-          <div style={{ fontSize: '12px', fontWeight: '700', color: '#FF7043' }}>7 jours de streak</div>
+          <div style={{ fontSize: '12px', fontWeight: '700', color: '#EB7035' }}>7 jours de streak</div>
           <div style={{ fontSize: '10px', color: 'rgba(245,240,232,0.40)' }}>Continuez comme ça !</div>
         </div>
       </div>
@@ -113,7 +113,7 @@ export default function Sidebar({ role = 'apprenant' }: { role?: string }) {
       {/* User */}
       <div style={{ padding: '0 0.625rem 0.875rem' }}>
         <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', padding: '10px 12px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ width: '36px', height: '36px', borderRadius: '50%', flexShrink: 0, background: 'linear-gradient(135deg,#FF5722,#FFB300)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '800', color: '#fff' }}>LG</div>
+          <div style={{ width: '36px', height: '36px', borderRadius: '50%', flexShrink: 0, background: 'linear-gradient(135deg,#E8651A,#D4A017)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '800', color: '#fff' }}>LG</div>
           <div>
             <div style={{ fontWeight: '600', fontSize: '13px', color: '#F5F0E8' }}>Lamine Gaye</div>
             <div style={{ fontSize: '11px', color: 'rgba(245,240,232,0.40)', textTransform: 'capitalize' }}>{role}</div>

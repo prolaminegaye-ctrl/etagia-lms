@@ -114,16 +114,16 @@ export default function TutorPage() {
   return (
     <div style={{display:'flex',flexDirection:'column',height:'calc(100vh - 4rem)'}}>
       {/* Header */}
-      <div style={{marginBottom:'1rem',padding:'1rem 1.5rem',background:'linear-gradient(135deg,rgba(123,92,245,0.12),rgba(224,64,160,0.06))',border:'1px solid rgba(123,92,245,0.25)',borderRadius:'16px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+      <div style={{marginBottom:'1rem',padding:'1rem 1.5rem',background:'linear-gradient(135deg,rgba(28,25,23,0.07),rgba(224,64,160,0.06))',border:'1px solid rgba(28,25,23,0.10)',borderRadius:'16px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
         <div>
           <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
-            <h1 style={{fontSize:'20px',fontWeight:'800',color:'#F0EEFF'}}>✦ AI Tutor</h1>
-            <span style={{fontSize:'10px',fontWeight:'800',padding:'3px 8px',borderRadius:'6px',background:'rgba(123,92,245,0.25)',color:'#A78BF8',letterSpacing:'0.5px'}}>IA · ETAGIA</span>
+            <h1 style={{fontSize:'20px',fontWeight:'800',color:'#1C1917'}}>✦ AI Tutor</h1>
+            <span style={{fontSize:'10px',fontWeight:'800',padding:'3px 8px',borderRadius:'6px',background:'rgba(28,25,23,0.10)',color:'#E8651A',letterSpacing:'0.5px'}}>IA · ETAGIA</span>
           </div>
-          <p style={{color:'#8B7BAE',fontSize:'12px',marginTop:'2px'}}>Propulsé par Claude · Analyse documents PDF · Explications personnalisées</p>
+          <p style={{color:'#A8A29E',fontSize:'12px',marginTop:'2px'}}>Propulsé par Claude · Analyse documents PDF · Explications personnalisées</p>
         </div>
         <div style={{display:'flex',gap:'8px',alignItems:'center'}}>
-          <button onClick={()=>fileRef.current?.click()} disabled={docLoading} style={{background:'rgba(123,92,245,0.1)',border:'1px solid rgba(123,92,245,0.25)',borderRadius:'8px',padding:'7px 14px',color:'#A78BF8',fontSize:'12px',fontWeight:'600',cursor:'pointer',display:'flex',alignItems:'center',gap:'6px'}}>
+          <button onClick={()=>fileRef.current?.click()} disabled={docLoading} style={{background:'rgba(28,25,23,0.06)',border:'1px solid rgba(28,25,23,0.10)',borderRadius:'8px',padding:'7px 14px',color:'#E8651A',fontSize:'12px',fontWeight:'600',cursor:'pointer',display:'flex',alignItems:'center',gap:'6px'}}>
             {docLoading?'⏳ Chargement...':'📎 Joindre un document'}
           </button>
           <input ref={fileRef} type="file" style={{display:'none'}} accept=".pdf,.txt,.md,.docx" onChange={e=>{if(e.target.files?.[0])loadDoc(e.target.files[0])}} />
@@ -139,30 +139,30 @@ export default function TutorPage() {
 
       {/* Doc attached */}
       {doc&&(
-        <div style={{marginBottom:'1rem',background:'rgba(123,92,245,0.08)',border:'1px solid rgba(123,92,245,0.25)',borderRadius:'12px',padding:'10px 14px',display:'flex',alignItems:'center',gap:'10px'}}>
+        <div style={{marginBottom:'1rem',background:'rgba(28,25,23,0.05)',border:'1px solid rgba(28,25,23,0.10)',borderRadius:'12px',padding:'10px 14px',display:'flex',alignItems:'center',gap:'10px'}}>
           <span style={{fontSize:'20px'}}>📄</span>
           <div style={{flex:1}}>
-            <div style={{fontWeight:'600',fontSize:'13px',color:'#A78BF8'}}>{doc.name}</div>
-            <div style={{fontSize:'11px',color:'#8B7BAE'}}>Document prêt à être analysé · posez votre question ci-dessous</div>
+            <div style={{fontWeight:'600',fontSize:'13px',color:'#E8651A'}}>{doc.name}</div>
+            <div style={{fontSize:'11px',color:'#A8A29E'}}>Document prêt à être analysé · posez votre question ci-dessous</div>
           </div>
           <button onClick={removeDoc} style={{background:'rgba(240,90,90,0.1)',border:'none',borderRadius:'6px',padding:'4px 8px',color:'#F05A5A',fontSize:'12px',cursor:'pointer'}}>✕ Retirer</button>
         </div>
       )}
 
       {/* Chat */}
-      <div style={{flex:1,background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(123,92,245,0.12)',borderRadius:'16px',display:'flex',flexDirection:'column',overflow:'hidden'}}>
+      <div style={{flex:1,background:'#FFFFFF',border:'1px solid rgba(28,25,23,0.07)',borderRadius:'16px',display:'flex',flexDirection:'column',overflow:'hidden'}}>
         <div style={{flex:1,overflowY:'auto',padding:'1.5rem'}}>
           {msgs.length===0&&(
             <div style={{textAlign:'center',marginTop:'3rem'}}>
               <div style={{fontSize:'48px',marginBottom:'1rem'}}>✦</div>
-              <h3 style={{fontSize:'18px',fontWeight:'700',marginBottom:'8px',color:'#F0EEFF'}}>Bonjour, je suis votre AI Tutor</h3>
-              <p style={{color:'#8B7BAE',fontSize:'14px',marginBottom:'0.5rem'}}>Posez vos questions ou <strong style={{color:'#A78BF8'}}>📎 joignez un document PDF</strong> pour l&apos;analyser.</p>
-              <p style={{color:'#4A3D6A',fontSize:'12px',marginBottom:'2rem'}}>Cours, supports de formation, articles — j&apos;analyse et explique tout.</p>
+              <h3 style={{fontSize:'18px',fontWeight:'700',marginBottom:'8px',color:'#1C1917'}}>Bonjour, je suis votre AI Tutor</h3>
+              <p style={{color:'#A8A29E',fontSize:'14px',marginBottom:'0.5rem'}}>Posez vos questions ou <strong style={{color:'#E8651A'}}>📎 joignez un document PDF</strong> pour l&apos;analyser.</p>
+              <p style={{color:'#57534E',fontSize:'12px',marginBottom:'2rem'}}>Cours, supports de formation, articles — j&apos;analyse et explique tout.</p>
               <div style={{display:'flex',flexWrap:'wrap',gap:'8px',justifyContent:'center'}}>
                 {suggestions.map(s=>(
-                  <button key={s} onClick={()=>send(s)} style={{background:'rgba(123,92,245,0.08)',border:'1px solid rgba(123,92,245,0.2)',borderRadius:'20px',padding:'8px 14px',fontSize:'13px',color:'#8B7BAE',cursor:'pointer',fontFamily:'inherit',transition:'all .15s'}}
-                    onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.background='rgba(123,92,245,0.15)';(e.currentTarget as HTMLElement).style.color='#A78BF8'}}
-                    onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.background='rgba(123,92,245,0.08)';(e.currentTarget as HTMLElement).style.color='#8B7BAE'}}>
+                  <button key={s} onClick={()=>send(s)} style={{background:'rgba(28,25,23,0.05)',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'20px',padding:'8px 14px',fontSize:'13px',color:'#A8A29E',cursor:'pointer',fontFamily:'inherit',transition:'all .15s'}}
+                    onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.background='rgba(28,25,23,0.08)';(e.currentTarget as HTMLElement).style.color='#E8651A'}}
+                    onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.background='rgba(28,25,23,0.05)';(e.currentTarget as HTMLElement).style.color='#A8A29E'}}>
                     {s}
                   </button>
                 ))}
@@ -175,7 +175,7 @@ export default function TutorPage() {
               {m.role==='assistant'&&(
                 <div style={{width:'32px',height:'32px',borderRadius:'50%',background:'linear-gradient(135deg,#FF5722,#FFB300)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'14px',color:'#fff',marginRight:'10px',flexShrink:0,marginTop:'4px'}}>✦</div>
               )}
-              <div style={{maxWidth:'75%',padding:'10px 14px',borderRadius:m.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px',background:m.role==='user'?'linear-gradient(135deg,#FF5722,#FFB300)':'rgba(123,92,245,0.08)',border:m.role==='assistant'?'1px solid rgba(123,92,245,0.15)':'none',color:'#F0EEFF',fontSize:'14px',lineHeight:'1.6',whiteSpace:'pre-wrap'}}>
+              <div style={{maxWidth:'75%',padding:'10px 14px',borderRadius:m.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px',background:m.role==='user'?'linear-gradient(135deg,#FF5722,#FFB300)':'rgba(28,25,23,0.05)',border:m.role==='assistant'?'1px solid rgba(28,25,23,0.08)':'none',color:'#1C1917',fontSize:'14px',lineHeight:'1.6',whiteSpace:'pre-wrap'}}>
                 {m.content||(loading&&i===msgs.length-1?<span style={{opacity:0.5}}>●●●</span>:null)}
               </div>
             </div>
@@ -183,17 +183,17 @@ export default function TutorPage() {
           <div ref={bottomRef} />
         </div>
 
-        <div style={{padding:'1rem',borderTop:'1px solid rgba(123,92,245,0.1)',display:'flex',gap:'8px',flexDirection:'column'}}>
+        <div style={{padding:'1rem',borderTop:'1px solid rgba(28,25,23,0.06)',display:'flex',gap:'8px',flexDirection:'column'}}>
           {doc&&(
-            <div style={{fontSize:'12px',color:'#A78BF8',background:'rgba(123,92,245,0.06)',borderRadius:'8px',padding:'6px 10px',display:'flex',alignItems:'center',gap:'6px'}}>
+            <div style={{fontSize:'12px',color:'#E8651A',background:'rgba(123,92,245,0.06)',borderRadius:'8px',padding:'6px 10px',display:'flex',alignItems:'center',gap:'6px'}}>
               <span>📎</span><span style={{flex:1}}>{doc.name} sera analysé avec votre question</span>
               <button onClick={removeDoc} style={{background:'none',border:'none',color:'#F05A5A',cursor:'pointer',fontSize:'12px'}}>✕</button>
             </div>
           )}
           <div style={{display:'flex',gap:'8px'}}>
-            <button onClick={()=>fileRef.current?.click()} style={{background:'rgba(123,92,245,0.08)',border:'1px solid rgba(123,92,245,0.2)',borderRadius:'10px',padding:'10px 12px',color:'#A78BF8',fontSize:'18px',cursor:'pointer',flexShrink:0}} title="Joindre un PDF">📎</button>
+            <button onClick={()=>fileRef.current?.click()} style={{background:'rgba(28,25,23,0.05)',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'10px',padding:'10px 12px',color:'#E8651A',fontSize:'18px',cursor:'pointer',flexShrink:0}} title="Joindre un PDF">📎</button>
             <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==='Enter'&&!e.shiftKey&&send()} placeholder={doc?`Question sur "${doc.name}"...`:"Posez votre question..."} disabled={loading}
-              style={{flex:1,background:'rgba(123,92,245,0.06)',color:'#F0EEFF',border:'1px solid rgba(123,92,245,0.2)',borderRadius:'10px',padding:'10px 14px',fontSize:'14px',fontFamily:'inherit',outline:'none'}} />
+              style={{flex:1,background:'rgba(123,92,245,0.06)',color:'#1C1917',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'10px',padding:'10px 14px',fontSize:'14px',fontFamily:'inherit',outline:'none'}} />
             <button onClick={()=>send()} disabled={loading||!input.trim()} style={{background:'linear-gradient(135deg,#FF5722,#FFB300)',border:'none',borderRadius:'10px',padding:'10px 18px',color:'#fff',fontSize:'14px',fontWeight:'700',cursor:'pointer',opacity:loading||!input.trim()?0.6:1,boxShadow:'0 4px 12px rgba(123,92,245,0.4)',flexShrink:0}}>
               Envoyer
             </button>
@@ -202,7 +202,7 @@ export default function TutorPage() {
       </div>
 
       <div style={{marginTop:'8px',textAlign:'center'}}>
-        <span style={{fontSize:'11px',color:'#4A3D6A'}}>⚠ IA · Réponses générées par Claude · Vérifiez les informations importantes</span>
+        <span style={{fontSize:'11px',color:'#57534E'}}>⚠ IA · Réponses générées par Claude · Vérifiez les informations importantes</span>
       </div>
     </div>
   )

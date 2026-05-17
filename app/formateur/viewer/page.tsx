@@ -140,21 +140,21 @@ export default function ViewerPage() {
   return (
     <div style={{height:'calc(100vh - 3rem)',display:'flex',flexDirection:'column'}}>
       {/* Header */}
-      <div style={{marginBottom:'1rem',padding:'1rem 1.5rem',background:'linear-gradient(135deg,rgba(123,92,245,0.12),rgba(224,64,160,0.06))',border:'1px solid rgba(123,92,245,0.25)',borderRadius:'16px',display:'flex',alignItems:'center',gap:'1rem',flexWrap:'wrap'}}>
+      <div style={{marginBottom:'1rem',padding:'1rem 1.5rem',background:'linear-gradient(135deg,rgba(28,25,23,0.07),rgba(224,64,160,0.06))',border:'1px solid rgba(28,25,23,0.10)',borderRadius:'16px',display:'flex',alignItems:'center',gap:'1rem',flexWrap:'wrap'}}>
         <div style={{flex:1,minWidth:'200px'}}>
-          <h1 style={{fontSize:'18px',fontWeight:'800',background:'linear-gradient(135deg,#F0EEFF,#A78BF8)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>
+          <h1 style={{fontSize:'18px',fontWeight:'800',background:'linear-gradient(135deg,#1C1917,#E8651A)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>
             👁 Visualiseur e-learning
           </h1>
-          <p style={{color:'#8B7BAE',fontSize:'11px',marginTop:'2px'}}>SCORM · H5P · HTML · PDF · Vidéo — lecture directe dans le navigateur</p>
+          <p style={{color:'#A8A29E',fontSize:'11px',marginTop:'2px'}}>SCORM · H5P · HTML · PDF · Vidéo — lecture directe dans le navigateur</p>
         </div>
         {launchUrl && fileName && (
-          <div style={{fontSize:'12px',color:'#A78BF8',background:'rgba(123,92,245,0.1)',border:'1px solid rgba(123,92,245,0.2)',borderRadius:'8px',padding:'5px 12px',maxWidth:'300px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
+          <div style={{fontSize:'12px',color:'#E8651A',background:'rgba(28,25,23,0.06)',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'8px',padding:'5px 12px',maxWidth:'300px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
             📦 {fileName} {fileCount>0&&`· ${fileCount} fichiers`}
           </div>
         )}
         <div style={{display:'flex',gap:'8px'}}>
           {launchUrl && (
-            <a href={launchUrl} target="_blank" rel="noreferrer" style={{background:'rgba(123,92,245,0.1)',border:'1px solid rgba(123,92,245,0.2)',borderRadius:'8px',padding:'7px 14px',color:'#A78BF8',fontSize:'12px',fontWeight:'600'}}>⤢ Plein écran</a>
+            <a href={launchUrl} target="_blank" rel="noreferrer" style={{background:'rgba(28,25,23,0.06)',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'8px',padding:'7px 14px',color:'#E8651A',fontSize:'12px',fontWeight:'600'}}>⤢ Plein écran</a>
           )}
           <button onClick={()=>inputRef.current?.click()} style={{background:'linear-gradient(135deg,#FF5722,#FFB300)',border:'none',borderRadius:'8px',padding:'8px 16px',color:'#fff',fontWeight:'700',fontSize:'13px',cursor:'pointer'}}>
             {launchUrl?'📁 Autre fichier':'📁 Ouvrir un fichier'}
@@ -164,12 +164,12 @@ export default function ViewerPage() {
       </div>
 
       {loading&&(
-        <div style={{marginBottom:'1rem',background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(123,92,245,0.2)',borderRadius:'12px',padding:'1.25rem'}}>
+        <div style={{marginBottom:'1rem',background:'#FFFFFF',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'12px',padding:'1.25rem'}}>
           <div style={{display:'flex',justifyContent:'space-between',marginBottom:'8px',fontSize:'13px'}}>
-            <span style={{color:'#A78BF8',fontWeight:'600'}}>{msg}</span>
-            <span style={{color:'#A78BF8',fontWeight:'700'}}>{progress}%</span>
+            <span style={{color:'#E8651A',fontWeight:'600'}}>{msg}</span>
+            <span style={{color:'#E8651A',fontWeight:'700'}}>{progress}%</span>
           </div>
-          <div style={{height:'6px',background:'rgba(123,92,245,0.1)',borderRadius:'3px',overflow:'hidden'}}>
+          <div style={{height:'6px',background:'rgba(28,25,23,0.06)',borderRadius:'3px',overflow:'hidden'}}>
             <div style={{height:'100%',width:`${progress}%`,background:'linear-gradient(90deg,#FF5722,#FFB300)',borderRadius:'3px',transition:'width .2s'}} />
           </div>
         </div>
@@ -178,17 +178,17 @@ export default function ViewerPage() {
       {error&&<div style={{marginBottom:'1rem',background:'rgba(240,90,90,0.08)',border:'1px solid rgba(240,90,90,0.25)',borderRadius:'12px',padding:'1rem',fontSize:'13px',color:'#F08080'}}>⚠️ {error}</div>}
 
       {!loading&&!launchUrl&&!error&&(
-        <div onClick={()=>inputRef.current?.click()} style={{flex:1,background:'linear-gradient(145deg,#1A1530,#130F23)',border:'2px dashed rgba(123,92,245,0.2)',borderRadius:'16px',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',cursor:'pointer',transition:'all .2s'}}
+        <div onClick={()=>inputRef.current?.click()} style={{flex:1,background:'#FFFFFF',border:'2px dashed rgba(28,25,23,0.09)',borderRadius:'16px',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',cursor:'pointer',transition:'all .2s'}}
           onMouseEnter={e=>(e.currentTarget as HTMLElement).style.borderColor='rgba(123,92,245,0.5)'}
-          onMouseLeave={e=>(e.currentTarget as HTMLElement).style.borderColor='rgba(123,92,245,0.2)'}>
+          onMouseLeave={e=>(e.currentTarget as HTMLElement).style.borderColor='rgba(28,25,23,0.09)'}>
           <div style={{fontSize:'56px',marginBottom:'1.5rem'}}>📦</div>
-          <div style={{fontWeight:'700',fontSize:'18px',color:'#F0EEFF',marginBottom:'8px'}}>Ouvrir un contenu e-learning</div>
-          <div style={{color:'#8B7BAE',fontSize:'13px',marginBottom:'1.5rem',textAlign:'center',maxWidth:'400px'}}>
+          <div style={{fontWeight:'700',fontSize:'18px',color:'#1C1917',marginBottom:'8px'}}>Ouvrir un contenu e-learning</div>
+          <div style={{color:'#A8A29E',fontSize:'13px',marginBottom:'1.5rem',textAlign:'center',maxWidth:'400px'}}>
             SCORM .zip · H5P .h5p · HTML · PDF · Vidéo MP4
           </div>
           <div style={{display:'flex',gap:'8px',flexWrap:'wrap',justifyContent:'center'}}>
             {['📦 SCORM .zip','🎮 H5P .h5p','💻 .html','📄 .pdf','🎬 .mp4'].map(f=>(
-              <span key={f} style={{background:'rgba(123,92,245,0.1)',border:'1px solid rgba(123,92,245,0.15)',borderRadius:'20px',padding:'4px 12px',fontSize:'12px',color:'#8B7BAE',fontWeight:'600'}}>{f}</span>
+              <span key={f} style={{background:'rgba(28,25,23,0.06)',border:'1px solid rgba(28,25,23,0.08)',borderRadius:'20px',padding:'4px 12px',fontSize:'12px',color:'#A8A29E',fontWeight:'600'}}>{f}</span>
             ))}
           </div>
         </div>
@@ -201,7 +201,7 @@ export default function ViewerPage() {
       )}
 
       {launchUrl&&fileType!=='video'&&(
-        <div style={{flex:1,borderRadius:'16px',overflow:'hidden',border:'1px solid rgba(123,92,245,0.15)',background:'#fff',position:'relative'}}>
+        <div style={{flex:1,borderRadius:'16px',overflow:'hidden',border:'1px solid rgba(28,25,23,0.08)',background:'#fff',position:'relative'}}>
           <iframe ref={iframeRef} src={launchUrl} style={{width:'100%',height:'100%',border:'none'}} title="Viewer"
             sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads" />
         </div>

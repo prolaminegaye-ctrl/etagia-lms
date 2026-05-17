@@ -7,9 +7,9 @@
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 :root {
   /* — Couleurs primaires — */
-  --orange:        #FF5722;
-  --orange-light:  #FF7043;
-  --orange-dark:   #E64A19;
+  --orange:        #E8651A;
+  --orange-light:  #EB7035;
+  --orange-dark:   #C85515;
   --teal:          #00BFA5;
   --teal-dark:     #00897B;
   --gold:          #FFB300;
@@ -34,10 +34,10 @@
   /* — Bordures — */
   --border:        rgba(28,25,23,0.08);
   --border-strong: rgba(28,25,23,0.14);
-  --border-orange: rgba(255,87,34,0.30);
+  --border-orange: rgba(232,101,26,0.28);
 
   /* — Gradients — */
-  --grad-fire:    linear-gradient(135deg, #FF5722 0%, #FFB300 100%);
+  --grad-fire:    linear-gradient(135deg, #E8651A 0%, #D4A017 100%);
   --grad-teal:    linear-gradient(135deg, #00BFA5 0%, #7C3AED 100%);
   --grad-sunset:  linear-gradient(135deg, #FF5722 0%, #7C3AED 100%);
   --grad-gold:    linear-gradient(135deg, #FFB300 0%, #FF5722 100%);
@@ -51,7 +51,7 @@
   --shadow-sm:    0 1px 4px rgba(28,25,23,0.06);
   --shadow-md:    0 4px 16px rgba(28,25,23,0.08);
   --shadow-lg:    0 8px 32px rgba(28,25,23,0.10);
-  --shadow-orange:0 4px 20px rgba(255,87,34,0.25);
+  --shadow-orange:0 4px 20px rgba(232,101,26,0.22);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation'
 
 const kpis = [
-  { label: 'Cours en cours', value: '4', color: '#FF5722', grad: 'linear-gradient(135deg,#FF5722,#FFB300)', delta: '+1 ce mois', icon: '📚' },
+  { label: 'Cours en cours', value: '4', color: '#FF5722', grad: 'linear-gradient(135deg,#E8651A,#D4A017)', delta: '+1 ce mois', icon: '📚' },
   { label: 'Progression', value: '68%', color: '#00BFA5', grad: 'linear-gradient(135deg,#00BFA5,#7C3AED)', delta: '+5% semaine', icon: '📈' },
   { label: 'Score moyen', value: '82/100', color: '#FFB300', grad: 'linear-gradient(135deg,#FFB300,#FF5722)', delta: 'Top 15%', icon: '🏆' },
   { label: 'Heures semaine', value: '12h', color: '#7C3AED', grad: 'linear-gradient(135deg,#7C3AED,#00BFA5)', delta: 'Obj: 15h', icon: '⏱' },
@@ -25,7 +25,7 @@ export default function DashboardPage() {
   return (
     <div>
       {/* Hero */}
-      <div style={{ marginBottom: '2rem', padding: '2rem', borderRadius: '24px', background: 'linear-gradient(135deg,#FF5722 0%,#FFB300 100%)', position: 'relative', overflow: 'hidden', boxShadow: '0 8px 32px rgba(255,87,34,0.30)' }}>
+      <div style={{ marginBottom: '2rem', padding: '2rem', borderRadius: '24px', background: 'linear-gradient(135deg,#FF5722 0%,#FFB300 100%)', position: 'relative', overflow: 'hidden', boxShadow: '0 8px 32px rgba(232,101,26,0.26)' }}>
         <div style={{ position: 'absolute', top: '-80px', right: '-60px', width: '280px', height: '280px', borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: '-50px', left: '20%', width: '200px', height: '200px', borderRadius: '50%', background: 'rgba(0,0,0,0.08)', pointerEvents: 'none' }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
@@ -101,9 +101,9 @@ export default function DashboardPage() {
             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(0,0,0,0.25)' }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)' }}>
             <div style={{ fontSize: '32px', marginBottom: '10px' }}>✦</div>
-            <div style={{ fontWeight: '800', fontSize: '16px', marginBottom: '6px', background: 'linear-gradient(135deg,#FF5722,#FFB300)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontFamily: 'Syne,sans-serif' }}>AI Tutor ETAGIA</div>
+            <div style={{ fontWeight: '800', fontSize: '16px', marginBottom: '6px', background: 'linear-gradient(135deg,#E8651A,#D4A017)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontFamily: 'Syne,sans-serif' }}>AI Tutor ETAGIA</div>
             <div style={{ fontSize: '12px', color: 'rgba(245,240,232,0.55)', marginBottom: '16px', lineHeight: 1.5 }}>Posez vos questions, obtenez des explications personnalisées en temps réel</div>
-            <div style={{ display: 'inline-block', background: 'linear-gradient(135deg,#FF5722,#FFB300)', borderRadius: '10px', padding: '9px 22px', color: '#fff', fontSize: '13px', fontWeight: '700', boxShadow: '0 4px 16px rgba(255,87,34,0.35)' }}>Ouvrir le Tutor →</div>
+            <div style={{ display: 'inline-block', background: 'linear-gradient(135deg,#E8651A,#D4A017)', borderRadius: '10px', padding: '9px 22px', color: '#fff', fontSize: '13px', fontWeight: '700', boxShadow: '0 4px 16px rgba(232,101,26,0.30)' }}>Ouvrir le Tutor →</div>
           </div>
         </div>
       </div>
