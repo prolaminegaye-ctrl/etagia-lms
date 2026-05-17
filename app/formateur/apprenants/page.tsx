@@ -50,7 +50,7 @@ export default function ApprenantPage() {
       <div style={{background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(123,92,245,0.12)',borderRadius:'16px',overflow:'hidden'}}>
         <table style={{width:'100%',borderCollapse:'collapse'}}>
           <thead>
-            <tr style={{borderBottom:'1px solid rgba(123,92,245,0.1)',background:'rgba(0,0,0,0.2)'}}>
+            <tr style={{borderBottom:'1px solid rgba(123,92,245,0.1)',background:'#F4F2FF'}}>
               {['Apprenant','Cours','Progression','Score','Streak','Dernière activité','Statut','Action'].map(h=>(
                 <th key={h} style={{padding:'11px 14px',textAlign:'left',fontSize:'10px',fontWeight:'700',color:'#4A3D6A',textTransform:'uppercase',letterSpacing:'0.8px'}}>{h}</th>
               ))}
@@ -96,7 +96,7 @@ export default function ApprenantPage() {
 
       {/* Detail modal */}
       {sel&&(
-        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.8)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
+        <div style={{position:'fixed',inset:0,background:'#F4F2FF',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
           <div style={{background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(123,92,245,0.25)',borderRadius:'20px',padding:'2rem',width:'100%',maxWidth:'480px'}}>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'1.5rem'}}>
               <div style={{display:'flex',gap:'12px',alignItems:'center'}}>
@@ -114,7 +114,7 @@ export default function ApprenantPage() {
                 {l:'Score',v:`${sel.score}/100`,c:'#F0B429'},{l:'Streak',v:`${sel.streak} jours 🔥`,c:'#E040A0'},
                 {l:'Dernière activité',v:sel.lastSeen,c:'#8B7BAE'},{l:'Statut',v:sel.status,c:sel.status==='Actif'?'#22D4A8':'#F05A5A'},
               ].map(s=>(
-                <div key={s.l} style={{background:'rgba(0,0,0,0.2)',borderRadius:'10px',padding:'12px'}}>
+                <div key={s.l} style={{background:'#F4F2FF',borderRadius:'10px',padding:'12px'}}>
                   <div style={{fontSize:'10px',color:'#4A3D6A',textTransform:'uppercase',letterSpacing:'0.5px',marginBottom:'4px'}}>{s.l}</div>
                   <div style={{fontSize:'14px',fontWeight:'700',color:s.c}}>{s.v}</div>
                 </div>
@@ -122,7 +122,7 @@ export default function ApprenantPage() {
             </div>
             <div style={{background:'rgba(123,92,245,0.06)',border:'1px solid rgba(123,92,245,0.15)',borderRadius:'12px',padding:'14px',marginBottom:'1rem'}}>
               <div style={{fontSize:'12px',color:'#8B7BAE',marginBottom:'8px',fontWeight:'600'}}>MESSAGE PERSONNALISÉ</div>
-              <textarea placeholder={`Envoyer un message de suivi à ${sel.name}...`} rows={3} style={{width:'100%',background:'rgba(0,0,0,0.2)',color:'#F0EEFF',border:'1px solid rgba(123,92,245,0.15)',borderRadius:'8px',padding:'8px 12px',fontSize:'13px',fontFamily:'inherit',outline:'none',resize:'none'}} />
+              <textarea placeholder={`Envoyer un message de suivi à ${sel.name}...`} rows={3} style={{width:'100%',background:'#F4F2FF',color:'#F0EEFF',border:'1px solid rgba(123,92,245,0.15)',borderRadius:'8px',padding:'8px 12px',fontSize:'13px',fontFamily:'inherit',outline:'none',resize:'none'}} />
               <button style={{marginTop:'8px',background:'linear-gradient(135deg,#7B5CF5,#E040A0)',border:'none',borderRadius:'8px',padding:'8px 16px',color:'#fff',fontSize:'12px',fontWeight:'700',cursor:'pointer'}}>Envoyer le message</button>
             </div>
           </div>

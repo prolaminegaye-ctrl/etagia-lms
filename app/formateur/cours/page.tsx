@@ -60,7 +60,7 @@ export default function FormateurCoursPage() {
                       {l:'Complétion moyenne',v:`${c.completion}%`,color:'#22D4A8'},
                       {l:'Satisfaction',v:'4.7/5 ⭐',color:'#F0B429'},
                     ].map(s=>(
-                      <div key={s.l} style={{background:'rgba(0,0,0,0.2)',borderRadius:'10px',padding:'10px 14px'}}>
+                      <div key={s.l} style={{background:'#F4F2FF',borderRadius:'10px',padding:'10px 14px'}}>
                         <div style={{fontSize:'20px',fontWeight:'800',color:s.color,fontFamily:'Syne,sans-serif'}}>{s.v}</div>
                         <div style={{fontSize:'11px',color:'#4A3D6A',marginTop:'2px'}}>{s.l}</div>
                       </div>
@@ -95,7 +95,7 @@ export default function FormateurCoursPage() {
 
       {/* Confirm modal */}
       {confirm&&(
-        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.8)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100}}>
+        <div style={{position:'fixed',inset:0,background:'#F4F2FF',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100}}>
           <div style={{background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(123,92,245,0.3)',borderRadius:'20px',padding:'2rem',textAlign:'center',maxWidth:'400px',margin:'1rem'}}>
             <div style={{fontSize:'48px',marginBottom:'1rem'}}>{confirm.action==='publish'?'🚀':'📦'}</div>
             <h2 style={{fontSize:'18px',fontWeight:'800',color:'#F0EEFF',marginBottom:'8px'}}>
@@ -105,7 +105,7 @@ export default function FormateurCoursPage() {
               {confirm.action==='publish'?'Le cours sera visible pour tous vos apprenants immédiatement.':'Le cours ne sera plus accessible aux nouveaux apprenants.'}
             </p>
             <div style={{display:'flex',gap:'10px',justifyContent:'center'}}>
-              <button onClick={()=>setConfirm(null)} style={{background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:'10px',padding:'10px 20px',color:'#8B7BAE',fontSize:'14px',cursor:'pointer'}}>Annuler</button>
+              <button onClick={()=>setConfirm(null)} style={{background:'#F4F2FF',border:'1px solid rgba(107,78,255,0.10)',borderRadius:'10px',padding:'10px 20px',color:'#8B7BAE',fontSize:'14px',cursor:'pointer'}}>Annuler</button>
               <button onClick={()=>{confirm.action==='publish'?publish(confirm.id):archive(confirm.id);setConfirm(null)}} style={{background:confirm.action==='publish'?'linear-gradient(135deg,#7B5CF5,#E040A0)':'linear-gradient(135deg,#F05A5A,#C0392B)',border:'none',borderRadius:'10px',padding:'10px 20px',color:'#fff',fontWeight:'700',fontSize:'14px',cursor:'pointer'}}>
                 {confirm.action==='publish'?'Publier':'Archiver'}
               </button>

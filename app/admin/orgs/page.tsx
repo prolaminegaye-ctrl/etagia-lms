@@ -19,10 +19,10 @@ export default function OrgsPage() {
   const [form, setForm] = useState<Partial<Org>>({})
   const [search, setSearch] = useState('')
 
-  const inp: React.CSSProperties = { background:'rgba(255,255,255,0.04)', color:'#F0F4FF', border:'1px solid rgba(255,255,255,0.1)', borderRadius:'10px', padding:'9px 12px', width:'100%', fontSize:'14px', fontFamily:'inherit', outline:'none' }
-  const lbl: React.CSSProperties = { fontSize:'11px', color:'#7A90B0', display:'block', marginBottom:'5px', fontWeight:'700', textTransform:'uppercase', letterSpacing:'0.7px' }
+  const inp: React.CSSProperties = { background:'#F4F2FF', color:'#1A1550', border:'1px solid rgba(107,78,255,0.15)', borderRadius:'10px', padding:'9px 12px', width:'100%', fontSize:'14px', fontFamily:'inherit', outline:'none' }
+  const lbl: React.CSSProperties = { fontSize:'11px', color:'#9B8EC0', display:'block', marginBottom:'5px', fontWeight:'700', textTransform:'uppercase', letterSpacing:'0.7px' }
   const btnPrimary: React.CSSProperties = { background:'linear-gradient(135deg,#5B8DEF,#22D4A8)', border:'none', borderRadius:'10px', padding:'10px 20px', color:'#fff', fontWeight:'700', fontSize:'14px', cursor:'pointer' }
-  const btnCancel: React.CSSProperties = { background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:'10px', padding:'10px 18px', color:'#7A90B0', fontSize:'14px', cursor:'pointer' }
+  const btnCancel: React.CSSProperties = { background:'#F4F2FF', border:'1px solid rgba(107,78,255,0.15)', borderRadius:'10px', padding:'10px 18px', color:'#9B8EC0', fontSize:'14px', cursor:'pointer' }
 
   const openCreate = () => { setForm({ id: Date.now().toString(), name:'', slug:'', country:'🇸🇳', plan:'Starter', status:'Actif', email:'', users:0, courses:0, created: new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}) }); setModal('form') }
   const openEdit = (o: Org) => { setSel(o); setForm({...o}); setModal('form') }
@@ -45,8 +45,8 @@ export default function OrgsPage() {
     <div>
       <div style={{marginBottom:'2rem',padding:'1.5rem',background:'linear-gradient(135deg,rgba(240,180,41,0.1),rgba(91,141,239,0.05))',border:'1px solid rgba(240,180,41,0.2)',borderRadius:'20px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
         <div>
-          <h1 style={{fontSize:'24px',fontWeight:'800',background:'linear-gradient(135deg,#F0F4FF,#F0B429)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Organisations</h1>
-          <p style={{color:'#7A90B0',fontSize:'13px',marginTop:'3px'}}>{orgs.length} organisations · {orgs.filter(o=>o.status==='Actif').length} actives · {orgs.reduce((a,o)=>a+o.users,0)} utilisateurs</p>
+          <h1 style={{fontSize:'24px',fontWeight:'800',color:'#1A1550'}}>Organisations</h1>
+          <p style={{color:'#9B8EC0',fontSize:'13px',marginTop:'3px'}}>{orgs.length} organisations · {orgs.filter(o=>o.status==='Actif').length} actives · {orgs.reduce((a,o)=>a+o.users,0)} utilisateurs</p>
         </div>
         <button onClick={openCreate} style={btnPrimary}>+ Nouvelle organisation</button>
       </div>
@@ -55,14 +55,14 @@ export default function OrgsPage() {
 
       <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'1rem'}}>
         {filtered.map(org=>(
-          <div key={org.id} style={{background:'linear-gradient(145deg,#111827,#0D1425)',border:'1px solid rgba(255,255,255,0.07)',borderRadius:'18px',padding:'1.5rem',position:'relative',overflow:'hidden'}}>
+          <div key={org.id} style={{background:'#FFFFFF',border:'1px solid rgba(107,78,255,0.10)',borderRadius:'18px',padding:'1.5rem',position:'relative',overflow:'hidden'}}>
             <div style={{position:'absolute',top:0,left:0,right:0,height:'3px',background:`linear-gradient(135deg,${planColors[org.plan]||'#5B8DEF'},${planColors[org.plan]||'#5B8DEF'}66)`}} />
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'1.25rem',marginTop:'4px'}}>
               <div style={{display:'flex',alignItems:'center',gap:'12px'}}>
                 <div style={{fontSize:'32px'}}>{org.country}</div>
                 <div>
-                  <div style={{fontWeight:'700',fontSize:'16px',color:'#F0F4FF'}}>{org.name}</div>
-                  <div style={{fontSize:'11px',color:'#3D5070'}}>/{org.slug} · {org.email}</div>
+                  <div style={{fontWeight:'700',fontSize:'16px',color:'#1A1550'}}>{org.name}</div>
+                  <div style={{fontSize:'11px',color:'#9B8EC0'}}>/{org.slug} · {org.email}</div>
                 </div>
               </div>
               <div style={{display:'flex',gap:'5px',flexDirection:'column',alignItems:'flex-end'}}>
@@ -72,9 +72,9 @@ export default function OrgsPage() {
             </div>
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'0.6rem',marginBottom:'1.25rem'}}>
               {[{l:'Utilisateurs',v:org.users,c:'#5B8DEF'},{l:'Cours',v:org.courses,c:'#22D4A8'},{l:'Créée',v:org.created,c:'#F0B429',s:true}].map(s=>(
-                <div key={s.l} style={{background:'rgba(0,0,0,0.25)',borderRadius:'10px',padding:'10px',textAlign:'center'}}>
+                <div key={s.l} style={{background:'#F4F2FF',borderRadius:'10px',padding:'10px',textAlign:'center'}}>
                   <div style={{fontSize:s.s?'11px':'22px',fontWeight:'700',color:s.c,fontFamily:s.s?'inherit':'Syne,sans-serif',marginBottom:'3px'}}>{s.v}</div>
-                  <div style={{fontSize:'10px',color:'#3D5070',textTransform:'uppercase',letterSpacing:'0.5px'}}>{s.l}</div>
+                  <div style={{fontSize:'10px',color:'#9B8EC0',textTransform:'uppercase',letterSpacing:'0.5px'}}>{s.l}</div>
                 </div>
               ))}
             </div>
@@ -90,9 +90,9 @@ export default function OrgsPage() {
 
       {/* Create/Edit modal */}
       {modal==='form'&&(
-        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.75)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
-          <div style={{background:'linear-gradient(145deg,#141B2D,#0D1425)',border:'1px solid rgba(91,141,239,0.25)',borderRadius:'20px',padding:'2rem',width:'100%',maxWidth:'520px'}}>
-            <h2 style={{fontSize:'20px',fontWeight:'800',color:'#F0F4FF',marginBottom:'1.5rem'}}>{sel?'✏️ Modifier':'+ Nouvelle organisation'}</h2>
+        <div style={{position:'fixed',inset:0,background:'#F4F2FF',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
+          <div style={{background:'#FFFFFF',border:'1px solid rgba(91,141,239,0.25)',borderRadius:'20px',padding:'2rem',width:'100%',maxWidth:'520px'}}>
+            <h2 style={{fontSize:'20px',fontWeight:'800',color:'#1A1550',marginBottom:'1.5rem'}}>{sel?'✏️ Modifier':'+ Nouvelle organisation'}</h2>
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem',marginBottom:'1rem'}}>
               <div style={{gridColumn:'1/-1'}}><label style={lbl}>Nom *</label><input style={inp} value={form.name||''} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Nom de l'organisation" /></div>
               <div><label style={lbl}>Slug URL</label><input style={inp} value={form.slug||''} onChange={e=>setForm({...form,slug:e.target.value.toLowerCase().replace(/\s+/g,'-')})} placeholder="mon-organisation" /></div>
@@ -118,9 +118,9 @@ export default function OrgsPage() {
 
       {/* Settings modal */}
       {modal==='settings'&&(
-        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.75)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
-          <div style={{background:'linear-gradient(145deg,#141B2D,#0D1425)',border:'1px solid rgba(240,180,41,0.25)',borderRadius:'20px',padding:'2rem',width:'100%',maxWidth:'520px'}}>
-            <h2 style={{fontSize:'20px',fontWeight:'800',color:'#F0F4FF',marginBottom:'1.5rem'}}>⚙️ Paramètres — {sel?.name}</h2>
+        <div style={{position:'fixed',inset:0,background:'#F4F2FF',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
+          <div style={{background:'#FFFFFF',border:'1px solid rgba(240,180,41,0.25)',borderRadius:'20px',padding:'2rem',width:'100%',maxWidth:'520px'}}>
+            <h2 style={{fontSize:'20px',fontWeight:'800',color:'#1A1550',marginBottom:'1.5rem'}}>⚙️ Paramètres — {sel?.name}</h2>
             <div style={{display:'flex',flexDirection:'column',gap:'1rem',marginBottom:'1.5rem'}}>
               <div><label style={lbl}>Plan</label>
                 <select style={inp} value={form.plan||'Starter'} onChange={e=>setForm({...form,plan:e.target.value})}>
@@ -129,12 +129,12 @@ export default function OrgsPage() {
               </div>
               <div><label style={lbl}>Utilisateurs max</label><input style={inp} type="number" placeholder="100" /></div>
               <div><label style={lbl}>Domaine personnalisé</label><input style={inp} placeholder="lms.monorganisation.com" /></div>
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 14px',background:'rgba(255,255,255,0.02)',border:'1px solid rgba(255,255,255,0.06)',borderRadius:'10px'}}>
-                <div><div style={{fontWeight:'600',fontSize:'14px',color:'#F0F4FF'}}>SSO SAML 2.0</div><div style={{fontSize:'12px',color:'#7A90B0'}}>Authentification entreprise</div></div>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 14px',background:'#F4F2FF',border:'1px solid rgba(107,78,255,0.10)',borderRadius:'10px'}}>
+                <div><div style={{fontWeight:'600',fontSize:'14px',color:'#1A1550'}}>SSO SAML 2.0</div><div style={{fontSize:'12px',color:'#9B8EC0'}}>Authentification entreprise</div></div>
                 <span style={{background:'rgba(240,180,41,0.15)',color:'#F0B429',fontSize:'11px',fontWeight:'700',padding:'3px 10px',borderRadius:'20px'}}>Pro+</span>
               </div>
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 14px',background:'rgba(255,255,255,0.02)',border:'1px solid rgba(255,255,255,0.06)',borderRadius:'10px'}}>
-                <div><div style={{fontWeight:'600',fontSize:'14px',color:'#F0F4FF'}}>Marque blanche</div><div style={{fontSize:'12px',color:'#7A90B0'}}>Logo et couleurs personnalisés</div></div>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 14px',background:'#F4F2FF',border:'1px solid rgba(107,78,255,0.10)',borderRadius:'10px'}}>
+                <div><div style={{fontWeight:'600',fontSize:'14px',color:'#1A1550'}}>Marque blanche</div><div style={{fontSize:'12px',color:'#9B8EC0'}}>Logo et couleurs personnalisés</div></div>
                 <span style={{background:'rgba(240,180,41,0.15)',color:'#F0B429',fontSize:'11px',fontWeight:'700',padding:'3px 10px',borderRadius:'20px'}}>Enterprise</span>
               </div>
             </div>
@@ -148,11 +148,11 @@ export default function OrgsPage() {
 
       {/* Delete modal */}
       {modal==='delete'&&(
-        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100}}>
-          <div style={{background:'linear-gradient(145deg,#141B2D,#0D1425)',border:'1px solid rgba(240,90,90,0.3)',borderRadius:'20px',padding:'2.5rem',textAlign:'center',maxWidth:'400px',margin:'1rem'}}>
+        <div style={{position:'fixed',inset:0,background:'#F4F2FF',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100}}>
+          <div style={{background:'#FFFFFF',border:'1px solid rgba(240,90,90,0.3)',borderRadius:'20px',padding:'2.5rem',textAlign:'center',maxWidth:'400px',margin:'1rem'}}>
             <div style={{fontSize:'48px',marginBottom:'1rem'}}>⚠️</div>
             <h2 style={{fontSize:'18px',fontWeight:'800',color:'#F05A5A',marginBottom:'8px'}}>Supprimer {sel?.name} ?</h2>
-            <p style={{color:'#7A90B0',fontSize:'13px',marginBottom:'2rem',lineHeight:'1.6'}}>Action irréversible. Tous les {sel?.users} utilisateurs et {sel?.courses} cours seront supprimés définitivement.</p>
+            <p style={{color:'#9B8EC0',fontSize:'13px',marginBottom:'2rem',lineHeight:'1.6'}}>Action irréversible. Tous les {sel?.users} utilisateurs et {sel?.courses} cours seront supprimés définitivement.</p>
             <div style={{display:'flex',gap:'10px',justifyContent:'center'}}>
               <button onClick={()=>{setModal(null);setSel(null)}} style={btnCancel}>Annuler</button>
               <button onClick={confirmDelete} style={{background:'linear-gradient(135deg,#F05A5A,#C0392B)',border:'none',borderRadius:'10px',padding:'10px 20px',color:'#fff',fontWeight:'700',fontSize:'14px',cursor:'pointer'}}>Supprimer</button>

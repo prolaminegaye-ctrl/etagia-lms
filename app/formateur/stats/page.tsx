@@ -84,7 +84,7 @@ export default function StatsPage() {
         <h2 style={{fontSize:'15px',fontWeight:'700',color:'#F0EEFF',marginBottom:'1.25rem'}}>Performance des cours</h2>
         <div style={{display:'flex',flexDirection:'column',gap:'1rem'}}>
           {topCours.map((c,i)=>(
-            <div key={c.title} style={{display:'flex',alignItems:'center',gap:'1rem',padding:'12px 14px',background:'rgba(0,0,0,0.2)',borderRadius:'12px'}}>
+            <div key={c.title} style={{display:'flex',alignItems:'center',gap:'1rem',padding:'12px 14px',background:'#F4F2FF',borderRadius:'12px'}}>
               <div style={{width:'28px',height:'28px',borderRadius:'50%',background:`${c.color}22`,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:'800',color:c.color,fontSize:'13px',flexShrink:0}}>{i+1}</div>
               <div style={{flex:1}}>
                 <div style={{fontWeight:'600',fontSize:'13px',color:'#F0EEFF',marginBottom:'4px'}}>{c.title}</div>

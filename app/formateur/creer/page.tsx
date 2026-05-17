@@ -230,7 +230,7 @@ export default function CreerCours() {
 
                   <div style={{display:'flex',flexDirection:'column',gap:'0.6rem',marginBottom:'0.75rem'}}>
                     {mod.blocks.map(blk=>(
-                      <div key={blk.id} style={{background:'rgba(0,0,0,0.2)',border:'1px solid rgba(123,92,245,0.1)',borderRadius:'10px',padding:'0.875rem'}}>
+                      <div key={blk.id} style={{background:'#F4F2FF',border:'1px solid rgba(123,92,245,0.1)',borderRadius:'10px',padding:'0.875rem'}}>
                         <div style={{display:'flex',gap:'8px',alignItems:'center',marginBottom:'8px'}}>
                           <span>{blockTypes.find(x=>x.t===blk.type)?.icon}</span>
                           <span style={{fontSize:'10px',color:'#A78BF8',fontWeight:'700',textTransform:'uppercase',letterSpacing:'0.5px'}}>{blk.type}</span>
@@ -279,11 +279,11 @@ export default function CreerCours() {
                   </div>
 
                   {addBlk===mod.id?(
-                    <div style={{background:'rgba(0,0,0,0.3)',borderRadius:'10px',padding:'1rem'}}>
+                    <div style={{background:'#F4F2FF',borderRadius:'10px',padding:'1rem'}}>
                       <div style={{fontSize:'10px',color:'#8B7BAE',marginBottom:'8px',fontWeight:'700',letterSpacing:'1px'}}>AJOUTER UN BLOC</div>
                       <div style={{display:'flex',gap:'6px',flexWrap:'wrap'}}>
                         {blockTypes.map(b=><button key={b.t} onClick={()=>addBlkFn(mod.id,b.t)} style={{background:'rgba(123,92,245,0.08)',border:'1px solid rgba(123,92,245,0.15)',borderRadius:'8px',padding:'7px 12px',color:'#F0EEFF',fontSize:'12px',cursor:'pointer'}}>{b.icon} {b.label}</button>)}
-                        <button onClick={()=>setAddBlk(null)} style={{background:'none',border:'1px solid rgba(255,255,255,0.08)',borderRadius:'8px',padding:'7px 12px',color:'#4A3D6A',fontSize:'12px',cursor:'pointer'}}>Annuler</button>
+                        <button onClick={()=>setAddBlk(null)} style={{background:'none',border:'1px solid rgba(107,78,255,0.10)',borderRadius:'8px',padding:'7px 12px',color:'#4A3D6A',fontSize:'12px',cursor:'pointer'}}>Annuler</button>
                       </div>
                     </div>
                   ):(
@@ -321,7 +321,7 @@ export default function CreerCours() {
             </div>
           )}
           <div style={{display:'flex',gap:'10px',justifyContent:'center',flexWrap:'wrap'}}>
-            <button onClick={()=>setStep(2)} style={{background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:'10px',padding:'10px 18px',color:'#8B7BAE',fontSize:'13px',cursor:'pointer'}}>← Retour</button>
+            <button onClick={()=>setStep(2)} style={{background:'#F4F2FF',border:'1px solid rgba(107,78,255,0.10)',borderRadius:'10px',padding:'10px 18px',color:'#8B7BAE',fontSize:'13px',cursor:'pointer'}}>← Retour</button>
             <button onClick={()=>setPublished(true)} style={{...S.btn,background:'rgba(240,180,41,0.15)',color:'#F0B429',border:'1px solid rgba(240,180,41,0.3)'}}>💾 Brouillon</button>
             <button onClick={()=>setPublished(true)} style={S.btn}>✅ Publier le cours</button>
           </div>

@@ -18,7 +18,7 @@ const S = {
   inp: { background:'rgba(123,92,245,0.06)', color:'#F0EEFF', border:'1px solid rgba(123,92,245,0.2)', borderRadius:'10px', padding:'9px 12px', width:'100%', fontSize:'14px', fontFamily:'inherit', outline:'none' } as React.CSSProperties,
   lbl: { fontSize:'11px', color:'#8B7BAE', display:'block', marginBottom:'5px', fontWeight:'700', textTransform:'uppercase' as const, letterSpacing:'0.7px' },
   btn: { background:'linear-gradient(135deg,#7B5CF5,#E040A0)', border:'none', borderRadius:'10px', padding:'10px 20px', color:'#fff', fontWeight:'700', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
-  cancel: { background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'10px', padding:'10px 18px', color:'#8B7BAE', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
+  cancel: { background:'#F4F2FF', border:'1px solid rgba(107,78,255,0.10)', borderRadius:'10px', padding:'10px 18px', color:'#8B7BAE', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
 }
 
 export default function UsersPage() {
@@ -73,7 +73,7 @@ export default function UsersPage() {
       <div style={{background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(123,92,245,0.12)',borderRadius:'16px',overflow:'hidden'}}>
         <table style={{width:'100%',borderCollapse:'collapse'}}>
           <thead>
-            <tr style={{borderBottom:'1px solid rgba(123,92,245,0.1)',background:'rgba(0,0,0,0.2)'}}>
+            <tr style={{borderBottom:'1px solid rgba(123,92,245,0.1)',background:'#F4F2FF'}}>
               {['Utilisateur','Rôle','Organisation','Cours','Inscrit le','Statut','Actions'].map(h=>(
                 <th key={h} style={{padding:'12px 14px',textAlign:'left',fontSize:'10px',fontWeight:'700',color:'#4A3D6A',textTransform:'uppercase',letterSpacing:'0.8px'}}>{h}</th>
               ))}
@@ -121,7 +121,7 @@ export default function UsersPage() {
 
       {/* Add/Edit modal */}
       {(modal==='add'||modal==='edit')&&(
-        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.8)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
+        <div style={{position:'fixed',inset:0,background:'#F4F2FF',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
           <div style={{background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(123,92,245,0.3)',borderRadius:'20px',padding:'2rem',width:'100%',maxWidth:'500px'}}>
             <h2 style={{fontSize:'20px',fontWeight:'800',color:'#F0EEFF',marginBottom:'1.5rem'}}>{modal==='add'?'+ Inviter un utilisateur':'✏️ Modifier l\'utilisateur'}</h2>
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem',marginBottom:'1.5rem'}}>
@@ -160,7 +160,7 @@ export default function UsersPage() {
 
       {/* Delete modal */}
       {modal==='delete'&&(
-        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100}}>
+        <div style={{position:'fixed',inset:0,background:'#F4F2FF',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100}}>
           <div style={{background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(240,90,90,0.3)',borderRadius:'20px',padding:'2.5rem',textAlign:'center',maxWidth:'380px',margin:'1rem'}}>
             <div style={{fontSize:'48px',marginBottom:'1rem'}}>⚠️</div>
             <h2 style={{fontSize:'18px',fontWeight:'800',color:'#F05A5A',marginBottom:'8px'}}>Supprimer {sel?.name} ?</h2>
