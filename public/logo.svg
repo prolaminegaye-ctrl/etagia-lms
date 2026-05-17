@@ -1,56 +1,45 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 90" width="300" height="90">
   <defs>
     <linearGradient id="eGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#7C3AED"/>
-      <stop offset="100%" style="stop-color:#3B82F6"/>
+      <stop offset="0%" style="stop-color:#6B4EFF"/>
+      <stop offset="100%" style="stop-color:#8B70FF"/>
     </linearGradient>
     <linearGradient id="lmsLeft" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#3B82F6"/>
-      <stop offset="100%" style="stop-color:#7C3AED"/>
+      <stop offset="0%" style="stop-color:#6B4EFF"/>
+      <stop offset="100%" style="stop-color:#D63384"/>
     </linearGradient>
     <linearGradient id="lmsRight" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#EC4899"/>
-      <stop offset="100%" style="stop-color:#F97316"/>
+      <stop offset="0%" style="stop-color:#D63384"/>
+      <stop offset="100%" style="stop-color:#E6A817"/>
+    </linearGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1A1550"/>
+      <stop offset="100%" style="stop-color:#6B4EFF"/>
     </linearGradient>
   </defs>
 
-  <!-- Stylized E -->
+  <!-- Stylized E bars -->
   <rect x="6" y="12" width="34" height="9" rx="4.5" fill="url(#eGrad)"/>
-  <rect x="6" y="27" width="26" height="8" rx="4" fill="url(#eGrad)" opacity="0.85"/>
+  <rect x="6" y="27" width="26" height="8" rx="4" fill="url(#eGrad)" opacity="0.75"/>
   <rect x="6" y="42" width="34" height="9" rx="4.5" fill="url(#eGrad)"/>
 
-  <!-- "tagia" in WHITE -->
+  <!-- "tagia" in dark purple gradient -->
   <text x="50" y="52"
     font-family="Georgia, serif"
     font-size="44"
     font-weight="700"
-    fill="#FFFFFF"
+    fill="url(#textGrad)"
     letter-spacing="-1">tagia</text>
 
-  <!-- Leaf accent on i -->
-  <ellipse cx="182" cy="11" rx="4" ry="6" fill="#EC4899" transform="rotate(-20 182 11)"/>
+  <!-- Accent dot on i -->
+  <ellipse cx="182" cy="11" rx="4" ry="6" fill="#D63384" transform="rotate(-20 182 11)"/>
 
   <!-- LMS line left -->
   <line x1="56" y1="68" x2="80" y2="68" stroke="url(#lmsLeft)" stroke-width="2" stroke-linecap="round"/>
   <!-- LMS text -->
-  <text x="84" y="74"
-    font-family="Arial, sans-serif"
-    font-size="15"
-    font-weight="700"
-    fill="#3B82F6"
-    letter-spacing="6">L</text>
-  <text x="100" y="74"
-    font-family="Arial, sans-serif"
-    font-size="15"
-    font-weight="700"
-    fill="#EC4899"
-    letter-spacing="6">M</text>
-  <text x="117" y="74"
-    font-family="Arial, sans-serif"
-    font-size="15"
-    font-weight="700"
-    fill="#F97316"
-    letter-spacing="6">S</text>
+  <text x="84" y="74" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#6B4EFF" letter-spacing="6">L</text>
+  <text x="100" y="74" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#D63384" letter-spacing="6">M</text>
+  <text x="117" y="74" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#E6A817" letter-spacing="6">S</text>
   <!-- LMS line right -->
   <line x1="134" y1="68" x2="160" y2="68" stroke="url(#lmsRight)" stroke-width="2" stroke-linecap="round"/>
 </svg>

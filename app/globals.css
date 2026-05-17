@@ -2,25 +2,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
 
 :root {
-  --bg-primary: #1A1740;
-  --bg-secondary: #221E52;
-  --bg-card: #2C2860;
-  --accent: #7B5CF5;
-  --accent2: #9B6FF5;
-  --teal: #22D4A8;
-  --pink: #E040A0;
-  --gold: #F0B429;
-  --red: #F05A5A;
-  --text-primary: #F2EFFF;
-  --text-secondary: #A898CC;
-  --text-muted: #7060A0;
-  --border: rgba(140,110,255,0.18);
-  --border-active: rgba(140,110,255,0.5);
+  --bg-primary: #F4F2FF;
+  --bg-secondary: #EBE7FF;
+  --bg-card: #FFFFFF;
+  --accent: #6B4EFF;
+  --accent2: #8B70FF;
+  --teal: #00B89C;
+  --pink: #D63384;
+  --gold: #E6A817;
+  --red: #E05252;
+  --text-primary: #1A1550;
+  --text-secondary: #6B5EA8;
+  --text-muted: #9B8EC0;
+  --border: rgba(107,78,255,0.12);
+  --border-active: rgba(107,78,255,0.40);
   --font-display: 'Syne', sans-serif;
   --font-body: 'DM Sans', sans-serif;
-  --grad-main: linear-gradient(135deg, #7B5CF5 0%, #E040A0 100%);
-  --grad-cool: linear-gradient(135deg, #7B5CF5 0%, #22D4A8 100%);
-  --grad-warm: linear-gradient(135deg, #E040A0 0%, #F0B429 100%);
+  --grad-main: linear-gradient(135deg, #6B4EFF 0%, #D63384 100%);
+  --grad-cool: linear-gradient(135deg, #6B4EFF 0%, #00B89C 100%);
+  --grad-warm: linear-gradient(135deg, #D63384 0%, #E6A817 100%);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,9 +41,9 @@ button { cursor: pointer; font-family: var(--font-body); }
 
 input, textarea, select {
   font-family: var(--font-body);
-  background: rgba(140,110,255,0.08) !important;
+  background: #FFFFFF !important;
   color: var(--text-primary) !important;
-  border: 1px solid rgba(140,110,255,0.22);
+  border: 1px solid rgba(107,78,255,0.20);
   border-radius: 10px;
   padding: 10px 14px;
   outline: none;
@@ -51,8 +51,8 @@ input, textarea, select {
   font-size: 14px;
 }
 input::placeholder, textarea::placeholder { color: var(--text-muted); }
-input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(123,92,245,0.12); }
-select option { background: #2C2860; color: #F2EFFF; }
+input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(107,78,255,0.10); }
+select option { background: #FFFFFF; color: var(--text-primary); }
 
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-thumb { background: rgba(140,110,255,0.3); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: rgba(107,78,255,0.25); border-radius: 2px; }
