@@ -1,109 +1,238 @@
 'use client'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
-const PLUGINS = [
-  { id:'edugears', name:'EduGears AI', version:'1.4.0', protocol:'LTI 1.3 Advantage', status:'actif', icon:'🤖', color:'#E8651A', tools:10,
-    desc:'Suite complète d\'outils pédagogiques IA — génération de cours, quiz adaptatifs, tuteur conversationnel, notation automatique.',
-    config:{ claimCode:'EG-4UGR-MVU9', issuer:'https://etagia-lms.vercel.app', clientId:'7c4a2b1e-9f3d-4e8a-b5c6-3a2d1f0e8b7c', authLoginUrl:'https://lti-api.edugears.ai/lti/auth', authTokenUrl:'https://lti-api.edugears.ai/lti/token', keySetUrl:'https://etagia-lms.vercel.app/lti/certs' } },
-  { id:'scorm', name:'SCORM Runtime', version:'2.1.0', protocol:'SCORM 1.2 / 2004', status:'actif', icon:'📦', color:'#00BFA5', tools:1,
-    desc:'Moteur de lecture SCORM natif — compatible SCORM 1.2 et SCORM 2004, suivi xAPI, import ZIP, table des matières interactive.',
-    config:null },
+const PLATFORM_URL = 'https://etagia-lms.vercel.app'
+
+interface Plugin {
+  id: string; name: string; version: string; protocol: string
+  status: 'actif' | 'inactif' | 'pending'; icon: string; color: string
+  tools: number; desc: string; claim?: string
+}
+
+const PLUGINS: Plugin[] = [
+  {
+    id: 'edugears', name: 'EduGears AI', version: '1.4.0', protocol: 'LTI 1.3 Advantage',
+    status: 'pending', icon: '🤖', color: '#E8651A', tools: 10,
+    desc: 'Moteur d\'IA pédagogique — génération de quiz, évaluation adaptative, feedback automatique.',
+    claim: 'À réinitialiser via enregistrement dynamique',
+  },
+  {
+    id: 'h5p', name: 'H5P Content', version: '2.1.0', protocol: 'LTI 1.1',
+    status: 'actif', icon: '🎮', color: '#00BFA5', tools: 25,
+    desc: 'Contenus interactifs H5P : vidéos, quiz, présentations, jeux éducatifs.',
+  },
+  {
+    id: 'zoom', name: 'Zoom Classes', version: '1.0.0', protocol: 'LTI 1.3',
+    status: 'inactif', icon: '📹', color: '#7C3AED', tools: 5,
+    desc: 'Intégration Zoom pour sessions synchrones directement depuis le LMS.',
+  },
 ]
 
-const card: React.CSSProperties = { background:'#FFFFFF', border:'1.5px solid rgba(28,25,23,0.07)', borderRadius:'18px', boxShadow:'0 2px 12px rgba(28,25,23,0.05)' }
+const card: React.CSSProperties = {
+  background: '#FFFFFF', border: '1px solid rgba(28,25,23,0.08)',
+  borderRadius: '16px', boxShadow: '0 2px 12px rgba(28,25,23,0.04)',
+}
 
-export default function AdminPluginsPage() {
-  const [selected, setSelected] = useState<string|null>(null)
-  const [copied, setCopied] = useState<string|null>(null)
+const inpStyle: React.CSSProperties = {
+  width: '100%', padding: '9px 12px', borderRadius: '9px', fontSize: '13px',
+  border: '1px solid rgba(28,25,23,0.12)', background: '#FAF9F7',
+  color: '#1C1917', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' as const,
+  fontFamily: 'monospace',
+}
 
-  function copy(text:string, key:string) {
-    navigator.clipboard.writeText(text).then(()=>{ setCopied(key); setTimeout(()=>setCopied(null),1500) })
+export default function PluginsPage() {
+  const router = useRouter()
+  const [active, setActive] = useState<string | null>('edugears')
+  const [copied, setCopied] = useState<string | null>(null)
+  const [jwksStatus, setJwksStatus] = useState<'idle' | 'checking' | 'ok' | 'error'>('idle')
+
+  const copy = (text: string, key: string) => {
+    navigator.clipboard.writeText(text)
+    setCopied(key)
+    setTimeout(() => setCopied(null), 2000)
   }
 
-  const plugin = PLUGINS.find(p=>p.id===selected)
+  const checkJwks = async () => {
+    setJwksStatus('checking')
+    try {
+      const res = await fetch(`${PLATFORM_URL}/api/lti/certs`)
+      const data = await res.json()
+      setJwksStatus(data?.keys?.length > 0 ? 'ok' : 'error')
+    } catch {
+      setJwksStatus('error')
+    }
+  }
+
+  const CopyBtn = ({ text, id }: { text: string; id: string }) => (
+    <button onClick={() => copy(text, id)} style={{
+      background: copied === id ? '#E8651A' : 'rgba(28,25,23,0.06)',
+      border: 'none', borderRadius: '6px', padding: '5px 10px', fontSize: '11px',
+      fontWeight: '700', color: copied === id ? '#fff' : '#57534E', cursor: 'pointer',
+      transition: 'all .15s', whiteSpace: 'nowrap' as const, flexShrink: 0,
+    }}>
+      {copied === id ? '✓ Copié' : 'Copier'}
+    </button>
+  )
+
+  const Row = ({ label, value, id, highlight }: { label: string; value: string; id: string; highlight?: boolean }) => (
+    <div style={{ marginBottom: '10px' }}>
+      <div style={{ fontSize: '11px', fontWeight: '700', color: '#A8A29E', marginBottom: '4px', textTransform: 'uppercase' as const, letterSpacing: '0.5px' }}>{label}</div>
+      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <input readOnly value={value} style={{ ...inpStyle, flex: 1, color: highlight ? '#E8651A' : '#1C1917', fontWeight: highlight ? '700' : '400' }} />
+        <CopyBtn text={value} id={id} />
+      </div>
+    </div>
+  )
 
   return (
-    <div>
-      <div style={{marginBottom:'2rem',padding:'2rem',background:'linear-gradient(135deg,#12100E 0%,#1C1714 100%)',borderRadius:'24px',boxShadow:'0 8px 32px rgba(0,0,0,0.20)',position:'relative',overflow:'hidden'}}>
-        <div style={{position:'absolute',top:'-50px',right:'-30px',width:'180px',height:'180px',borderRadius:'50%',background:'rgba(232,101,26,0.08)',pointerEvents:'none'}}/>
-        <div style={{display:'inline-block',background:'rgba(232,101,26,0.18)',border:'1px solid rgba(232,101,26,0.30)',borderRadius:'8px',padding:'3px 10px',fontSize:'10px',fontWeight:'700',color:'#FF7043',marginBottom:'10px',letterSpacing:'1px',position:'relative'}}>INTÉGRATIONS LTI</div>
-        <h1 style={{fontSize:'22px',fontWeight:'800',color:'#F5F0E8',fontFamily:'Syne,sans-serif',marginBottom:'4px',position:'relative'}}>Plugins & Intégrations LTI</h1>
-        <p style={{color:'rgba(245,240,232,0.50)',fontSize:'13px',position:'relative'}}>Gérez les plugins installés et leurs configurations LTI 1.3</p>
-      </div>
+    <div style={{ maxWidth: '1000px' }}>
 
-      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1rem',marginBottom:'2rem'}}>
-        {[
-          {l:'Plugins installés',v:'2',c:'#E8651A',grad:'linear-gradient(135deg,#E8651A,#D4A017)'},
-          {l:'Plugins actifs',v:'2',c:'#00BFA5',grad:'linear-gradient(135deg,#00BFA5,#7C3AED)'},
-          {l:'Protocoles',v:'LTI · SCORM',c:'#FFB300',grad:'linear-gradient(135deg,#D4A017,#E8651A)'},
-          {l:'Outils IA',v:'10',c:'#7C3AED',grad:'linear-gradient(135deg,#7C3AED,#00BFA5)'},
-        ].map(k=>(
-          <div key={k.l} style={{...card,padding:'1.25rem',position:'relative',overflow:'hidden'}}>
-            <div style={{position:'absolute',top:0,left:0,right:0,height:'3px',background:k.grad}}/>
-            <div style={{fontSize:'20px',fontWeight:'800',color:k.c,marginTop:'10px',marginBottom:'4px',fontFamily:'Syne,sans-serif'}}>{k.v}</div>
-            <div style={{fontSize:'11px',color:'#57534E'}}>{k.l}</div>
+      {/* Header */}
+      <div style={{ marginBottom: '2rem', padding: '1.75rem', borderRadius: '20px',
+        background: 'linear-gradient(135deg,#1C1917 0%,#2C1E14 100%)',
+        boxShadow: '0 4px 24px rgba(0,0,0,0.20)', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '-40px', right: '-20px', width: '200px', height: '200px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(232,101,26,0.15),transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+              <span style={{ fontSize: '24px' }}>🔌</span>
+              <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#fff', fontFamily: 'Syne,sans-serif', margin: 0 }}>Plugins & LTI 1.3</h1>
+            </div>
+            <p style={{ color: 'rgba(245,240,232,0.55)', fontSize: '13px', margin: 0 }}>
+              Gérez vos intégrations LTI, SCORM et plugins tiers
+            </p>
           </div>
-        ))}
+          <button onClick={() => router.push('/admin')} style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', padding: '8px 16px', color: 'rgba(245,240,232,0.70)', fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}>
+            ← Admin
+          </button>
+        </div>
       </div>
 
-      <div style={{display:'grid',gridTemplateColumns:selected?'1fr 1.6fr':'1fr',gap:'1.5rem'}}>
-        <div style={{display:'flex',flexDirection:'column',gap:'1rem'}}>
-          {PLUGINS.map(p=>(
-            <div key={p.id} onClick={()=>setSelected(selected===p.id?null:p.id)}
-              style={{...card,padding:'1.25rem',cursor:'pointer',border:`1.5px solid ${selected===p.id?p.color+'55':'rgba(28,25,23,0.07)'}`,background:selected===p.id?p.color+'08':'#FFFFFF',transition:'all .15s'}}>
-              <div style={{display:'flex',alignItems:'flex-start',gap:'14px'}}>
-                <div style={{width:'50px',height:'50px',borderRadius:'14px',background:`${p.color}15`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'24px',flexShrink:0}}>{p.icon}</div>
-                <div style={{flex:1}}>
-                  <div style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:'5px'}}>
-                    <span style={{fontWeight:'700',fontSize:'15px',color:'#1C1917'}}>{p.name}</span>
-                    <span style={{fontSize:'10px',color:p.color,background:`${p.color}15`,borderRadius:'5px',padding:'2px 7px',fontWeight:'700'}}>v{p.version}</span>
-                    <span style={{fontSize:'10px',color:'#00BFA5',background:'rgba(0,191,165,0.12)',borderRadius:'5px',padding:'2px 7px',fontWeight:'700'}}>● {p.status}</span>
-                  </div>
-                  <div style={{fontSize:'11px',color:'#A8A29E',marginBottom:'8px'}}>{p.protocol}</div>
-                  <p style={{fontSize:'12px',color:'#57534E',lineHeight:'1.5'}}>{p.desc}</p>
+      {/* JWKS Status check */}
+      <div style={{ ...card, padding: '1rem 1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '14px',
+        borderLeft: `4px solid ${jwksStatus === 'ok' ? '#00BFA5' : jwksStatus === 'error' ? '#EF4444' : '#E8651A'}`,
+        background: jwksStatus === 'ok' ? 'rgba(0,191,165,0.04)' : 'rgba(232,101,26,0.04)' }}>
+        <span style={{ fontSize: '20px' }}>
+          {jwksStatus === 'ok' ? '✅' : jwksStatus === 'error' ? '❌' : jwksStatus === 'checking' ? '⏳' : '🔐'}
+        </span>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontWeight: '700', fontSize: '13px', color: '#1C1917' }}>
+            Endpoint JWKS — <code style={{ fontFamily: 'monospace', fontSize: '12px', color: '#E8651A' }}>{PLATFORM_URL}/api/lti/certs</code>
+          </div>
+          <div style={{ fontSize: '12px', color: '#A8A29E' }}>
+            {jwksStatus === 'ok' ? '✓ JWKS actif — la clé publique RSA est servie correctement' :
+             jwksStatus === 'error' ? 'Erreur — vérifiez le déploiement Vercel' :
+             jwksStatus === 'checking' ? 'Vérification en cours…' :
+             'Vérifiez que votre endpoint JWKS répond correctement (requis par EduGears)'}
+          </div>
+        </div>
+        <button onClick={checkJwks} style={{ background: '#E8651A', border: 'none', borderRadius: '9px', padding: '8px 16px', color: '#fff', fontWeight: '700', fontSize: '12px', cursor: 'pointer', whiteSpace: 'nowrap' as const }}>
+          {jwksStatus === 'checking' ? '…' : 'Tester JWKS'}
+        </button>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: '1.5rem' }}>
+
+        {/* Plugin list */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {PLUGINS.map(p => (
+            <div key={p.id} onClick={() => setActive(p.id)} style={{
+              ...card, padding: '14px', cursor: 'pointer', transition: 'all .15s',
+              borderLeft: active === p.id ? `3px solid ${p.color}` : '3px solid transparent',
+              background: active === p.id ? `${p.color}08` : '#fff',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '22px' }}>{p.icon}</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: '700', fontSize: '13px', color: '#1C1917' }}>{p.name}</div>
+                  <div style={{ fontSize: '11px', color: '#A8A29E' }}>{p.protocol}</div>
                 </div>
+                <span style={{
+                  fontSize: '10px', fontWeight: '800', padding: '2px 8px', borderRadius: '20px',
+                  background: p.status === 'actif' ? 'rgba(0,191,165,0.12)' : p.status === 'pending' ? 'rgba(212,160,23,0.15)' : 'rgba(168,162,158,0.15)',
+                  color: p.status === 'actif' ? '#00897B' : p.status === 'pending' ? '#92400E' : '#78716C',
+                }}>
+                  {p.status === 'actif' ? '● Actif' : p.status === 'pending' ? '⚠ Config' : '○ Inactif'}
+                </span>
               </div>
-              {p.config&&<div style={{marginTop:'12px',fontSize:'11px',color:p.color,background:`${p.color}12`,borderRadius:'7px',padding:'5px 12px',display:'inline-block',fontWeight:'700',border:`1px solid ${p.color}25`}}>Configurer →</div>}
             </div>
           ))}
         </div>
 
-        {selected&&plugin?.config&&(
-          <div style={{...card,padding:'1.5rem'}}>
-            <div style={{display:'flex',alignItems:'center',gap:'12px',marginBottom:'1.5rem',paddingBottom:'1rem',borderBottom:'1.5px solid rgba(28,25,23,0.06)'}}>
-              <span style={{fontSize:'24px'}}>{plugin.icon}</span>
-              <div>
-                <div style={{fontWeight:'700',fontSize:'16px',color:'#1C1917',fontFamily:'Syne,sans-serif'}}>{plugin.name} — Config LTI</div>
-                <div style={{fontSize:'11px',color:'#A8A29E'}}>LTI 1.3 Advantage · OAuth 2.0</div>
-              </div>
-            </div>
-            {[
-              {label:'Code de réclamation',key:'claimCode',value:plugin.config.claimCode,highlight:true},
-              {label:'Issuer (Platform ID)',key:'issuer',value:plugin.config.issuer},
-              {label:'Client ID',key:'clientId',value:plugin.config.clientId},
-              {label:'Auth Login URL',key:'authLoginUrl',value:plugin.config.authLoginUrl},
-              {label:'Auth Token URL',key:'authTokenUrl',value:plugin.config.authTokenUrl},
-              {label:'Key Set URL (JWKS)',key:'keySetUrl',value:plugin.config.keySetUrl},
-            ].map(field=>(
-              <div key={field.key} style={{marginBottom:'12px'}}>
-                <div style={{fontSize:'10px',color:'#A8A29E',fontWeight:'700',letterSpacing:'1px',textTransform:'uppercase',marginBottom:'5px'}}>{field.label}</div>
-                <div style={{display:'flex',alignItems:'center',gap:'8px',background:field.highlight?'rgba(0,191,165,0.05)':'#FAF9F7',borderRadius:'10px',padding:'10px 14px',border:field.highlight?'1.5px solid rgba(0,191,165,0.25)':'1.5px solid rgba(28,25,23,0.06)'}}>
-                  <code style={{flex:1,fontSize:'12px',color:field.highlight?'#00BFA5':'#57534E',fontFamily:'monospace',wordBreak:'break-all'}}>{field.value}</code>
-                  <button onClick={()=>copy(field.value,field.key)} style={{background:copied===field.key?'rgba(0,191,165,0.12)':'rgba(28,25,23,0.06)',border:'none',borderRadius:'7px',padding:'5px 10px',color:copied===field.key?'#00BFA5':'#57534E',fontSize:'11px',cursor:'pointer',fontWeight:'700',flexShrink:0,transition:'all .15s'}}>
-                    {copied===field.key?'✓ Copié':'Copier'}
-                  </button>
+        {/* Config panel */}
+        {active && (() => {
+          const plugin = PLUGINS.find(p => p.id === active)!
+          return (
+            <div style={{ ...card, padding: '1.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1.25rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(28,25,23,0.06)' }}>
+                <span style={{ fontSize: '28px' }}>{plugin.icon}</span>
+                <div>
+                  <div style={{ fontWeight: '800', fontSize: '16px', color: '#1C1917' }}>{plugin.name}</div>
+                  <div style={{ fontSize: '12px', color: '#A8A29E' }}>{plugin.desc}</div>
                 </div>
               </div>
-            ))}
-            <div style={{display:'flex',gap:'10px',marginTop:'1rem',paddingTop:'1rem',borderTop:'1.5px solid rgba(28,25,23,0.06)'}}>
-              {[{l:'Deep Linking ✓',c:'#E8651A'},{l:'Grade Passback ✓',c:'#FFB300'},{l:'● Actif',c:'#00BFA5'}].map(item=>(
-                <div key={item.l} style={{flex:1,background:item.c+'10',border:`1.5px solid ${item.c}25`,borderRadius:'10px',padding:'10px',textAlign:'center'}}>
-                  <div style={{fontSize:'12px',color:item.c,fontWeight:'700'}}>{item.l}</div>
+
+              {plugin.id === 'edugears' && (
+                <>
+                  {/* EduGears Dynamic Registration */}
+                  <div style={{ background: 'rgba(212,160,23,0.07)', border: '1px solid rgba(212,160,23,0.25)', borderRadius: '12px', padding: '14px', marginBottom: '1.25rem' }}>
+                    <div style={{ fontWeight: '800', fontSize: '13px', color: '#92400E', marginBottom: '8px' }}>⚠️ Action requise — Ré-enregistrement dynamique</div>
+                    <div style={{ fontSize: '12px', color: '#78350F', lineHeight: '1.6', marginBottom: '12px' }}>
+                      L&apos;ancien enregistrement pointait vers Netlify. Cliquez ci-dessous pour déclencher l&apos;enregistrement LTI 1.3 dynamique vers EduGears et obtenir un nouveau code de réclamation.
+                    </div>
+                    <a href={`${PLATFORM_URL}/api/lti/register`} target="_blank" rel="noopener noreferrer"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '10px', padding: '10px 20px', color: '#fff', fontWeight: '800', fontSize: '13px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(232,101,26,0.30)' }}>
+                      🔌 Lancer l&apos;enregistrement dynamique EduGears
+                    </a>
+                  </div>
+
+                  <div style={{ fontWeight: '800', fontSize: '13px', color: '#1C1917', marginBottom: '12px' }}>
+                    🔧 Configuration LTI 1.3 — URLs de la plateforme ETAGIA LMS
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#A8A29E', marginBottom: '14px', padding: '10px', background: 'rgba(0,191,165,0.06)', borderRadius: '8px', border: '1px solid rgba(0,191,165,0.15)' }}>
+                    ℹ️ Ces URLs sont celles <strong>de notre plateforme</strong> (ETAGIA LMS). À renseigner dans l&apos;interface de configuration d&apos;EduGears.
+                  </div>
+
+                  <Row label="Issuer / Platform ID" value={PLATFORM_URL} id="issuer" />
+                  <Row label="JWKS URL (clé publique RSA)" value={`${PLATFORM_URL}/api/lti/certs`} id="jwks" highlight />
+                  <Row label="OIDC Auth Endpoint" value={`${PLATFORM_URL}/api/lti/auth`} id="auth" />
+                  <Row label="Token Endpoint" value={`${PLATFORM_URL}/api/lti/token`} id="token" />
+                  <Row label="OpenID Configuration" value={`${PLATFORM_URL}/api/lti/openid-configuration`} id="oidc" />
+                  <Row label="Dynamic Registration" value={`${PLATFORM_URL}/api/lti/register`} id="reg" />
+
+                  <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid rgba(28,25,23,0.06)' }}>
+                    <div style={{ fontWeight: '800', fontSize: '13px', color: '#1C1917', marginBottom: '12px' }}>
+                      🤖 URLs de l&apos;outil EduGears (côté outil — ne pas modifier)
+                    </div>
+                    <Row label="Login Initiation URL" value="https://lti-api.edugears.ai/lti/login" id="eg-login" />
+                    <Row label="Launch URL (POST id_token)" value="https://lti-api.edugears.ai/lti/launch" id="eg-launch" />
+                    <Row label="JWKS EduGears" value="https://lti-api.edugears.ai/lti/jwks" id="eg-jwks" />
+                  </div>
+
+                  <div style={{ marginTop: '1rem', padding: '12px', background: '#FAF9F7', borderRadius: '10px', border: '1px solid rgba(28,25,23,0.08)' }}>
+                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#A8A29E', marginBottom: '6px' }}>CLÉ PUBLIQUE RSA (kid: etagia-lms-2026)</div>
+                    <div style={{ fontFamily: 'monospace', fontSize: '10px', color: '#57534E', wordBreak: 'break-all' as const, lineHeight: '1.5' }}>
+                      n: s3n-UfXLv9qQqDtKWPG4zzdMQijoAzp0DEjZ_-4c3cY…
+                    </div>
+                    <button onClick={() => copy(`${PLATFORM_URL}/api/lti/certs`, 'jwks-url')}
+                      style={{ marginTop: '8px', background: '#E8651A', border: 'none', borderRadius: '7px', padding: '6px 14px', color: '#fff', fontSize: '11px', fontWeight: '700', cursor: 'pointer' }}>
+                      Copier l&apos;URL JWKS
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {plugin.id !== 'edugears' && (
+                <div style={{ padding: '2rem', textAlign: 'center', color: '#A8A29E' }}>
+                  <div style={{ fontSize: '32px', marginBottom: '8px' }}>{plugin.icon}</div>
+                  <div style={{ fontWeight: '600', color: '#1C1917', marginBottom: '6px' }}>{plugin.name}</div>
+                  <div style={{ fontSize: '13px' }}>Configuration disponible prochainement.</div>
                 </div>
-              ))}
+              )}
             </div>
-          </div>
-        )}
+          )
+        })()}
       </div>
     </div>
   )
