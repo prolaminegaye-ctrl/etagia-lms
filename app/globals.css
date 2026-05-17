@@ -2,20 +2,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
 
 :root {
-  --bg-primary: #0D0A1A;
-  --bg-secondary: #130F23;
-  --bg-card: #1A1530;
+  --bg-primary: #1A1740;
+  --bg-secondary: #221E52;
+  --bg-card: #2C2860;
   --accent: #7B5CF5;
   --accent2: #9B6FF5;
   --teal: #22D4A8;
   --pink: #E040A0;
   --gold: #F0B429;
   --red: #F05A5A;
-  --text-primary: #F0EEFF;
-  --text-secondary: #8B7BAE;
-  --text-muted: #4A3D6A;
-  --border: rgba(123,92,245,0.12);
-  --border-active: rgba(123,92,245,0.5);
+  --text-primary: #F2EFFF;
+  --text-secondary: #A898CC;
+  --text-muted: #7060A0;
+  --border: rgba(140,110,255,0.18);
+  --border-active: rgba(140,110,255,0.5);
   --font-display: 'Syne', sans-serif;
   --font-body: 'DM Sans', sans-serif;
   --grad-main: linear-gradient(135deg, #7B5CF5 0%, #E040A0 100%);
@@ -41,9 +41,9 @@ button { cursor: pointer; font-family: var(--font-body); }
 
 input, textarea, select {
   font-family: var(--font-body);
-  background: rgba(123,92,245,0.06) !important;
+  background: rgba(140,110,255,0.08) !important;
   color: var(--text-primary) !important;
-  border: 1px solid rgba(123,92,245,0.2);
+  border: 1px solid rgba(140,110,255,0.22);
   border-radius: 10px;
   padding: 10px 14px;
   outline: none;
@@ -51,8 +51,8 @@ input, textarea, select {
   font-size: 14px;
 }
 input::placeholder, textarea::placeholder { color: var(--text-muted); }
-input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(123,92,245,0.1); }
-select option { background: #1A1530; color: #F0EEFF; }
+input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(123,92,245,0.12); }
+select option { background: #2C2860; color: #F2EFFF; }
 
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-thumb { background: rgba(123,92,245,0.25); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: rgba(140,110,255,0.3); border-radius: 2px; }
