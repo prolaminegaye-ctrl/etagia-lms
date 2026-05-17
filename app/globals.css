@@ -1,32 +1,63 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap');
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ETAGIA LMS — Identité "Soleil Kente"
+   Orange africain · Teal émeraude · Or kente
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 :root {
-  --bg-primary: #F4F2FF;
-  --bg-secondary: #EBE7FF;
-  --bg-card: #FFFFFF;
-  --accent: #6B4EFF;
-  --accent2: #8B70FF;
-  --teal: #00B89C;
-  --pink: #D63384;
-  --gold: #E6A817;
-  --red: #E05252;
-  --text-primary: #1A1550;
-  --text-secondary: #6B5EA8;
-  --text-muted: #9B8EC0;
-  --border: rgba(107,78,255,0.12);
-  --border-active: rgba(107,78,255,0.40);
+  /* — Couleurs primaires — */
+  --orange:        #FF5722;
+  --orange-light:  #FF7043;
+  --orange-dark:   #E64A19;
+  --teal:          #00BFA5;
+  --teal-dark:     #00897B;
+  --gold:          #FFB300;
+  --gold-dark:     #E65100;
+  --purple:        #7C3AED;
+
+  /* — Fonds — */
+  --bg-main:       #FAF9F7;
+  --bg-card:       #FFFFFF;
+  --bg-hover:      #FFF5F2;
+  --bg-sidebar:    #12100E;
+  --bg-sidebar2:   #1C1714;
+  --bg-muted:      #F5F3F0;
+
+  /* — Texte — */
+  --text-primary:  #1C1917;
+  --text-secondary:#57534E;
+  --text-muted:    #A8A29E;
+  --text-on-dark:  #F5F0E8;
+  --text-on-dark2: rgba(245,240,232,0.55);
+
+  /* — Bordures — */
+  --border:        rgba(28,25,23,0.08);
+  --border-strong: rgba(28,25,23,0.14);
+  --border-orange: rgba(255,87,34,0.30);
+
+  /* — Gradients — */
+  --grad-fire:    linear-gradient(135deg, #FF5722 0%, #FFB300 100%);
+  --grad-teal:    linear-gradient(135deg, #00BFA5 0%, #7C3AED 100%);
+  --grad-sunset:  linear-gradient(135deg, #FF5722 0%, #7C3AED 100%);
+  --grad-gold:    linear-gradient(135deg, #FFB300 0%, #FF5722 100%);
+  --grad-dark:    linear-gradient(135deg, #12100E 0%, #1C1714 100%);
+
+  /* — Polices — */
   --font-display: 'Syne', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
-  --grad-main: linear-gradient(135deg, #6B4EFF 0%, #D63384 100%);
-  --grad-cool: linear-gradient(135deg, #6B4EFF 0%, #00B89C 100%);
-  --grad-warm: linear-gradient(135deg, #D63384 0%, #E6A817 100%);
+  --font-body:    'Plus Jakarta Sans', sans-serif;
+
+  /* — Ombres — */
+  --shadow-sm:    0 1px 4px rgba(28,25,23,0.06);
+  --shadow-md:    0 4px 16px rgba(28,25,23,0.08);
+  --shadow-lg:    0 8px 32px rgba(28,25,23,0.10);
+  --shadow-orange:0 4px 20px rgba(255,87,34,0.25);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
-  background: var(--bg-primary);
+  background: var(--bg-main);
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 15px;
@@ -41,18 +72,23 @@ button { cursor: pointer; font-family: var(--font-body); }
 
 input, textarea, select {
   font-family: var(--font-body);
-  background: #FFFFFF !important;
-  color: var(--text-primary) !important;
-  border: 1px solid rgba(107,78,255,0.20);
+  background: #FFFFFF;
+  color: var(--text-primary);
+  border: 1.5px solid var(--border-strong);
   border-radius: 10px;
   padding: 10px 14px;
   outline: none;
   width: 100%;
   font-size: 14px;
+  transition: border-color .15s, box-shadow .15s;
 }
 input::placeholder, textarea::placeholder { color: var(--text-muted); }
-input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(107,78,255,0.10); }
-select option { background: #FFFFFF; color: var(--text-primary); }
+input:focus, textarea:focus, select:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255,87,34,0.10);
+}
 
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-thumb { background: rgba(107,78,255,0.25); border-radius: 2px; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(28,25,23,0.15); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,87,34,0.40); }

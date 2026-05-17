@@ -156,7 +156,7 @@ export default function ViewerPage() {
           {launchUrl && (
             <a href={launchUrl} target="_blank" rel="noreferrer" style={{background:'rgba(123,92,245,0.1)',border:'1px solid rgba(123,92,245,0.2)',borderRadius:'8px',padding:'7px 14px',color:'#A78BF8',fontSize:'12px',fontWeight:'600'}}>⤢ Plein écran</a>
           )}
-          <button onClick={()=>inputRef.current?.click()} style={{background:'linear-gradient(135deg,#7B5CF5,#E040A0)',border:'none',borderRadius:'8px',padding:'8px 16px',color:'#fff',fontWeight:'700',fontSize:'13px',cursor:'pointer'}}>
+          <button onClick={()=>inputRef.current?.click()} style={{background:'linear-gradient(135deg,#FF5722,#FFB300)',border:'none',borderRadius:'8px',padding:'8px 16px',color:'#fff',fontWeight:'700',fontSize:'13px',cursor:'pointer'}}>
             {launchUrl?'📁 Autre fichier':'📁 Ouvrir un fichier'}
           </button>
         </div>
@@ -170,7 +170,7 @@ export default function ViewerPage() {
             <span style={{color:'#A78BF8',fontWeight:'700'}}>{progress}%</span>
           </div>
           <div style={{height:'6px',background:'rgba(123,92,245,0.1)',borderRadius:'3px',overflow:'hidden'}}>
-            <div style={{height:'100%',width:`${progress}%`,background:'linear-gradient(90deg,#7B5CF5,#E040A0)',borderRadius:'3px',transition:'width .2s'}} />
+            <div style={{height:'100%',width:`${progress}%`,background:'linear-gradient(90deg,#FF5722,#FFB300)',borderRadius:'3px',transition:'width .2s'}} />
           </div>
         </div>
       )}

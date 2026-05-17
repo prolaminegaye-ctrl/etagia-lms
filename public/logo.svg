@@ -1,45 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 90" width="300" height="90">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 64" width="220" height="64">
   <defs>
-    <linearGradient id="eGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#6B4EFF"/>
-      <stop offset="100%" style="stop-color:#8B70FF"/>
+    <linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF5722"/>
+      <stop offset="100%" stop-color="#FFB300"/>
     </linearGradient>
-    <linearGradient id="lmsLeft" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#6B4EFF"/>
-      <stop offset="100%" style="stop-color:#D63384"/>
-    </linearGradient>
-    <linearGradient id="lmsRight" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#D63384"/>
-      <stop offset="100%" style="stop-color:#E6A817"/>
-    </linearGradient>
-    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#1A1550"/>
-      <stop offset="100%" style="stop-color:#6B4EFF"/>
+    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00BFA5"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
     </linearGradient>
   </defs>
 
-  <!-- Stylized E bars -->
-  <rect x="6" y="12" width="34" height="9" rx="4.5" fill="url(#eGrad)"/>
-  <rect x="6" y="27" width="26" height="8" rx="4" fill="url(#eGrad)" opacity="0.75"/>
-  <rect x="6" y="42" width="34" height="9" rx="4.5" fill="url(#eGrad)"/>
+  <!-- Sun icon — stylized "E" as rising sun -->
+  <circle cx="22" cy="32" r="10" fill="url(#sunGrad)"/>
+  <!-- Sun rays -->
+  <line x1="22" y1="10" x2="22" y2="15" stroke="#FFB300" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="22" y1="49" x2="22" y2="54" stroke="#FF5722" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="4" y1="32" x2="9" y2="32" stroke="#FF5722" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="35" y1="32" x2="40" y2="32" stroke="#FFB300" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="9.5" y1="17.5" x2="13" y2="21" stroke="#FF7043" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="31" y1="43" x2="34.5" y2="46.5" stroke="#FF7043" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="9.5" y1="46.5" x2="13" y2="43" stroke="#FFB300" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="31" y1="21" x2="34.5" y2="17.5" stroke="#FFB300" stroke-width="2.5" stroke-linecap="round"/>
 
-  <!-- "tagia" in dark purple gradient -->
-  <text x="50" y="52"
-    font-family="Georgia, serif"
-    font-size="44"
+  <!-- "tagia" wordmark -->
+  <text x="50" y="40"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="30"
     font-weight="700"
-    fill="url(#textGrad)"
-    letter-spacing="-1">tagia</text>
+    fill="#F5F0E8"
+    letter-spacing="-0.5">tagia</text>
 
-  <!-- Accent dot on i -->
-  <ellipse cx="182" cy="11" rx="4" ry="6" fill="#D63384" transform="rotate(-20 182 11)"/>
-
-  <!-- LMS line left -->
-  <line x1="56" y1="68" x2="80" y2="68" stroke="url(#lmsLeft)" stroke-width="2" stroke-linecap="round"/>
-  <!-- LMS text -->
-  <text x="84" y="74" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#6B4EFF" letter-spacing="6">L</text>
-  <text x="100" y="74" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#D63384" letter-spacing="6">M</text>
-  <text x="117" y="74" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#E6A817" letter-spacing="6">S</text>
-  <!-- LMS line right -->
-  <line x1="134" y1="68" x2="160" y2="68" stroke="url(#lmsRight)" stroke-width="2" stroke-linecap="round"/>
+  <!-- LMS pill -->
+  <rect x="50" y="47" width="52" height="13" rx="6.5" fill="url(#tealGrad)" opacity="0.9"/>
+  <text x="76" y="57"
+    font-family="'Plus Jakarta Sans', Arial, sans-serif"
+    font-size="8"
+    font-weight="800"
+    fill="#FFFFFF"
+    text-anchor="middle"
+    letter-spacing="3">LMS</text>
 </svg>

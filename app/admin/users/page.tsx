@@ -17,8 +17,8 @@ const emptyUser: Partial<User> = { name:'', email:'', role:'Apprenant', org:'ETA
 const S = {
   inp: { background:'rgba(123,92,245,0.06)', color:'#F0EEFF', border:'1px solid rgba(123,92,245,0.2)', borderRadius:'10px', padding:'9px 12px', width:'100%', fontSize:'14px', fontFamily:'inherit', outline:'none' } as React.CSSProperties,
   lbl: { fontSize:'11px', color:'#8B7BAE', display:'block', marginBottom:'5px', fontWeight:'700', textTransform:'uppercase' as const, letterSpacing:'0.7px' },
-  btn: { background:'linear-gradient(135deg,#7B5CF5,#E040A0)', border:'none', borderRadius:'10px', padding:'10px 20px', color:'#fff', fontWeight:'700', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
-  cancel: { background:'#F4F2FF', border:'1px solid rgba(107,78,255,0.10)', borderRadius:'10px', padding:'10px 18px', color:'#8B7BAE', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
+  btn: { background:'linear-gradient(135deg,#FF5722,#FFB300)', border:'none', borderRadius:'10px', padding:'10px 20px', color:'#fff', fontWeight:'700', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
+  cancel: { background:'#FAF9F7', border:'1px solid rgba(28,25,23,0.07)', borderRadius:'10px', padding:'10px 18px', color:'#8B7BAE', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
 }
 
 export default function UsersPage() {
@@ -49,7 +49,7 @@ export default function UsersPage() {
   const confirmDelete = () => { setUsers(p => p.filter(u => u.id!==sel?.id)); setModal(null) }
   const toggleStatus = (id: string) => setUsers(p => p.map(u => u.id===id ? {...u, status: u.status==='Actif'?'Inactif':'Actif'} : u))
 
-  const roleColors: Record<string,string> = { Admin:'#F0B429', Formateur:'#7B5CF5', Apprenant:'#22D4A8' }
+  const roleColors: Record<string,string> = { Admin:'#FFB300', Formateur:'#FF5722', Apprenant:'#00BFA5' }
 
   return (
     <div>
@@ -73,7 +73,7 @@ export default function UsersPage() {
       <div style={{background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(123,92,245,0.12)',borderRadius:'16px',overflow:'hidden'}}>
         <table style={{width:'100%',borderCollapse:'collapse'}}>
           <thead>
-            <tr style={{borderBottom:'1px solid rgba(123,92,245,0.1)',background:'#F4F2FF'}}>
+            <tr style={{borderBottom:'1px solid rgba(123,92,245,0.1)',background:'#FAF9F7'}}>
               {['Utilisateur','Rôle','Organisation','Cours','Inscrit le','Statut','Actions'].map(h=>(
                 <th key={h} style={{padding:'12px 14px',textAlign:'left',fontSize:'10px',fontWeight:'700',color:'#4A3D6A',textTransform:'uppercase',letterSpacing:'0.8px'}}>{h}</th>
               ))}
@@ -86,7 +86,7 @@ export default function UsersPage() {
                 onMouseLeave={e=>(e.currentTarget as HTMLElement).style.background='transparent'}>
                 <td style={{padding:'14px'}}>
                   <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
-                    <div style={{width:'34px',height:'34px',borderRadius:'50%',background:`${roleColors[u.role]||'#7B5CF5'}22`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'13px',fontWeight:'700',color:roleColors[u.role]||'#A78BF8',flexShrink:0}}>
+                    <div style={{width:'34px',height:'34px',borderRadius:'50%',background:`${roleColors[u.role]||'#FF5722'}22`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'13px',fontWeight:'700',color:roleColors[u.role]||'#A78BF8',flexShrink:0}}>
                       {u.name.charAt(0)}
                     </div>
                     <div>
@@ -96,13 +96,13 @@ export default function UsersPage() {
                   </div>
                 </td>
                 <td style={{padding:'14px'}}>
-                  <span style={{fontSize:'11px',fontWeight:'700',padding:'3px 10px',borderRadius:'20px',background:`${roleColors[u.role]||'#7B5CF5'}22`,color:roleColors[u.role]||'#A78BF8'}}>{u.role}</span>
+                  <span style={{fontSize:'11px',fontWeight:'700',padding:'3px 10px',borderRadius:'20px',background:`${roleColors[u.role]||'#FF5722'}22`,color:roleColors[u.role]||'#A78BF8'}}>{u.role}</span>
                 </td>
                 <td style={{padding:'14px',fontSize:'13px',color:'#8B7BAE'}}>{u.org}</td>
                 <td style={{padding:'14px',fontSize:'14px',fontWeight:'700',color:'#A78BF8'}}>{u.courses}</td>
                 <td style={{padding:'14px',fontSize:'12px',color:'#4A3D6A'}}>{u.joined}</td>
                 <td style={{padding:'14px'}}>
-                  <button onClick={()=>toggleStatus(u.id)} style={{fontSize:'11px',fontWeight:'700',padding:'4px 10px',borderRadius:'20px',border:'none',cursor:'pointer',background:u.status==='Actif'?'rgba(34,212,168,0.15)':'rgba(240,90,90,0.1)',color:u.status==='Actif'?'#22D4A8':'#F05A5A'}}>
+                  <button onClick={()=>toggleStatus(u.id)} style={{fontSize:'11px',fontWeight:'700',padding:'4px 10px',borderRadius:'20px',border:'none',cursor:'pointer',background:u.status==='Actif'?'rgba(34,212,168,0.15)':'rgba(240,90,90,0.1)',color:u.status==='Actif'?'#00BFA5':'#F05A5A'}}>
                     {u.status}
                   </button>
                 </td>
@@ -121,7 +121,7 @@ export default function UsersPage() {
 
       {/* Add/Edit modal */}
       {(modal==='add'||modal==='edit')&&(
-        <div style={{position:'fixed',inset:0,background:'#F4F2FF',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
+        <div style={{position:'fixed',inset:0,background:'#FAF9F7',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
           <div style={{background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(123,92,245,0.3)',borderRadius:'20px',padding:'2rem',width:'100%',maxWidth:'500px'}}>
             <h2 style={{fontSize:'20px',fontWeight:'800',color:'#F0EEFF',marginBottom:'1.5rem'}}>{modal==='add'?'+ Inviter un utilisateur':'✏️ Modifier l\'utilisateur'}</h2>
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem',marginBottom:'1.5rem'}}>
@@ -160,7 +160,7 @@ export default function UsersPage() {
 
       {/* Delete modal */}
       {modal==='delete'&&(
-        <div style={{position:'fixed',inset:0,background:'#F4F2FF',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100}}>
+        <div style={{position:'fixed',inset:0,background:'#FAF9F7',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100}}>
           <div style={{background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(240,90,90,0.3)',borderRadius:'20px',padding:'2.5rem',textAlign:'center',maxWidth:'380px',margin:'1rem'}}>
             <div style={{fontSize:'48px',marginBottom:'1rem'}}>⚠️</div>
             <h2 style={{fontSize:'18px',fontWeight:'800',color:'#F05A5A',marginBottom:'8px'}}>Supprimer {sel?.name} ?</h2>

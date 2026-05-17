@@ -1,25 +1,23 @@
 'use client'
 import { useRouter } from 'next/navigation'
 
-const card = { background: '#FFFFFF', border: '1px solid rgba(107,78,255,0.10)', borderRadius: '16px', boxShadow: '0 2px 12px rgba(107,78,255,0.05)' } as React.CSSProperties
-
 const kpis = [
-  { label: 'Cours en cours', value: '4', color: '#9B7EFF', grad: 'linear-gradient(135deg,#7B5CF5,#E040A0)', delta: '+1 ce mois' },
-  { label: 'Progression', value: '68%', color: '#22D4A8', grad: 'linear-gradient(135deg,#22D4A8,#7B5CF5)', delta: '+5% semaine' },
-  { label: 'Score moyen', value: '82/100', color: '#F0B429', grad: 'linear-gradient(135deg,#F0B429,#E040A0)', delta: 'Top 15%' },
-  { label: 'Heures semaine', value: '12h', color: '#F06292', grad: 'linear-gradient(135deg,#E040A0,#7B5CF5)', delta: 'Obj: 15h' },
+  { label: 'Cours en cours', value: '4', color: '#FF5722', grad: 'linear-gradient(135deg,#FF5722,#FFB300)', delta: '+1 ce mois', icon: '📚' },
+  { label: 'Progression', value: '68%', color: '#00BFA5', grad: 'linear-gradient(135deg,#00BFA5,#7C3AED)', delta: '+5% semaine', icon: '📈' },
+  { label: 'Score moyen', value: '82/100', color: '#FFB300', grad: 'linear-gradient(135deg,#FFB300,#FF5722)', delta: 'Top 15%', icon: '🏆' },
+  { label: 'Heures semaine', value: '12h', color: '#7C3AED', grad: 'linear-gradient(135deg,#7C3AED,#00BFA5)', delta: 'Obj: 15h', icon: '⏱' },
 ]
 
 const courses = [
-  { title: 'Data Science avec Python', progress: 72, cat: 'Tech', color: '#9B7EFF', done: 17, total: 24 },
-  { title: 'Marketing Digital Afrique', progress: 45, cat: 'Business', color: '#22D4A8', done: 8, total: 18 },
-  { title: 'Leadership & Management', progress: 30, cat: 'Soft Skills', color: '#F06292', done: 4, total: 12 },
+  { title: 'Data Science avec Python', progress: 72, cat: 'Tech', color: '#FF5722', done: 17, total: 24 },
+  { title: 'Marketing Digital Afrique', progress: 45, cat: 'Business', color: '#00BFA5', done: 8, total: 18 },
+  { title: 'Leadership & Management', progress: 30, cat: 'Soft Skills', color: '#FFB300', done: 4, total: 12 },
 ]
 
 const reco = [
-  { title: 'IA Générative pour pros', tag: 'Nouveau', color: '#9B7EFF', emoji: '🤖' },
-  { title: 'Comptabilité SME Afrique', tag: 'Populaire', color: '#22D4A8', emoji: '💼' },
-  { title: 'Pitch & Fundraising', tag: 'Tendance', color: '#F06292', emoji: '🚀' },
+  { title: 'IA Générative pour pros', tag: 'Nouveau', color: '#7C3AED', emoji: '🤖' },
+  { title: 'Comptabilité SME Afrique', tag: 'Populaire', color: '#00BFA5', emoji: '💼' },
+  { title: 'Pitch & Fundraising', tag: 'Tendance', color: '#FF5722', emoji: '🚀' },
 ]
 
 export default function DashboardPage() {
@@ -27,18 +25,19 @@ export default function DashboardPage() {
   return (
     <div>
       {/* Hero */}
-      <div style={{ marginBottom: '2rem', padding: '1.75rem', borderRadius: '20px', background: 'linear-gradient(135deg,#EBE7FF 0%,#F9F0FF 100%)', border: '1px solid rgba(107,78,255,0.15)', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '-60px', right: '-40px', width: '250px', height: '250px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(107,78,255,0.12),transparent 70%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: '-40px', left: '30%', width: '180px', height: '180px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(214,51,132,0.08),transparent 70%)', pointerEvents: 'none' }} />
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ marginBottom: '2rem', padding: '2rem', borderRadius: '24px', background: 'linear-gradient(135deg,#FF5722 0%,#FFB300 100%)', position: 'relative', overflow: 'hidden', boxShadow: '0 8px 32px rgba(255,87,34,0.30)' }}>
+        <div style={{ position: 'absolute', top: '-80px', right: '-60px', width: '280px', height: '280px', borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '-50px', left: '20%', width: '200px', height: '200px', borderRadius: '50%', background: 'rgba(0,0,0,0.08)', pointerEvents: 'none' }} />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
           <div>
-            <h1 style={{ fontSize: '28px', fontWeight: '800', marginBottom: '6px', background: 'linear-gradient(135deg,#1A1550 0%,#6B4EFF 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Bonjour, Lamine 👋</h1>
-            <p style={{ color: '#9B8EC0', fontSize: '14px' }}>Dimanche 17 mai 2026 · 7 jours de streak 🔥</p>
+            <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.75)', marginBottom: '6px', letterSpacing: '0.5px' }}>DIMANCHE 17 MAI 2026</div>
+            <h1 style={{ fontSize: '32px', fontWeight: '800', color: '#FFFFFF', marginBottom: '6px', fontFamily: 'Syne,sans-serif', lineHeight: 1.1 }}>Bonjour, Lamine 👋</h1>
+            <p style={{ color: 'rgba(255,255,255,0.80)', fontSize: '14px' }}>Vous êtes sur une belle lancée. Continuez !</p>
           </div>
-          <div style={{ background: '#FFFFFF', border: '1px solid rgba(107,78,255,0.20)', borderRadius: '14px', padding: '12px 18px', textAlign: 'center', boxShadow: '0 2px 12px rgba(107,78,255,0.08)' }}>
-            <div style={{ fontSize: '11px', color: '#9B8EC0', marginBottom: '4px' }}>Objectif hebdo</div>
-            <div style={{ fontSize: '22px', fontWeight: '800', color: '#6B4EFF', fontFamily: 'Syne,sans-serif' }}>15h/sem</div>
-            <div style={{ fontSize: '11px', color: '#00B89C', marginTop: '2px' }}>12h ✓</div>
+          <div style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: '18px', padding: '16px 22px', textAlign: 'center' }}>
+            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.70)', marginBottom: '4px', fontWeight: '600' }}>Objectif hebdo</div>
+            <div style={{ fontSize: '26px', fontWeight: '800', color: '#FFFFFF', fontFamily: 'Syne,sans-serif' }}>15h/sem</div>
+            <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.85)', marginTop: '4px', fontWeight: '600' }}>✓ 12h cette semaine</div>
           </div>
         </div>
       </div>
@@ -46,56 +45,65 @@ export default function DashboardPage() {
       {/* KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1rem', marginBottom: '2rem' }}>
         {kpis.map(k => (
-          <div key={k.label} style={{ ...card, padding: '1.25rem', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: k.grad }} />
-            <div style={{ marginTop: '4px', fontSize: '28px', fontWeight: '800', color: k.color, fontFamily: 'Syne,sans-serif', marginBottom: '4px' }}>{k.value}</div>
-            <div style={{ fontSize: '12px', color: '#6B5EA8', marginBottom: '4px' }}>{k.label}</div>
-            <div style={{ fontSize: '11px', color: '#00B89C', fontWeight: '600' }}>{k.delta}</div>
+          <div key={k.label} style={{ background: '#FFFFFF', border: '1.5px solid rgba(28,25,23,0.07)', borderRadius: '18px', padding: '1.25rem', position: 'relative', overflow: 'hidden', boxShadow: '0 2px 12px rgba(28,25,23,0.05)', transition: 'transform .2s,box-shadow .2s' }}>
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: k.grad, borderRadius: '18px 18px 0 0' }} />
+            <div style={{ fontSize: '22px', marginBottom: '8px', marginTop: '4px' }}>{k.icon}</div>
+            <div style={{ fontSize: '28px', fontWeight: '800', color: k.color, fontFamily: 'Syne,sans-serif', marginBottom: '3px', lineHeight: 1 }}>{k.value}</div>
+            <div style={{ fontSize: '12px', color: '#57534E', marginBottom: '6px' }}>{k.label}</div>
+            <div style={{ fontSize: '11px', color: '#00BFA5', fontWeight: '700' }}>{k.delta}</div>
           </div>
         ))}
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1.5rem' }}>
+        {/* Courses */}
         <div>
-          <h2 style={{ fontSize: '16px', fontWeight: '700', marginBottom: '1rem', color: '#1A1550' }}>Continuer l&apos;apprentissage</h2>
+          <h2 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '1rem', color: '#1C1917', fontFamily: 'Syne,sans-serif' }}>Continuer l&apos;apprentissage</h2>
           {courses.map(c => (
-            <div key={c.title} onClick={() => router.push('/cours')} style={{ ...card, padding: '1.1rem 1.25rem', cursor: 'pointer', marginBottom: '0.75rem', transition: 'all .15s' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(107,78,255,0.30)'; (e.currentTarget as HTMLElement).style.background = '#F4F2FF' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(107,78,255,0.10)'; (e.currentTarget as HTMLElement).style.background = '#FFFFFF' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+            <div key={c.title} onClick={() => router.push('/cours')}
+              style={{ background: '#FFFFFF', border: '1.5px solid rgba(28,25,23,0.07)', borderRadius: '16px', padding: '1.1rem 1.25rem', cursor: 'pointer', marginBottom: '0.75rem', transition: 'all .15s', boxShadow: '0 2px 8px rgba(28,25,23,0.04)' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = c.color + '55'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)'; (e.currentTarget as HTMLElement).style.boxShadow = `0 6px 20px ${c.color}18` }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(28,25,23,0.07)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 8px rgba(28,25,23,0.04)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
                 <div>
-                  <div style={{ fontWeight: '600', fontSize: '14px', color: '#1A1550', marginBottom: '3px' }}>{c.title}</div>
-                  <span style={{ fontSize: '11px', fontWeight: '600', padding: '2px 8px', borderRadius: '6px', background: '#EBE7FF', color: '#6B4EFF' }}>{c.cat}</span>
+                  <div style={{ fontWeight: '600', fontSize: '14px', color: '#1C1917', marginBottom: '4px' }}>{c.title}</div>
+                  <span style={{ fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '6px', background: c.color + '15', color: c.color }}>{c.cat}</span>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '22px', fontWeight: '800', color: c.color, fontFamily: 'Syne,sans-serif' }}>{c.progress}%</div>
-                  <div style={{ fontSize: '11px', color: '#9B8EC0' }}>{c.done}/{c.total} leçons</div>
+                  <div style={{ fontSize: '24px', fontWeight: '800', color: c.color, fontFamily: 'Syne,sans-serif' }}>{c.progress}%</div>
+                  <div style={{ fontSize: '11px', color: '#A8A29E' }}>{c.done}/{c.total} leçons</div>
                 </div>
               </div>
-              <div style={{ height: '5px', background: '#EBE7FF', borderRadius: '3px', overflow: 'hidden' }}>
-                <div style={{ height: '100%', width: `${c.progress}%`, background: `linear-gradient(90deg,${c.color},${c.color}88)`, borderRadius: '3px' }} />
+              <div style={{ height: '6px', background: '#F5F3F0', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${c.progress}%`, background: `linear-gradient(90deg,${c.color},${c.color}CC)`, borderRadius: '3px', transition: 'width .5s ease' }} />
               </div>
             </div>
           ))}
         </div>
 
+        {/* Right column */}
         <div>
-          <h2 style={{ fontSize: '16px', fontWeight: '700', marginBottom: '1rem', color: '#1A1550' }}>Recommandé pour toi</h2>
+          <h2 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '1rem', color: '#1C1917', fontFamily: 'Syne,sans-serif' }}>Recommandé</h2>
           {reco.map(r => (
-            <div key={r.title} onClick={() => router.push('/cours')} style={{ ...card, padding: '12px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.6rem', transition: 'all .15s' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(107,78,255,0.30)'; (e.currentTarget as HTMLElement).style.background = '#F4F2FF' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(107,78,255,0.10)'; (e.currentTarget as HTMLElement).style.background = '#FFFFFF' }}>
-              <span style={{ fontSize: '20px' }}>{r.emoji}</span>
-              <span style={{ flex: 1, fontWeight: '500', fontSize: '13px', color: '#1A1550' }}>{r.title}</span>
-              <span style={{ fontSize: '10px', fontWeight: '700', padding: '3px 8px', borderRadius: '20px', background: r.color + '18', color: r.color }}>{r.tag}</span>
+            <div key={r.title} onClick={() => router.push('/cours')}
+              style={{ background: '#FFFFFF', border: '1.5px solid rgba(28,25,23,0.07)', borderRadius: '14px', padding: '13px 15px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '0.6rem', transition: 'all .15s', boxShadow: '0 1px 6px rgba(28,25,23,0.04)' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#FFF5F2'; (e.currentTarget as HTMLElement).style.borderColor = '#FF572222' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#FFFFFF'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(28,25,23,0.07)' }}>
+              <span style={{ fontSize: '22px' }}>{r.emoji}</span>
+              <span style={{ flex: 1, fontWeight: '500', fontSize: '13px', color: '#1C1917' }}>{r.title}</span>
+              <span style={{ fontSize: '10px', fontWeight: '700', padding: '3px 9px', borderRadius: '20px', background: r.color + '15', color: r.color }}>{r.tag}</span>
             </div>
           ))}
 
-          <div onClick={() => router.push('/tutor')} style={{ padding: '1.25rem', textAlign: 'center', cursor: 'pointer', marginTop: '1rem', background: 'linear-gradient(135deg,#EBE7FF 0%,#F9F0FF 100%)', border: '1px solid rgba(107,78,255,0.20)', borderRadius: '16px', boxShadow: '0 2px 12px rgba(107,78,255,0.08)', transition: 'all .2s' }}>
-            <div style={{ fontSize: '28px', marginBottom: '8px' }}>✦</div>
-            <div style={{ fontWeight: '700', fontSize: '15px', marginBottom: '6px', background: 'linear-gradient(135deg,#6B4EFF,#D63384)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AI Tutor ETAGIA</div>
-            <div style={{ fontSize: '12px', color: '#9B8EC0', marginBottom: '14px' }}>Posez vos questions, obtenez des explications personnalisées</div>
-            <div style={{ display: 'inline-block', background: 'linear-gradient(135deg,#6B4EFF,#D63384)', borderRadius: '10px', padding: '8px 20px', color: '#fff', fontSize: '13px', fontWeight: '700', boxShadow: '0 4px 20px rgba(107,78,255,0.30)' }}>Ouvrir le Tutor →</div>
+          {/* AI Tutor CTA */}
+          <div onClick={() => router.push('/tutor')}
+            style={{ marginTop: '1rem', padding: '1.5rem', textAlign: 'center', cursor: 'pointer', background: 'linear-gradient(135deg,#12100E 0%,#1C1714 100%)', borderRadius: '18px', border: '1px solid rgba(255,255,255,0.08)', transition: 'all .2s', boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(0,0,0,0.25)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)' }}>
+            <div style={{ fontSize: '32px', marginBottom: '10px' }}>✦</div>
+            <div style={{ fontWeight: '800', fontSize: '16px', marginBottom: '6px', background: 'linear-gradient(135deg,#FF5722,#FFB300)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontFamily: 'Syne,sans-serif' }}>AI Tutor ETAGIA</div>
+            <div style={{ fontSize: '12px', color: 'rgba(245,240,232,0.55)', marginBottom: '16px', lineHeight: 1.5 }}>Posez vos questions, obtenez des explications personnalisées en temps réel</div>
+            <div style={{ display: 'inline-block', background: 'linear-gradient(135deg,#FF5722,#FFB300)', borderRadius: '10px', padding: '9px 22px', color: '#fff', fontSize: '13px', fontWeight: '700', boxShadow: '0 4px 16px rgba(255,87,34,0.35)' }}>Ouvrir le Tutor →</div>
           </div>
         </div>
       </div>

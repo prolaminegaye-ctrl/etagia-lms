@@ -11,7 +11,7 @@ const g = () => Math.random().toString(36).slice(2, 8)
 const S = {
   card: { background: 'linear-gradient(145deg,#1A1530,#130F23)', border: '1px solid rgba(123,92,245,0.12)', borderRadius: '16px' } as React.CSSProperties,
   inp: { background: 'rgba(123,92,245,0.06)', color: '#F0EEFF', border: '1px solid rgba(123,92,245,0.2)', borderRadius: '10px', padding: '10px 14px', width: '100%', fontSize: '14px', fontFamily: 'inherit', outline: 'none' } as React.CSSProperties,
-  btn: { background: 'linear-gradient(135deg,#7B5CF5,#E040A0)', border: 'none', borderRadius: '10px', padding: '10px 20px', color: '#fff', fontWeight: '700', fontSize: '14px', cursor: 'pointer' } as React.CSSProperties,
+  btn: { background: 'linear-gradient(135deg,#FF5722,#FFB300)', border: 'none', borderRadius: '10px', padding: '10px 20px', color: '#fff', fontWeight: '700', fontSize: '14px', cursor: 'pointer' } as React.CSSProperties,
   lbl: { fontSize: '11px', color: '#8B7BAE', display: 'block', marginBottom: '5px', fontWeight: '700', textTransform: 'uppercase' as const, letterSpacing: '0.7px' },
 }
 const blockTypes = [
@@ -78,11 +78,11 @@ export default function CreerCours() {
   if (published) return (
     <div style={{textAlign:'center',padding:'4rem 2rem'}}>
       <div style={{fontSize:'64px',marginBottom:'1.5rem'}}>🎉</div>
-      <h1 style={{fontSize:'28px',fontWeight:'800',marginBottom:'8px',background:'linear-gradient(135deg,#A78BF8,#E040A0)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Cours publié avec succès !</h1>
+      <h1 style={{fontSize:'28px',fontWeight:'800',marginBottom:'8px',background:'linear-gradient(135deg,#A78BF8,#FFB300)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Cours publié avec succès !</h1>
       <p style={{color:'#8B7BAE',marginBottom:'2rem'}}>"{info.title}" · {modules.length} modules · Visible pour vos apprenants</p>
       <div style={{display:'flex',gap:'12px',justifyContent:'center'}}>
         <button style={S.btn} onClick={()=>router.push('/formateur/cours')}>Voir mes cours →</button>
-        <button style={{...S.btn,background:'linear-gradient(135deg,#E040A0,#F0B429)'}} onClick={()=>{setPublished(false);setStep(0);setModules([]);setCourseData(null);setInfo({title:'',description:'',level:'débutant',category:'Tech',duration:'3h',audience:''})}}>+ Nouveau cours</button>
+        <button style={{...S.btn,background:'linear-gradient(135deg,#FFB300,#FFB300)'}} onClick={()=>{setPublished(false);setStep(0);setModules([]);setCourseData(null);setInfo({title:'',description:'',level:'débutant',category:'Tech',duration:'3h',audience:''})}}>+ Nouveau cours</button>
       </div>
     </div>
   )
@@ -98,7 +98,7 @@ export default function CreerCours() {
           </div>
           <div style={{display:'flex',gap:'6px'}}>
             {['Infos','Méthode','Modules & Activités','Publier'].map((s,i)=>(
-              <div key={i} onClick={()=>i<step&&setStep(i)} style={{padding:'5px 12px',borderRadius:'20px',fontSize:'11px',fontWeight:'700',background:step===i?'linear-gradient(135deg,#7B5CF5,#E040A0)':'rgba(123,92,245,0.08)',color:step===i?'#fff':'#4A3D6A',cursor:i<step?'pointer':'default'}}>{i+1}. {s}</div>
+              <div key={i} onClick={()=>i<step&&setStep(i)} style={{padding:'5px 12px',borderRadius:'20px',fontSize:'11px',fontWeight:'700',background:step===i?'linear-gradient(135deg,#FF5722,#FFB300)':'rgba(123,92,245,0.08)',color:step===i?'#fff':'#4A3D6A',cursor:i<step?'pointer':'default'}}>{i+1}. {s}</div>
             ))}
           </div>
         </div>
@@ -139,7 +139,7 @@ export default function CreerCours() {
             </div>
           )}
           {aiLog&&<div style={{background:'rgba(123,92,245,0.08)',border:'1px solid rgba(123,92,245,0.2)',borderRadius:'12px',padding:'1rem',marginBottom:'1rem',display:'flex',gap:'10px',alignItems:'center'}}>
-            <div style={{width:'18px',height:'18px',borderRadius:'50%',border:'2px solid #7B5CF5',borderTopColor:'transparent',animation:'spin 1s linear infinite',flexShrink:0}} />
+            <div style={{width:'18px',height:'18px',borderRadius:'50%',border:'2px solid #FF5722',borderTopColor:'transparent',animation:'spin 1s linear infinite',flexShrink:0}} />
             <span style={{fontSize:'13px',color:'#A78BF8'}}>{aiLog}</span>
           </div>}
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1.5rem'}}>
@@ -152,13 +152,13 @@ export default function CreerCours() {
                   <span key={t} style={{fontSize:'10px',background:'rgba(123,92,245,0.15)',color:'#A78BF8',padding:'2px 8px',borderRadius:'20px',fontWeight:'600'}}>{t}</span>
                 ))}
               </div>
-              <div style={{fontSize:'13px',fontWeight:'700',background:'linear-gradient(135deg,#A78BF8,#E040A0)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>⚡ Recommandé — 30 secondes →</div>
+              <div style={{fontSize:'13px',fontWeight:'700',background:'linear-gradient(135deg,#A78BF8,#FFB300)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>⚡ Recommandé — 30 secondes →</div>
             </button>
             <button onClick={addMod} disabled={busy} style={{...S.card,padding:'2rem',cursor:'pointer',border:'1px solid rgba(224,64,160,0.3)',background:'linear-gradient(145deg,rgba(224,64,160,0.06),rgba(123,92,245,0.03))',textAlign:'left'}}>
               <div style={{fontSize:'36px',marginBottom:'12px'}}>🏗️</div>
-              <div style={{fontSize:'17px',fontWeight:'800',color:'#E040A0',marginBottom:'8px'}}>Créer manuellement</div>
-              <p style={{fontSize:'13px',color:'#8B7BAE',lineHeight:'1.7',marginBottom:'12px'}}>Construisez chaque module. Ajoutez textes, vidéos, PDFs, <strong style={{color:'#E040A0'}}>activités pratiques</strong>, quiz, HTML interactif et H5P.</p>
-              <div style={{fontSize:'13px',fontWeight:'700',color:'#E040A0'}}>🎨 Contrôle total →</div>
+              <div style={{fontSize:'17px',fontWeight:'800',color:'#FFB300',marginBottom:'8px'}}>Créer manuellement</div>
+              <p style={{fontSize:'13px',color:'#8B7BAE',lineHeight:'1.7',marginBottom:'12px'}}>Construisez chaque module. Ajoutez textes, vidéos, PDFs, <strong style={{color:'#FFB300'}}>activités pratiques</strong>, quiz, HTML interactif et H5P.</p>
+              <div style={{fontSize:'13px',fontWeight:'700',color:'#FFB300'}}>🎨 Contrôle total →</div>
             </button>
           </div>
           <button onClick={()=>setStep(0)} style={{marginTop:'1rem',background:'none',border:'none',color:'#8B7BAE',fontSize:'13px',cursor:'pointer'}}>← Retour</button>
@@ -177,7 +177,7 @@ export default function CreerCours() {
                   <div style={{fontSize:'11px',color:'#4A3D6A',fontWeight:'700',textTransform:'uppercase',letterSpacing:'1px',marginBottom:'6px'}}>Objectifs généraux</div>
                   {courseData.objectifs_generaux.map((o,i)=>(
                     <div key={i} style={{display:'flex',gap:'8px',alignItems:'flex-start',marginBottom:'4px'}}>
-                      <span style={{color:'#22D4A8',fontWeight:'700',fontSize:'12px',flexShrink:0}}>✓</span>
+                      <span style={{color:'#00BFA5',fontWeight:'700',fontSize:'12px',flexShrink:0}}>✓</span>
                       <span style={{fontSize:'13px',color:'#8B7BAE'}}>{o}</span>
                     </div>
                   ))}
@@ -185,7 +185,7 @@ export default function CreerCours() {
               )}
               {courseData.evaluation_finale&&(
                 <div style={{background:'rgba(240,180,41,0.08)',border:'1px solid rgba(240,180,41,0.2)',borderRadius:'10px',padding:'12px'}}>
-                  <div style={{fontSize:'11px',color:'#F0B429',fontWeight:'700',textTransform:'uppercase',letterSpacing:'1px',marginBottom:'4px'}}>Évaluation finale · {courseData.evaluation_finale.type}</div>
+                  <div style={{fontSize:'11px',color:'#FFB300',fontWeight:'700',textTransform:'uppercase',letterSpacing:'1px',marginBottom:'4px'}}>Évaluation finale · {courseData.evaluation_finale.type}</div>
                   <div style={{fontSize:'13px',color:'#8B7BAE'}}>{courseData.evaluation_finale.description}</div>
                 </div>
               )}
@@ -206,10 +206,10 @@ export default function CreerCours() {
           {modules.map((mod,mi)=>(
             <div key={mod.id} style={{...S.card,marginBottom:'0.75rem',overflow:'hidden'}}>
               <div style={{padding:'1rem 1.25rem',display:'flex',alignItems:'center',gap:'12px',cursor:'pointer',background:open===mod.id?'rgba(123,92,245,0.06)':'transparent',borderBottom:open===mod.id?'1px solid rgba(123,92,245,0.1)':'none'}} onClick={()=>setOpen(open===mod.id?null:mod.id)}>
-                <div style={{width:'30px',height:'30px',borderRadius:'50%',background:'linear-gradient(135deg,#7B5CF5,#E040A0)',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:'800',color:'#fff',fontSize:'12px',flexShrink:0}}>{mi+1}</div>
+                <div style={{width:'30px',height:'30px',borderRadius:'50%',background:'linear-gradient(135deg,#FF5722,#FFB300)',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:'800',color:'#fff',fontSize:'12px',flexShrink:0}}>{mi+1}</div>
                 <div style={{flex:1}}>
                   <div style={{fontWeight:'600',fontSize:'14px',color:'#F0EEFF'}}>{mod.title}</div>
-                  <div style={{fontSize:'11px',color:'#8B7BAE'}}>{mod.objectif&&<span style={{color:'#22D4A8'}}>🎯 {mod.objectif.slice(0,60)}... · </span>}{mod.blocks.length} blocs · {mod.duration}</div>
+                  <div style={{fontSize:'11px',color:'#8B7BAE'}}>{mod.objectif&&<span style={{color:'#00BFA5'}}>🎯 {mod.objectif.slice(0,60)}... · </span>}{mod.blocks.length} blocs · {mod.duration}</div>
                 </div>
                 <div style={{display:'flex',gap:'6px',alignItems:'center'}}>
                   {mod.blocks.map(b=>b.type).filter((v,i,a)=>a.indexOf(v)===i).map(t=>(
@@ -230,7 +230,7 @@ export default function CreerCours() {
 
                   <div style={{display:'flex',flexDirection:'column',gap:'0.6rem',marginBottom:'0.75rem'}}>
                     {mod.blocks.map(blk=>(
-                      <div key={blk.id} style={{background:'#F4F2FF',border:'1px solid rgba(123,92,245,0.1)',borderRadius:'10px',padding:'0.875rem'}}>
+                      <div key={blk.id} style={{background:'#FAF9F7',border:'1px solid rgba(123,92,245,0.1)',borderRadius:'10px',padding:'0.875rem'}}>
                         <div style={{display:'flex',gap:'8px',alignItems:'center',marginBottom:'8px'}}>
                           <span>{blockTypes.find(x=>x.t===blk.type)?.icon}</span>
                           <span style={{fontSize:'10px',color:'#A78BF8',fontWeight:'700',textTransform:'uppercase',letterSpacing:'0.5px'}}>{blk.type}</span>
@@ -241,7 +241,7 @@ export default function CreerCours() {
                         {blk.type==='activity'&&(()=>{
                           let a:any={}; try{a=blk.content?JSON.parse(blk.content):{}}catch{}
                           return <div style={{display:'flex',flexDirection:'column',gap:'6px'}}>
-                            <div style={{fontSize:'11px',color:'#22D4A8',fontWeight:'700',textTransform:'uppercase',letterSpacing:'0.5px',padding:'4px 0'}}>🎯 Activité d'apprentissage — {a.type?.replace('_',' ')}</div>
+                            <div style={{fontSize:'11px',color:'#00BFA5',fontWeight:'700',textTransform:'uppercase',letterSpacing:'0.5px',padding:'4px 0'}}>🎯 Activité d'apprentissage — {a.type?.replace('_',' ')}</div>
                             <input style={S.inp} value={a.description||''} onChange={e=>updBlk(mod.id,blk.id,'content',JSON.stringify({...a,description:e.target.value}))} placeholder="Description de l'activité pratique" />
                             <textarea style={{...S.inp,resize:'vertical',minHeight:'60px'}} value={a.consigne||''} onChange={e=>updBlk(mod.id,blk.id,'content',JSON.stringify({...a,consigne:e.target.value}))} placeholder="Consigne détaillée pour l'apprenant" />
                           </div>
@@ -262,7 +262,7 @@ export default function CreerCours() {
                             <input ref={el=>{refs.current[blk.id]=el}} type="file" style={{display:'none'}} accept={blk.type==='video'?'.mp4,.mov,.webm':blk.type==='pdf'?'.pdf':'.h5p,.zip'} onChange={e=>{if(e.target.files?.[0])upFile(mod.id,blk.id,e.target.files[0])}} />
                             {blk.url?(
                               <div style={{background:'rgba(34,212,168,0.06)',border:'1px solid rgba(34,212,168,0.2)',borderRadius:'10px',padding:'10px',display:'flex',gap:'8px',alignItems:'center'}}>
-                                <span style={{color:'#22D4A8',fontWeight:'600',fontSize:'12px',flex:1}}>✓ {blk.title}</span>
+                                <span style={{color:'#00BFA5',fontWeight:'600',fontSize:'12px',flex:1}}>✓ {blk.title}</span>
                                 {blk.type==='pdf'&&<a href={blk.url} target="_blank" rel="noreferrer" style={{color:'#A78BF8',fontSize:'12px',fontWeight:'600'}}>👁 Voir</a>}
                                 {blk.type==='video'&&<video src={blk.url} controls style={{width:'100%',maxHeight:'160px',borderRadius:'8px',marginTop:'8px'}} />}
                                 <button onClick={()=>refs.current[blk.id]?.click()} style={{background:'rgba(123,92,245,0.1)',border:'none',borderRadius:'6px',padding:'4px 10px',color:'#A78BF8',fontSize:'11px',cursor:'pointer'}}>Remplacer</button>
@@ -279,11 +279,11 @@ export default function CreerCours() {
                   </div>
 
                   {addBlk===mod.id?(
-                    <div style={{background:'#F4F2FF',borderRadius:'10px',padding:'1rem'}}>
+                    <div style={{background:'#FAF9F7',borderRadius:'10px',padding:'1rem'}}>
                       <div style={{fontSize:'10px',color:'#8B7BAE',marginBottom:'8px',fontWeight:'700',letterSpacing:'1px'}}>AJOUTER UN BLOC</div>
                       <div style={{display:'flex',gap:'6px',flexWrap:'wrap'}}>
                         {blockTypes.map(b=><button key={b.t} onClick={()=>addBlkFn(mod.id,b.t)} style={{background:'rgba(123,92,245,0.08)',border:'1px solid rgba(123,92,245,0.15)',borderRadius:'8px',padding:'7px 12px',color:'#F0EEFF',fontSize:'12px',cursor:'pointer'}}>{b.icon} {b.label}</button>)}
-                        <button onClick={()=>setAddBlk(null)} style={{background:'none',border:'1px solid rgba(107,78,255,0.10)',borderRadius:'8px',padding:'7px 12px',color:'#4A3D6A',fontSize:'12px',cursor:'pointer'}}>Annuler</button>
+                        <button onClick={()=>setAddBlk(null)} style={{background:'none',border:'1px solid rgba(28,25,23,0.07)',borderRadius:'8px',padding:'7px 12px',color:'#4A3D6A',fontSize:'12px',cursor:'pointer'}}>Annuler</button>
                       </div>
                     </div>
                   ):(
@@ -295,7 +295,7 @@ export default function CreerCours() {
                   {/* Resources */}
                   {mod.ressources.length>0&&(
                     <div style={{marginTop:'1rem',padding:'10px 14px',background:'rgba(240,180,41,0.06)',border:'1px solid rgba(240,180,41,0.15)',borderRadius:'10px'}}>
-                      <div style={{fontSize:'11px',color:'#F0B429',fontWeight:'700',marginBottom:'6px'}}>📚 RESSOURCES COMPLÉMENTAIRES</div>
+                      <div style={{fontSize:'11px',color:'#FFB300',fontWeight:'700',marginBottom:'6px'}}>📚 RESSOURCES COMPLÉMENTAIRES</div>
                       {mod.ressources.map((r,i)=><div key={i} style={{fontSize:'12px',color:'#8B7BAE',marginBottom:'3px'}}>• {r}</div>)}
                     </div>
                   )}
@@ -316,13 +316,13 @@ export default function CreerCours() {
           <p style={{color:'#4A3D6A',fontSize:'13px',marginBottom:'2rem'}}>{modules.length} modules · {modules.reduce((a,m)=>a+m.blocks.length,0)} blocs · Niveau {info.level} · {info.duration}</p>
           {courseData?.evaluation_finale&&(
             <div style={{background:'rgba(240,180,41,0.08)',border:'1px solid rgba(240,180,41,0.2)',borderRadius:'12px',padding:'12px',marginBottom:'1.5rem',textAlign:'left'}}>
-              <div style={{fontSize:'12px',color:'#F0B429',fontWeight:'700',marginBottom:'4px'}}>📝 ÉVALUATION FINALE · {courseData.evaluation_finale.type?.toUpperCase()}</div>
+              <div style={{fontSize:'12px',color:'#FFB300',fontWeight:'700',marginBottom:'4px'}}>📝 ÉVALUATION FINALE · {courseData.evaluation_finale.type?.toUpperCase()}</div>
               <div style={{fontSize:'13px',color:'#8B7BAE'}}>{courseData.evaluation_finale.description}</div>
             </div>
           )}
           <div style={{display:'flex',gap:'10px',justifyContent:'center',flexWrap:'wrap'}}>
-            <button onClick={()=>setStep(2)} style={{background:'#F4F2FF',border:'1px solid rgba(107,78,255,0.10)',borderRadius:'10px',padding:'10px 18px',color:'#8B7BAE',fontSize:'13px',cursor:'pointer'}}>← Retour</button>
-            <button onClick={()=>setPublished(true)} style={{...S.btn,background:'rgba(240,180,41,0.15)',color:'#F0B429',border:'1px solid rgba(240,180,41,0.3)'}}>💾 Brouillon</button>
+            <button onClick={()=>setStep(2)} style={{background:'#FAF9F7',border:'1px solid rgba(28,25,23,0.07)',borderRadius:'10px',padding:'10px 18px',color:'#8B7BAE',fontSize:'13px',cursor:'pointer'}}>← Retour</button>
+            <button onClick={()=>setPublished(true)} style={{...S.btn,background:'rgba(240,180,41,0.15)',color:'#FFB300',border:'1px solid rgba(240,180,41,0.3)'}}>💾 Brouillon</button>
             <button onClick={()=>setPublished(true)} style={S.btn}>✅ Publier le cours</button>
           </div>
         </div>

@@ -173,9 +173,9 @@ export default function TutorPage() {
           {msgs.map((m,i)=>(
             <div key={i} style={{display:'flex',justifyContent:m.role==='user'?'flex-end':'flex-start',marginBottom:'1rem'}}>
               {m.role==='assistant'&&(
-                <div style={{width:'32px',height:'32px',borderRadius:'50%',background:'linear-gradient(135deg,#7B5CF5,#E040A0)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'14px',color:'#fff',marginRight:'10px',flexShrink:0,marginTop:'4px'}}>✦</div>
+                <div style={{width:'32px',height:'32px',borderRadius:'50%',background:'linear-gradient(135deg,#FF5722,#FFB300)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'14px',color:'#fff',marginRight:'10px',flexShrink:0,marginTop:'4px'}}>✦</div>
               )}
-              <div style={{maxWidth:'75%',padding:'10px 14px',borderRadius:m.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px',background:m.role==='user'?'linear-gradient(135deg,#7B5CF5,#E040A0)':'rgba(123,92,245,0.08)',border:m.role==='assistant'?'1px solid rgba(123,92,245,0.15)':'none',color:'#F0EEFF',fontSize:'14px',lineHeight:'1.6',whiteSpace:'pre-wrap'}}>
+              <div style={{maxWidth:'75%',padding:'10px 14px',borderRadius:m.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px',background:m.role==='user'?'linear-gradient(135deg,#FF5722,#FFB300)':'rgba(123,92,245,0.08)',border:m.role==='assistant'?'1px solid rgba(123,92,245,0.15)':'none',color:'#F0EEFF',fontSize:'14px',lineHeight:'1.6',whiteSpace:'pre-wrap'}}>
                 {m.content||(loading&&i===msgs.length-1?<span style={{opacity:0.5}}>●●●</span>:null)}
               </div>
             </div>
@@ -194,7 +194,7 @@ export default function TutorPage() {
             <button onClick={()=>fileRef.current?.click()} style={{background:'rgba(123,92,245,0.08)',border:'1px solid rgba(123,92,245,0.2)',borderRadius:'10px',padding:'10px 12px',color:'#A78BF8',fontSize:'18px',cursor:'pointer',flexShrink:0}} title="Joindre un PDF">📎</button>
             <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==='Enter'&&!e.shiftKey&&send()} placeholder={doc?`Question sur "${doc.name}"...`:"Posez votre question..."} disabled={loading}
               style={{flex:1,background:'rgba(123,92,245,0.06)',color:'#F0EEFF',border:'1px solid rgba(123,92,245,0.2)',borderRadius:'10px',padding:'10px 14px',fontSize:'14px',fontFamily:'inherit',outline:'none'}} />
-            <button onClick={()=>send()} disabled={loading||!input.trim()} style={{background:'linear-gradient(135deg,#7B5CF5,#E040A0)',border:'none',borderRadius:'10px',padding:'10px 18px',color:'#fff',fontSize:'14px',fontWeight:'700',cursor:'pointer',opacity:loading||!input.trim()?0.6:1,boxShadow:'0 4px 12px rgba(123,92,245,0.4)',flexShrink:0}}>
+            <button onClick={()=>send()} disabled={loading||!input.trim()} style={{background:'linear-gradient(135deg,#FF5722,#FFB300)',border:'none',borderRadius:'10px',padding:'10px 18px',color:'#fff',fontSize:'14px',fontWeight:'700',cursor:'pointer',opacity:loading||!input.trim()?0.6:1,boxShadow:'0 4px 12px rgba(123,92,245,0.4)',flexShrink:0}}>
               Envoyer
             </button>
           </div>

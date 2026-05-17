@@ -36,8 +36,8 @@ export default function AdminCoursPage() {
   const S = {
     inp: { background:'rgba(123,92,245,0.06)', color:'#F0EEFF', border:'1px solid rgba(123,92,245,0.2)', borderRadius:'10px', padding:'9px 12px', width:'100%', fontSize:'14px', fontFamily:'inherit', outline:'none' } as React.CSSProperties,
     lbl: { fontSize:'11px', color:'#8B7BAE', display:'block', marginBottom:'5px', fontWeight:'700', textTransform:'uppercase' as const, letterSpacing:'0.7px' },
-    btn: { background:'linear-gradient(135deg,#7B5CF5,#E040A0)', border:'none', borderRadius:'10px', padding:'10px 20px', color:'#fff', fontWeight:'700', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
-    cancel: { background:'#F4F2FF', border:'1px solid rgba(107,78,255,0.10)', borderRadius:'10px', padding:'10px 18px', color:'#8B7BAE', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
+    btn: { background:'linear-gradient(135deg,#FF5722,#FFB300)', border:'none', borderRadius:'10px', padding:'10px 20px', color:'#fff', fontWeight:'700', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
+    cancel: { background:'#FAF9F7', border:'1px solid rgba(28,25,23,0.07)', borderRadius:'10px', padding:'10px 18px', color:'#8B7BAE', fontSize:'14px', cursor:'pointer' } as React.CSSProperties,
   }
 
   return (
@@ -64,7 +64,7 @@ export default function AdminCoursPage() {
       <div style={{background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(123,92,245,0.12)',borderRadius:'16px',overflow:'hidden'}}>
         <table style={{width:'100%',borderCollapse:'collapse'}}>
           <thead>
-            <tr style={{borderBottom:'1px solid rgba(123,92,245,0.1)',background:'#F4F2FF'}}>
+            <tr style={{borderBottom:'1px solid rgba(123,92,245,0.1)',background:'#FAF9F7'}}>
               {['Cours','Auteur','Catégorie','Inscrits','Complétion','Statut','Actions'].map(h=>(
                 <th key={h} style={{padding:'12px 14px',textAlign:'left',fontSize:'10px',fontWeight:'700',color:'#4A3D6A',textTransform:'uppercase',letterSpacing:'0.8px'}}>{h}</th>
               ))}
@@ -85,7 +85,7 @@ export default function AdminCoursPage() {
                 <td style={{padding:'14px'}}>
                   <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
                     <div style={{flex:1,height:'4px',background:'rgba(123,92,245,0.1)',borderRadius:'2px',overflow:'hidden'}}>
-                      <div style={{height:'100%',width:`${c.completion}%`,background:'linear-gradient(90deg,#7B5CF5,#E040A0)',borderRadius:'2px'}} />
+                      <div style={{height:'100%',width:`${c.completion}%`,background:'linear-gradient(90deg,#FF5722,#FFB300)',borderRadius:'2px'}} />
                     </div>
                     <span style={{fontSize:'12px',color:'#A78BF8',fontWeight:'600',minWidth:'30px'}}>{c.completion}%</span>
                   </div>
@@ -93,12 +93,12 @@ export default function AdminCoursPage() {
                 <td style={{padding:'14px'}}>
                   <span style={{fontSize:'11px',fontWeight:'700',padding:'3px 10px',borderRadius:'20px',
                     background:c.status==='Publié'?'rgba(34,212,168,0.15)':c.status==='Brouillon'?'rgba(240,180,41,0.15)':'rgba(240,90,90,0.1)',
-                    color:c.status==='Publié'?'#22D4A8':c.status==='Brouillon'?'#F0B429':'#F05A5A'}}>{c.status}</span>
+                    color:c.status==='Publié'?'#00BFA5':c.status==='Brouillon'?'#FFB300':'#F05A5A'}}>{c.status}</span>
                 </td>
                 <td style={{padding:'14px'}}>
                   <div style={{display:'flex',gap:'5px'}}>
                     <button onClick={()=>openEdit(c)} style={{background:'rgba(123,92,245,0.1)',border:'none',borderRadius:'6px',padding:'5px 10px',color:'#A78BF8',fontSize:'11px',fontWeight:'600',cursor:'pointer'}}>✏️ Éditer</button>
-                    <button onClick={()=>toggleStatus(c.id)} style={{background:'rgba(34,212,168,0.08)',border:'none',borderRadius:'6px',padding:'5px 10px',color:'#22D4A8',fontSize:'11px',cursor:'pointer'}}>⇄</button>
+                    <button onClick={()=>toggleStatus(c.id)} style={{background:'rgba(34,212,168,0.08)',border:'none',borderRadius:'6px',padding:'5px 10px',color:'#00BFA5',fontSize:'11px',cursor:'pointer'}}>⇄</button>
                     <button onClick={()=>openDelete(c)} style={{background:'rgba(240,90,90,0.08)',border:'none',borderRadius:'6px',padding:'5px 8px',color:'#F05A5A',fontSize:'11px',cursor:'pointer'}}>🗑</button>
                   </div>
                 </td>
@@ -111,7 +111,7 @@ export default function AdminCoursPage() {
 
       {/* Edit modal */}
       {modal==='edit'&&(
-        <div style={{position:'fixed',inset:0,background:'#F4F2FF',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
+        <div style={{position:'fixed',inset:0,background:'#FAF9F7',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
           <div style={{background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(123,92,245,0.25)',borderRadius:'20px',padding:'2rem',width:'100%',maxWidth:'500px'}}>
             <h2 style={{fontSize:'18px',fontWeight:'800',color:'#F0EEFF',marginBottom:'1.5rem'}}>✏️ Modifier le cours</h2>
             <div style={{display:'flex',flexDirection:'column',gap:'1rem',marginBottom:'1.5rem'}}>
@@ -138,7 +138,7 @@ export default function AdminCoursPage() {
       )}
 
       {modal==='delete'&&(
-        <div style={{position:'fixed',inset:0,background:'#F4F2FF',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100}}>
+        <div style={{position:'fixed',inset:0,background:'#FAF9F7',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100}}>
           <div style={{background:'linear-gradient(145deg,#1A1530,#130F23)',border:'1px solid rgba(240,90,90,0.3)',borderRadius:'20px',padding:'2.5rem',textAlign:'center',maxWidth:'400px',margin:'1rem'}}>
             <div style={{fontSize:'48px',marginBottom:'1rem'}}>⚠️</div>
             <h2 style={{fontSize:'18px',fontWeight:'800',color:'#F05A5A',marginBottom:'8px'}}>Supprimer "{sel?.title}" ?</h2>
