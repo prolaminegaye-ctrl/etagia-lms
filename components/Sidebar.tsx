@@ -22,6 +22,8 @@ const navFormateur = [
   { href: '/formateur/apprenants', icon: '◎', label: 'Apprenants' },
   { href: '/formateur/edugears', icon: '🤖', label: 'EduGears AI', badge: 'IA' },
   { href: '/formateur/stats', icon: '〜', label: 'Statistiques' },
+  { href: '/formateur/calendrier', icon: '📅', label: 'Planning' },
+  { href: '/formateur/notes', icon: '📓', label: 'Bloc-note' },
 ]
 const navAdmin = [
   { href: '/admin', icon: '⊞', label: 'Dashboard' },
