@@ -13,9 +13,9 @@ interface Plugin {
 const PLUGINS: Plugin[] = [
   {
     id: 'edugears', name: 'EduGears AI', version: '1.4.0', protocol: 'LTI 1.3 Advantage',
-    status: 'pending', icon: '🤖', color: '#E8651A', tools: 10,
+    status: 'actif', icon: '🤖', color: '#E8651A', tools: 10,
     desc: 'Moteur d\'IA pédagogique — génération de quiz, évaluation adaptative, feedback automatique.',
-    claim: 'À réinitialiser via enregistrement dynamique',
+    claim: 'EG-YAFU-G6T9',
   },
   {
     id: 'h5p', name: 'H5P Content', version: '2.1.0', protocol: 'LTI 1.1',
@@ -176,14 +176,14 @@ export default function PluginsPage() {
               {plugin.id === 'edugears' && (
                 <>
                   {/* EduGears Dynamic Registration */}
-                  <div style={{ background: 'rgba(212,160,23,0.07)', border: '1px solid rgba(212,160,23,0.25)', borderRadius: '12px', padding: '14px', marginBottom: '1.25rem' }}>
-                    <div style={{ fontWeight: '800', fontSize: '13px', color: '#92400E', marginBottom: '8px' }}>⚠️ Action requise — Ré-enregistrement dynamique</div>
-                    <div style={{ fontSize: '12px', color: '#78350F', lineHeight: '1.6', marginBottom: '12px' }}>
-                      L&apos;ancien enregistrement pointait vers Netlify. Cliquez ci-dessous pour déclencher l&apos;enregistrement LTI 1.3 dynamique vers EduGears et obtenir un nouveau code de réclamation.
+                  <div style={{ background: 'rgba(0,191,165,0.07)', border: '1px solid rgba(0,191,165,0.25)', borderRadius: '12px', padding: '14px', marginBottom: '1.25rem' }}>
+                    <div style={{ fontWeight: '800', fontSize: '13px', color: '#00695C', marginBottom: '8px' }}>✅ EduGears AI — Enregistrement LTI 1.3 actif</div>
+                    <div style={{ fontSize: '12px', color: '#004D40', lineHeight: '1.6', marginBottom: '12px' }}>
+                      EduGears AI est enregistré avec succès sur ETAGIA LMS via LTI 1.3 dynamique. Code de réclamation actif : <strong>EG-YAFU-G6T9</strong>
                     </div>
                     <a href={`${PLATFORM_URL}/api/lti/register`} target="_blank" rel="noopener noreferrer"
                       style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '10px', padding: '10px 20px', color: '#fff', fontWeight: '800', fontSize: '13px', textDecoration: 'none', boxShadow: '0 4px 16px rgba(232,101,26,0.30)' }}>
-                      🔌 Lancer l&apos;enregistrement dynamique EduGears
+                      🔄 Renouveler l&apos;enregistrement
                     </a>
                   </div>
 
