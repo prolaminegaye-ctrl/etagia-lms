@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 
-const PLATFORM_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://etagia-lms.vercel.app'
+const PLATFORM_URL   = process.env.NEXT_PUBLIC_APP_URL || 'https://etagia-lms.vercel.app'
 const PRIVATE_KEY_B64 = process.env.LTI_PRIVATE_KEY_B64 || ''
+
+// Doit correspondre à ce que /api/lti/register retourne
+const DEPLOYMENT_ID = 'etagia-deploy-001'
+const CLIENT_ID     = 'etagia-edugears-client-001'
 
 function getPrivateKey(): string {
   if (PRIVATE_KEY_B64) {
@@ -25,17 +29,22 @@ function signJWT(payload: Record<string, unknown>): string {
   return `${h}.${p}.${base64url(sig)}`
 }
 
-// GET — OIDC auth request from tool (step 3 of LTI 1.3 flow)
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url)
-  const scope         = searchParams.get('scope') || 'openid'
-  const responseType  = searchParams.get('response_type') || 'id_token'
-  const clientId      = searchParams.get('client_id') || ''
-  const redirectUri   = searchParams.get('redirect_uri') || ''
-  const loginHint     = searchParams.get('login_hint') || ''
-  const ltiMessageHint= searchParams.get('lti_message_hint') || ''
-  const state         = searchParams.get('state') || ''
-  const nonce         = searchParams.get('nonce') || crypto.randomUUID()
+// ─────────────────────────────────────────────────────────────────────────────
+// GET/POST — OIDC Authentication Request (étape 3 du flux LTI 1.3)
+// EduGears nous envoie : client_id, redirect_uri, login_hint, nonce, state
+// On signe un id_token RS256 et on POST vers redirect_uri
+// ─────────────────────────────────────────────────────────────────────────────
+async function handleAuth(req: NextRequest) {
+  const params = req.method === 'GET'
+    ? new URL(req.url).searchParams
+    : new URLSearchParams(await req.text())
+
+  const clientId       = params.get('client_id')      || CLIENT_ID
+  const redirectUri    = params.get('redirect_uri')   || ''
+  const loginHint      = params.get('login_hint')     || 'user-001'
+  const ltiMessageHint = params.get('lti_message_hint') || 'resource-001'
+  const state          = params.get('state')          || ''
+  const nonce          = params.get('nonce')          || crypto.randomUUID()
 
   if (!redirectUri) {
     return NextResponse.json({ error: 'missing redirect_uri' }, { status: 400 })
@@ -43,53 +52,101 @@ export async function GET(req: NextRequest) {
 
   try {
     const now = Math.floor(Date.now() / 1000)
+
     const payload: Record<string, unknown> = {
-      iss: PLATFORM_URL,
-      sub: loginHint || 'user_lamine',
-      aud: clientId,
-      iat: now,
-      exp: now + 3600,
+      // ── Claims OIDC standard ────────────────────────────────────────
+      iss:          PLATFORM_URL,
+      sub:          loginHint,
+      aud:          clientId,
+      iat:          now,
+      exp:          now + 3600,
       nonce,
-      'https://purl.imsglobal.org/spec/lti/claim/message_type': 'LtiResourceLinkRequest',
+
+      // ── Claims LTI 1.3 obligatoires ────────────────────────────────
+      'https://purl.imsglobal.org/spec/lti/claim/message_type':
+        'LtiResourceLinkRequest',
       'https://purl.imsglobal.org/spec/lti/claim/version': '1.3.0',
-      'https://purl.imsglobal.org/spec/lti/claim/deployment_id': 'etagia-deploy-1',
+
+      // deployment_id = cohérent avec /api/lti/register
+      'https://purl.imsglobal.org/spec/lti/claim/deployment_id': DEPLOYMENT_ID,
+
       'https://purl.imsglobal.org/spec/lti/claim/target_link_uri': redirectUri,
+
       'https://purl.imsglobal.org/spec/lti/claim/resource_link': {
-        id: ltiMessageHint || 'resource-1',
+        id:    ltiMessageHint || 'resource-001',
         title: 'ETAGIA LMS Resource',
       },
+
       'https://purl.imsglobal.org/spec/lti/claim/roles': [
-        'http://purl.imsglobal.org/vocab/lis/v2/membership#Learner',
+        'http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor',
       ],
+
       'https://purl.imsglobal.org/spec/lti/claim/context': {
-        id: 'course-1',
-        type: ['http://purl.imsglobal.org/vocab/lis/v2/course#CourseOffering'],
-        label: 'ETAGIA Course',
-        title: 'ETAGIA Learning Context',
+        id:    'course-etagia-001',
+        type:  ['http://purl.imsglobal.org/vocab/lis/v2/course#CourseOffering'],
+        label: 'ETAGIA',
+        title: 'ETAGIA LMS Learning Context',
       },
-      given_name: 'Lamine',
+
+      'https://purl.imsglobal.org/spec/lti/claim/tool_platform': {
+        guid:                 'etagia-lms',
+        name:                 'ETAGIA LMS',
+        description:          'Plateforme LMS EdTech — Afrique francophone',
+        url:                  PLATFORM_URL,
+        product_family_code:  'etagia-lms',
+        version:              '1.0.0',
+      },
+
+      'https://purl.imsglobal.org/spec/lti/claim/launch_presentation': {
+        document_target: 'iframe',
+        locale:          'fr-FR',
+      },
+
+      // ── Identité utilisateur ────────────────────────────────────────
+      given_name:  'Lamine',
       family_name: 'Gaye',
-      email: 'lamine@etagia.com',
-      name: 'Lamine Gaye',
+      email:       'prolaminegaye@gmail.com',
+      name:        'Lamine Gaye',
     }
 
     const idToken = signJWT(payload)
+
+    // Auto-submit form POST vers redirect_uri (launch URL d'EduGears)
     const formUrl = new URL(redirectUri)
-    const html = `<!DOCTYPE html><html><body>
+    const html = `<!DOCTYPE html>
+<html>
+<head><title>LTI Launch — ETAGIA LMS</title></head>
+<body>
 <form id="lti" method="POST" action="${formUrl.origin + formUrl.pathname}">
   <input type="hidden" name="id_token" value="${idToken}" />
-  <input type="hidden" name="state" value="${state}" />
+  <input type="hidden" name="state"    value="${state}"   />
 </form>
 <script>document.getElementById('lti').submit();</script>
-</body></html>`
+</body>
+</html>`
 
-    return new NextResponse(html, { headers: { 'Content-Type': 'text/html' } })
+    return new NextResponse(html, {
+      headers: {
+        'Content-Type':                'text/html',
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
+    console.error('[LTI Auth] error:', msg)
     return NextResponse.json({ error: msg }, { status: 500 })
   }
 }
 
-export async function POST(req: NextRequest) {
-  return GET(req)
+export async function GET(req: NextRequest)  { return handleAuth(req) }
+export async function POST(req: NextRequest) { return handleAuth(req) }
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    headers: {
+      'Access-Control-Allow-Origin':  '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  })
 }
