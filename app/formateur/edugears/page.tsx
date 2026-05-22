@@ -16,6 +16,7 @@ const AI_TOOLS = [
 
 const CATEGORIES = ['Tous', 'Création', 'Évaluation', 'Accompagnement', 'Révision', 'Pratique', 'Assistance', 'Stratégie']
 const EDUGEARS_LAUNCH_URL = 'https://lti-api.edugears.ai/lti/launch'
+const EDUGEARS_LOGIN_URL  = 'https://lti-api.edugears.ai/lti/login'
 
 export default function EduGearsPage() {
   const [filter, setFilter]       = useState('Tous')
@@ -25,59 +26,37 @@ export default function EduGearsPage() {
   const filtered = AI_TOOLS.filter(t => filter === 'Tous' || t.category === filter)
 
   /**
-   * Lance un outil EduGears via LTI 1.3 — flux correct :
-   *  1. POST /api/lti/auth  { tool, target_link_uri }
-   *  2. Le serveur signe un id_token JWT RS256 avec toutes les claims LTI 1.3
-   *  3. Il retourne une page HTML avec un <form> auto-soumis vers EduGears
-   *  4. On injecte ce HTML dans un iframe plein-écran
+   * Lance un outil EduGears via LTI 1.3 — flux OIDC 3rd-party initié correct :
+   *
+   *  1. ETAGIA redirige vers EduGears login initiation URL
+   *     → EduGears génère un state/nonce, les stocke dans SA session
+   *  2. EduGears redirige vers notre /api/lti/auth avec state+nonce+redirect_uri
+   *  3. Notre /api/lti/auth signe le JWT avec ces valeurs et auto-submit vers EduGears
+   *  4. EduGears valide le state (trouvé dans sa session) → outil s'ouvre
    */
-  async function launchTool(toolId: string) {
+  function launchTool(toolId: string) {
     setLaunching(toolId)
     setError(null)
+
     try {
-      const res = await fetch('/api/lti/auth', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({
-          tool:             toolId,
-          target_link_uri:  EDUGEARS_LAUNCH_URL,
-          redirect_uri:     EDUGEARS_LAUNCH_URL,
-        }),
-      })
+      // Étape 1 : initier le flux OIDC côté EduGears
+      // EduGears va générer le state, le stocker dans sa session,
+      // puis rediriger vers notre /api/lti/auth avec les bons paramètres
+      const loginUrl = new URL(EDUGEARS_LOGIN_URL)
+      loginUrl.searchParams.set('iss',               'https://etagia-lms.vercel.app')
+      loginUrl.searchParams.set('client_id',          'etagia-edugears-client-001')
+      loginUrl.searchParams.set('lti_deployment_id',  'etagia-deploy-001')
+      loginUrl.searchParams.set('target_link_uri',    EDUGEARS_LAUNCH_URL)
+      loginUrl.searchParams.set('login_hint',         'lamine-gaye-stable-001')
+      loginUrl.searchParams.set('lti_message_hint',   toolId)
 
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}))
-        throw new Error((err as { error?: string }).error || `HTTP ${res.status}`)
-      }
-
-      const html = await res.text()
-
-      // Ouvrir dans un nouvel onglet — l'HTML contient l'auto-submit vers EduGears
-      const win = window.open('', '_blank')
-      if (win) {
-        win.document.open()
-        win.document.write(html)
-        win.document.close()
-      } else {
-        // Fallback si les pop-ups sont bloqués : iframe superposé
-        const overlay = document.createElement('div')
-        overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#12100E;display:flex;flex-direction:column;'
-        overlay.innerHTML = `
-          <div style="padding:10px 16px;background:#1C1714;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:10px;">
-            <button id="close-lti" style="background:rgba(232,101,26,0.15);border:1px solid rgba(232,101,26,0.3);border-radius:8px;padding:6px 14px;color:#E8651A;font-size:13px;font-weight:700;cursor:pointer;">✕ Fermer</button>
-            <span style="color:rgba(255,255,255,0.5);font-size:12px;">EduGears AI — LTI 1.3</span>
-          </div>
-          <iframe id="lti-frame" style="flex:1;border:none;" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals"></iframe>
-        `
-        document.body.appendChild(overlay)
-        const frame = overlay.querySelector('#lti-frame') as HTMLIFrameElement
-        frame.srcdoc = html
-        overlay.querySelector('#close-lti')!.addEventListener('click', () => document.body.removeChild(overlay))
-      }
+      // Ouvrir dans un nouvel onglet pour conserver la session EduGears
+      window.open(loginUrl.toString(), '_blank')
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e))
     } finally {
-      setLaunching(null)
+      // Petit délai pour que le spinner soit visible
+      setTimeout(() => setLaunching(null), 800)
     }
   }
 
