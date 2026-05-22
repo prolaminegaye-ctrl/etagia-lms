@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server'
 
-// Public RSA-2048 key generated for ETAGIA LMS LTI 1.3 platform
+// Clé publique RSA-2048 — correspond à LTI_PRIVATE_KEY_B64
 // kid: etagia-lms-2026
 const PUBLIC_JWK = {
   kty: "RSA",
-  n: "s3n-UfXLv9qQqDtKWPG4zzdMQijoAzp0DEjZ_-4c3cYXalcPWybGFa7yhnmFP_GmHnOyl4lxaQ8gv2aKBurKiSICuiybG07AWQJrm8E9Bggp-Qsr8qb4oQGG8KIgdK6Vlyi4i4z687Og-3-uPYOOS4MmDrJBfi4EMcOPbrE0xOdUhPcl0i9EfQSCfVanNEaZsP8oG4m8fRl4ynMNkAIoezZ6P1Em5tAdDviD1wHT4Kf8CBPPGQLogqSgDWkEgU-D0c5IBorrU5eJO7qUkl_jNrAFsGSL2uR-KuiBcgjjqUkLEOB7tKMSvCFW1EtLSdG5HWMz9cYD5iXocxApPfDJGw",
-  e: "AQAB",
+  n:   "0gzT3RHZz2F1pM3oeiK3aERZSXKU0OCtr4P6qlWggc_-5cCRAQcZQOoEB3wTADgUM1rzOZzr6vhn0y-mV2hZsPwA33kqZdtYI-7nqgtEHb7i0epEfI0GnxmyViQyxlEKVOG22-LKRy-NH5p9iUcjmAcl8H7aOfdxVJar_9zXloCywo9Z4tVSvyTDAdpg6qNSvEY4TIhn-p5GUvYEhNmVqTiTnCwe15W07aPhMgCy8prhAxcWHpyELKYcKEuu0Hsw9vszhAuXNNRg6A2D-fqPpiRj8XTMKLKn04_Ekakg7xBIS2AYlGDKUwysciOpUfAYlGeKd4Aw6HQeUkJBYJGt7Q",
+  e:   "AQAB",
   kid: "etagia-lms-2026",
   use: "sig",
   alg: "RS256",
@@ -17,8 +17,8 @@ export async function GET() {
     { keys: [PUBLIC_JWK] },
     {
       headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=3600',
+        'Content-Type':                'application/json',
+        'Cache-Control':               'public, max-age=3600',
         'Access-Control-Allow-Origin': '*',
       },
     }
@@ -28,7 +28,7 @@ export async function GET() {
 export async function OPTIONS() {
   return new NextResponse(null, {
     headers: {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin':  '*',
       'Access-Control-Allow-Methods': 'GET, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     },
