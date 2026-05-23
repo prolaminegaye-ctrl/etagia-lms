@@ -296,7 +296,7 @@ export default function CreerCours() {
         <p style={{ color: '#A8A29E', marginBottom: '2rem' }}>{info.title} · {modules.length} modules</p>
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button style={S.ghost} onClick={() => { setSaved(false); setStep(0); setModules([]); setInfo({ title: '', description: '', level: 'débutant', category: 'Tech', duration: '3h', audience: '' }) }}>+ Nouveau cours</button>
-          <button style={S.ghost} onClick={() => router.push('/formateur/mes-cours')}>📚 Mes cours</button>
+          <button style={S.ghost} onClick={() => router.push('/formateur/cours')}>📚 Mes cours</button>
           <button style={S.btn} onClick={() => router.push('/formateur')}>← Dashboard</button>
         </div>
       </div>
