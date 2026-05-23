@@ -596,7 +596,7 @@ slides:[
    sub:"Pourquoi les clients achètent-ils vraiment ? SAC pour le rationnel, COINS pour l'émotionnel.",
    objs:["Maîtriser le tunnel de vente","Décoder SAC","Décoder COINS","Adapter son discours en temps réel"],
    color:'#F5A623',
-   video:{title:"Alex face à un client indécis",dur:"1 min 50s"}
+   video:{title:"Madame Chen — Gestion d'objection",dur:"1 min 11s",url:"https://files2.heygen.ai/aws_pacific/avatar_tmp/2e3656c5f6804d12807bb9c466828903/2fb6bccbe59247d2a690480c23de07c0.mp4?Expires=1780145648&Signature=mMJ~1VSNFaI5KbIqlRWoW1KLogscmPtRDDNe1GVqSfk7jfnFPQyv4-jG-H-TQuP6TK2~j3ZGqtVWR~It8vNo~ddEzHXheXxfm1ezjXgaQnnmaZYLNQkcdVHUGGKDFTvo2BA16LcZfTzCMeDf-I2iPLx3Z0oyMOuS-CyCyPe4sKMm9csFK8RGJiOfF-kW87FIaJF7UTVF0nEdzqd8DkoaaL7MwMMJDsjTk6oC4m-~A4NDNVFffkN06oaAH9f9iketHYNMj1we3Y8mWvC7O7ufO0Vv5lbcfiGfTrDz-VdFnuKa7g~ZtXDBmVL66iHmn32mz84ZGC7rpc88Cjbn2hA__&Key-Pair-Id=K38HBHX5LX3X2H"}
   },
   {type:'content',title:"Le tunnel de vente — Votre carte de navigation",
    body:`<p class="page-sub" style="margin-bottom:16px">Chaque client traverse ces 5 étapes. Votre rôle : identifier où il est et l'accompagner à l'étape suivante.</p>
@@ -661,7 +661,7 @@ slides:[
    sub:"7 étapes structurées + méthode CAP. La science de la vente appliquée à chaque conversation.",
    objs:["Conduire les 7 étapes","Argumenter avec CAP","Traiter les objections"],
    color:'#00C896',
-   video:{title:"Alex conduit son premier entretien de vente",dur:"2 min 15s"}
+   video:{title:"Alex conduit son premier entretien de vente",dur:"1 min 27s",url:"https://files2.heygen.ai/aws_pacific/avatar_tmp/2e3656c5f6804d12807bb9c466828903/58e75329feeb41ebb01396116ea8e7fc.mp4?Expires=1780145645&Signature=R61XfnAZJzc9VjBTYcYv~qcyacJwgsWS8cpIU5rB-zFqb7XhOFmfSeGId~AxJU-Nki30bZ0-mvywN4er28IV9SEh46M66gVjqJas644X9ClX1BX71ufc~46qLCqUbQGiptNzMpgoscJzb9hBP9omE0FziY6splRK9Y5We9zYI-6i63fpCTRNGdAYQBtTTVIXxCzflQpuHtG2uD9Hc4shtHfGyPN-J-0wqkKaNPyxZgBI1M8L4pJ1BxcEK6eqFecMGTIVUmhCkag4ZV4TswRcgAtX5KnRM-fWXKEHDgr9veqrovMA7Uyoc57bDOYGJiYT1J7AnlP4pqkuCZ-Z5OYZGg__&Key-Pair-Id=K38HBHX5LX3X2H"}
   },
   {type:'content',title:"Les 7 étapes de l'entretien commercial",
    body:`<div class="timeline" id="tl-steps"></div>
@@ -1001,10 +1001,7 @@ function buildGuide(){return `<div style="max-width:680px;margin:0 auto;text-ali
 </div>`;}
 
 function buildChIntro(sl){
-  const vid=sl.video?`<div class="video-ph" onclick="showToast('🎬','Vidéo HeyGen AI','${sl.video.title} · ${sl.video.dur} — Intégrable dans votre LMS')">
-    <div class="vph-icon">▶️</div><h4>${sl.video.title}</h4>
-    <p>Vidéo IA ETAGIA · ${sl.video.dur}</p>
-    <span class="vph-tag">🤖 HeyGen · Avatar IA · Cliquer pour plus d'infos</span></div>`:'';
+  const vid=sl.video?(sl.video.url?`<div class="heygen-player" style="margin-bottom:24px;border-radius:16px;overflow:hidden;box-shadow:0 6px 32px rgba(0,0,0,0.18)"><video controls preload="metadata" style="width:100%;display:block;max-height:380px;background:#000"><source src="${sl.video.url}" type="video/mp4"><p style="padding:16px;color:#aaa;text-align:center">Vidéo non disponible.</p></video><div style="background:#1a1d2e;padding:10px 18px;display:flex;align-items:center;gap:10px"><span style="font-size:1.2rem">🤖</span><div><div style="color:#fff;font-size:.88rem;font-weight:700">${sl.video.title}</div><div style="color:#8899bb;font-size:.74rem">HeyGen Avatar IA · ${sl.video.dur}</div></div><span style="margin-left:auto;background:rgba(255,99,64,.2);border:1px solid rgba(255,99,64,.4);color:#FF6340;padding:3px 10px;border-radius:50px;font-size:.72rem;font-weight:700">▶ ETAGIA</span></div></div>`:`<div class="video-ph" onclick="showToast('🎬','Vidéo HeyGen AI','${sl.video.title} · ${sl.video.dur} — Intégrable dans votre LMS')"><div class="vph-icon">▶️</div><h4>${sl.video.title}</h4><p>Vidéo IA ETAGIA · ${sl.video.dur}</p><span class="vph-tag">🤖 HeyGen · Avatar IA · Cliquer pour plus d'infos</span></div>`):'';
   const chips=sl.objs.map((o,i)=>`<span class="chip ${i===0?'chip-blue':i===1?'chip-green':'chip-gold'}">${o}</span>`).join('');
   return `<div style="max-width:800px;margin:0 auto">${vid}
   <div class="ch-intro-wrap"><div class="ch-num" style="background:${sl.color}">${sl.num}</div>
