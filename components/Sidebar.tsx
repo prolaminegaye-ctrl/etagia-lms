@@ -33,6 +33,7 @@ const navAdmin = [
   { href: '/admin', icon: '⊞', label: 'Dashboard' },
   { href: '/admin/users', icon: '◎', label: 'Utilisateurs' },
   { href: '/admin/cours', icon: '◈', label: 'Cours' },
+  { href: '/admin/market', icon: '🏪', label: 'Marketplace', badge: 'ADMIN' },
   { href: '/live', icon: '🎥', label: 'Classes en direct', badge: 'LIVE' },
   { href: '/admin/orgs', icon: '▦', label: 'Organisations' },
   { href: '/admin/analytics', icon: '〜', label: 'Analytics' },

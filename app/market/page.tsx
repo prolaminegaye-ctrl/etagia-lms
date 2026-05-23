@@ -1,6 +1,8 @@
 'use client'
 import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
+import dynamic from 'next/dynamic'
+const MarketChatbot = dynamic(() => import('@/components/MarketChatbot'), { ssr: false })
 
 /* ═══════════════════════════════════════════════
    CATALOGUE PRODUITS
@@ -160,10 +162,18 @@ export default function MarketPage() {
   const [buyStep, setBuyStep] = useState<'form'|'loading'|'success'>('form')
   const [detail, setDetail] = useState<Product | null>(null)
   const [toast, setToast] = useState('')
+  const [userProfile, setUserProfile] = useState<any>(null)
+  const [catalogProducts, setCatalogProducts] = useState<Product[]>(PRODUCTS)
+  const [highlightId, setHighlightId] = useState<string>('')
 
-  // Load purchases
+  // Load purchases, catalog and user profile
   useEffect(() => {
     try { setPurchases(JSON.parse(localStorage.getItem('etagia_purchases') || '[]')) } catch {}
+    try {
+      const stored = localStorage.getItem('etagia_market_products')
+      if (stored) { const p = JSON.parse(stored); setCatalogProducts(p.filter((x: any) => x.status === 'published')) }
+    } catch {}
+    try { setUserProfile(JSON.parse(localStorage.getItem('etagia_user_profile') || 'null')) } catch {}
   }, [])
 
   const isPurchased = (id: string) => purchases.includes(id)
@@ -225,7 +235,7 @@ export default function MarketPage() {
 
   // ── FILTERED + SORTED
   const filtered = useMemo(() => {
-    let list = PRODUCTS
+    let list = catalogProducts
     if (cat !== 'all') list = list.filter(p => p.type === cat)
     if (search.trim()) {
       const q = search.toLowerCase()
@@ -236,10 +246,10 @@ export default function MarketPage() {
     if (sort === 'price_desc') list = [...list].sort((a,b) => b.price - a.price)
     if (sort === 'new') list = [...list].sort((a,b) => (b.new ? 1:0) - (a.new ? 1:0))
     return list
-  }, [cat, search, sort])
+  }, [cat, search, sort, catalogProducts])
 
   const purchasedCount = purchases.length
-  const totalSpent = PRODUCTS.filter(p => purchases.includes(p.id)).reduce((s,p) => s+p.price, 0)
+  const totalSpent = catalogProducts.filter(p => purchases.includes(p.id)).reduce((s,p) => s+p.price, 0)
 
   return (
     <div style={{ color:'var(--text-primary)', fontFamily:'var(--font-body)' }}>
@@ -328,7 +338,7 @@ export default function MarketPage() {
           }}>
             <span>{c.icon}</span>{c.label}
             <span style={{ fontSize:'11px', opacity:.7 }}>
-              {c.id==='all' ? PRODUCTS.length : PRODUCTS.filter(p=>p.type===c.id).length}
+              {c.id==='all' ? catalogProducts.length : catalogProducts.filter(p=>p.type===c.id).length}
             </span>
           </button>
         ))}
@@ -339,7 +349,7 @@ export default function MarketPage() {
         {filtered.map(p => {
           const bought = isPurchased(p.id)
           return (
-            <div key={p.id} style={{
+            <div key={p.id} id={`product-${p.id}`} style={{
               background:'var(--bg-card)', border:`1px solid ${bought ? 'rgba(74,127,245,0.35)' : 'var(--border)'}`,
               borderRadius:'16px', overflow:'hidden', transition:'transform .18s, box-shadow .18s',
               position:'relative',
@@ -542,7 +552,20 @@ export default function MarketPage() {
         @keyframes spin { to { transform: rotate(360deg) } }
         @keyframes progress { from { transform: scaleX(0); transform-origin: left } to { transform: scaleX(1) } }
         @keyframes slideUp { from { opacity:0; transform:translateY(10px) } to { opacity:1; transform:translateY(0) } }
+        @keyframes highlight { 0%,100% { box-shadow:none } 50% { box-shadow: 0 0 0 3px rgba(74,127,245,0.5) } }
       `}</style>
+
+      {/* ── CHATBOT */}
+      <MarketChatbot
+        products={catalogProducts}
+        userProfile={userProfile}
+        onProductClick={(id) => {
+          setHighlightId(id)
+          const el = document.getElementById(`product-${id}`)
+          if (el) { el.scrollIntoView({ behavior:'smooth', block:'center' }); el.style.animation='highlight 1.5s ease 3' }
+          setTimeout(() => setHighlightId(''), 5000)
+        }}
+      />
     </div>
   )
 }
