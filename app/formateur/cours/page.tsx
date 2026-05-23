@@ -172,7 +172,7 @@ export default function MesCours() {
             {/* Actions */}
             <div style={{ padding: '10px 1.25rem', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
               <button style={{ ...S.btn, flex: 1, textAlign: 'center', fontSize: '12px', padding: '7px 12px' }}
-                onClick={() => router.push(`/formateur/viewer`)}>
+                onClick={() => router.push(`/formateur/player?id=${course.id}`)}>
                 ▶ Visualiser
               </button>
               <button style={{ ...S.ghost, fontSize: '12px', padding: '7px 12px' }}
