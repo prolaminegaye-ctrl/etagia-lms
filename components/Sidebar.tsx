@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 
 const navApprenant = [
   { href: '/dashboard', icon: '⊞', label: 'Dashboard' },
+  { href: '/market', icon: '🛒', label: 'Marketplace', badge: 'NEW' },
   { href: '/cours', icon: '◈', label: 'Mes cours' },
   { href: '/live', icon: '🎥', label: 'Classes en direct', badge: 'LIVE' },
   { href: '/tutor', icon: '✦', label: 'AI Tutor', badge: 'IA' },
@@ -15,6 +16,7 @@ const navApprenant = [
 ]
 const navFormateur = [
   { href: '/formateur', icon: '⊞', label: 'Dashboard' },
+  { href: '/market', icon: '🛒', label: 'Marketplace', badge: 'NEW' },
   { href: '/formateur/creer', icon: '✦', label: 'Créer un cours', badge: 'IA' },
   { href: '/formateur/import', icon: '↑', label: 'Importer SCORM/H5P' },
   { href: '/formateur/cours', icon: '◈', label: 'Mes cours' },
