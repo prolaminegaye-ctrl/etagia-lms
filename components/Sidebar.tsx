@@ -11,6 +11,7 @@ const navApprenant = [
   { href: '/apprenant/diagnostic', icon: '📋', label: 'Éval. diagnostic' },
   { href: '/apprenant/satisfaction', icon: '⭐', label: 'Satisfaction' },
   { href: '/profil', icon: '◉', label: 'Profil' },
+  { href: '/guide', icon: '📖', label: 'Guide utilisateur' },
 ]
 const navFormateur = [
   { href: '/formateur', icon: '⊞', label: 'Dashboard' },
@@ -24,6 +25,7 @@ const navFormateur = [
   { href: '/formateur/stats', icon: '〜', label: 'Statistiques' },
   { href: '/formateur/calendrier', icon: '📅', label: 'Planning' },
   { href: '/formateur/notes', icon: '📓', label: 'Bloc-note' },
+  { href: '/guide', icon: '📖', label: 'Guide utilisateur' },
 ]
 const navAdmin = [
   { href: '/admin', icon: '⊞', label: 'Dashboard' },
