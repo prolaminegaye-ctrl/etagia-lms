@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETAGIA — L'Art de Vendre & Conseiller</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#F0F4FF;--bg2:#E8EEFF;--white:#FFFFFF;
+--blue:#1E5EFF;--blue2:#4A7FFF;--blue-soft:rgba(30,94,255,.1);
+--coral:#FF6340;--coral-soft:rgba(255,99,64,.1);
+--gold:#F5A623;--gold-soft:rgba(245,166,35,.12);
+--green:#00C896;--green-soft:rgba(0,200,150,.1);
+--pink:#FF4D8B;--pink-soft:rgba(255,77,139,.1);
+--red:#FF4D6D;--red-soft:rgba(255,77,109,.1);
+--dark:#1A1D2E;--mid:#3D4466;--muted:#6B7A99;--light:#A8B5CC;
+--border:#DDE4F5;--shadow:0 4px 24px rgba(30,50,120,.1);--shadow-lg:0 8px 40px rgba(30,50,120,.18);
+--radius:16px;--radius-sm:10px;--t:.28s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark)}
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+/* HEADER */
+#hdr{position:fixed;top:0;left:0;right:0;height:60px;background:rgba(255,255,255,.92);
+  backdrop-filter:blur(16px);border-bottom:1.5px solid var(--border);
+  display:flex;align-items:center;padding:0 20px;gap:16px;z-index:200}
+.logo{font-family:'Sora',sans-serif;font-weight:800;font-size:1.2rem;color:var(--blue);letter-spacing:.04em;white-space:nowrap}
+.logo em{color:var(--gold);font-style:normal}
+#hdr-chapter{flex:1;font-size:.8rem;font-weight:600;color:var(--muted);text-align:center;letter-spacing:.06em;text-transform:uppercase}
+.xp-bar-wrap{display:flex;align-items:center;gap:10px;background:var(--bg);border-radius:50px;padding:5px 14px;border:1.5px solid var(--border)}
+.level-badge{background:linear-gradient(135deg,var(--blue),var(--coral));color:#fff;border-radius:50px;padding:2px 10px;font-size:.7rem;font-weight:700;white-space:nowrap}
+.xp-track{width:90px;height:6px;background:var(--border);border-radius:6px;overflow:hidden}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--coral));border-radius:6px;transition:width .5s ease}
+.xp-num{font-family:'Space Grotesk',sans-serif;font-size:.8rem;font-weight:700;color:var(--blue);white-space:nowrap}
+.hearts{display:flex;gap:3px;font-size:1.1rem}
+.streak-badge{display:flex;align-items:center;gap:4px;background:var(--gold-soft);border:1.5px solid rgba(245,166,35,.3);border-radius:50px;padding:3px 10px;font-size:.78rem;font-weight:700;color:#C07A00}
+
+/* SIDEBAR */
+#sidebar{position:fixed;top:60px;left:0;bottom:0;width:260px;
+  background:#fff;border-right:1.5px solid var(--border);overflow-y:auto;padding:16px 0;z-index:150}
+.sb-title{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--light);padding:0 16px 8px;margin-top:8px}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;border-radius:10px;margin:0 8px 2px;transition:all var(--t)}
+.sb-item:hover{background:var(--blue-soft)}
+.sb-item.active{background:var(--blue-soft);border-left:3px solid var(--blue)}
+.sb-item.done{opacity:.7}
+.sb-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.sb-info{flex:1;min-width:0}
+.sb-name{font-size:.82rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-meta{font-size:.7rem;color:var(--muted)}
+.sb-stars{font-size:.7rem;margin-left:auto}
+.sb-dots{display:flex;gap:4px;padding:2px 16px 6px 58px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--border);cursor:pointer;transition:all var(--t)}
+.dot.vis{background:var(--blue2);opacity:.5}
+.dot.cur{background:var(--blue);transform:scale(1.3)}
+.dot.done{background:var(--green)}
+
+/* MAIN */
+#main{margin-left:260px;margin-top:60px;height:calc(100vh - 60px);display:flex;flex-direction:column;overflow:hidden}
+#slide-wrap{flex:1;overflow-y:auto;padding:32px 40px 24px}
+#nav-foot{flex-shrink:0;padding:12px 40px;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-top:1.5px solid var(--border);display:flex;align-items:center;gap:16px}
+.nav-left{font-size:.78rem;color:var(--muted);font-weight:500;white-space:nowrap}
+.nav-prog{flex:1;height:4px;background:var(--border);border-radius:4px;overflow:hidden}
+.nav-prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--coral));border-radius:4px;transition:width .4s}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border:none;cursor:pointer;border-radius:50px;font-family:'Inter',sans-serif;font-weight:600;font-size:.85rem;transition:all var(--t)}
+.btn-out{background:transparent;border:1.5px solid var(--border);color:var(--mid)}
+.btn-out:hover{border-color:var(--blue);color:var(--blue)}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 16px rgba(30,94,255,.3)}
+.btn-blue:hover{background:var(--blue2);transform:translateY(-1px)}
+.btn-gold{background:linear-gradient(135deg,#F5A623,#e89010);color:var(--dark);font-weight:700}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(245,166,35,.4)}
+.btn-green{background:var(--green);color:#fff}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important}
+
+/* SLIDE ANIMATIONS */
+.s-enter{animation:sIn .32s ease forwards}
+@keyframes sIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* WELCOME */
+.welcome-hero{min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:20px}
+.w-tag{display:inline-flex;align-items:center;gap:8px;background:var(--blue-soft);border:1.5px solid rgba(30,94,255,.2);border-radius:50px;padding:6px 18px;font-size:.8rem;font-weight:700;color:var(--blue)}
+.w-hero-img{width:120px;height:120px;background:linear-gradient(135deg,var(--blue),var(--coral));border-radius:32px;display:flex;align-items:center;justify-content:center;font-size:3.5rem;box-shadow:0 16px 40px rgba(30,94,255,.35)}
+.w-title{font-family:'Sora',sans-serif;font-size:2.8rem;font-weight:800;line-height:1.15}
+.w-title span{background:linear-gradient(135deg,var(--blue),var(--coral));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.w-sub{font-size:1.05rem;color:var(--muted);max-width:500px;line-height:1.7}
+.w-stats{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.w-stat{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 20px;text-align:center;min-width:110px;box-shadow:var(--shadow)}
+.w-stat .v{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:var(--blue)}
+.w-stat .l{font-size:.72rem;color:var(--muted);margin-top:2px}
+
+/* CONTENT CONTAINERS */
+.page-title{font-family:'Sora',sans-serif;font-size:1.75rem;font-weight:800;margin-bottom:6px;line-height:1.25}
+.page-sub{font-size:.95rem;color:var(--muted);margin-bottom:28px;line-height:1.6}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.grid-auto{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+
+/* CARDS */
+.card{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);transition:all var(--t)}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.card-icon{font-size:1.8rem;margin-bottom:10px}
+.card h3{font-family:'Sora',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:7px}
+.card p{font-size:.83rem;color:var(--muted);line-height:1.65}
+.card.blue{border-top:3px solid var(--blue)}
+.card.gold{border-top:3px solid var(--gold)}
+.card.green{border-top:3px solid var(--green)}
+.card.purple{border-top:3px solid var(--coral)}
+.card.pink{border-top:3px solid var(--pink)}
+.card.red{border-top:3px solid var(--red)}
+
+/* CALLOUT */
+.callout{border-radius:var(--radius-sm);padding:16px 20px;margin:14px 0;font-size:.88rem;line-height:1.7;display:flex;gap:12px;align-items:flex-start}
+.callout-icon{font-size:1.3rem;flex-shrink:0;margin-top:1px}
+.callout.blue{background:var(--blue-soft);border-left:3px solid var(--blue)}
+.callout.gold{background:var(--gold-soft);border-left:3px solid var(--gold)}
+.callout.green{background:var(--green-soft);border-left:3px solid var(--green)}
+.callout.purple{background:var(--coral-soft);border-left:3px solid var(--coral)}
+.callout strong{color:var(--dark);font-weight:700}
+
+/* SECTION TITLE */
+.sec-title{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:700;margin:24px 0 14px;display:flex;align-items:center;gap:8px}
+.sec-title::after{content:'';flex:1;height:1.5px;background:var(--border)}
+
+/* CHAPTER INTRO */
+.ch-intro-wrap{display:flex;gap:24px;align-items:flex-start;background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:28px;box-shadow:var(--shadow);margin-bottom:28px}
+.ch-num{width:60px;height:60px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:800;color:#fff;flex-shrink:0}
+.ch-intro-info h2{font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:6px}
+.ch-intro-info p{font-size:.9rem;color:var(--muted);line-height:1.65;margin-bottom:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:5px 13px;border-radius:50px;font-size:.75rem;font-weight:600}
+.chip-blue{background:var(--blue-soft);color:var(--blue);border:1px solid rgba(30,94,255,.2)}
+.chip-green{background:var(--green-soft);color:#008a65;border:1px solid rgba(0,200,150,.2)}
+.chip-gold{background:var(--gold-soft);color:#9a6200;border:1px solid rgba(245,166,35,.25)}
+
+/* VIDEO PLACEHOLDER */
+.video-ph{background:linear-gradient(135deg,#EEF2FF,#E0E8FF);border:2px dashed rgba(30,94,255,.25);border-radius:var(--radius);padding:32px;text-align:center;cursor:pointer;transition:all var(--t);margin-bottom:24px}
+.video-ph:hover{background:linear-gradient(135deg,#E5EAFF,#D5E0FF);border-color:var(--blue)}
+.video-ph .vph-icon{font-size:2.8rem;margin-bottom:8px}
+.video-ph h4{font-family:'Sora',sans-serif;font-weight:700;font-size:1rem;margin-bottom:4px;color:var(--dark)}
+.video-ph p{font-size:.8rem;color:var(--muted)}
+.vph-tag{display:inline-flex;align-items:center;gap:6px;background:var(--blue-soft);border:1px solid rgba(30,94,255,.2);border-radius:50px;padding:4px 12px;font-size:.72rem;font-weight:700;color:var(--blue);margin-top:10px}
+
+/* COMPARE TABLE */
+.cmp-table{width:100%;border-collapse:collapse;font-size:.85rem;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.cmp-table th{background:linear-gradient(135deg,var(--blue),var(--coral));color:#fff;padding:12px 16px;text-align:left;font-weight:700}
+.cmp-table td{padding:10px 16px;border-bottom:1px solid var(--border);background:#fff;vertical-align:top}
+.cmp-table tr:last-child td{border-bottom:none}
+.cmp-table tr:hover td{background:var(--bg)}
+.badge-inline{display:inline-block;padding:2px 8px;border-radius:50px;font-size:.7rem;font-weight:700}
+.badge-blue{background:var(--blue-soft);color:var(--blue)}
+.badge-green{background:var(--green-soft);color:#006a4a}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:14px;position:relative}
+.tl-item:not(:last-child)::after{content:'';position:absolute;left:18px;top:40px;bottom:-4px;width:2px;background:var(--border)}
+.tl-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;flex-shrink:0;font-family:'Space Grotesk',sans-serif}
+.tl-body{padding-bottom:18px;flex:1}
+.tl-body h4{font-family:'Sora',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:3px}
+.tl-body p{font-size:.8rem;color:var(--muted);line-height:1.6}
+.tl-body .tl-ex{font-size:.78rem;background:var(--bg);border-radius:var(--radius-sm);padding:8px 12px;margin-top:8px;border-left:3px solid var(--blue);font-style:italic;color:var(--mid)}
+
+/* FUNNEL */
+.funnel{display:flex;flex-direction:column;align-items:center;gap:3px;margin:16px 0}
+.f-step{display:flex;align-items:center;gap:14px;border-radius:var(--radius-sm);padding:12px 20px;font-weight:600;font-size:.88rem;border:1.5px solid;transition:all var(--t);cursor:default;width:100%}
+.f-step:hover{transform:scale(1.01);box-shadow:var(--shadow)}
+.f-step .fi{font-size:1.3rem;flex-shrink:0}
+.f-step .fl{flex:1;font-weight:700}
+.f-step .fd{font-size:.75rem;font-weight:400;opacity:.8}
+.f-arrow{color:var(--muted);font-size:.8rem;text-align:center;width:100%;max-width:600px}
+
+/* MOTIVE CARDS */
+.mot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mot-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius);padding:18px;transition:all var(--t);cursor:default;box-shadow:var(--shadow)}
+.mot-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.mot-letter{font-family:'Space Grotesk',sans-serif;font-size:2.4rem;font-weight:700;line-height:1;margin-bottom:6px}
+.mot-name{font-weight:700;font-size:.9rem;margin-bottom:5px}
+.mot-desc{font-size:.78rem;color:var(--muted);line-height:1.55}
+.mot-ex{font-size:.75rem;background:var(--bg);border-radius:8px;padding:7px 10px;margin-top:8px;font-style:italic;color:var(--mid)}
+
+/* ── FLIP CARDS ──────────────────────────────────── */
+.fc-activity{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:28px;box-shadow:var(--shadow)}
+.fc-activity h3{font-family:'Sora',sans-serif;font-weight:700;margin-bottom:6px}
+.fc-activity .fc-meta{font-size:.8rem;color:var(--muted);margin-bottom:20px}
+.fc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.fc-card{perspective:800px;height:160px;cursor:pointer}
+.fc-inner{position:relative;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d}
+.fc-card.flipped .fc-inner{transform:rotateY(180deg)}
+.fc-front,.fc-back{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;text-align:center}
+.fc-front{background:linear-gradient(135deg,var(--blue),var(--coral));color:#fff;border:2px solid transparent}
+.fc-back{background:#fff;border:2px solid var(--blue);transform:rotateY(180deg)}
+.fc-front .fc-emoji{font-size:2rem;margin-bottom:8px}
+.fc-front .fc-term{font-family:'Sora',sans-serif;font-weight:700;font-size:.95rem}
+.fc-back .fc-def{font-size:.78rem;color:var(--mid);line-height:1.5}
+.fc-back .fc-ex{font-size:.72rem;color:var(--blue);margin-top:6px;font-style:italic}
+.fc-progress{display:flex;align-items:center;gap:10px;margin-top:16px;font-size:.8rem;color:var(--muted)}
+
+/* ── DRAG & DROP ──────────────────────────────── */
+.dd-activity{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:28px;box-shadow:var(--shadow)}
+.dd-activity h3{font-family:'Sora',sans-serif;font-weight:700;margin-bottom:5px}
+.dd-activity .dd-meta{font-size:.8rem;color:var(--muted);margin-bottom:22px}
+.dd-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.dd-phrases{display:flex;flex-direction:column;gap:8px}
+.dd-phrase{background:var(--bg);border:2px dashed var(--border);border-radius:10px;padding:11px 15px;font-size:.83rem;cursor:grab;transition:all var(--t);user-select:none;line-height:1.45}
+.dd-phrase:hover{border-color:var(--blue);background:var(--blue-soft)}
+.dd-phrase.dragging{opacity:.4;cursor:grabbing}
+.dd-phrase.placed{opacity:.4;pointer-events:none;background:var(--green-soft);border-color:var(--green)}
+.dd-zones{display:flex;flex-direction:column;gap:10px}
+.dd-zone{border:2px dashed var(--border);border-radius:12px;padding:12px;min-height:80px;transition:all var(--t)}
+.dd-zone.drag-over{border-color:var(--blue);background:var(--blue-soft)}
+.dd-zone h4{font-size:.82rem;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.dd-zone .dropped{background:#fff;border:1.5px solid var(--green);border-radius:8px;padding:8px 11px;font-size:.78rem;margin:4px 0;display:flex;align-items:center;gap:8px}
+.dd-zone .dropped.wrong{border-color:var(--red);background:var(--red-soft)}
+.dd-result{display:flex;align-items:center;gap:10px;background:var(--green-soft);border:1.5px solid var(--green);border-radius:10px;padding:12px 16px;margin-top:14px;font-size:.85rem;font-weight:600;color:#005a42;display:none}
+
+/* ── SCENARIO SIMULATION ──────────────────────── */
+.scenario-wrap{background:#fff;border:1.5px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
+.scenario-header{background:linear-gradient(135deg,var(--blue),var(--coral));color:#fff;padding:16px 24px}
+.scenario-header h3{font-family:'Sora',sans-serif;font-weight:700;font-size:1rem}
+.scenario-header p{font-size:.78rem;opacity:.85;margin-top:3px}
+.scenario-chat{padding:20px 24px;max-height:350px;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.chat-msg{display:flex;gap:10px;align-items:flex-start;animation:sIn .3s ease}
+.chat-msg.alex{flex-direction:row-reverse}
+.chat-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.av-client{background:#f0f0f0}
+.av-alex{background:linear-gradient(135deg,var(--blue),var(--coral))}
+.chat-bubble{max-width:72%;padding:10px 14px;border-radius:14px;font-size:.84rem;line-height:1.55}
+.chat-bubble.client{background:var(--bg);border:1px solid var(--border);border-bottom-left-radius:4px}
+.chat-bubble.alex{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;border-bottom-right-radius:4px}
+.chat-name{font-size:.68rem;color:var(--muted);margin-bottom:3px;font-weight:600}
+.scenario-choices{padding:16px 24px;border-top:1.5px solid var(--border);display:flex;flex-direction:column;gap:8px}
+.scenario-choices h4{font-size:.8rem;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+.choice-btn{background:var(--bg);border:2px solid var(--border);border-radius:12px;padding:11px 16px;cursor:pointer;text-align:left;font-size:.83rem;font-family:'Inter',sans-serif;transition:all var(--t);line-height:1.45;color:var(--dark)}
+.choice-btn:hover:not([disabled]){border-color:var(--blue);background:var(--blue-soft)}
+.choice-btn.correct{border-color:var(--green);background:var(--green-soft);color:#005a42;font-weight:600}
+.choice-btn.wrong{border-color:var(--red);background:var(--red-soft);color:#8B001C;font-weight:600}
+.choice-btn[disabled]{cursor:default}
+.scenario-fb{padding:12px 24px 16px;font-size:.83rem;line-height:1.6;display:none}
+.scenario-fb.show{display:block}
+.scenario-fb.ok{background:var(--green-soft);color:#005a42}
+.scenario-fb.bad{background:var(--red-soft);color:#8B001C}
+
+/* ── ORDERING ACTIVITY ────────────────────────── */
+.order-activity{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:28px;box-shadow:var(--shadow)}
+.order-activity h3{font-family:'Sora',sans-serif;font-weight:700;margin-bottom:5px}
+.order-meta{font-size:.8rem;color:var(--muted);margin-bottom:20px}
+.order-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.order-item{display:flex;align-items:center;gap:12px;background:var(--bg);border:2px solid var(--border);border-radius:12px;padding:12px 16px;cursor:grab;user-select:none;font-size:.85rem;transition:all var(--t)}
+.order-item:hover{border-color:var(--blue);background:var(--blue-soft)}
+.order-item.dragging{opacity:.35;cursor:grabbing}
+.order-item.drag-target{border-color:var(--coral);background:var(--coral-soft)}
+.order-item .oi-handle{font-size:1rem;color:var(--light)}
+.order-item .oi-num{width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.order-item .oi-text{flex:1;font-weight:500}
+.order-result{border-radius:12px;padding:12px 16px;font-size:.85rem;font-weight:600;display:none}
+.order-result.show.ok{display:block;background:var(--green-soft);color:#005a42;border:1.5px solid var(--green)}
+.order-result.show.bad{display:block;background:var(--red-soft);color:#8B001C;border:1.5px solid var(--red)}
+
+/* ── QUIZ ─────────────────────────────────────── */
+.quiz-wrap{max-width:660px;margin:0 auto}
+.quiz-hud{display:flex;align-items:center;gap:16px;margin-bottom:20px;background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:12px 16px}
+.quiz-prog-bar{flex:1;height:6px;background:var(--border);border-radius:6px;overflow:hidden}
+.quiz-prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--coral));border-radius:6px;transition:width .4s}
+.quiz-hearts{font-size:1.1rem;display:flex;gap:3px}
+.quiz-q{font-family:'Sora',sans-serif;font-size:1.15rem;font-weight:700;line-height:1.45;margin-bottom:22px}
+.quiz-opts{display:flex;flex-direction:column;gap:9px}
+.q-opt{display:flex;align-items:center;gap:13px;background:#fff;border:2px solid var(--border);border-radius:12px;padding:13px 16px;cursor:pointer;transition:all var(--t);font-size:.88rem;box-shadow:0 2px 8px rgba(30,50,120,.06)}
+.q-opt:hover:not(.answered){border-color:var(--blue);background:var(--blue-soft)}
+.q-opt.selected{border-color:var(--blue);background:var(--blue-soft)}
+.q-opt.correct{border-color:var(--green);background:var(--green-soft)}
+.q-opt.wrong{border-color:var(--red);background:var(--red-soft)}
+.q-opt.answered{cursor:default}
+.q-letter{width:28px;height:28px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.78rem;flex-shrink:0;transition:background var(--t)}
+.q-opt.selected .q-letter{background:var(--blue);color:#fff}
+.q-opt.correct .q-letter{background:var(--green);color:#fff}
+.q-opt.wrong .q-letter{background:var(--red);color:#fff}
+.quiz-fb{margin-top:14px;border-radius:10px;padding:12px 16px;font-size:.85rem;line-height:1.6;display:none}
+.quiz-fb.show{display:block}
+.quiz-fb.ok{background:var(--green-soft);border:1.5px solid var(--green);color:#005a42}
+.quiz-fb.bad{background:var(--red-soft);border:1.5px solid var(--red);color:#8B001C}
+
+/* CHAPTER COMPLETE */
+.ch-complete{text-align:center;padding:40px 20px}
+.ch-complete .big-icon{font-size:5rem;margin-bottom:16px;animation:bounce 1s ease}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+.ch-complete h2{font-family:'Sora',sans-serif;font-size:2rem;font-weight:800;margin-bottom:8px}
+.ch-complete p{color:var(--muted);font-size:.95rem;margin-bottom:24px}
+.stars-row{display:flex;justify-content:center;gap:6px;font-size:2.5rem;margin-bottom:24px}
+.xp-gained{display:inline-flex;align-items:center;gap:8px;background:var(--gold-soft);border:2px solid var(--gold);border-radius:50px;padding:10px 24px;font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:#9a6200;margin-bottom:24px}
+
+/* CERTIFICATE */
+.cert{max-width:640px;margin:0 auto;background:#fff;border:2px solid var(--gold);border-radius:24px;padding:40px;text-align:center;box-shadow:0 16px 60px rgba(245,166,35,.15);position:relative;overflow:hidden}
+.cert::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0,rgba(245,166,35,.07),transparent 60%);pointer-events:none}
+.cert-logo{font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;color:var(--blue);margin-bottom:4px}
+.cert-logo em{color:var(--gold);font-style:normal}
+.cert-divider{height:1.5px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:16px 0}
+.cert-tag{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.cert-name{font-family:'Sora',sans-serif;font-size:2rem;font-weight:800;margin:6px 0 4px}
+.cert-module{color:var(--muted);margin-bottom:20px}
+.cert-badges{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.cert-badge{display:flex;align-items:center;gap:7px;background:var(--bg);border:1.5px solid var(--border);border-radius:50px;padding:7px 16px;font-size:.82rem;font-weight:700}
+
+/* BADGE SHOWCASE */
+.badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}
+.badge-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;transition:all var(--t)}
+.badge-card.unlocked{border-color:var(--gold);box-shadow:0 4px 20px rgba(245,166,35,.15)}
+.badge-card.unlocked:hover{transform:translateY(-4px)}
+.badge-card .bi{font-size:2.2rem;filter:grayscale(1) opacity(.3)}
+.badge-card.unlocked .bi{filter:none}
+.badge-card .bn{font-size:.72rem;font-weight:700;margin-top:6px;color:var(--muted)}
+.badge-card.unlocked .bn{color:var(--dark)}
+
+/* CONFETTI CANVAS */
+#confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:9999;display:none}
+
+/* XP POP */
+.xp-pop{position:fixed;font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:800;color:var(--gold);pointer-events:none;z-index:9998;animation:xpUp 1.3s ease forwards;text-shadow:0 2px 10px rgba(245,166,35,.5)}
+@keyframes xpUp{0%{opacity:0;transform:translateY(0) scale(.6)}20%{opacity:1;transform:translateY(-15px) scale(1.15)}80%{opacity:.8;transform:translateY(-70px) scale(1)}100%{opacity:0;transform:translateY(-100px)}}
+
+/* LEVEL UP OVERLAY */
+#levelup{position:fixed;inset:0;background:rgba(30,50,120,.6);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center}
+#levelup.show{display:flex}
+.lu-card{background:#fff;border-radius:24px;padding:48px;text-align:center;box-shadow:0 24px 80px rgba(30,50,120,.35);animation:luIn .5s ease}
+@keyframes luIn{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+.lu-icon{font-size:5rem;margin-bottom:16px;animation:bounce 1s .3s ease both}
+.lu-title{font-family:'Sora',sans-serif;font-size:2.2rem;font-weight:800;background:linear-gradient(135deg,var(--blue),var(--coral));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.lu-level{font-size:1rem;color:var(--muted);margin:8px 0 20px}
+
+/* TOAST */
+.toast{position:fixed;bottom:80px;right:24px;background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-lg);z-index:9997;animation:toastIn .35s ease;max-width:270px}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.toast-icon{font-size:1.8rem}
+.toast-title{font-weight:700;font-size:.83rem}
+.toast-sub{font-size:.74rem;color:var(--muted)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  #sidebar{display:none}
+  #main{margin-left:0}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .mot-grid{grid-template-columns:1fr 1fr}
+  .fc-grid{grid-template-columns:1fr 1fr}
+  .dd-layout{grid-template-columns:1fr}
+  #slide-wrap{padding:20px}
+  #nav-foot{padding:10px 20px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+<div id="levelup">
+  <div class="lu-card">
+    <div class="lu-icon" id="lu-icon">⭐</div>
+    <div class="lu-title" id="lu-title">Niveau supérieur !</div>
+    <div class="lu-level" id="lu-level"></div>
+    <button class="btn btn-blue" onclick="document.getElementById('levelup').classList.remove('show')">Continuer →</button>
+  </div>
+</div>
+
+<header id="hdr">
+  <div class="logo">ET<em>A</em>GIA</div>
+  <div id="hdr-chapter">Module de Formation</div>
+  <div class="xp-bar-wrap">
+    <div class="level-badge" id="level-label">Novice 🌱</div>
+    <div class="xp-track"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
+    <div class="xp-num"><span id="xp-cur">0</span> / <span id="xp-next">200</span> XP</div>
+  </div>
+  <div class="hearts" id="hearts-display">❤️❤️❤️</div>
+  <div class="streak-badge" id="streak-badge">🔥 0 jours</div>
+</header>
+
+<nav id="sidebar"><div id="sb-list"></div></nav>
+
+<main id="main">
+  <div id="slide-wrap"></div>
+  <div id="nav-foot">
+    <span class="nav-left">Slide <b id="sl-cur">1</b> / <b id="sl-tot">1</b></span>
+    <div class="nav-prog"><div class="nav-prog-fill" id="nav-pfill" style="width:0%"></div></div>
+    <button class="btn btn-out" id="btn-prev" onclick="nav(-1)">← Retour</button>
+    <button class="btn btn-blue" id="btn-next" onclick="nav(1)">Suivant →</button>
+  </div>
+</main>
+
+<script>
+/* ════ STATE & LEVELS ════ */
+const LEVELS=[
+  {name:'Novice 🌱',min:0,max:199,color:'#6B7A99'},
+  {name:'Apprenti ⭐',min:200,max:499,color:'#1E5EFF'},
+  {name:'Confirmé 🔥',min:500,max:899,color:'#F5A623'},
+  {name:'Expert 💎',min:900,max:1399,color:'#FF6340'},
+  {name:'Maître 🏆',min:1400,max:Infinity,color:'#00C896'}
+];
+const HEARTS_MAX=3;
+
+let S={
+  ch:0,sl:0,xp:0,hearts:HEARTS_MAX,streak:1,
+  visited:{},done:[],quizScores:{},
+  badges:{},scenariosDone:{},activitiesDone:{},
+  quizAnswers:{}
+};
+
+function save(){try{localStorage.setItem('e2',JSON.stringify(S))}catch(e){}}
+function load(){try{const d=localStorage.getItem('e2');if(d)S={...S,...JSON.parse(d)}}catch(e){}}
+
+function getLevel(xp){return LEVELS.findIndex((l,i)=>xp>=l.min&&xp<=l.max)||0}
+function getLevelObj(xp){return LEVELS[getLevel(xp)]||LEVELS[0]}
+
+/* ════ XP & GAMIFICATION ════ */
+function addXP(n,pop=true){
+  const before=getLevel(S.xp);
+  S.xp+=n;
+  const after=getLevel(S.xp);
+  if(pop) showXPPop(n);
+  if(after>before) setTimeout(()=>showLevelUp(LEVELS[after]),400);
+  updateHUD();
+  checkBadges();
+  save();
+}
+
+function loseHeart(){
+  if(S.hearts>0){S.hearts--;updateHUD();}
+  save();
+}
+
+function showXPPop(n){
+  const el=document.createElement('div');
+  el.className='xp-pop';
+  el.textContent=`+${n} XP`;
+  el.style.cssText=`left:${45+Math.random()*10}%;top:${30+Math.random()*20}%`;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1400);
+}
+
+function showLevelUp(lvl){
+  document.getElementById('lu-icon').textContent=lvl.name.split(' ')[1]||'🏆';
+  document.getElementById('lu-title').textContent='Niveau atteint !';
+  document.getElementById('lu-level').textContent=lvl.name;
+  document.getElementById('levelup').classList.add('show');
+  launchConfetti();
+}
+
+function updateHUD(){
+  const lv=getLevelObj(S.xp);
+  const li=LEVELS.indexOf(lv);
+  const nextLv=LEVELS[li+1];
+  const pct=nextLv?Math.round((S.xp-lv.min)/(nextLv.min-lv.min)*100):100;
+  document.getElementById('level-label').textContent=lv.name;
+  document.getElementById('xp-fill').style.width=pct+'%';
+  document.getElementById('xp-cur').textContent=S.xp;
+  document.getElementById('xp-next').textContent=nextLv?nextLv.min:'MAX';
+  const h='❤️'.repeat(S.hearts)+'🖤'.repeat(Math.max(0,HEARTS_MAX-S.hearts));
+  document.getElementById('hearts-display').textContent=h;
+  document.getElementById('streak-badge').textContent=`🔥 ${S.streak} jour${S.streak>1?'s':''}`;
+}
+
+/* ════ CONFETTI ════ */
+function launchConfetti(){
+  const cv=document.getElementById('confetti-canvas');
+  cv.style.display='block';
+  cv.width=window.innerWidth;cv.height=window.innerHeight;
+  const ctx=cv.getContext('2d');
+  const particles=Array.from({length:120},()=>({
+    x:Math.random()*cv.width,y:-10,
+    vx:(Math.random()-.5)*6,vy:Math.random()*4+2,
+    r:Math.random()*6+3,
+    c:['#1E5EFF','#FF6340','#F5A623','#00C896','#FF4D8B','#FF4D6D'][Math.floor(Math.random()*6)],
+    rot:Math.random()*360,rv:(Math.random()-.5)*8
+  }));
+  let frame=0;
+  function draw(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    particles.forEach(p=>{
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle=p.c;ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r*1.5);ctx.restore();
+      p.x+=p.vx;p.y+=p.vy;p.rot+=p.rv;p.vy+=.05;
+    });
+    frame++;
+    if(frame<120)requestAnimationFrame(draw);
+    else{ctx.clearRect(0,0,cv.width,cv.height);cv.style.display='none';}
+  }
+  draw();
+}
+
+/* ════ BADGES ════ */
+const BADGES=[
+  {id:'start',icon:'🚀',name:'Premiers pas',cond:s=>s.xp>=50},
+  {id:'ch1',icon:'🧬',name:'ADN Activé',cond:s=>s.done.includes(1)},
+  {id:'ch2',icon:'🔍',name:'Psychologue',cond:s=>s.done.includes(2)},
+  {id:'ch3',icon:'🎙️',name:'Entretien Pro',cond:s=>s.done.includes(3)},
+  {id:'ch4',icon:'👂',name:'Oreille d\'Or',cond:s=>s.done.includes(4)},
+  {id:'ch5',icon:'🏁',name:'Closer Elite',cond:s=>s.done.includes(5)},
+  {id:'perfect',icon:'💎',name:'Perfectionniste',cond:s=>Object.values(s.quizScores).some(v=>v===3)},
+  {id:'master',icon:'🏆',name:'Maître ETAGIA',cond:s=>s.done.length>=6}
+];
+
+function checkBadges(){
+  BADGES.forEach(b=>{
+    if(!S.badges[b.id]&&b.cond(S)){
+      S.badges[b.id]=true;
+      showToast(b.icon,`Badge : ${b.name}`,'Nouveau badge débloqué !');
+      addXP(30,false);
+    }
+  });
+}
+
+function showToast(icon,title,sub){
+  const t=document.createElement('div');
+  t.className='toast';
+  t.innerHTML=`<span class="toast-icon">${icon}</span><div><div class="toast-title">${title}</div><div class="toast-sub">${sub}</div></div>`;
+  document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .4s';setTimeout(()=>t.remove(),400)},3200);
+}
+
+/* ════ MODULE DATA ════ */
+const CHS=[
+
+/* ── INTRO ── */
+{id:'intro',icon:'🎯',name:'Bienvenue',meta:'Module intro',color:'#1E5EFF',xp:60,
+slides:[
+  {type:'welcome'},
+  {type:'objectives'},
+  {type:'guide'}
+]},
+
+/* ── CH1 ── */
+{id:'ch1',icon:'🧬',name:"L'ADN du Conseiller",meta:'5 activités · 15 min',color:'#FF6340',xp:150,
+slides:[
+  {type:'ch-intro',num:'01',
+   title:"L'ADN du Conseiller Vendeur",
+   sub:"Qui êtes-vous vraiment dans la relation commerciale ? Comprendre le rôle, la posture et les indicateurs du métier.",
+   objs:["Distinguer vendre et conseiller","Décoder la fiche métier","Maîtriser ses indicateurs KPI"],
+   color:'#FF6340',
+   video:{title:"Alex commence son premier jour",dur:"1 min 30s"}
+  },
+  {type:'content',title:"Vendre ≠ Conseiller — La différence qui change tout",
+   body:`<div class="callout gold"><div class="callout-icon">💡</div><div><strong>Scénario réel :</strong> Alex rencontre Mme Dupont qui cherche "un bon aspirateur". Un vendeur ordinaire lui montre le plus cher. Alex, lui, commence par demander : <em>"Vous avez un animal de compagnie ?"</em> — et vend la solution <em>parfaite</em> pour elle. Résultat : cliente fidèle, recommandation à 3 amies.</div></div>
+   <table class="cmp-table" style="margin-top:20px">
+   <thead><tr><th>Dimension</th><th>Vendeur transactionnel</th><th>Conseiller vendeur ✨</th></tr></thead>
+   <tbody>
+   <tr><td><strong>Objectif principal</strong></td><td>Conclure la vente</td><td>Résoudre le vrai problème</td></tr>
+   <tr><td><strong>Posture</strong></td><td>Persuader à tout prix</td><td>Écouter, analyser, recommander</td></tr>
+   <tr><td><strong>Relation client</strong></td><td>One-shot transactionnelle</td><td>Long terme & confiance</td></tr>
+   <tr><td><strong>Après la vente</strong></td><td>Passe au client suivant</td><td>Suivi, satisfaction, fidélisation</td></tr>
+   <tr><td><strong>Valeur générée</strong></td><td>CA immédiat</td><td>CA + NPS + bouche-à-oreille</td></tr>
+   </tbody></table>
+   <div class="callout green" style="margin-top:16px"><div class="callout-icon">🎯</div><div><strong>L'excellence commerciale</strong> n'est pas une contradiction entre vendre et conseiller. C'est <em>conseiller si bien</em> que la vente devient naturelle.</div></div>`},
+
+  {type:'content',title:"La Fiche Métier du Conseiller Vendeur",
+   body:`<div class="grid-3">
+   <div class="card blue"><div class="card-icon">🎯</div><h3>Missions</h3><p>Accueillir & orienter, analyser les besoins, présenter l'offre, argumenter, conclure, fidéliser, assurer le suivi CRM.</p></div>
+   <div class="card gold"><div class="card-icon">📚</div><h3>Savoirs</h3><p>Maîtrise produit/service, connaissance marché et concurrence, réglementation commerciale, techniques de vente.</p></div>
+   <div class="card green"><div class="card-icon">⚙️</div><h3>Savoir-faire</h3><p>Conduire un entretien, argumenter CAP, traiter les objections, utiliser CRM, rédiger devis, closing.</p></div>
+   <div class="card purple"><div class="card-icon">💬</div><h3>Savoir-être</h3><p>Écoute active, empathie, persévérance, adaptabilité, rigueur, enthousiasme, éthique commerciale.</p></div>
+   <div class="card pink"><div class="card-icon">📊</div><h3>KPIs clés</h3><p>CA, taux de transformation, panier moyen, NPS (satisfaction), taux de fidélisation, taux de recommandation.</p></div>
+   <div class="card blue"><div class="card-icon">🚀</div><h3>Évolution</h3><p>Conseiller → Senior → Responsable PDV → Directeur Commercial → KAM → Business Developer.</p></div>
+   </div>
+   <div class="callout green" style="margin-top:16px"><div class="callout-icon">💡</div><div><strong>Le savoir-être prime :</strong> Dans une étude McKinsey (2023), 67% des directeurs commerciaux citent l'intelligence émotionnelle comme critère #1 de recrutement — devant la maîtrise technique.</div></div>`},
+  {type:'flipcards',
+   title:"Mémorise les concepts clés",
+   meta:"Clique sur chaque carte pour la retourner et découvrir la définition + un exemple concret",
+   cards:[
+     {emoji:'📊',term:'Taux de transformation',def:"Nombre de ventes / Nombre de contacts",ex:"Alex a eu 40 contacts en semaine, conclu 12 ventes → taux = 30%"},
+     {emoji:'🛒',term:'Panier moyen',def:"CA total / Nombre de ventes. Indicateur de la montée en gamme.",ex:"Alex fait 150€ de panier moyen vs 90€ au niveau national → il argumente bien la valeur"},
+     {emoji:'😊',term:'NPS (Net Promoter Score)',def:"Mesure la fidélité client : probabilité de recommander (0→10). Score = % Promoteurs − % Détracteurs",ex:"Mme Dupont donne 9/10 → elle est promotrice et va recommander l'enseigne"},
+     {emoji:'🎯',term:'Objectif SMART',def:"Spécifique, Mesurable, Atteignable, Réaliste, Temporellement défini",ex:"'Augmenter mon panier moyen de 20% en 30 jours sur les produits premium'"},
+     {emoji:'🔄',term:'Taux de fidélisation',def:"% de clients qui reviennent. Coût d'acquisition client x5 vs fidélisation.",ex:"Alex reconnaît M. Chen dès l'entrée, l'appelle par son nom → +65% de retour"},
+     {emoji:'📞',term:'CRM',def:"Customer Relationship Management. Outil de suivi des interactions clients.",ex:"Alex note dans le CRM que Mme Dupont a un chien. Au prochain contact : 'Comment va Médor ?'"}
+   ]
+  },
+
+  {type:'quiz',chIdx:1,
+   questions:[
+     {q:"Alex propose à un client l'option la plus chère sans écouter son besoin. Cette approche est celle d'un :",
+      opts:["Conseiller vendeur expert","Vendeur transactionnel","Manager commercial","Technicien produit"],
+      ans:1,fb:"Un conseiller vendeur commence TOUJOURS par la découverte des besoins. Vendre la solution la plus chère sans écouter peut générer une vente à court terme mais détruit la relation et la fidélisation."},
+     {q:"Quel est l'indicateur qui mesure le mieux l'efficacité d'un argumentaire en montée en gamme ?",
+      opts:["Le nombre de contacts clients","Le panier moyen","La ponctualité au travail","Le nombre de produits en stock"],
+      ans:1,fb:"Le panier moyen révèle si le conseiller arrive à valoriser des solutions de qualité supérieure. Un panier moyen qui augmente = clients convaincus par la valeur, pas uniquement par le prix."},
+     {q:"Mme Chen revient 3 fois en 2 mois et recommande l'enseigne à ses collègues. Quel indicateur illustre cela ?",
+      opts:["Taux de transformation","Objectif SMART","NPS élevé + taux de fidélisation","Chiffre d'affaires brut"],
+      ans:2,fb:"Le NPS (elle recommande = promotrice) et le taux de fidélisation (elle revient) sont les deux indicateurs illustrés. Ensemble, ils signalent une relation client excellente — le saint graal du conseiller vendeur."}
+   ]
+  }
+]},
+
+/* ── CH2 ── */
+{id:'ch2',icon:'🧠',name:'Motivations SAC & COINS',meta:'5 activités · 20 min',color:'#F5A623',xp:200,
+slides:[
+  {type:'ch-intro',num:'02',
+   title:"Décoder les Motivations d'Achat",
+   sub:"Pourquoi les clients achètent-ils vraiment ? SAC pour le rationnel, COINS pour l'émotionnel.",
+   objs:["Maîtriser le tunnel de vente","Décoder SAC","Décoder COINS","Adapter son discours en temps réel"],
+   color:'#F5A623',
+   video:{title:"Alex face à un client indécis",dur:"1 min 50s"}
+  },
+  {type:'content',title:"Le tunnel de vente — Votre carte de navigation",
+   body:`<p class="page-sub" style="margin-bottom:16px">Chaque client traverse ces 5 étapes. Votre rôle : identifier où il est et l'accompagner à l'étape suivante.</p>
+   <div class="funnel" id="funnel"></div>
+   <div class="callout blue" style="margin-top:20px"><div class="callout-icon">🔎</div><div><strong>Diagnostic rapide :</strong> Un client qui quitte le tunnel à l'étape <em>Convertir</em> a un problème différent de celui perdu à <em>Attirer</em>. Diagnostiquer le bon niveau évite de mauvais traitements.</div></div>`},
+
+  {type:'content',title:"SAC — Les 3 leviers rationnels",
+   body:`<div class="mot-grid">
+   <div class="mot-card" style="border-top:3px solid #1E5EFF"><div class="mot-letter" style="color:#1E5EFF">S</div><div class="mot-name">Sécurité</div><div class="mot-desc">Besoin de garantie, fiabilité, protection. Le client veut être rassuré sur le risque.</div><div class="mot-ex">💬 "Est-ce que ça dure dans le temps ?" / "Quelle garantie vous offrez ?"</div><div class="mot-ex" style="background:#EEF8FF;color:#1E5EFF;margin-top:4px">✅ Réponse Alex : "<em>Ce modèle est garanti 3 ans, pièces et main d'œuvre. Et 94% de nos clients le conservent plus de 5 ans.</em>"</div></div>
+   <div class="mot-card" style="border-top:3px solid #F5A623"><div class="mot-letter" style="color:#F5A623">A</div><div class="mot-name">Argent</div><div class="mot-desc">ROI, rapport qualité/prix, économies. Le client calcule ce qu'il en retire.</div><div class="mot-ex">💬 "C'est dans mon budget ?" / "J'en ai pour mon argent ?"</div><div class="mot-ex" style="background:#FFF8EE;color:#9a6200;margin-top:4px">✅ Réponse Alex : "<em>Sur 3 ans, ce modèle vous coûte 2€/jour. Le modèle entrée de gamme : 2,80€/jour en maintenance.</em>"</div></div>
+   <div class="mot-card" style="border-top:3px solid #00C896"><div class="mot-letter" style="color:#00C896">C</div><div class="mot-name">Commodité</div><div class="mot-desc">Facilité, gain de temps, simplicité d'usage. Réduire la friction au maximum.</div><div class="mot-ex">💬 "C'est compliqué à utiliser ?" / "Ça prend combien de temps ?"</div><div class="mot-ex" style="background:#EEFAF5;color:#006a4a;margin-top:4px">✅ Réponse Alex : "<em>Une seule touche, et il se vide automatiquement. Zéro manipulation. Je vous montre en 30 secondes ?</em>"</div></div>
+   </div>
+   <div class="callout purple" style="margin-top:20px"><div class="callout-icon">🎯</div><div><strong>Tactique d'expert :</strong> Identifiez la motivation SAC dominante en phase de découverte. Puis construisez TOUT votre argumentaire autour de cette dimension. Un client "Sécurité" n'achètera jamais sur un argument "Argent" seul.</div></div>`},
+
+  {type:'content',title:"COINS — Les 5 déclencheurs émotionnels",
+   body:`<div class="callout purple"><div class="callout-icon">🧠</div><div><strong>La grande révélation :</strong> Daniel Kahneman (Prix Nobel 2002) a démontré que <strong>95% des décisions d'achat sont inconscientes et émotionnelles</strong>. Le cerveau rationnel justifie après coup. Les COINS parlent directement au vrai décideur.</div></div>
+   <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:20px">
+   <div class="mot-card" style="border-top:3px solid #FF4D6D"><div class="mot-letter" style="color:#FF4D6D;font-size:2rem">C</div><div class="mot-name">Compétition</div><div class="mot-desc">Être le premier, surpasser ses rivaux.</div><div class="mot-ex">💬 "Mes concurrents ont déjà ça ?"</div><div class="mot-ex" style="background:#FFF0F0;color:#8B001C">✅ Alex : "<em>Vous seriez parmi les 3 premiers de votre secteur à adopter cette solution.</em>"</div></div>
+   <div class="mot-card" style="border-top:3px solid #FF6340"><div class="mot-letter" style="color:#FF6340;font-size:2rem">O</div><div class="mot-name">Orgueil</div><div class="mot-desc">Statut social, image, prestige.</div><div class="mot-ex">💬 "Qu'est-ce que ça dit de moi ?"</div><div class="mot-ex" style="background:#FFF0EB;color:#CC3A10">✅ Alex : "<em>Nos clients dans votre position choisissent généralement la gamme Premium.</em>"</div></div>
+   <div class="mot-card" style="border-top:3px solid #3498DB"><div class="mot-letter" style="color:#3498DB;font-size:2rem">I</div><div class="mot-name">Imitation</div><div class="mot-desc">Social proof, tendances, conformité.</div><div class="mot-ex">💬 "Tout le monde le fait ?"</div><div class="mot-ex" style="background:#EEF6FF;color:#0a4a8a">✅ Alex : "<em>Plus de 500 entreprises de votre taille l'ont adopté ce trimestre.</em>"</div></div>
+   <div class="mot-card" style="border-top:3px solid #00C896"><div class="mot-letter" style="color:#00C896;font-size:2rem">N</div><div class="mot-name">Nouveauté</div><div class="mot-desc">Attrait de l'innovation, être à la pointe.</div><div class="mot-ex">💬 "C'est la dernière version ?"</div><div class="mot-ex" style="background:#EEFAF5;color:#006a4a">✅ Alex : "<em>C'est notre toute dernière génération, sortie il y a 3 semaines.</em>"</div></div>
+   <div class="mot-card" style="border-top:3px solid #F5A623"><div class="mot-letter" style="color:#F5A623;font-size:2rem">S</div><div class="mot-name">Sympathie</div><div class="mot-desc">Affect, confiance, relation humaine.</div><div class="mot-ex">💬 "Je fais confiance à cette marque."</div><div class="mot-ex" style="background:#FFF8EE;color:#9a6200">✅ Alex : "<em>Ça fait plaisir — et cette confiance, on la mérite chaque jour.</em>"</div></div>
+   </div>
+   <div class="callout gold" style="margin-top:16px"><div class="callout-icon">🎯</div><div><strong>Combinaison gagnante :</strong> Un client peut avoir plusieurs motivations actives. Alex repère la dominante et l'adresse en priorité, puis renforce avec une seconde. SAC + COINS ensemble = argumentaire imbattable.</div></div>`},
+  {type:'dragdrop',
+   title:"Associe chaque phrase client à sa motivation",
+   meta:"Fais glisser chaque phrase vers SAC ou COINS. Attention aux subtilités !",
+   items:[
+     {id:'p1',text:'"Je veux être sûr que ça ne tombera pas en panne dans 6 mois."',cat:'SAC',catLabel:'S - Sécurité'},
+     {id:'p2',text:'"Mes concurrents n\'ont pas encore ça. Je veux être le premier."',cat:'COINS',catLabel:'C - Compétition'},
+     {id:'p3',text:'"Est-ce que c\'est simple à configurer ? J\'ai horreur des complications."',cat:'SAC',catLabel:'C - Commodité'},
+     {id:'p4',text:'"Tout le monde en parle en ce moment. C\'est la tendance."',cat:'COINS',catLabel:'I - Imitation'},
+     {id:'p5',text:'"Je veux calculer mon retour sur investissement avant de décider."',cat:'SAC',catLabel:'A - Argent'},
+     {id:'p6',text:'"J\'aime beaucoup cette marque. J\'ai confiance en eux depuis des années."',cat:'COINS',catLabel:'S - Sympathie'}
+   ],
+   zones:[
+     {id:'SAC',label:'SAC — Rationnel',icon:'🧠',color:'#1E5EFF'},
+     {id:'COINS',label:'COINS — Émotionnel',icon:'❤️',color:'#FF4D8B'}
+   ]
+  },
+
+  {type:'quiz',chIdx:2,
+   questions:[
+     {q:"Un client dit : 'Mes rivaux vont être jaloux quand ils verront ça.' Quelle motivation COINS active-t-il ?",
+      opts:["Sympathie","Imitation","Compétition","Nouveauté"],
+      ans:2,fb:"La jalousie de ses concurrents est typique de la Compétition (C de COINS) — le désir d'être supérieur aux autres, d'avoir ce qu'ils n'ont pas encore. Réponse idéale d'Alex : montrer en quoi c'est un avantage différenciant."},
+     {q:"Vous identifiez qu'un client est dominé par la motivation 'Argent'. Quel argument priorisez-vous ?",
+      opts:["Les caractéristiques techniques avancées","Le fait que tout le monde l'achète","Le calcul du coût total de possession sur 3 ans","La nouveauté du produit"],
+      ans:2,fb:"Le client 'Argent' a besoin de preuves chiffrées de la valeur. Le coût total de possession (TCO) est l'argument ROI par excellence — il transforme un prix perçu comme élevé en investissement rentable."},
+     {q:"95% des décisions d'achat sont prises de façon inconsciente selon Kahneman. Cela signifie que :",
+      opts:["Il faut bombarder le client d'informations techniques","Les déclencheurs COINS sont souvent plus déterminants que les arguments SAC","Le prix est toujours le facteur principal","Il faut éviter les arguments rationnels"],
+      ans:1,fb:"Kahneman (Prix Nobel Économie 2002) démontre que le cerveau émotionnel décide, le cerveau rationnel justifie après coup. Un conseiller expert adresse les COINS pour déclencher le désir, puis confirme avec les SAC pour rassurer."}
+   ]
+  }
+]},
+
+/* ── CH3 ── */
+{id:'ch3',icon:'🎙️',name:"L'Entretien de Vente",meta:'6 activités · 25 min',color:'#00C896',xp:250,
+slides:[
+  {type:'ch-intro',num:'03',
+   title:"Maîtriser l'Entretien de Vente",
+   sub:"7 étapes structurées + méthode CAP. La science de la vente appliquée à chaque conversation.",
+   objs:["Conduire les 7 étapes","Argumenter avec CAP","Traiter les objections"],
+   color:'#00C896',
+   video:{title:"Alex conduit son premier entretien de vente",dur:"2 min 15s"}
+  },
+  {type:'content',title:"Les 7 étapes de l'entretien commercial",
+   body:`<div class="timeline" id="tl-steps"></div>
+   <div class="callout gold" style="margin-top:20px"><div class="callout-icon">⚠️</div><div><strong>Erreur classique d'Alex à J+1 :</strong> Il commence à argumenter à l'étape 2, sans découverte. Résultat : il parle des caractéristiques techniques à un client qui cherchait la simplicité. Vente perdue. La découverte n'est pas optionnelle.</div></div>`},
+
+  {type:'content',title:"La Méthode CAP — Votre argumentaire en 3 temps",
+   body:`<div class="grid-3" style="margin-bottom:20px">
+   <div class="card blue" style="text-align:center;padding:28px 20px">
+   <div style="font-family:'Space Grotesk',sans-serif;font-size:3.5rem;font-weight:700;color:#1E5EFF;line-height:1">C</div>
+   <h3>Caractéristique</h3>
+   <p>Le fait objectif, la donnée technique, la spec mesurable du produit/service.</p>
+   <div style="background:var(--bg);border-radius:8px;padding:8px 10px;margin-top:10px;font-size:.75rem;color:var(--muted);font-style:italic">"Batterie 80 kWh"<br>"Livraison sous 24h"<br>"Garantie 3 ans"</div>
+   </div>
+   <div class="card gold" style="text-align:center;padding:28px 20px">
+   <div style="font-family:'Space Grotesk',sans-serif;font-size:3.5rem;font-weight:700;color:#F5A623;line-height:1">A</div>
+   <h3>Avantage</h3>
+   <p>Ce que ça apporte à CE client précis. Bénéfice concret adapté à son besoin identifié.</p>
+   <div style="background:#FFF8EE;border-radius:8px;padding:8px 10px;margin-top:10px;font-size:.75rem;color:#9a6200;font-style:italic">"Vous parcourez 500km<br>sans recharge"</div>
+   </div>
+   <div class="card green" style="text-align:center;padding:28px 20px">
+   <div style="font-family:'Space Grotesk',sans-serif;font-size:3.5rem;font-weight:700;color:#00C896;line-height:1">P</div>
+   <h3>Preuve</h3>
+   <p>La validation qui ancre la conviction. Démo, témoignage, étude, certification.</p>
+   <div style="background:#EEFAF5;border-radius:8px;padding:8px 10px;margin-top:10px;font-size:.75rem;color:#006a4a;font-style:italic">"93% de nos clients<br>le confirment"</div>
+   </div>
+   </div>
+   <div class="callout blue"><div class="callout-icon">🎬</div><div><strong>Alex en action — CAP en live :</strong><br>
+   C → <em>"Ce système de filtration à 5 étapes..."</em><br>
+   A → <em>"...élimine 99,9% des allergènes — parfait pour votre enfant asthmatique dont vous m'avez parlé..."</em><br>
+   P → <em>"...et 4 familles de ce quartier l'utilisent déjà depuis 6 mois avec des résultats cliniquement mesurés."</em></div></div>`},
+
+  {type:'scenario',
+   title:"Simulation : Alex face à une objection",
+   subtitle:"M. Leclerc hésite. Alex doit réagir. Choisissez la bonne réponse.",
+   steps:[
+     {who:'client',msg:"Votre offre est intéressante, mais c'est vraiment trop cher pour nous.",choices:[
+       {text:"Je comprends votre point de vue. Par rapport à quoi vous semblez-t-il élevé ? Votre budget actuel, ou une offre concurrente ?",ok:true,fb:"✅ Parfait ! Alex accueille sans réfuter, empathise, puis questionne pour comprendre le vrai frein. C'est la méthode A.E.R.E. : Accueillir → Empathiser → Reformuler → Expliquer. +25 XP"},
+       {text:"Non non, notre prix est très compétitif par rapport au marché, je vous assure.",ok:false,fb:"❌ Réfuter directement une objection crée de la résistance. Le client se sent contredit et se ferme. Résultat : perte de confiance."},
+       {text:"Je peux vous faire une remise de 15% si vous décidez aujourd'hui.",ok:false,fb:"❌ Céder immédiatement sur le prix sans comprendre l'objection réelle dévalorise votre offre ET crédibilise l'idée que votre prix initial était gonflé."}
+     ]},
+     {who:'client',msg:"En fait, c'est surtout par rapport à votre concurrent qui propose 200€ de moins.",choices:[
+       {text:"Oui, ils sont moins chers, mais ils sont nettement moins bien.",ok:false,fb:"❌ Dénigrer la concurrence est perçu comme non-professionnel et inquiète le client sur votre impartialité."},
+       {text:"C'est une bonne remarque. Avez-vous comparé le coût total sur 3 ans, maintenance comprise ?",ok:true,fb:"✅ Alex déplace le débat du prix d'achat au coût total de possession — un terrain sur lequel sa solution gagne souvent. C'est l'argumentaire ROI. +25 XP"},
+       {text:"Ils ne sont pas fiables. On a eu beaucoup de clients mécontents qui sont venus nous voir.",ok:false,fb:"❌ Citer des clients mécontents de la concurrence sans preuves est une affirmation risquée. Sans données, ça ressemble à du dénigrement."}
+     ]}
+   ]
+  },
+
+  {type:'quiz',chIdx:3,
+   questions:[
+     {q:"Dans la méthode CAP, l'Avantage doit toujours être :",
+      opts:["La même formulation pour tous les clients","Adapté au besoin spécifique identifié chez CE client","La caractéristique technique répétée autrement","Le prix de vente"],
+      ans:1,fb:"L'Avantage est la traduction de la caractéristique en bénéfice PERSONNEL pour ce client. C'est pour ça qu'on fait la découverte AVANT l'argumentation : pour savoir quel avantage résonnera."},
+     {q:"Un client dit 'J'ai besoin de réfléchir.' La meilleure réponse d'Alex est :",
+      opts:["'Bien sûr, prenez le temps qu'il vous faut.'","'Réfléchir à quoi exactement ? Il y a quelque chose qui vous retient ?'","'Je dois vous prévenir, le prix monte demain.'","'Vous avez tout ce qu'il faut pour décider maintenant.'"],
+      ans:1,fb:"'J'ai besoin de réfléchir' cache presque toujours une objection non exprimée. En questionnant gentiment, Alex identifie le vrai frein et peut y répondre. Le 'temps qu'il vous faut' est la réponse la plus polie mais aussi la plus naïve."},
+     {q:"Quelle est la bonne séquence des 7 étapes ?",
+      opts:["Argumentation → Découverte → Conclusion → Accueil","Accueil → Découverte → Reformulation → Argumentation → Objections → Conclusion → Suivi","Découverte → Accueil → Argumentation → Conclusion","Conclusion → Reformulation → Argumentation → Découverte"],
+      ans:1,fb:"La séquence est logique : on accueille, on découvre, on reformule pour valider, on argumente sur la base du besoin confirmé, on traite les objections, on conclut, puis on assure le suivi. Chaque étape prépare la suivante."}
+   ]
+  }
+]},
+
+/* ── CH4 ── */
+{id:'ch4',icon:'👂',name:'Écoute & Questionnement',meta:'5 activités · 20 min',color:'#FF4D8B',xp:200,
+slides:[
+  {type:'ch-intro',num:'04',
+   title:"L'Art de l'Écoute Active",
+   sub:"10 commandements, 7 types de questions. L'outil le plus sous-estimé du commercial.",
+   objs:["Pratiquer l'écoute active","Maîtriser les 7 types de questions","Reformuler avec précision"],
+   color:'#FF4D8B',
+   video:{title:"Alex apprend à vraiment écouter",dur:"2 min"}
+  },
+  {type:'content',title:"Les 10 commandements de l'écoute active",
+   body:`<div class="callout purple"><div class="callout-icon">💡</div><div><strong>Fait surprenant :</strong> Nous retenons en moyenne <strong>25% de ce que nous entendons</strong>. Et un vendeur typique parle 70% du temps lors d'un entretien. Résultat : il ne sait rien des besoins réels du client. L'écoute active inverse ce ratio.</div></div>
+   <div class="grid-2" style="margin-top:20px">
+   <div class="card blue"><div class="card-icon">🔕</div><h3>1. Tu te tairas</h3><p>Silence actif = compétence rare. Laissez le client finir SANS interruption, même s'il fait une pause.</p></div>
+   <div class="card gold"><div class="card-icon">👁️</div><h3>2. Tu regarderas</h3><p>Contact visuel bienveillant : 60-70% du temps. Le non-verbal révèle ce que les mots cachent.</p></div>
+   <div class="card green"><div class="card-icon">📝</div><h3>3. Tu prendras note</h3><p>Notez les mots EXACTS du client (pas votre interprétation). Ces mots sont des trésors pour reformuler.</p></div>
+   <div class="card purple"><div class="card-icon">🧠</div><h3>4. Tu te concentreras</h3><p>Écouter pour comprendre, pas pour répondre. Votre prochaine question vient DE ce que le client dit.</p></div>
+   <div class="card pink"><div class="card-icon">🪞</div><h3>5. Tu reformuleras</h3><p>"Si je comprends bien, vous cherchez X pour résoudre Y ?" — Valider avant d'argumenter.</p></div>
+   <div class="card blue"><div class="card-icon">⏸️</div><h3>6. Tu seras patient(e)</h3><p>Un silence de 3 secondes vous semble une éternité. Pour le client, c'est le temps de réfléchir. Respectez-le.</p></div>
+   <div class="card gold"><div class="card-icon">🚫</div><h3>7. Tu ne jugeras pas</h3><p>Zéro réaction défensive. Même si le client critique votre enseigne : accueillez, comprenez, répondez.</p></div>
+   <div class="card green"><div class="card-icon">🎭</div><h3>8. Tu t'adapteras</h3><p>Miroir subtil : adaptez votre registre, votre débit, votre vocabulaire à celui du client.</p></div>
+   <div class="card purple"><div class="card-icon">❓</div><h3>9. Tu creuseras</h3><p>La première réponse est rarement le vrai besoin. Creusez avec "c'est-à-dire ?", "pourquoi ça compte pour vous ?"</p></div>
+   <div class="card pink"><div class="card-icon">✅</div><h3>10. Tu valideras</h3><p>Concluez la découverte : "Donc vos 3 priorités sont X, Y, Z — c'est bien ça ?" Client dit oui → argumento.</p></div>
+   </div>`},
+
+  {type:'content',title:"Les 7 types de questions — La boîte à outils complète",
+   body:`<div class="timeline" id="tl-questions"></div>`},
+
+  {type:'quiz',chIdx:4,
+   questions:[
+     {q:"Alex dit : 'Si je vous comprends bien, votre priorité c'est la durabilité, pas le prix ?' C'est :",
+      opts:["Une question fermée","Une reformulation de validation","Une question miroir","Une question d'orientation"],
+      ans:1,fb:"C'est une reformulation de validation — l'étape 10 des commandements. Elle permet de confirmer la compréhension AVANT d'argumenter. Si le client dit non, Alex évite un argumentaire hors-cible."},
+     {q:"Le client dit 'La durabilité'. Alex répond '...La durabilité ?' avec une légère intonation montante. C'est :",
+      opts:["Une question ouverte","Une question fermée","Une question miroir","Une question de contrôle"],
+      ans:2,fb:"La question miroir consiste à répéter les derniers mots du client avec une légère inflexion montante. C'est un outil puissant d'approfondissement non-directif — le client va naturellement développer."},
+     {q:"'Est-ce que la livraison sous 48h vous conviendrait ?' est une question :",
+      opts:["Ouverte","Fermée","Ricochet","Relais"],
+      ans:1,fb:"Question fermée : elle appelle une réponse oui/non. Utile pour confirmer, qualifier ou avancer vers la conclusion. Attention : trop de questions fermées rend l'entretien interrogatoire."}
+   ]
+  }
+]},
+
+/* ── CH5 ── */
+{id:'ch5',icon:'🏁',name:'Conclure & Fidéliser',meta:'5 activités · 20 min',color:'#1E5EFF',xp:250,
+slides:[
+  {type:'ch-intro',num:'05',
+   title:"Conclure & Fidéliser",
+   sub:"Signaux d'achat, techniques de closing, fidélisation long terme et stratégies omnicanales.",
+   objs:["Détecter les signaux d'achat","Appliquer les techniques de closing","Construire la fidélisation"],
+   color:'#1E5EFF',
+   video:{title:"Alex conclut sa première grande vente",dur:"2 min 10s"}
+  },
+  {type:'content',title:"Signaux d'achat — Le moment de conclure",
+   body:`<div class="callout gold"><div class="callout-icon">🎯</div><div><strong>Règle absolue :</strong> N'attendez jamais que le client vous demande explicitement d'acheter. 80% des clients qui sont prêts à acheter n'osent pas le dire. Les signaux d'achat, c'est leur façon de vous dire "je suis prêt, aidez-moi à franchir le pas."</div></div>
+   <div class="grid-2" style="margin-top:20px">
+   <div class="card blue"><div class="card-icon">💬</div><h3>Signaux verbaux</h3>
+   <p style="margin-bottom:10px">Ce que le client dit :</p>
+   <ul style="font-size:.8rem;color:var(--muted);line-height:1.9;padding-left:16px">
+   <li>"La livraison, c'est dans quel délai ?"</li><li>"Il y a une garantie ?"</li><li>"Et si je voulais 2 couleurs ?"</li><li>"Vous faites de la maintenance ?"</li><li>"Ça s'intègre avec notre système ?"</li><li>"On pourrait démarrer quand ?"</li>
+   </ul></div>
+   <div class="card gold"><div class="card-icon">🤝</div><h3>Signaux non-verbaux</h3>
+   <p style="margin-bottom:10px">Ce que le corps dit :</p>
+   <ul style="font-size:.8rem;color:var(--muted);line-height:1.9;padding-left:16px">
+   <li>Se penche en avant (engagement)</li><li>Prend le produit en main</li><li>Parcourt la brochure en détail</li><li>Vérifie son agenda</li><li>Ton de voix plus détendu</li><li>Demande à un collègue son avis</li>
+   </ul></div>
+   </div>
+   <div class="grid-2" style="margin-top:14px">
+   <div class="card green"><div class="card-icon">↔️</div><h3>Technique de l'alternative</h3><p>Proposer 2 options d'achat, jamais une option vs rien.<br><br><em>"Vous préférez démarrer lundi ou mercredi ?"<br>"Vous optez pour la version Standard ou Premium ?"</em><br><br>Le client choisit <strong>comment</strong> acheter, pas <strong>si</strong> il achète.</p></div>
+   <div class="card purple"><div class="card-icon">🔄</div><h3>Reformulation positive</h3><p>Synthétiser les points d'accord et guider naturellement vers la conclusion.<br><br><em>"Donc vous cherchez durabilité + simplicité + livraison rapide. Notre solution Premium couvre les trois. On part sur ça ?"</em></p></div>
+   </div>`},
+
+  {type:'content',title:"Fidélisation & Ère Digitale",
+   body:`<div class="grid-3">
+   <div class="card blue"><div class="card-icon">📲</div><h3>Social Selling</h3><p>78% des vendeurs social selling dépassent leurs objectifs (LinkedIn 2024). Partagez du contenu utile, commentez, créez des connexions avant le premier contact commercial.</p><div class="callout blue" style="padding:8px 12px;margin-top:10px;font-size:.76rem">Alex publie chaque semaine un conseil sur LinkedIn → ses prospects arrivent pré-convaincus.</div></div>
+   <div class="card gold"><div class="card-icon">🌐</div><h3>Omnicanal</h3><p>Un client peut débuter en ligne, continuer en WhatsApp et conclure en magasin. Chaque point de contact doit être cohérent et mémorable.</p><div class="callout gold" style="padding:8px 12px;margin-top:10px;font-size:.76rem">Mme Dupont voit une pub Instagram → envoie un DM → visite le magasin → Alex est déjà au courant.</div></div>
+   <div class="card green"><div class="card-icon">💎</div><h3>Intelligence Émotionnelle</h3><p>Gérer ses émotions + percevoir celles du client = superpower commercial. Un client qui se sent compris achète même plus cher.</p><div class="callout green" style="padding:8px 12px;margin-top:10px;font-size:.76qurem">Alex détecte que M. Chen est stressé → ralentit le rythme → installe la confiance → vente conclue.</div></div>
+   </div>
+   <div class="callout purple" style="margin-top:16px"><div class="callout-icon">🔢</div><div>Acquérir un nouveau client coûte <strong>5 à 7 fois plus cher</strong> que de conserver un client existant. La fidélisation n'est pas une option sentimentale — c'est la stratégie de rentabilité la plus puissante.</div></div>`},
+
+  {type:'quiz',chIdx:5,
+   questions:[
+     {q:"M. Benali demande : 'La livraison prend combien de temps ?' en plein milieu de votre présentation. C'est :",
+      opts:["Une interruption à gérer poliment","Un signal d'achat verbal à saisir pour avancer vers la conclusion","Une question technique sans importance commerciale","Un signe que le client veut partir"],
+      ans:1,fb:"Les questions logistiques sont des signaux d'achat classiques ! Le client se projette dans l'achat. Répondez clairement et enchaînez : 'Livraison sous 48h. On établit le bon de commande maintenant ?'"},
+     {q:"Alex dit : 'Vous préférez la version rouge ou bleue ?' Quelle technique utilise-t-il ?",
+      opts:["Technique de la rareté","Reformulation positive","Technique de l'alternative","Question de contrôle"],
+      ans:2,fb:"C'est la technique de l'alternative : Alex propose deux options d'achat. Le client choisit comment acheter, pas s'il achète. C'est une technique de closing élégante qui respecte l'autonomie du client."},
+     {q:"Pourquoi le Social Selling est-il devenu indispensable ?",
+      opts:["Parce que les réseaux sociaux sont gratuits","Parce que 78% des vendeurs qui le pratiquent dépassent leurs objectifs et les prospects arrivent pré-engagés","Parce que c'est obligatoire dans les entreprises","Parce que ça remplace entièrement les entretiens en face à face"],
+      ans:1,fb:"Le Social Selling crée une relation de confiance AVANT le premier contact commercial. Le prospect découvre votre expertise, partage vos contenus, et arrive déjà convaincu. C'est le 'pull marketing' appliqué à la vente."}
+   ]
+  }
+]},
+
+/* ── CERT ── */
+{id:'cert',icon:'🏆',name:'Certification',meta:'Résultats finaux',color:'#F5A623',xp:0,
+slides:[{type:'certificate'}]}
+];
+
+/* ════ FUNNEL DATA ════ */
+const FUNNEL=[
+  {i:'🎯',l:'Cibler',d:'Identifier ses segments prioritaires',c:'#1E5EFF'},
+  {i:'📣',l:'Attirer',d:'Capter l\'attention via les bons canaux',c:'#FF6340'},
+  {i:'🔄',l:'Convertir',d:'Transformer l\'intérêt en décision d\'achat',c:'#F5A623'},
+  {i:'🤝',l:'Conclure',d:'Signer et officialiser la transaction',c:'#00C896'},
+  {i:'❤️',l:'Fidéliser',d:'Transformer le client en ambassadeur',c:'#FF4D8B'}
+];
+
+/* ════ TIMELINE DATA ════ */
+const TL_STEPS=[
+  {n:'1',t:'Préparation',d:'Rechercher le profil client, fixer ses objectifs, préparer argumentaire + réponses aux objections.',ex:'Alex vérifie l\'historique CRM de M. Leclerc avant de le rappeler.',c:'#1E5EFF'},
+  {n:'2',t:'Accueil & 1er contact',d:'Créer la confiance en 7 secondes. Sourire, posture ouverte, appeler par le nom.',ex:'"Bonjour M. Leclerc, je suis Alex. Merci de prendre ce temps — installez-vous."',c:'#FF6340'},
+  {n:'3',t:'Découverte des besoins',d:'La phase la plus stratégique. Questions ouvertes, écoute active, identification SAC/COINS.',ex:'"Qu\'est-ce qui vous a amené à nous contacter aujourd\'hui ?"',c:'#F5A623'},
+  {n:'4',t:'Reformulation',d:'Synthétiser et valider AVANT d\'argumenter. Évite les argumentaires hors-cible.',ex:'"Si je vous comprends bien, votre priorité c\'est la durabilité et la simplicité d\'usage — c\'est ça ?"',c:'#00C896'},
+  {n:'5',t:'Argumentation CAP',d:'Lier chaque caractéristique à un avantage client ET une preuve. Personnaliser.',ex:'"Ce modèle [C] dure 12 ans en moyenne [A = durabilité que vous cherchez], confirmé par 89% de nos clients [P]."',c:'#FF4D8B'},
+  {n:'6',t:'Traitement des objections',d:'Accueillir, questionner, reformuler, répondre. Ne jamais réfuter frontalement.',ex:'"Je comprends. Quand vous dites trop cher, c\'est par rapport à votre budget ou à un autre produit ?"',c:'#FF4D6D'},
+  {n:'7',t:'Conclusion & Suivi',d:'Détecter les signaux d\'achat, choisir la technique de closing, confirmer et assurer le suivi.',ex:'"On part sur cette option ? Je prépare la livraison pour lundi ?"',c:'#1E5EFF'}
+];
+
+const TL_QUESTIONS=[
+  {n:'1',t:'Ouverte',d:'Invite à développer librement. Commence par Qui/Quoi/Comment/Pourquoi. Idéale en début de découverte.',ex:'"Qu\'est-ce qui vous a amené à chercher cette solution aujourd\'hui ?"',c:'#1E5EFF'},
+  {n:'2',t:'Fermée',d:'Appel à oui/non. Utile pour confirmer, qualifier, avancer. À ne pas surutiliser.',ex:'"Avez-vous un budget défini pour ce projet ?"',c:'#FF6340'},
+  {n:'3',t:'Miroir',d:'Répéter les derniers mots avec une légère inflexion montante. Invite à préciser sans diriger.',ex:'Client : "La fiabilité." Alex : "...La fiabilité ?"',c:'#F5A623'},
+  {n:'4',t:'Ricochet',d:'Rebondir sur un mot-clé. Approfondit sans imposer une direction.',ex:'"Vous mentionnez la flexibilité — c\'est-à-dire pour vous ?"',c:'#00C896'},
+  {n:'5',t:'Relais',d:'Renvoyer la question au client. Co-construction de la solution.',ex:'"Qu\'est-ce qui serait idéal pour vous dans ce cas ?"',c:'#FF4D8B'},
+  {n:'6',t:'De contrôle',d:'Vérifier la compréhension mutuelle. Évite les quiproquos avant l\'argumentation.',ex:'"Je comprends bien que votre priorité numéro 1 c\'est la durabilité ?"',c:'#FF4D6D'},
+  {n:'7',t:'D\'orientation',d:'Guider vers la solution. Engage vers la conclusion. Utilisée au bon moment.',ex:'"Si on résolvait ce problème de délai, est-ce que l\'offre vous correspondrait ?"',c:'#1E5EFF'}
+];
+
+
+/* ════ NAVIGATION ════ */
+function nav(dir){
+  const ch=CHS[S.ch];
+  const ns=S.sl+dir;
+  if(dir===1&&ns>=ch.slides.length){
+    if(S.ch<CHS.length-1){
+      if(!S.done.includes(S.ch)){
+        S.done.push(S.ch);
+        if(ch.xp>0){addXP(ch.xp,true);launchConfetti();}
+      }
+      S.ch++;S.sl=0;
+    }
+  } else if(dir===-1&&ns<0){
+    if(S.ch>0){S.ch--;S.sl=CHS[S.ch].slides.length-1;}
+  } else {S.sl=ns;}
+  markVisit();save();renderAll();
+}
+
+function goC(ci){S.ch=ci;S.sl=0;markVisit();save();renderAll();}
+function goS(ci,si){S.ch=ci;S.sl=si;markVisit();save();renderAll();}
+
+function markVisit(){
+  const k=`${S.ch}-${S.sl}`;
+  if(!S.visited[k]){S.visited[k]=true;addXP(5,false);}
+}
+
+/* ════ SIDEBAR ════ */
+function renderSB(){
+  const el=document.getElementById('sb-list');
+  el.innerHTML=CHS.map((ch,ci)=>{
+    const act=ci===S.ch;
+    const dn=S.done.includes(ci);
+    const sc=S.quizScores[ci]||0;
+    const stars=dn?(sc>=3?'⭐⭐⭐':sc>=2?'⭐⭐':sc>=1?'⭐':''):'';
+    let dots='';
+    if(act){
+      dots='<div class="sb-dots">'+ch.slides.map((_,si)=>{
+        const k=`${ci}-${si}`;
+        let c='dot';
+        if(S.visited[k])c+=' vis';
+        if(ci===S.ch&&si===S.sl)c='dot cur';
+        if(dn)c='dot done';
+        return `<div class="${c}" onclick="goS(${ci},${si})"></div>`;
+      }).join('')+'</div>';
+    }
+    return `<div class="sb-item ${act?'active':''} ${dn?'done':''}" onclick="goC(${ci})">
+      <div class="sb-icon" style="background:${ch.color}18">${ch.icon}</div>
+      <div class="sb-info"><div class="sb-name">${ch.name}</div><div class="sb-meta">${ch.meta}</div></div>
+      <div class="sb-stars">${stars}</div>
+    </div>${dots}`;
+  }).join('');
+}
+
+/* ════ NAV FOOTER ════ */
+function renderFoot(){
+  const tot=CHS.reduce((a,c)=>a+c.slides.length,0);
+  let cur=0;for(let i=0;i<S.ch;i++)cur+=CHS[i].slides.length;cur+=S.sl+1;
+  document.getElementById('sl-cur').textContent=cur;
+  document.getElementById('sl-tot').textContent=tot;
+  document.getElementById('nav-pfill').style.width=Math.round(cur/tot*100)+'%';
+  document.getElementById('btn-prev').disabled=S.ch===0&&S.sl===0;
+  const last=S.ch===CHS.length-1&&S.sl===CHS[S.ch].slides.length-1;
+  document.getElementById('btn-next').textContent=last?'Terminer ✓':'Suivant →';
+  document.getElementById('hdr-chapter').textContent=CHS[S.ch].name;
+}
+
+/* ════ SLIDE BUILDER ════ */
+function renderAll(){renderSB();renderFoot();updateHUD();renderSlide();}
+
+function renderSlide(){
+  const area=document.getElementById('slide-wrap');
+  area.innerHTML='';
+  const d=document.createElement('div');
+  d.className='s-enter';
+  const sl=CHS[S.ch].slides[S.sl];
+  d.innerHTML=buildSlide(sl);
+  area.appendChild(d);
+  // post-render
+  if(document.getElementById('funnel'))buildFunnel();
+  if(document.getElementById('tl-steps'))buildTL('tl-steps',TL_STEPS);
+  if(document.getElementById('tl-questions'))buildTL('tl-questions',TL_QUESTIONS);
+  if(sl.type==='flipcards')initFlipCards(sl);
+  if(sl.type==='dragdrop')initDD(sl);
+  if(sl.type==='scenario')initScenario(sl,0);
+  if(sl.type==='quiz')initQuiz(sl);
+}
+
+function buildSlide(sl){
+  switch(sl.type){
+    case 'welcome': return buildWelcome();
+    case 'objectives': return buildObjectives();
+    case 'guide': return buildGuide();
+    case 'ch-intro': return buildChIntro(sl);
+    case 'content': return `<div style="max-width:860px;margin:0 auto"><h1 class="page-title">${sl.title}</h1>${sl.body}</div>`;
+    case 'flipcards': return buildFlipCards(sl);
+    case 'dragdrop': return buildDD(sl);
+    case 'scenario': return buildScenario(sl);
+    case 'quiz': return buildQuizShell(sl);
+    case 'certificate': return buildCert();
+    default: return '';
+  }
+}
+
+function buildWelcome(){return `<div class="welcome-hero">
+  <div class="w-tag">✦ Formation Premium ETAGIA · 2025</div>
+  <div class="w-hero-img">🎯</div>
+  <h1 class="w-title">L'Art de<br><span>Vendre & Conseiller</span></h1>
+  <p class="w-sub">Maîtrisez les techniques commerciales modernes. Devenez le conseiller vendeur que vos clients cherchent.</p>
+  <div class="w-stats">
+    <div class="w-stat"><div class="v">5</div><div class="l">Chapitres</div></div>
+    <div class="w-stat"><div class="v">5h</div><div class="l">Microlearning</div></div>
+    <div class="w-stat"><div class="v">1 500</div><div class="l">XP à gagner</div></div>
+    <div class="w-stat"><div class="v">8</div><div class="l">Badges</div></div>
+    <div class="w-stat"><div class="v">5</div><div class="l">Niveaux</div></div>
+  </div>
+  <button class="btn btn-gold" onclick="nav(1)" style="font-size:1rem;padding:14px 36px;margin-top:8px">Commencer le module →</button>
+</div>`;}
+
+function buildObjectives(){return `<div style="max-width:680px;margin:0 auto">
+  <div class="w-tag" style="margin-bottom:24px">🎯 Ce que vous allez maîtriser</div>
+  <h1 class="page-title">Vos objectifs pédagogiques</h1>
+  <p class="page-sub">5 chapitres, 5 compétences clés, du savoir à l'action.</p>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-dot" style="background:#FF6340;color:#fff">1</div><div class="tl-body"><h4>L'ADN du Conseiller Vendeur</h4><p>Rôle, posture, compétences, indicateurs de performance.</p></div></div>
+    <div class="tl-item"><div class="tl-dot" style="background:#F5A623;color:#fff">2</div><div class="tl-body"><h4>Décoder les Motivations d'Achat</h4><p>SAC (rationnel), COINS (émotionnel), tunnel de vente.</p></div></div>
+    <div class="tl-item"><div class="tl-dot" style="background:#00C896;color:#fff">3</div><div class="tl-body"><h4>Maîtriser l'Entretien de Vente</h4><p>7 étapes, méthode CAP, traitement des objections.</p></div></div>
+    <div class="tl-item"><div class="tl-dot" style="background:#FF4D8B;color:#fff">4</div><div class="tl-body"><h4>L'Art de l'Écoute Active</h4><p>10 commandements, 7 types de questions, reformulation.</p></div></div>
+    <div class="tl-item"><div class="tl-dot" style="background:#1E5EFF;color:#fff">5</div><div class="tl-body"><h4>Conclure & Fidéliser</h4><p>Signaux d'achat, closing, Social Selling, fidélisation.</p></div></div>
+  </div>
+</div>`;}
+
+function buildGuide(){return `<div style="max-width:680px;margin:0 auto;text-align:center">
+  <div style="font-size:5rem;margin-bottom:16px">🧭</div>
+  <h1 class="page-title">Votre fil rouge : Alex</h1>
+  <p class="page-sub">Tout au long de ce module, vous suivez Alex — nouveau conseiller vendeur — dans ses défis quotidiens.</p>
+  <div class="grid-3">
+    <div class="card blue"><div class="card-icon">📍</div><h3>Situation</h3><p>Alex vient d'intégrer une enseigne premium. Premier jour, premières ventes, premières erreurs.</p></div>
+    <div class="card gold"><div class="card-icon">🎯</div><h3>Votre rôle</h3><p>L'accompagner, choisir ses réponses, apprendre de ses succès et de ses erreurs.</p></div>
+    <div class="card green"><div class="card-icon">🏆</div><h3>Objectif final</h3><p>Valider toutes les compétences d'Alex et décrocher la Certification ETAGIA.</p></div>
+  </div>
+  <div class="callout blue" style="margin-top:20px;text-align:left"><div class="callout-icon">💡</div><div><strong>Conseils :</strong> Complétez les chapitres dans l'ordre. Chaque activité rapporte des XP. Les quiz ont un système de cœurs — 3 erreurs et vous repassez l'activité. Votre progression est auto-sauvegardée.</div></div>
+  <button class="btn btn-blue" onclick="nav(1)" style="margin-top:20px">C'est parti avec Alex →</button>
+</div>`;}
+
+function buildChIntro(sl){
+  const vid=sl.video?`<div class="video-ph" onclick="showToast('🎬','Vidéo HeyGen AI','${sl.video.title} · ${sl.video.dur} — Intégrable dans votre LMS')">
+    <div class="vph-icon">▶️</div><h4>${sl.video.title}</h4>
+    <p>Vidéo IA ETAGIA · ${sl.video.dur}</p>
+    <span class="vph-tag">🤖 HeyGen · Avatar IA · Cliquer pour plus d'infos</span></div>`:'';
+  const chips=sl.objs.map((o,i)=>`<span class="chip ${i===0?'chip-blue':i===1?'chip-green':'chip-gold'}">${o}</span>`).join('');
+  return `<div style="max-width:800px;margin:0 auto">${vid}
+  <div class="ch-intro-wrap"><div class="ch-num" style="background:${sl.color}">${sl.num}</div>
+  <div class="ch-intro-info"><h2>${sl.title}</h2><p>${sl.sub}</p>
+  <div class="chips">${chips}</div></div></div></div>`;}
+
+function buildFunnel(){
+  const el=document.getElementById('funnel');if(!el)return;
+  const ws=[100,84,70,56,44];
+  el.innerHTML=FUNNEL.map((f,i)=>`
+  <div class="f-step" style="background:${f.c}12;border-color:${f.c}35;width:${ws[i]}%;max-width:600px">
+    <span class="fi">${f.i}</span><span class="fl" style="color:${f.c}">${f.l}</span><span class="fd">${f.d}</span>
+  </div><div class="f-arrow">▼</div>`).join('').replace(/<div class="f-arrow">▼<\/div>$/,'');}
+
+function buildTL(id,items){
+  const el=document.getElementById(id);if(!el)return;
+  el.innerHTML=items.map(it=>`<div class="tl-item">
+    <div class="tl-dot" style="background:${it.c};color:#fff">${it.n}</div>
+    <div class="tl-body"><h4>${it.t}</h4><p>${it.d}</p>${it.ex?`<div class="tl-ex">💬 Exemple : <em>${it.ex}</em></div>`:''}</div>
+  </div>`).join('');}
+
+/* ════ FLIP CARDS ════ */
+function buildFlipCards(sl){return `<div style="max-width:860px;margin:0 auto">
+  <h1 class="page-title">🃏 ${sl.title}</h1>
+  <p class="page-sub">${sl.meta}</p>
+  <div class="fc-activity"><div class="fc-grid" id="fc-grid"></div>
+  <div class="fc-progress"><span id="fc-count">0 / ${sl.cards.length} retournées</span>
+  <div style="flex:1;height:5px;background:var(--border);border-radius:5px;overflow:hidden"><div id="fc-prog" style="height:100%;background:var(--green);border-radius:5px;transition:width .4s;width:0%"></div></div>
+  </div></div></div>`;}
+
+function initFlipCards(sl){
+  const grid=document.getElementById('fc-grid');if(!grid)return;
+  let flipped=0;
+  grid.innerHTML=sl.cards.map((c,i)=>`<div class="fc-card" id="fcc-${i}" onclick="flipCard(${i},${sl.cards.length})">
+    <div class="fc-inner"><div class="fc-front"><div class="fc-emoji">${c.emoji}</div><div class="fc-term">${c.term}</div><div style="font-size:.7rem;opacity:.75;margin-top:6px">Cliquez pour révéler</div></div>
+    <div class="fc-back"><div style="font-family:'Sora',sans-serif;font-weight:700;font-size:.82rem;margin-bottom:6px;color:var(--dark)">${c.term}</div>
+    <div class="fc-def">${c.def}</div><div class="fc-ex">${c.ex}</div></div>
+    </div></div>`).join('');
+  window._fcFlipped={};}
+
+function flipCard(i,tot){
+  const card=document.getElementById(`fcc-${i}`);if(!card)return;
+  card.classList.toggle('flipped');
+  if(card.classList.contains('flipped')){
+    window._fcFlipped[i]=true;addXP(10,true);
+    const count=Object.keys(window._fcFlipped).length;
+    document.getElementById('fc-count').textContent=`${count} / ${tot} retournées`;
+    document.getElementById('fc-prog').style.width=Math.round(count/tot*100)+'%';
+    if(count===tot)showToast('🎉','Toutes les cartes retournées !','Activité complète · +10 XP bonus');
+  }}
+
+/* ════ DRAG & DROP ════ */
+let ddDragging=null;
+function buildDD(sl){return `<div style="max-width:860px;margin:0 auto">
+  <h1 class="page-title">🔗 ${sl.title}</h1>
+  <p class="page-sub">${sl.meta}</p>
+  <div class="dd-activity"><div class="dd-layout">
+    <div><h4 style="font-size:.82rem;font-weight:700;margin-bottom:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Phrases clients</h4>
+    <div class="dd-phrases" id="dd-phrases"></div></div>
+    <div><h4 style="font-size:.82rem;font-weight:700;margin-bottom:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Catégories</h4>
+    <div class="dd-zones" id="dd-zones"></div></div>
+  </div>
+  <div id="dd-result" class="dd-result">✅ Excellent ! Toutes les associations sont correctes ! +50 XP</div>
+  </div></div>`;}
+
+function initDD(sl){
+  const ph=document.getElementById('dd-phrases');
+  const zn=document.getElementById('dd-zones');
+  if(!ph||!zn)return;
+  window._ddSl=sl;window._ddCorrect=0;
+  ph.innerHTML=sl.items.map(it=>`<div class="dd-phrase" id="ddp-${it.id}" draggable="true" data-id="${it.id}" data-cat="${it.cat}"
+    ondragstart="ddStart(event)" ondragend="ddEnd(event)">${it.text}</div>`).join('');
+  zn.innerHTML=sl.zones.map(z=>`<div class="dd-zone" id="ddz-${z.id}" data-zone="${z.id}"
+    ondragover="ddOver(event)" ondragleave="ddLeave(event)" ondrop="ddDrop(event)">
+    <h4 style="color:${z.color}">${z.icon} ${z.label}</h4>
+    <div id="ddd-${z.id}"></div>
+  </div>`).join('');}
+
+function ddStart(e){ddDragging=e.target;e.target.classList.add('dragging');}
+function ddEnd(e){e.target.classList.remove('dragging');}
+function ddOver(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+function ddLeave(e){e.currentTarget.classList.remove('drag-over');}
+function ddDrop(e){
+  e.preventDefault();const zone=e.currentTarget;zone.classList.remove('drag-over');
+  if(!ddDragging)return;
+  const id=ddDragging.dataset.id;const cat=ddDragging.dataset.cat;
+  const zoneCat=zone.dataset.zone;
+  const sl=window._ddSl;
+  const item=sl.items.find(it=>it.id===id);
+  const correct=cat===zoneCat;
+  ddDragging.classList.add('placed');
+  const dropped=document.createElement('div');
+  dropped.className=`dropped ${correct?'':'wrong'}`;
+  dropped.innerHTML=`<span>${correct?'✅':'❌'}</span><span style="flex:1">${item.text.substring(0,50)}...</span><span style="font-size:.7rem;font-weight:700">${item.catLabel}</span>`;
+  document.getElementById(`ddd-${zoneCat}`).appendChild(dropped);
+  if(correct){window._ddCorrect++;addXP(15,true);}
+  const total=sl.items.length;
+  const allDone=document.querySelectorAll('.dd-phrase.placed').length===total;
+  if(allDone){
+    const allCorrect=window._ddCorrect===total;
+    const r=document.getElementById('dd-result');
+    r.textContent=allCorrect?'✅ Parfait ! Toutes les associations sont correctes ! +50 XP':'⚠️ Quelques erreurs. Revoyez SAC vs COINS pour mieux distinguer rationnel et émotionnel.';
+    r.style.display='flex';
+    if(allCorrect)addXP(50,true);
+  }
+  ddDragging=null;}
+
+/* ════ SCENARIO ════ */
+function buildScenario(sl){return `<div style="max-width:760px;margin:0 auto">
+  <h1 class="page-title">🎭 ${sl.title}</h1>
+  <p class="page-sub">${sl.subtitle}</p>
+  <div class="scenario-wrap" id="scenario-wrap"></div>
+</div>`;}
+
+function initScenario(sl,stepIdx){
+  const wrap=document.getElementById('scenario-wrap');if(!wrap)return;
+  const step=sl.steps[stepIdx];
+  const pastChats=window._scChats||'';
+  const clientMsg=`<div class="chat-msg">
+    <div class="chat-avatar av-client">👤</div>
+    <div><div class="chat-name">Client</div><div class="chat-bubble client">${step.msg}</div></div>
+  </div>`;
+  wrap.innerHTML=`<div class="scenario-header"><h3>Situation réelle avec Alex</h3><p>Étape ${stepIdx+1} sur ${sl.steps.length}</p></div>
+  <div class="scenario-chat" id="sc-chat">${pastChats}${clientMsg}</div>
+  <div class="scenario-choices"><h4>Que répond Alex ?</h4>
+    ${step.choices.map((c,ci)=>`<button class="choice-btn" id="sc-btn-${ci}" onclick="pickChoice(${ci},${stepIdx},${sl.steps.length})" data-ok="${c.ok}" data-fb="${c.fb.replace(/'/g,"&#39;")}">${c.text}</button>`).join('')}
+  </div>
+  <div class="scenario-fb" id="sc-fb"></div>`;}
+
+function pickChoice(ci,stepIdx,total){
+  const sl=CHS[S.ch].slides[S.sl];
+  const step=sl.steps[stepIdx];
+  const choice=step.choices[ci];
+  document.querySelectorAll('.choice-btn').forEach(b=>{b.disabled=true;});
+  document.getElementById(`sc-btn-${ci}`).classList.add(choice.ok?'correct':'wrong');
+  const fb=document.getElementById('sc-fb');
+  fb.className=`scenario-fb show ${choice.ok?'ok':'bad'}`;
+  fb.textContent=choice.fb;
+  if(choice.ok){addXP(25,true);}else{loseHeart();}
+  if(choice.ok&&stepIdx+1<total){
+    const alexMsg=`<div class="chat-msg alex">
+      <div class="chat-avatar av-alex">🧑</div>
+      <div><div class="chat-name" style="text-align:right">Alex</div><div class="chat-bubble alex">${step.choices[ci].text}</div></div>
+    </div>`;
+    window._scChats=(window._scChats||'')+`<div class="chat-msg"><div class="chat-avatar av-client">👤</div><div><div class="chat-name">Client</div><div class="chat-bubble client">${step.msg}</div></div></div>${alexMsg}`;
+    setTimeout(()=>{window._scChats='';initScenario(sl,stepIdx+1);},1800);
+  }}
+
+/* ════ QUIZ ════ */
+let qIdx=0,qAnswered=false;
+function buildQuizShell(sl){
+  qIdx=0;qAnswered=false;
+  const done=sl.chIdx in S.quizScores;
+  if(done) return buildQuizResult(sl.chIdx);
+  return buildQBlock(sl,0);}
+
+function buildQBlock(sl,qi){
+  const q=sl.questions[qi];
+  const pct=Math.round(qi/sl.questions.length*100);
+  const letters=['A','B','C','D'];
+  return `<div class="quiz-wrap"><div class="quiz-hud">
+    <span style="font-size:.78rem;font-weight:700;color:var(--muted)">Q${qi+1}/${sl.questions.length}</span>
+    <div class="quiz-prog-bar"><div class="quiz-prog-fill" style="width:${pct}%"></div></div>
+    <div class="quiz-hearts">${'❤️'.repeat(S.hearts)+'🖤'.repeat(Math.max(0,HEARTS_MAX-S.hearts))}</div>
+  </div>
+  <p class="quiz-q">❓ ${q.q}</p>
+  <div class="quiz-opts">${q.opts.map((o,oi)=>`<div class="q-opt" id="qo-${oi}" onclick="pickQ(${sl.chIdx},${qi},${oi},${q.ans},${sl.questions.length})">
+    <span class="q-letter">${letters[oi]}</span><span>${o}</span></div>`).join('')}
+  </div><div class="quiz-fb" id="qfb"></div>
+  <div id="q-next"></div></div>`;}
+
+function pickQ(chIdx,qi,ai,correct,total){
+  if(qAnswered)return;qAnswered=true;
+  const ok=ai===correct;
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{
+    el.classList.add('answered');
+    if(i===correct)el.classList.add('correct');
+    else if(i===ai&&!ok)el.classList.add('wrong');
+  });
+  const fb=document.getElementById('qfb');
+  const sl=CHS[S.ch].slides[S.sl];
+  fb.className=`quiz-fb show ${ok?'ok':'bad'}`;
+  fb.textContent=(ok?'✅ ':'❌ ')+sl.questions[qi].fb;
+  const k=`${chIdx}-${qi}`;
+  S.quizAnswers[k]={a:ai,ok};
+  if(ok)addXP(25,true);else loseHeart();
+  const nx=document.getElementById('q-next');
+  if(qi+1<total){
+    nx.innerHTML=`<button class="btn btn-blue" style="margin-top:16px" onclick="nextQ(${chIdx},${qi+1},${total})">Question suivante →</button>`;
+  } else {
+    let score=0;for(let i=0;i<total;i++){const k2=`${chIdx}-${i}`;if(S.quizAnswers[k2]&&S.quizAnswers[k2].ok)score++;}
+    S.quizScores[chIdx]=score;save();
+    nx.innerHTML=`<button class="btn btn-blue" style="margin-top:16px" onclick="finQ(${chIdx},${score})">Voir mes résultats →</button>`;
+  }save();}
+
+function nextQ(ci,qi,total){
+  qAnswered=false;
+  const sl=CHS[ci].slides.find(s=>s.type==='quiz');
+  document.getElementById('slide-wrap').innerHTML=`<div class="s-enter" style="max-width:860px;margin:0 auto">${buildQBlock(sl,qi)}</div>`;}
+
+function finQ(ci,score){
+  document.getElementById('slide-wrap').innerHTML=`<div class="s-enter">${buildQuizResult(ci)}</div>`;}
+
+function buildQuizResult(ci){
+  const sc=S.quizScores[ci]||0;const tot=3;
+  const pct=Math.round(sc/tot*100);
+  const stars=sc>=3?'⭐⭐⭐':sc>=2?'⭐⭐':sc>=1?'⭐':'';
+  const msg=pct===100?'Score parfait ! 🏆':pct>=66?'Très bien ! 👍':pct>=33?'En progression 📈':'À retravailler 💪';
+  return `<div class="ch-complete">
+    <div class="big-icon">${pct===100?'🏆':pct>=66?'⭐':'💪'}</div>
+    <div class="stars-row">${stars}</div>
+    <h2>${msg}</h2><p>Chapitre ${ci} · ${sc}/${tot} bonnes réponses</p>
+    <div class="xp-gained">⚡ ${sc*25} XP gagnés</div>
+    <br><button class="btn btn-blue" onclick="nav(1)">Continuer →</button>
+  </div>`;}
+
+function buildCert(){
+  const ub=BADGES.filter(b=>S.badges[b.id]);
+  const allQ=Object.values(S.quizScores);
+  const avgPct=allQ.length?Math.round(allQ.reduce((a,b)=>a+b,0)/(allQ.length*3)*100):0;
+  return `<div style="max-width:700px;margin:0 auto">
+    <div style="text-align:center;margin-bottom:24px"><div style="font-size:4rem">🎓</div>
+    <h1 class="page-title" style="text-align:center">Félicitations !</h1>
+    <p class="page-sub" style="text-align:center">Module complété · Certification ETAGIA obtenue</p></div>
+    <div class="cert">
+      <div class="cert-logo">ET<em>A</em>GIA</div>
+      <div class="cert-divider"></div>
+      <div class="cert-tag">Certifie que</div>
+      <div class="cert-name">L'Apprenant</div>
+      <div class="cert-module">a complété avec succès le module<br><strong>L'Art de Vendre & Conseiller</strong></div>
+      <div class="cert-badges">
+        <div class="cert-badge">⚡ ${S.xp} XP</div>
+        <div class="cert-badge" style="background:var(--green-soft);color:#005a42">📊 ${avgPct}%</div>
+        <div class="cert-badge" style="background:var(--gold-soft);color:#9a6200">🏅 ${ub.length} badges</div>
+        <div class="cert-badge" style="background:var(--coral-soft);color:var(--coral)">${getLevelObj(S.xp).name}</div>
+      </div>
+      <div class="cert-divider"></div>
+      <div style="font-size:.75rem;color:var(--muted)">ETAGIA · Formation Professionnelle · ${new Date().toLocaleDateString('fr-FR')}</div>
+    </div>
+    <h3 class="sec-title" style="margin-top:32px">Vos badges</h3>
+    <div class="badge-grid">${BADGES.map(b=>`<div class="badge-card ${S.badges[b.id]?'unlocked':''}">
+      <div class="bi">${b.icon}</div><div class="bn">${b.name}</div></div>`).join('')}</div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn btn-out" onclick="if(confirm('Recommencer ?')){localStorage.removeItem('e2');location.reload()}">🔄 Recommencer</button>
+    </div>
+  </div>`;}
+
+/* ════ INIT ════ */
+document.addEventListener('DOMContentLoaded',()=>{
+  load();markVisit();renderAll();checkBadges();
+  // Update streak
+  const today=new Date().toDateString();
+  const last=localStorage.getItem('e2_last');
+  if(last&&last!==today){
+    const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+    if(last===yesterday.toDateString())S.streak++;else S.streak=1;
+  }
+  localStorage.setItem('e2_last',today);
+  updateHUD();
+});
+</script>
+</body>
+</html>
