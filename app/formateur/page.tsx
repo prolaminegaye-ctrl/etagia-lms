@@ -131,7 +131,7 @@ export default function FormateurPage(){
         <div>
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1rem'}}>
             <h2 style={{fontSize:'15px',fontWeight:'800',color:'#1C1917'}}>Mes cours</h2>
-            <button onClick={()=>router.push('/formateur/cours')} style={{background:'none',border:'none',fontSize:'12px',color:'#E8651A',fontWeight:'700',cursor:'pointer'}}>Voir tout →</button>
+            <button onClick={()=>router.push('/formateur/mes-cours')} style={{background:'none',border:'none',fontSize:'12px',color:'#E8651A',fontWeight:'700',cursor:'pointer'}}>Voir tout →</button>
           </div>
           <div style={{display:'flex',flexDirection:'column',gap:'0.625rem'}}>
             {[
@@ -167,7 +167,7 @@ export default function FormateurPage(){
                   </div>
                 </div>}
                 <span style={{fontSize:'11px',fontWeight:'700',padding:'4px 12px',borderRadius:'20px',background:c.status==='Publié'?'rgba(0,191,165,0.10)':'rgba(255,179,0,0.10)',color:c.status==='Publié'?'#00BFA5':'#CC8800',flexShrink:0}}>{c.status}</span>
-                <button onClick={()=>router.push('/formateur/cours')} style={{background:'linear-gradient(135deg,#E8651A,#D4A017)',border:'none',borderRadius:'9px',padding:'7px 16px',color:'#fff',fontSize:'11px',fontWeight:'700',cursor:'pointer',flexShrink:0}}>Gérer →</button>
+                <button onClick={()=>router.push('/formateur/mes-cours')} style={{background:'linear-gradient(135deg,#E8651A,#D4A017)',border:'none',borderRadius:'9px',padding:'7px 16px',color:'#fff',fontSize:'11px',fontWeight:'700',cursor:'pointer',flexShrink:0}}>Gérer →</button>
               </div>
             ))}
           </div>
