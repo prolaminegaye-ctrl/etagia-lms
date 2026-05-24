@@ -655,4 +655,121 @@ managers politiques, tout professionnel voulant passer au niveau supérieur.
   fileDataUrl: '/modules/MODULE_12_Outils_Strategies_Leader.pdf',
   fileName: 'MODULE_12_Outils_Strategies_Leader.pdf',
 },
+
+  {
+    id: 'et_ebook01',
+    type: 'livre',
+    author: 'ETAGIA Learning',
+    price: 14900,
+    cover: '🎓',
+    title: "L'Intelligence Artificielle au Service des Éducateurs",
+    desc: "Guide complet pour comprendre, adopter et maîtriser l'IA dans l'éducation. Basé sur Microsoft Learn, enrichi pour l'Afrique francophone.",
+    longDesc: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 eBOOK PREMIUM ETAGIA
+L'INTELLIGENCE ARTIFICIELLE AU SERVICE DES ÉDUCATEURS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Du débutant à l'initié : 32 pages denses pour transformer votre pratique pédagogique grâce à l'IA, avec des exemples concrets contextualisés pour l'Afrique francophone.
+
+CHAPITRES :
+1. Qu'est-ce que l'Intelligence Artificielle ? (définition, histoire, types)
+2. L'IA Générative — La Révolution Créative (comparatif outils, méthode SIFT)
+3. Les Grands Modèles de Langage (LLM) — Cadre CRTF de prompting
+4. Génération d'Images par IA (usages pédagogiques créatifs)
+5. L'IA dans l'Éducation (réduction charge, personnalisation)
+6. Outils IA, Accessibilité & Inclusion (contexte africain)
+7. IA Responsable : Éthique & Pensée Critique (6 principes Microsoft)
+
+BONUS INCLUS :
+✅ Glossaire 20 termes clés
+✅ 3 exercices pratiques (tableau de bord IA, fiche de cours, plan d'intégration)
+✅ 2 études de cas africaines (Dakar, Abidjan)
+✅ 30+ prompts prêts à l'emploi
+✅ Workflow PACO & boîte à outils complète
+
+Basé sur le parcours officiel Microsoft Learn — enrichi et augmenté.
+© ETAGIA Learning 2025 — Licence accordée à l'acheteur
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    shortLongDesc: "De ChatGPT à Copilot, des LLM aux images IA : 7 chapitres + 30 prompts + études de cas africaines pour faire de vous un éducateur augmenté.",
+    rating: 4.9,
+    sales: 0,
+    pages: 32,
+    fileSize: 'PDF · 32 pages · 170 KB',
+    tags: ["IA", "éducation", "ChatGPT", "Copilot", "prompts", "Microsoft Learn", "Afrique", "éducateur"],
+    status: 'published',
+    new: true,
+    featured: true,
+    bestseller: true,
+    chapitres: [
+      "Qu'est-ce que l'Intelligence Artificielle ?",
+      "L'IA Générative : La Révolution Créative",
+      "Les Grands Modèles de Langage (LLM) & Cadre CRTF",
+      "Génération d'Images par IA",
+      "L'IA dans l'Éducation",
+      "Outils IA, Accessibilité & Inclusion",
+      "IA Responsable : Éthique & Pensée Critique"
+    ],
+    niveau: "Débutant à intermédiaire",
+    duree: "3–4 heures de lecture",
+    createdAt: 1748300000000,
+    updatedAt: 1748300000000,
+    fileDataUrl: '/modules/EBOOK_IA_Educateurs_ETAGIA_2025.pdf',
+    fileName: 'EBOOK_IA_Educateurs_ETAGIA_2025.pdf',
+  },
+  {
+    id: 'et_ebook02',
+    type: 'livre',
+    author: 'ETAGIA Learning',
+    price: 14900,
+    cover: '🧰',
+    title: "La Boîte à Outils IA du Formateur",
+    desc: "Guide complet pour concevoir, animer et optimiser vos formations avec l'IA. Basé sur le parcours Microsoft Learn AI Toolbox for Trainers.",
+    longDesc: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 eBOOK PREMIUM ETAGIA
+LA BOÎTE À OUTILS IA DU FORMATEUR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+28 pages pour devenir un formateur augmenté par l'IA — de la conception pédagogique à l'animation, de la personnalisation à l'inclusion.
+
+MODULES :
+1. Intégrer les Outils IA dans votre Environnement de Formation (Microsoft 365 Copilot, 4 niveaux d'apprentissage)
+2. Optimiser vos Plans de Formation avec l'IA (conception, collaboration, inclusivité)
+3. Créer des Environnements d'Apprentissage Inclusifs (accessibilité, différenciation, évaluation IA)
+4. Maîtriser les Outils Concrets de Production IA (prompts CRTF, contenus visuels et multimédia)
+
+BONUS INCLUS :
+✅ Comparatif Microsoft vs Anthropic vs Google vs Canva
+✅ 2 études de cas africaines (Dakar, Abidjan, Lomé)
+✅ Glossaire 25 termes opérationnels
+✅ 4 exercices pratiques avec livrables
+✅ Checklist du formateur augmenté (50 points)
+✅ 12 modèles CRTF prêts à l'emploi
+
+Basé sur "An AI Toolbox for Trainers" (Microsoft Learn) — enrichi pour l'Afrique francophone.
+© ETAGIA Learning 2025 — Licence accordée à l'acheteur
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    shortLongDesc: "4 modules pratiques + comparatif outils IA + 12 prompts CRTF + études de cas africaines : la boîte à outils complète du formateur augmenté.",
+    rating: 4.9,
+    sales: 0,
+    pages: 28,
+    fileSize: 'PDF · 28 pages · 168 KB',
+    tags: ["IA", "formation", "formateur", "Copilot", "Microsoft 365", "prompts", "CRTF", "inclusion", "Afrique"],
+    status: 'published',
+    new: true,
+    featured: true,
+    chapitres: [
+      "Intégrer les Outils IA dans votre Environnement de Formation",
+      "Optimiser vos Plans de Formation avec l'IA",
+      "Créer des Environnements d'Apprentissage Inclusifs",
+      "Maîtriser les Outils Concrets de Production IA",
+      "Comparatif des Outils IA pour Formateurs",
+      "Études de Cas africaines et francophones"
+    ],
+    niveau: "Débutant à intermédiaire",
+    duree: "2–3 heures de lecture",
+    createdAt: 1748300000000,
+    updatedAt: 1748300000000,
+    fileDataUrl: '/modules/EBOOK_AI_Toolbox_Formateurs_ETAGIA_2025.pdf',
+    fileName: 'EBOOK_AI_Toolbox_Formateurs_ETAGIA_2025.pdf',
+  },
 ];
