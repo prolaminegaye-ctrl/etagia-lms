@@ -367,17 +367,17 @@ export default function PassBacPage() {
   })
 
   const cardStyle: React.CSSProperties = {
-    background: '#1C1917',
+    background: '#282220',
     borderRadius: '12px',
     padding: '1.2rem 1.5rem',
     marginBottom: '0.7rem',
-    border: '1px solid rgba(245,240,232,0.06)',
+    border: '1px solid rgba(245,240,232,0.1)',
     cursor: 'pointer',
     transition: 'all 0.2s',
   }
 
   const sectionStyle: React.CSSProperties = {
-    background: '#1a1512',
+    background: '#241E19',
     borderRadius: '14px',
     padding: '1.75rem',
     marginBottom: '1.5rem',
@@ -385,9 +385,9 @@ export default function PassBacPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0F0D0B', color: '#F5F0E8', fontFamily: "'Syne', sans-serif", paddingBottom: '3rem' }}>
+    <div style={{ minHeight: '100vh', background: '#1E1A16', color: '#F5F0E8', fontFamily: "'Syne', sans-serif", paddingBottom: '3rem' }}>
       {/* Header */}
-      <div style={{ background: 'linear-gradient(135deg, #1C1917 0%, #1a0800 100%)', padding: '2rem 2.5rem 0', borderBottom: '1px solid rgba(232,101,26,0.2)' }}>
+      <div style={{ background: 'linear-gradient(135deg, #2C2420 0%, #241A10 100%)', padding: '2rem 2.5rem 0', borderBottom: '1px solid rgba(232,101,26,0.2)' }}>
         <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#F5F0E8', margin: 0 }}>🎓 Mon Pass&apos;BAC</h1>
         <p style={{ color: 'rgba(245,240,232,0.45)', fontSize: '0.88rem', marginTop: '0.3rem', marginBottom: '1.5rem' }}>
           Révisions Terminale · Sénégal · Programme officiel · 8 matières
@@ -446,11 +446,11 @@ export default function PassBacPage() {
                 </button>
                 <div style={sectionStyle}>
                   <h2 style={{ color: subj.color, fontSize: '1.35rem', fontWeight: 800, marginBottom: '1rem' }}>{chapter.title}</h2>
-                  <p style={{ color: 'rgba(245,240,232,0.78)', lineHeight: 1.75, fontSize: '0.93rem', marginBottom: '1.5rem' }}>{chapter.summary}</p>
+                  <p style={{ color: 'rgba(245,240,232,0.88)', lineHeight: 1.75, fontSize: '0.93rem', marginBottom: '1.5rem' }}>{chapter.summary}</p>
                   <h3 style={{ color: '#E8651A', fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.75rem' }}>Points clés à retenir</h3>
                   <ul style={{ paddingLeft: '1.25rem', margin: 0 }}>
                     {chapter.keyPoints.map((pt, i) => (
-                      <li key={i} style={{ color: 'rgba(245,240,232,0.72)', marginBottom: '0.5rem', fontSize: '0.88rem', lineHeight: 1.65 }}>{pt}</li>
+                      <li key={i} style={{ color: 'rgba(245,240,232,0.90)', marginBottom: '0.5rem', fontSize: '0.88rem', lineHeight: 1.65 }}>{pt}</li>
                     ))}
                   </ul>
                 </div>
@@ -473,7 +473,7 @@ export default function PassBacPage() {
             ) : subj.chapters.filter(ch => ch.fiche).map(ch => (
               <div key={ch.id} style={sectionStyle}>
                 <h3 style={{ color: subj.color, fontSize: '0.95rem', fontWeight: 700, marginBottom: '1rem' }}>{ch.title}</h3>
-                <pre style={{ color: 'rgba(245,240,232,0.82)', whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: '0.86rem', lineHeight: 1.85, margin: 0 }}>
+                <pre style={{ color: 'rgba(245,240,232,0.90)', whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: '0.86rem', lineHeight: 1.85, margin: 0 }}>
                   {ch.fiche}
                 </pre>
               </div>
@@ -550,7 +550,7 @@ export default function PassBacPage() {
                   })}
                 </div>
                 {quizSubmitted && (
-                  <div style={{ marginTop: '0.75rem', padding: '0.75rem 1rem', background: 'rgba(232,101,26,0.08)', borderRadius: '8px', color: 'rgba(245,240,232,0.7)', fontSize: '0.84rem', lineHeight: 1.6 }}>
+                  <div style={{ marginTop: '0.75rem', padding: '0.75rem 1rem', background: 'rgba(232,101,26,0.08)', borderRadius: '8px', color: 'rgba(245,240,232,0.82)', fontSize: '0.84rem', lineHeight: 1.6 }}>
                     💡 {q.explanation}
                   </div>
                 )}
@@ -565,7 +565,7 @@ export default function PassBacPage() {
               </button>
             ) : (
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' as const }}>
-                <div style={{ background: '#1C1917', borderRadius: '12px', padding: '1rem 1.5rem', border: `1px solid ${quizScore === subj.quiz.length ? '#27AE60' : quizScore >= Math.ceil(subj.quiz.length / 2) ? '#E8651A' : '#E74C3C'}` }}>
+                <div style={{ background: '#282220', borderRadius: '12px', padding: '1rem 1.5rem', border: `1px solid ${quizScore === subj.quiz.length ? '#27AE60' : quizScore >= Math.ceil(subj.quiz.length / 2) ? '#E8651A' : '#E74C3C'}` }}>
                   <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#F5F0E8' }}>{quizScore}/{subj.quiz.length}</div>
                   <div style={{ fontSize: '0.78rem', color: 'rgba(245,240,232,0.4)', marginTop: '0.25rem' }}>
                     {quizScore === subj.quiz.length ? '🎉 Parfait !' : quizScore >= Math.ceil(subj.quiz.length / 2) ? '👍 Bien !' : '📚 À retravailler'}
@@ -604,8 +604,8 @@ export default function PassBacPage() {
                 </span>
               </div>
               {examBlanc[selectedExam].questions.map((q, qi) => (
-                <div key={qi} style={{ background: '#0F0D0B', borderRadius: '10px', padding: '1.25rem', marginBottom: '1rem', border: '1px solid rgba(245,240,232,0.06)' }}>
-                  <pre style={{ whiteSpace: 'pre-wrap', fontFamily: "'Syne', sans-serif", fontSize: '0.87rem', lineHeight: 1.8, color: 'rgba(245,240,232,0.8)', margin: 0 }}>
+                <div key={qi} style={{ background: '#1E1A16', borderRadius: '10px', padding: '1.25rem', marginBottom: '1rem', border: '1px solid rgba(245,240,232,0.1)' }}>
+                  <pre style={{ whiteSpace: 'pre-wrap', fontFamily: "'Syne', sans-serif", fontSize: '0.87rem', lineHeight: 1.8, color: 'rgba(245,240,232,0.90)', margin: 0 }}>
                     {q}
                   </pre>
                 </div>
@@ -625,7 +625,7 @@ export default function PassBacPage() {
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(270px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
               {conseilsBac.map((c, i) => (
-                <div key={i} style={{ background: '#1C1917', borderRadius: '14px', padding: '1.5rem', border: '1px solid rgba(232,101,26,0.1)' }}>
+                <div key={i} style={{ background: '#282220', borderRadius: '14px', padding: '1.5rem', border: '1px solid rgba(232,101,26,0.1)' }}>
                   <div style={{ fontSize: '1.85rem', marginBottom: '0.65rem' }}>{c.icon}</div>
                   <h3 style={{ color: '#E8651A', fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.45rem' }}>{c.title}</h3>
                   <p style={{ color: 'rgba(245,240,232,0.62)', fontSize: '0.86rem', lineHeight: 1.7, margin: 0 }}>{c.tip}</p>
@@ -646,7 +646,7 @@ export default function PassBacPage() {
                   { mat: 'Physique-Chimie', info: 'Jour 3 — Après-midi', duree: '3h' },
                   { mat: 'SVT', info: 'Jour 4 — Matin', duree: '3h' },
                 ].map((e, i) => (
-                  <div key={i} style={{ background: '#0F0D0B', borderRadius: '8px', padding: '0.8rem 1rem', border: '1px solid rgba(245,240,232,0.06)' }}>
+                  <div key={i} style={{ background: '#1E1A16', borderRadius: '8px', padding: '0.8rem 1rem', border: '1px solid rgba(245,240,232,0.1)' }}>
                     <div style={{ color: '#E8651A', fontWeight: 700, fontSize: '0.88rem' }}>{e.mat}</div>
                     <div style={{ color: 'rgba(245,240,232,0.4)', fontSize: '0.76rem', marginTop: '0.2rem' }}>{e.info}</div>
                     <div style={{ color: 'rgba(245,240,232,0.28)', fontSize: '0.74rem' }}>Durée : {e.duree}</div>
