@@ -524,4 +524,111 @@ renforcer son impact personnel et la crédibilité de sa marque.
     createdAt: 1748220000000,
     updatedAt: 1748220000000,
   },
+  {
+    id: 'et_mod11',
+    type: 'cours',
+    author: 'ETAGIA Académie',
+    price: 39900,
+    cover: '🏛️',
+    title: 'Fondations du Leadership Politique',
+    desc: "Vision, autorité, communication politique, storytelling, empathie, charisme et art oratoire : les 6 piliers du leader africain qui mobilise et inspire.",
+    longDesc: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 MODULE ETAGIA ACADÉMIE
+FONDATIONS DU LEADERSHIP POLITIQUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+De Kwame Nkrumah à Thomas Sankara, l'Afrique a enfanté des leaders
+qui ont changé l'histoire. Ce module vous donne les fondations
+pour rejoindre cette lignée de leaders au service du peuple.
+
+CHAPITRES INCLUS :
+1. Qu'est-ce qu'un bon leader politique ?
+2. La vision du leader : inspirer et mobiliser
+3. L'autorité : légitimité et crédibilité
+4. La communication politique & storytelling
+5. Empathie, confiance en soi et charisme
+6. Maîtriser l'art de l'Oratoire Public
+
+POUR QUI ?
+Leaders associatifs, politiques, communautaires, jeunes engagés,
+élus locaux, tout professionnel souhaitant développer son leadership
+en Afrique francophone.
+
+© ETAGIA — Licence accordée à l'acheteur uniquement
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    shortLongDesc: `Vision, autorité, storytelling, charisme, oratoire : les 6 piliers du leadership africain. Exemples Nkrumah, Sankara, Mandela, Obama — adaptés au terrain africain.`,
+    rating: 4.9,
+    sales: 0,
+    pages: 95,
+    fileSize: 'PDF · 95 pages · 6 chapitres',
+    tags: ["leadership", "politique", "vision", "charisme", "oratoire", "communication", "Afrique"],
+    status: 'published',
+    new: true,
+    featured: true,
+    bestseller: true,
+    chapitres: [
+      "Qu'est-ce qu'un bon leader politique ?",
+      "La vision du leader : inspirer et mobiliser",
+      "L'autorité : légitimité et crédibilité",
+      "La communication politique & storytelling",
+      "Empathie, confiance en soi et charisme",
+      "Maîtriser l'art de l'Oratoire Public"
+    ],
+    niveau: "Intermédiaire à avancé",
+    duree: "7–9 heures",
+    createdAt: 1748230000000,
+    updatedAt: 1748230000000,
+  },
+  {
+    id: 'et_mod12',
+    type: 'cours',
+    author: 'ETAGIA Académie',
+    price: 37900,
+    cover: '🧩',
+    title: 'Outils & Stratégies du Leader Politique',
+    desc: "Langage corporel, débats, IKIGAI, SWOT, modèle DISC et analyse PESTEL : les outils concrets du leader africain qui décide avec méthode et impact.",
+    longDesc: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 MODULE ETAGIA ACADÉMIE
+OUTILS & STRATÉGIES DU LEADER POLITIQUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Ce module complète les fondations du leadership par des outils
+stratégiques éprouvés pour analyser, décider et agir avec impact.
+
+CHAPITRES INCLUS :
+1. Langage corporel & protocole vestimentaire (Mehrabian 55%)
+2. Maîtriser les débats politiques
+3. Trouver son IKIGAI pour gagner en leadership
+4. Analyse SWOT appliquée au leadership politique
+5. Gérer les conflits avec le modèle DISC (4 profils)
+6. Décider avec l'analyse PESTEL — Étude de cas Lomé
+
+POUR QUI ?
+Leaders confirmés, candidats aux élections, responsables associatifs,
+managers politiques, tout professionnel voulant passer au niveau supérieur.
+
+© ETAGIA — Licence accordée à l'acheteur uniquement
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    shortLongDesc: `Langage corporel, IKIGAI, SWOT, DISC, PESTEL : la boîte à outils complète du leader politique africain. Étude de cas terrain Lomé, Abidjan, Dakar.`,
+    rating: 4.8,
+    sales: 0,
+    pages: 90,
+    fileSize: 'PDF · 90 pages · 6 chapitres',
+    tags: ["leadership", "DISC", "PESTEL", "SWOT", "IKIGAI", "débat", "stratégie", "décision"],
+    status: 'published',
+    new: true,
+    featured: true,
+    chapitres: [
+      "Langage corporel & protocole vestimentaire",
+      "Maîtriser les débats politiques",
+      "Trouver son IKIGAI pour gagner en leadership",
+      "Analyse SWOT appliquée au leadership",
+      "Gérer les conflits avec le modèle DISC",
+      "Décider avec l'analyse PESTEL — Étude de cas"
+    ],
+    niveau: "Intermédiaire à avancé",
+    duree: "7–8 heures",
+    createdAt: 1748230000000,
+    updatedAt: 1748230000000,
+  },
 ];
