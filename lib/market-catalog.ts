@@ -372,4 +372,156 @@ régulier avec des clients en face-à-face ou au téléphone.
     createdAt: 1748210000000,
     updatedAt: 1748210000000,
   },
+  {
+    id: 'et_mod08',
+    type: 'cours',
+    author: 'ETAGIA Académie',
+    price: 31900,
+    cover: '🏪',
+    title: 'Fondamentaux du Merchandising',
+    desc: "Maîtrisez l'organisation et la présentation du point de vente : règle des 4P, facing, niveaux de rayon, rangement et espace de vente optimisé.",
+    longDesc: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 MODULE ETAGIA ACADÉMIE
+FONDAMENTAUX DU MERCHANDISING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Le merchandising est l'art d'organiser et valoriser l'espace de vente
+pour maximiser les achats. Dans les marchés africains, c'est un avantage
+concurrentiel décisif face à Score, Mahima, Sococé et boutiques locales.
+
+CHAPITRES INCLUS :
+1. Grands principes du marchandisage (organisation, séduction, gestion)
+2. Présentation marchande & règle des 4P (Plein, Prix, Propre, Promotion)
+3. Facing : remplissage et implantation en rayon
+4. Rangement et nettoyage des surfaces de vente
+5. Organisation de l'espace de vente (zoning, allées, zones chaudes/froides)
+
+POUR QUI ?
+Responsables de rayon, chefs de secteur, gérants de boutique,
+merchandisers, employés commerciaux en distribution.
+
+© ETAGIA — Licence accordée à l'acheteur uniquement
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    shortLongDesc: `Règle des 4P, facing, niveaux de rayon, zoning : les fondamentaux du merchandising adaptés aux points de vente africains (Score, Sococé, boutiques).`,
+    rating: 4.7,
+    sales: 0,
+    pages: 85,
+    fileSize: 'PDF · 85 pages · 5 chapitres',
+    tags: ["merchandising", "marchandisage", "facing", "4P", "organisation", "rayon", "point de vente"],
+    status: 'published',
+    new: true,
+    chapitres: [
+      "Grands principes du marchandisage",
+      "Présentation marchande & règle des 4P",
+      "Facing : remplissage et implantation",
+      "Rangement et nettoyage des surfaces de vente",
+      "Organisation de l'espace de vente"
+    ],
+    niveau: "Débutant à intermédiaire",
+    duree: "6–7 heures",
+    createdAt: 1748220000000,
+    updatedAt: 1748220000000,
+  },
+  {
+    id: 'et_mod09',
+    type: 'cours',
+    author: 'ETAGIA Académie',
+    price: 34900,
+    cover: '🎪',
+    title: 'Animation & Dynamisation du Point de Vente',
+    desc: "Marketing sensoriel, planogramme, ILV/PLV, saisonnalité africaine, actions promotionnelles et argumentaire unité marchande : animez votre espace comme un pro.",
+    longDesc: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 MODULE ETAGIA ACADÉMIE
+ANIMATION & DYNAMISATION DU POINT DE VENTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Attirer, retenir et pousser à l'achat : ce module vous donne tous
+les outils pour créer une expérience d'achat inoubliable.
+
+CHAPITRES INCLUS :
+1. Facteurs d'ambiance & marketing sensoriel (5 sens)
+2. Le planogramme : conception et utilisation
+3. ILV et PLV : informer et séduire en magasin
+4. Saisonnalité des ventes (Tabaski, Noël, rentrée, Ramadan)
+5. Actions promotionnelles : concevoir et exécuter
+6. Argumentaire pour valoriser l'unité marchande (méthode CAP)
+
+POUR QUI ?
+Responsables commerciaux, animateurs de vente, gérants de boutique,
+chefs de rayon, category managers en Afrique francophone.
+
+© ETAGIA — Licence accordée à l'acheteur uniquement
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    shortLongDesc: `Marketing sensoriel, planogramme, ILV/PLV, saisonnalité africaine (Tabaski, Noël), promotions et argumentaire CAP : l'animation commerciale maîtrisée.`,
+    rating: 4.9,
+    sales: 0,
+    pages: 100,
+    fileSize: 'PDF · 100 pages · 6 chapitres',
+    tags: ["animation", "PLV", "ILV", "planogramme", "promotion", "saisonnalité", "marketing sensoriel"],
+    status: 'published',
+    new: true,
+    bestseller: true,
+    chapitres: [
+      "Facteurs d'ambiance & marketing sensoriel",
+      "Le planogramme : conception et utilisation",
+      "ILV et PLV : informer et séduire en magasin",
+      "Saisonnalité des ventes et adaptation",
+      "Actions promotionnelles : concevoir et exécuter",
+      "Argumentaire pour valoriser l'unité marchande"
+    ],
+    niveau: "Intermédiaire",
+    duree: "8–10 heures",
+    createdAt: 1748220000000,
+    updatedAt: 1748220000000,
+  },
+  {
+    id: 'et_mod10',
+    type: 'cours',
+    author: 'ETAGIA Académie',
+    price: 29900,
+    cover: '🧠',
+    title: 'Image de Marque & Communication Non-Verbale',
+    desc: "Construire une image de marque forte, maîtriser son langage corporel (règle Mehrabian 7-38-55%) et aligner image personnelle et communication professionnelle.",
+    longDesc: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 MODULE ETAGIA ACADÉMIE
+IMAGE DE MARQUE & COMMUNICATION NON-VERBALE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+En Afrique, le bouche-à-oreille représente 60 % des acquisitions clients.
+L'image que vous projetez conditionne tout ce que les gens disent de vous.
+
+CHAPITRES INCLUS :
+1. L'image de marque : enjeux et construction (4 piliers)
+2. Image personnelle = image de marque
+3. Langage corporel : décoder et maîtriser (Mehrabian 7-38-55%)
+4. Communication non-verbale avancée
+5. Cohérence image / communication en contexte africain
+
+POUR QUI ?
+Entrepreneurs, commerciaux, managers, toute personne souhaitant
+renforcer son impact personnel et la crédibilité de sa marque.
+
+© ETAGIA — Licence accordée à l'acheteur uniquement
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    shortLongDesc: `Image de marque, Mehrabian 7-38-55%, langage corporel, cohérence image/communication : l'impact total maîtrisé pour les professionnels africains.`,
+    rating: 4.8,
+    sales: 0,
+    pages: 90,
+    fileSize: 'PDF · 90 pages · 5 chapitres',
+    tags: ["image de marque", "langage corporel", "Mehrabian", "non-verbal", "communication", "posture"],
+    status: 'published',
+    new: true,
+    featured: true,
+    chapitres: [
+      "L'image de marque : enjeux et construction",
+      "Image personnelle = image de marque",
+      "Langage corporel : décoder et maîtriser",
+      "Communication non-verbale avancée",
+      "Cohérence image / communication en contexte africain"
+    ],
+    niveau: "Tous niveaux",
+    duree: "5–7 heures",
+    createdAt: 1748220000000,
+    updatedAt: 1748220000000,
+  },
 ];
