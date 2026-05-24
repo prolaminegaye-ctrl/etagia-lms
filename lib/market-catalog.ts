@@ -223,4 +223,153 @@ d'analyser son environnement et de communiquer par écrit.
     createdAt: 1748200000000,
     updatedAt: 1748200000000,
   },
+  {
+    id: 'et_mod05',
+    type: 'cours',
+    author: 'ETAGIA Académie',
+    price: 32900,
+    cover: '🤝',
+    title: 'Relation Client & Posture Commerciale',
+    desc: "Maîtrisez l'art de vendre, d'accueillir et de fidéliser vos clients avec une posture professionnelle affirmée. Méthodes SONCAS, CAB et segmentation clientèle.",
+    longDesc: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 MODULE ETAGIA ACADÉMIE
+RELATION CLIENT & POSTURE COMMERCIALE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Un module complet pour développer une relation client de qualité
+et adopter la posture du commercial africain performant.
+
+CHAPITRES INCLUS :
+1. Vendre et conseiller : rôle et missions du commercial
+2. Accueil client : les 5 premières secondes qui comptent
+3. Posture et méthode SONCAS : décoder les motivations d'achat
+4. Méthode CAB : Caractéristiques, Avantages, Bénéfices
+5. Segmentation clientèle : cibler pour mieux servir
+
+POUR QUI ?
+Commerciaux débutants et confirmés, conseillers clientèle,
+responsables de vente, entrepreneurs africains.
+
+© ETAGIA — Licence accordée à l'acheteur uniquement
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    shortLongDesc: `SONCAS, CAB, accueil client, segmentation : toute la posture commerciale en Afrique francophone. Exemples Wave, Ecobank, Orange Money.`,
+    rating: 4.8,
+    sales: 0,
+    pages: 90,
+    fileSize: 'PDF · 90 pages · 5 chapitres',
+    tags: ["relation client", "SONCAS", "CAB", "posture commerciale", "accueil", "segmentation"],
+    status: 'published',
+    new: true,
+    featured: true,
+    chapitres: [
+      "Vendre et conseiller : rôle et missions",
+      "Accueil client : les 5 premières secondes",
+      "Posture et méthode SONCAS",
+      "Méthode CAB : Caractéristiques, Avantages, Bénéfices",
+      "Segmentation clientèle"
+    ],
+    niveau: "Débutant à intermédiaire",
+    duree: "6–8 heures",
+    createdAt: 1748210000000,
+    updatedAt: 1748210000000,
+  },
+  {
+    id: 'et_mod06',
+    type: 'cours',
+    author: 'ETAGIA Académie',
+    price: 36900,
+    cover: '🎯',
+    title: 'Techniques de Vente Avancées',
+    desc: "Les 7 étapes de la vente, l'argumentation CAP, la présentation du prix et le closing : un module complet pour les commerciaux qui veulent performer.",
+    longDesc: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 MODULE ETAGIA ACADÉMIE
+TECHNIQUES DE VENTE AVANCÉES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Du premier contact à la signature : maîtrisez tout le cycle de vente
+avec les meilleures techniques adaptées au marché africain.
+
+CHAPITRES INCLUS :
+1. Les 7 étapes de la vente : du contact à la conclusion
+2. Méthode CAP : Caractéristiques, Avantages, Preuves
+3. Présentation du prix : ancrage et valorisation
+4. Traitement des objections : méthode CRAC
+5. Closing : les techniques de conclusion efficaces
+
+POUR QUI ?
+Commerciaux expérimentés, chefs des ventes, business developers,
+freelances et entrepreneurs cherchant à optimiser leur cycle de vente.
+
+© ETAGIA — Licence accordée à l'acheteur uniquement
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    shortLongDesc: `7 étapes de la vente, CAP, CRAC, closing : le toolkit complet du commercial africain performant. Mises en situation Jumia, Ecobank, PME locales.`,
+    rating: 4.9,
+    sales: 0,
+    pages: 95,
+    fileSize: 'PDF · 95 pages · 5 chapitres',
+    tags: ["techniques de vente", "CAP", "CRAC", "objections", "closing", "7 étapes"],
+    status: 'published',
+    new: true,
+    bestseller: true,
+    chapitres: [
+      "Les 7 étapes de la vente",
+      "Méthode CAP : Caractéristiques, Avantages, Preuves",
+      "Présentation du prix : ancrage et valorisation",
+      "Traitement des objections : méthode CRAC",
+      "Closing : les techniques de conclusion"
+    ],
+    niveau: "Intermédiaire à avancé",
+    duree: "7–9 heures",
+    createdAt: 1748210000000,
+    updatedAt: 1748210000000,
+  },
+  {
+    id: 'et_mod07',
+    type: 'cours',
+    author: 'ETAGIA Académie',
+    price: 28900,
+    cover: '💬',
+    title: 'Communication Commerciale & Impact',
+    desc: "Verbal, non-verbal, canaux de communication, langage corporel, prise de congé réussie et gestion multi-clients : tout pour communiquer avec impact.",
+    longDesc: `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 MODULE ETAGIA ACADÉMIE
+COMMUNICATION COMMERCIALE & IMPACT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+La communication, c'est 93% de non-verbal selon Mehrabian.
+Ce module vous donne les clés pour maîtriser votre impact total.
+
+CHAPITRES INCLUS :
+1. Communication verbale vs non-verbale : la règle des 7-38-55%
+2. Canaux de communication : choisir le bon canal au bon moment
+3. Langage corporel : décoder et maîtriser vos signaux
+4. Prise de congé réussie : laisser une impression durable
+5. Gestion multi-clients en affluence : priorités et équité
+
+POUR QUI ?
+Commerciaux, conseillers, managers, toute personne en contact
+régulier avec des clients en face-à-face ou au téléphone.
+
+© ETAGIA — Licence accordée à l'acheteur uniquement
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    shortLongDesc: `Règle Mehrabian, langage corporel, canaux de com, closing émotionnel et gestion d'affluence : la communication commerciale maîtrisée de A à Z.`,
+    rating: 4.7,
+    sales: 0,
+    pages: 85,
+    fileSize: 'PDF · 85 pages · 5 chapitres',
+    tags: ["communication", "non-verbal", "Mehrabian", "langage corporel", "multi-clients", "impact"],
+    status: 'published',
+    new: true,
+    chapitres: [
+      "Communication verbale vs non-verbale",
+      "Canaux de communication",
+      "Langage corporel : décoder et maîtriser",
+      "Prise de congé réussie",
+      "Gestion multi-clients en affluence"
+    ],
+    niveau: "Tous niveaux",
+    duree: "5–7 heures",
+    createdAt: 1748210000000,
+    updatedAt: 1748210000000,
+  },
 ];
