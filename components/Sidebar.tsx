@@ -12,6 +12,7 @@ const navApprenant = [
   { href: '/apprenant/diagnostic', icon: '📋', label: 'Éval. diagnostic' },
   { href: '/apprenant/satisfaction', icon: '⭐', label: 'Satisfaction' },
   { href: '/profil', icon: '◉', label: 'Profil' },
+  { href: '/apprenant/passbac', icon: '🎓', label: "Mon Pass'BAC", badge: 'BAC' },
   { href: '/guide', icon: '📖', label: 'Guide utilisateur' },
 ]
 const navFormateur = [
