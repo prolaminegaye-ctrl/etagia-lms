@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 const MarketChatbot = dynamic(() => import('@/components/MarketChatbot'), { ssr: false })
+import { ETAGIA_CATALOG } from '@/lib/market-catalog'
 
 /* ═══════════════════════════════════════════════
    CATALOGUE PRODUITS
@@ -171,8 +172,12 @@ export default function MarketPage() {
     try { setPurchases(JSON.parse(localStorage.getItem('etagia_purchases') || '[]')) } catch {}
     try {
       const stored = localStorage.getItem('etagia_market_products')
-      if (stored) { const p = JSON.parse(stored); setCatalogProducts(p.filter((x: any) => x.status === 'published')) }
-    } catch {}
+      const adminExtra = stored ? JSON.parse(stored).filter((x: any) =>
+        !ETAGIA_CATALOG.find((e: any) => e.id === x.id)
+      ) : []
+      const all = ([...ETAGIA_CATALOG, ...adminExtra] as any[]).filter((x: any) => x.status === 'published')
+      setCatalogProducts(all as any)
+    } catch { setCatalogProducts(ETAGIA_CATALOG as any) }
     try { setUserProfile(JSON.parse(localStorage.getItem('etagia_user_profile') || 'null')) } catch {}
   }, [])
 

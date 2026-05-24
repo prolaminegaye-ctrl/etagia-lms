@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { ETAGIA_CATALOG } from '@/lib/market-catalog'
 
 type ProductType = 'livre' | 'cours' | 'logiciel' | 'ressource'
 type ProductStatus = 'published' | 'draft'
@@ -80,8 +81,8 @@ export default function AdminMarketPage() {
     try {
       const stored = localStorage.getItem('etagia_market_products')
       if (stored) setProducts(JSON.parse(stored))
-      else { setProducts(DEFAULT_PRODUCTS); localStorage.setItem('etagia_market_products', JSON.stringify(DEFAULT_PRODUCTS)) }
-    } catch { setProducts(DEFAULT_PRODUCTS) }
+      else { const all = [...ETAGIA_CATALOG] as any[]; setProducts(all); localStorage.setItem('etagia_market_products', JSON.stringify(all)) }
+    } catch { setProducts([...ETAGIA_CATALOG] as any) }
   }, [])
 
   const save = (list: Product[]) => {
