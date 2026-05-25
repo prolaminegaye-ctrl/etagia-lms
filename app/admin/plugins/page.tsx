@@ -37,7 +37,7 @@ const card: React.CSSProperties = {
 const inpStyle: React.CSSProperties = {
   width: '100%', padding: '9px 12px', borderRadius: '9px', fontSize: '13px',
   border: '1px solid rgba(28,25,23,0.12)', background: '#FAF9F7',
-  color: '#1C1917', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' as const,
+  color: '#1C1917',  outline: 'none', boxSizing: 'border-box' as const,
   fontFamily: 'monospace',
 }
 

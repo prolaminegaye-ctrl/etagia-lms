@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 
-const BBB_URL    = process.env.BBB_URL    || 'https://test.bigbluebutton.org/bigbluebutton/api'
-const BBB_SECRET = process.env.BBB_SECRET || '8cd8ef52e8e101574e400365b55e11a6'
+// ⚠️  NE JAMAIS mettre de secret en fallback hardcodé dans le code source
+// Configurer BBB_URL et BBB_SECRET dans Vercel Settings > Environment Variables
+const BBB_URL    = process.env.BBB_URL    || ''
+const BBB_SECRET = process.env.BBB_SECRET || ''
 
 function checksum(action: string, params: string): string {
   return crypto.createHash('sha256').update(action + params + BBB_SECRET).digest('hex')
@@ -32,21 +34,29 @@ function parseXML(xml: string): Record<string, string> {
 }
 
 export async function POST(req: NextRequest) {
+  // Guard : BBB non configuré
+  if (!BBB_URL || !BBB_SECRET) {
+    return NextResponse.json({
+      ok: false,
+      error: 'Classes en direct non configurées. Ajoutez BBB_URL et BBB_SECRET dans Vercel > Settings > Environment Variables.',
+    }, { status: 503 })
+  }
+
   try {
     const body = await req.json()
     const { action, ...params } = body as { action: string; [k: string]: string }
 
     if (action === 'createMeeting') {
       const xml  = await callBBB('create', {
-        meetingID:        params.meetingID,
-        name:             params.name,
-        attendeePW:       params.attendeePW || 'ap',
-        moderatorPW:      params.moderatorPW || 'mp',
-        record:           'true',
+        meetingID:          params.meetingID,
+        name:               params.name,
+        attendeePW:         params.attendeePW || 'ap',
+        moderatorPW:        params.moderatorPW || 'mp',
+        record:             'true',
         autoStartRecording: 'false',
-        welcome:          `Bienvenue dans <b>${params.name}</b> — ETAGIA LMS`,
-        maxParticipants:  '100',
-        logoutURL:        'https://etagia-lms.vercel.app/live',
+        welcome:            `Bienvenue dans <b>${params.name}</b> — ETAGIA LMS`,
+        maxParticipants:    '100',
+        logoutURL:          'https://etagia-lms.vercel.app/live',
       })
       const parsed = parseXML(xml)
       return NextResponse.json({ ok: parsed.returncode === 'SUCCESS', ...parsed })
@@ -54,12 +64,12 @@ export async function POST(req: NextRequest) {
 
     if (action === 'joinMeeting') {
       const joinUrl = bbbUrl('join', {
-        meetingID:  params.meetingID,
-        fullName:   params.fullName || 'Apprenant ETAGIA',
-        password:   params.role === 'moderator' ? (params.moderatorPW || 'mp') : (params.attendeePW || 'ap'),
-        userID:     params.userID || 'user_' + Date.now(),
-        avatarURL:  '',
-        redirect:   'true',
+        meetingID: params.meetingID,
+        fullName:  params.fullName || 'Apprenant ETAGIA',
+        password:  params.role === 'moderator' ? (params.moderatorPW || 'mp') : (params.attendeePW || 'ap'),
+        userID:    params.userID || 'user_' + Date.now(),
+        avatarURL: '',
+        redirect:  'true',
       })
       return NextResponse.json({ ok: true, joinUrl })
     }
@@ -83,11 +93,11 @@ export async function POST(req: NextRequest) {
     }
 
     if (action === 'getMeetings') {
-      const xml    = await callBBB('getMeetings', {})
+      const xml = await callBBB('getMeetings', {})
       return NextResponse.json({ ok: true, raw: xml })
     }
 
-    return NextResponse.json({ ok: false, error: 'Unknown action' }, { status: 400 })
+    return NextResponse.json({ ok: false, error: 'Action inconnue' }, { status: 400 })
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : String(e)
     return NextResponse.json({ ok: false, error: msg }, { status: 500 })

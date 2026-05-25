@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 
 const PLATFORM_URL    = process.env.NEXT_PUBLIC_APP_URL || 'https://etagia-lms.vercel.app'
-const PRIVATE_KEY_B64 = process.env.LTI_PRIVATE_KEY_B64 || 'LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2Z0lCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktnd2dnU2tBZ0VBQW9JQkFRRFNETlBkRWRuUFlYV2sKemVoNklyZG9SRmxKY3BUUTRLMnZnL3FxVmFDQnovN2x3SkVCQnhsQTZnUUhmQk1BT0JReld2TTVuT3ZxK0dmVApMNlpYYUZtdy9BRGZlU3BsMjFnajd1ZXFDMFFkdnVMUjZrUjhqUWFmR2JKV0pETEdVUXBVNGJiYjRzcEhMNDBmCm1uMkpSeU9ZQnlYd2Z0bzU5M0ZVbHF2LzNOZVdnTExDajFuaTFWSy9KTU1CMm1EcW8xSzhSamhNaUdmNm5rWlMKOWdTRTJaV3BPSk9jTEI3WGxiVHRvK0V5QUxMeW11RURGeFllbklRc3Bod29TNjdRZXpEMit6T0VDNWMwMUdEbwpEWVA1K28rbUpHUHhkTXdvc3FmVGo4U1JxU0R2RUVoTFlCaVVZTXBUREt4eUk2bFI4QmlVWjRwM2dERG9kQjVTClFrRmdrYTN0QWdNQkFBRUNnZ0VBTEhOMGZtc2hxZVpaREJoYkkwV25oSlE2UlBYUGttaUp1UVA0RHdYeDRxYk8KclhaVCtXQzBNbTJUanJYdUczVENxWitNcTF1Ty9YbTJGeFlWWUpmL3F4bVpZYkYxakhxZnEzTUthWXphekdTeQpBWFJQTEFCNEwwRXo0VkRsd2R3eWtJWDN1WTdEK2M2UlVlZlN1ek5ueit0clZ2cXhXZVVJZ2JzbENRK0dQQjM3Cm9SMEZDdFNZZFNWSXJNTlZtUE91c2NyRGVXMzY4ODYwYUNiSDIwOUxpVlVrZ29ZTTlnMjVRYmJXVktuNDN2MjgKYW5iL3hrMXpjQSs3cGd6bHkxNkNZem84d1FFZHhtb0tVbXlocTRuQ1JLOVowMS9SZjM3Y2lQZURLdDNrajMyWgpGMG5oU1pkejhqeXAwdHN0YWMrUXRJaG9JaFpRQk5kdkZCWFM1T3AzalFLQmdRRCswUkxsa25EanZTUnNXa1R3ClJIYmxMNyt5amNrOUM5dGR5SUxxUWNQdklFMmtpWEFCT3h1MjIrTjNBRnFjUEIwS0tjcGhwVEFpUEs0WnRCY28KeWo4Z01kS1RmTFg4SUxQVGxYU1p5UGhOSWtUVFJNdy9JcktGWWhDcEhDbENOdzQ4VkI0QllxVTlwMGJmVm5lYwpQRlVrRGZuakRJNGpXcUdnSEN3Q3lINzNtd0tCZ1FEVEJva0ZqRGtJVkEzSGtHR2UzUjUva3ZXQ0VYek5kb3hFCmQycGZJUGg0ZUM2TXpvQ0tsb0IzTkRZM09KQ3F4TVJsK01nMHQ4cE55aTVrdXduZWRDcmQ0cGFlaDNBMVhPVEoKMjVRRmhuYWswUWxkTXU1K0Fzenk0UTd6aTN0OHlpc005dmFmTkt3YnVzU2pIOEJadEtBRmozaU05U3dvZTJSeQpBQ3Z1L05TOUZ3S0JnUUNVUHk2dlFUTk1TNDRWTzY4LzJaVVNZV1UxakNlM3pGNGpnYlFvZFhwNGRHSzNodjRTCnVVQzJjZGMwTkpDQ3RMWndZei9LN3ovQnEydmVxRmVRODVrbU1kWkEyQjFJUWY1YzZtYWIwY0Fqbi94S3JZdm0KYjFsTklIQnc4bUZPbEpsRG4reVZBYjhBejREOERtSW9FekcxZUN3WlhBU1ZyUFM3SWFpNU5jd29ZUUtCZ1FDOApnOUFRWnEza1pNSlNqd2JHVnA2U05RU2hoMkhJWXFqMzJQM3JzWmFHZUVhTmYwU1JpZFdGcDl6dkE5Y28xdExrCmpaUzhrNXRrVnNPUE5RK2g3SUVHNnc3RzNCTS9lSmJpUlFnOHoxeFo3R3ZER0dhNXAyTFRibjVlenpJbnpxc2EKejl5TmFRNS9UeCt1NGdTQm5yeDlleWVrTkxtWUNITTQ3REpUTXdZUlRRS0JnR3JYZFZyOFdXOXl3dVJmT3FKOQoxZXN2NGJDaGJ3WHF6MzBWNzJsNE9HR0JmNzMydHZJbFJuWkFwT1ZFM0FRM1hCL0ZjcjZvZlQrbE9INTJHckpBCnJYbHZPR00vODdkamZhT2F3dE5wWnpRSlpWNE90ejQvTVEvOTRqUkVBVXFlR1hFelQ1OHIrV2FEUzBLcW9VTWUKNjJZMkxWOVRsN1NyUlFYQWlxZGZTczJzCi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0K'
+const PRIVATE_KEY_B64 = process.env.LTI_PRIVATE_KEY_B64 || ''  // ⚠️ Configurer dans Vercel > Env Vars
 const DEPLOYMENT_ID   = 'etagia-deploy-001'
 const CLIENT_ID       = 'etagia-edugears-client-001'
 const KID             = 'etagia-lms-2026'
@@ -38,13 +38,19 @@ function signJWT(payload: Record<string, unknown>): string {
 //    Params: client_id, redirect_uri, login_hint, nonce, state, lti_message_hint
 //    → Génère id_token et retourne HTML auto-submit vers redirect_uri
 // ─────────────────────────────────────────────────────────────────────────────
+
 async function handleAuth(req: NextRequest): Promise<NextResponse> {
+  // Guard : clé LTI non configurée
+  if (!PRIVATE_KEY_B64) {
+    return NextResponse.json({ error: 'LTI_PRIVATE_KEY_B64 non configurée. Ajoutez-la dans Vercel > Settings > Environment Variables.' }, { status: 503 })
+  }
+
   let tool           = ''
   let redirectUri    = EDUGEARS_LAUNCH
   let loginHint      = 'lamine-gaye-stable-001'
   let resourceLinkId = 'resource-001'
-  let nonce          = crypto.randomUUID()
-  let state          = crypto.randomBytes(16).toString('hex')
+  let nonce: string  = crypto.randomUUID()
+  let state: string  = crypto.randomBytes(16).toString('hex')
 
   // Lire les paramètres selon le Content-Type
   const contentType = req.headers.get('content-type') || ''
