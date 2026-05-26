@@ -58,7 +58,7 @@ export default function ExportPage() {
           <div key={e.id} style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '16px', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'var(--accent-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', color: 'var(--accent)' }}>{e.icon}</div>
+                <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(232,101,26,0.10)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', color: '#E8651A' }}>{e.icon}</div>
                 <div>
                   <div style={{ fontWeight: '600', fontSize: '15px', color: 'var(--text-primary)' }}>{e.label}</div>
                   <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{e.rows.toLocaleString()} lignes estimées</div>
@@ -66,7 +66,7 @@ export default function ExportPage() {
               </div>
             </div>
             <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>{e.desc}</p>
-            <button onClick={() => download(e.id, e.label)} style={{ background: 'var(--accent-muted)', border: '1px solid var(--border-active)', borderRadius: '10px', padding: '9px 16px', color: 'var(--accent)', fontSize: '13px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px', justifyContent: 'center' }}>
+            <button onClick={() => download(e.id, e.label)} style={{ background: 'rgba(232,101,26,0.10)', border: '1px solid rgba(232,101,26,0.25)', borderRadius: '10px', padding: '9px 16px', color: '#E8651A', fontSize: '13px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px', justifyContent: 'center' }}>
               ⬇ Télécharger .csv
             </button>
           </div>

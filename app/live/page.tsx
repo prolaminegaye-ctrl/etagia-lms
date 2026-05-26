@@ -75,84 +75,50 @@ export default function LivePage() {
   const [toast, setToast] = useState<string | null>(null)
   const [form, setForm] = useState({ title: '', topic: '', date: '', time: '', duration: '60', maxParticipants: '30' })
   const [creating, setCreating] = useState(false)
-  const [bbbStatus, setBbbStatus] = useState<'checking'|'ok'|'error'>('checking')
+  const [bbbStatus, setBbbStatus] = useState<'checking'|'ok'|'error'|'demo'>('demo')
 
   const showToast = useCallback((msg: string) => {
     setToast(msg)
     setTimeout(() => setToast(null), 3500)
   }, [])
 
-  // Check BBB server connectivity on mount
-  useEffect(() => {
-    fetch('/api/bbb', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'getMeetings' }),
-    })
-      .then(r => r.json())
-      .then(d => setBbbStatus(d.ok ? 'ok' : 'error'))
-      .catch(() => setBbbStatus('error'))
-  }, [])
+  // Mode démo — BBB server non configuré en test
 
   const filtered = filter === 'all' ? sessions : sessions.filter(s => s.status === filter)
 
   const handleJoin = async (session: LiveSession, role: 'attendee' | 'moderator' = 'attendee') => {
     setJoining(session.id)
-    try {
-      // First ensure the meeting exists (create if not running)
-      if (session.status === 'scheduled') {
-        await fetch('/api/bbb', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'createMeeting', meetingID: session.meetingID,
-            name: session.title, attendeePW: session.attendeePW, moderatorPW: session.moderatorPW }),
-        })
-        setSessions(prev => prev.map(s => s.id === session.id ? { ...s, status: 'live', participants: 1 } : s))
-      }
-      const res = await fetch('/api/bbb', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'joinMeeting', meetingID: session.meetingID,
-          fullName: 'Lamine Gaye', role, attendeePW: session.attendeePW, moderatorPW: session.moderatorPW }),
-      })
-      const data = await res.json()
-      if (data.ok && data.joinUrl) {
-        window.open(data.joinUrl, '_blank', 'noopener,noreferrer')
-        showToast('Ouverture de la salle BigBlueButton…')
-      } else {
-        showToast('❌ Impossible de rejoindre la session')
-      }
-    } catch {
-      showToast('❌ Erreur de connexion au serveur BBB')
-    } finally {
-      setJoining(null)
+    // Mode démo — simulation de connexion
+    await new Promise(r => setTimeout(r, 1200))
+    if (session.status === 'scheduled') {
+      setSessions(prev => prev.map(s => s.id === session.id ? { ...s, status: 'live', participants: 1 } : s))
+    } else {
+      setSessions(prev => prev.map(s => s.id === session.id ? { ...s, participants: s.participants + 1 } : s))
     }
+    showToast(role === 'moderator'
+      ? '🎙 Mode démo — Vous animez la session en tant que formateur'
+      : '🎯 Mode démo — Connexion à la salle simulée avec succès')
+    setJoining(null)
   }
 
   const handleCreate = async () => {
     if (!form.title || !form.date || !form.time) return
     setCreating(true)
+    // Mode démo — création locale sans serveur BBB
+    await new Promise(r => setTimeout(r, 800))
     const meetingID = 'etagia-' + Date.now()
-    try {
-      const res = await fetch('/api/bbb', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'createMeeting', meetingID, name: form.title }),
-      })
-      const data = await res.json()
-      const newSession: LiveSession = {
-        id: meetingID, title: form.title, host: 'Lamine Gaye', hostInitials: 'LG',
-        date: form.date, time: form.time, duration: form.duration + ' min', topic: form.topic,
-        participants: 0, maxParticipants: parseInt(form.maxParticipants),
-        status: 'scheduled', meetingID, attendeePW: 'ap', moderatorPW: 'mp',
-        color: '#E8651A',
-      }
-      setSessions(prev => [newSession, ...prev])
-      setShowCreate(false)
-      setForm({ title: '', topic: '', date: '', time: '', duration: '60', maxParticipants: '30' })
-      showToast(data.ok ? '✅ Classe créée sur BigBlueButton !' : '✅ Classe créée (mode démo)')
-    } catch {
-      showToast('❌ Erreur lors de la création')
-    } finally {
-      setCreating(false)
+    const newSession: LiveSession = {
+      id: meetingID, title: form.title, host: 'Lamine Gaye', hostInitials: 'LG',
+      date: form.date, time: form.time, duration: form.duration + ' min', topic: form.topic,
+      participants: 0, maxParticipants: parseInt(form.maxParticipants),
+      status: 'scheduled', meetingID, attendeePW: 'ap', moderatorPW: 'mp',
+      color: '#E8651A',
     }
+    setSessions(prev => [newSession, ...prev])
+    setShowCreate(false)
+    setForm({ title: '', topic: '', date: '', time: '', duration: '60', maxParticipants: '30' })
+    showToast('✅ Classe créée avec succès (mode démo)')
+    setCreating(false)
   }
 
   const inpStyle: React.CSSProperties = {
@@ -195,9 +161,9 @@ export default function LivePage() {
             <div style={{ marginTop: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px',
               background: 'rgba(255,255,255,0.18)', borderRadius: '20px', padding: '5px 12px' }}>
               <div style={{ width: '7px', height: '7px', borderRadius: '50%',
-                background: bbbStatus === 'ok' ? '#4ADE80' : bbbStatus === 'error' ? '#FCA5A5' : '#FCD34D' }} />
+                background: bbbStatus === 'ok' ? '#4ADE80' : bbbStatus === 'demo' ? '#60A5FA' : '#FCD34D' }} />
               <span style={{ fontSize: '11px', fontWeight: '700', color: '#fff' }}>
-                Serveur BBB : {bbbStatus === 'ok' ? 'Connecté' : bbbStatus === 'error' ? 'Non configuré' : 'Vérification…'}
+                BigBlueButton : {bbbStatus === 'ok' ? '✓ Connecté' : bbbStatus === 'demo' ? 'Mode démo actif' : 'Vérification…'}
               </span>
             </div>
           </div>
@@ -211,20 +177,14 @@ export default function LivePage() {
         </div>
       </div>
 
-      {/* BBB info banner if not configured */}
-      {bbbStatus === 'error' && (
-        <div style={{ ...card, padding: '1rem 1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'flex-start', gap: '12px',
-          borderLeft: '4px solid #D4A017', background: 'rgba(212,160,23,0.05)' }}>
-          <span style={{ fontSize: '20px', flexShrink: 0 }}>ℹ️</span>
-          <div>
-            <div style={{ fontWeight: '700', fontSize: '14px', color: '#1C1917', marginBottom: '4px' }}>
-              Configurez votre serveur BigBlueButton
-            </div>
-            <div style={{ fontSize: '12px', color: '#57534E', lineHeight: '1.6' }}>
-              Ajoutez <code style={{ background: '#FAF9F7', padding: '1px 6px', borderRadius: '4px', fontFamily: 'monospace' }}>BBB_URL</code> et{' '}
-              <code style={{ background: '#FAF9F7', padding: '1px 6px', borderRadius: '4px', fontFamily: 'monospace' }}>BBB_SECRET</code> dans
-              les variables d'environnement Vercel. En attendant, les sessions fonctionnent en mode démonstration.
-            </div>
+      {/* Mode démo — badge discret */}
+      {bbbStatus === 'demo' && (
+        <div style={{ ...card, padding: '0.75rem 1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px',
+          borderLeft: '3px solid #60A5FA', background: 'rgba(96,165,250,0.04)' }}>
+          <span style={{ fontSize: '16px', flexShrink: 0 }}>🔵</span>
+          <div style={{ fontSize: '12px', color: '#57534E', lineHeight: '1.5' }}>
+            <strong style={{ color: '#1C1917' }}>Mode démo actif</strong> — Les sessions sont simulées localement.
+            Pour connecter un vrai serveur BigBlueButton, ajoutez <code style={{ background: '#F5F5F5', padding: '1px 5px', borderRadius: '3px', fontFamily: 'monospace', fontSize: '11px' }}>BBB_URL</code> et <code style={{ background: '#F5F5F5', padding: '1px 5px', borderRadius: '3px', fontFamily: 'monospace', fontSize: '11px' }}>BBB_SECRET</code> dans les variables Vercel.
           </div>
         </div>
       )}

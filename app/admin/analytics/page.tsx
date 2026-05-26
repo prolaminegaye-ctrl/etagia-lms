@@ -26,7 +26,7 @@ export default function AnalyticsPage() {
           {data.map((v,i) => (
             <div key={i} style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', gap:'8px' }}>
               <div style={{ fontSize:'12px', fontWeight:'600', color:'var(--accent)' }}>{v}</div>
-              <div style={{ width:'100%', background:'linear-gradient(180deg, var(--accent) 0%, rgba(91,141,239,0.3) 100%)', borderRadius:'6px 6px 0 0', height:`${(v/max)*120}px`, boxShadow:'0 0 12px rgba(91,141,239,0.3)' }} />
+              <div style={{ width:'100%', background:'linear-gradient(180deg, #6366F1 0%, rgba(99,102,241,0.3) 100%)', borderRadius:'6px 6px 0 0', height:`${(v/max)*120}px`, boxShadow:'0 0 12px rgba(91,141,239,0.3)' }} />
               <div style={{ fontSize:'11px', color:'var(--text-muted)' }}>{months[i]}</div>
             </div>
           ))}

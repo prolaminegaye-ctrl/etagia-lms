@@ -93,7 +93,7 @@ export default function DiagnosticPage() {
               fontSize: '14px', fontWeight: answers[q.id] === i ? '600' : '400', textAlign: 'left',
               transition: 'all .15s', display: 'flex', alignItems: 'center', gap: '12px'
             }}>
-              <span style={{ width: '26px', height: '26px', borderRadius: '50%', background: answers[q.id] === i ? 'var(--accent)' : 'var(--bg-card)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '700', color: answers[q.id] === i ? '#fff' : 'var(--text-muted)', flexShrink: 0 }}>
+              <span style={{ width: '26px', height: '26px', borderRadius: '50%', background: answers[q.id] === i ? '#6366F1' : '#F5F3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '700', color: answers[q.id] === i ? '#fff' : 'rgba(30,27,46,0.45)', flexShrink: 0 }}>
                 {String.fromCharCode(65 + i)}
               </span>
               {opt}

@@ -212,9 +212,9 @@ export default function AdminMarketPage() {
 
   /* ── FORM VIEW ── */
   if (view === 'form') return (
-    <div style={{ color: 'var(--text-primary)' }}>
+    <div style={{ color: '#1C1917', background: 'transparent' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '2rem' }}>
-        <button onClick={() => setView('list')} style={btnSec}>← Retour</button>
+        <button onClick={() => setView('list')} style={{ background: 'rgba(28,25,23,0.06)', border: '1px solid rgba(28,25,23,0.12)', borderRadius: '10px', padding: '9px 18px', color: '#57534E', fontWeight: '600', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '6px' }}>← Retour</button>
         <h2 style={{ margin: 0, fontSize: '22px', fontWeight: '800', fontFamily: 'var(--font-display)' }}>
           {editing ? '✏️ Modifier le produit' : '➕ Nouveau produit'}
         </h2>
@@ -345,11 +345,26 @@ export default function AdminMarketPage() {
         </div>
       </div>
 
-      <div style={{ marginTop: '1.5rem', display: 'flex', gap: '10px' }}>
-        <button onClick={handleSubmit} style={{ ...btnAcc, padding: '12px 32px', fontSize: '15px' }}>
+      <div style={{ marginTop: '2rem', marginBottom: '2rem', display: 'flex', gap: '12px', alignItems: 'center', padding: '1.25rem', background: '#FFFFFF', borderRadius: '14px', border: '1px solid rgba(28,25,23,0.10)', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+        <button onClick={handleSubmit} style={{
+          background: 'linear-gradient(135deg, #E8651A 0%, #D4A017 100%)',
+          border: 'none', borderRadius: '12px', padding: '13px 32px',
+          color: '#fff', fontWeight: '800', fontSize: '15px', cursor: 'pointer',
+          fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '8px',
+          boxShadow: '0 4px 20px rgba(232,101,26,0.35)',
+          transition: 'transform .15s, box-shadow .15s',
+        }}>
           {editing ? '💾 Sauvegarder les modifications' : '🚀 Créer le produit'}
         </button>
-        <button onClick={() => setView('list')} style={btnSec}>Annuler</button>
+        <button onClick={() => setView('list')} style={{
+          background: 'transparent', border: '1.5px solid rgba(28,25,23,0.15)',
+          borderRadius: '12px', padding: '13px 24px',
+          color: '#57534E', fontWeight: '600', fontSize: '14px', cursor: 'pointer',
+          fontFamily: 'inherit',
+        }}>Annuler</button>
+        <span style={{ fontSize: '12px', color: 'rgba(28,25,23,0.35)', marginLeft: '4px' }}>
+          {editing ? `Modification de : ${(editing as any).title?.slice(0, 40)}…` : 'Nouveau produit'}
+        </span>
       </div>
     </div>
   )
@@ -513,20 +528,20 @@ export default function AdminMarketPage() {
 
 /* ── Helpers ── */
 const Card = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '14px', padding: '1.25rem' }}>{children}</div>
+  <div style={{ background: '#FFFFFF', border: '1px solid rgba(28,25,23,0.10)', borderRadius: '14px', padding: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>{children}</div>
 )
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ fontSize: '12px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '12px' }}>{children}</div>
+  <div style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '1.5px', textTransform: 'uppercase', color: 'rgba(28,25,23,0.45)', marginBottom: '12px' }}>{children}</div>
 )
 const Field = ({ label, children, style }: { label: string; children: React.ReactNode; style?: React.CSSProperties }) => (
   <div style={{ marginBottom: '12px', ...style }}>
-    <label style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'block', marginBottom: '5px' }}>{label}</label>
+    <label style={{ fontSize: '12px', color: '#57534E', fontWeight: '600', display: 'block', marginBottom: '5px' }}>{label}</label>
     {children}
   </div>
 )
-const inp: React.CSSProperties = { width: '100%', background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '8px', padding: '9px 12px', color: 'var(--text-primary)', fontSize: '13px', outline: 'none', fontFamily: 'var(--font-body)', boxSizing: 'border-box' }
+const inp: React.CSSProperties = { width: '100%', background: '#FAF9F7', border: '1px solid rgba(28,25,23,0.12)', borderRadius: '8px', padding: '9px 12px', color: '#1C1917', fontSize: '13px', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' }
 const btnAcc: React.CSSProperties = { background: 'var(--accent)', border: 'none', borderRadius: '10px', padding: '9px 18px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer', fontFamily: 'var(--font-display)' }
 const btnSec: React.CSSProperties = { background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '10px', padding: '9px 18px', color: 'var(--text-secondary)', fontWeight: '500', fontSize: '13px', cursor: 'pointer', fontFamily: 'var(--font-display)' }
 const iconBtn: React.CSSProperties = { background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '7px', width: '30px', height: '30px', cursor: 'pointer', fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center' }
 const selStyle: React.CSSProperties = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '8px', padding: '8px 12px', color: 'var(--text-secondary)', fontSize: '13px', outline: 'none', cursor: 'pointer' }
-const typeBtn: React.CSSProperties = { borderRadius: '8px', padding: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '600', fontFamily: 'var(--font-display)', transition: 'all .15s' }
+const typeBtn: React.CSSProperties = { borderRadius: '8px', padding: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '600', fontFamily: 'inherit', transition: 'all .15s' }

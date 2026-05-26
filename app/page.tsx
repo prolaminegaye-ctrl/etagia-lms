@@ -102,7 +102,7 @@ export default function LoginPage() {
           <span style={{ fontSize: '20px', fontWeight: '700' }}>ETAGIA</span>
         </div>
         <span style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>🎉 Bienvenue ! Voici ton guide de démarrage</span>
-        <button onClick={handleGuideFinish} style={{ background: 'var(--accent)', border: 'none', borderRadius: '10px', padding: '9px 22px', color: '#fff', fontWeight: '600', fontSize: '14px', cursor: 'pointer' }}>
+        <button onClick={handleGuideFinish} style={{ background: 'linear-gradient(135deg,#6366F1,#A855F7)', border: 'none', borderRadius: '10px', padding: '9px 22px', color: '#fff', fontWeight: '600', fontSize: '14px', cursor: 'pointer' }}>
           Accéder à la plateforme →
         </button>
       </div>
