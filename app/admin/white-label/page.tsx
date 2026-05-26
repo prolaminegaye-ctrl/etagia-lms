@@ -135,7 +135,7 @@ export default function WhiteLabelPage() {
 
       {/* Header */}
       <div style={{ marginBottom:'1.75rem', padding:'1.75rem 2rem', borderRadius:'20px',
-        background: cfg.enabled ? `linear-gradient(135deg,${cfg.primaryColor} 0%,${cfg.accentColor} 100%)` : 'linear-gradient(135deg,#1C1917 0%,#3C2D1E 100%)',
+        background: cfg.enabled ? `linear-gradient(135deg,${cfg.primaryColor} 0%,${cfg.accentColor} 100%)` : 'linear-gradient(135deg,#1E1B4B 0%,#4C1D95 100%)',
         boxShadow: cfg.enabled ? `0 8px 32px ${cfg.primaryColor}44` : '0 4px 20px rgba(0,0,0,0.20)',
         position:'relative', overflow:'hidden', transition:'all .4s' }}>
         <div style={{ position:'absolute', top:'-50px', right:'-30px', width:'200px', height:'200px', borderRadius:'50%', background:'radial-gradient(circle,rgba(255,255,255,0.10),transparent 70%)', pointerEvents:'none' }} />

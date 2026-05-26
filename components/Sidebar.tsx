@@ -40,6 +40,7 @@ const navAdmin = [
   { href: '/admin/analytics', icon: '〜', label: 'Analytics' },
   { href: '/admin/export', icon: '📊', label: 'Export CSV' },
   { href: '/admin/white-label', icon: '🏷', label: 'White Label', badge: 'PRO' },
+  { href: '/admin/team', icon: '👥', label: 'Mon Équipe' },
   { href: '/admin/plugins', icon: '🔌', label: 'Plugins & LTI' },
 ]
 

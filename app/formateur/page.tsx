@@ -53,9 +53,9 @@ export default function FormateurPage(){
   return(
     <div style={{paddingBottom:'2rem'}}>
       {/* HERO */}
-      <div style={{marginBottom:'1.75rem',padding:'1.75rem 2rem',borderRadius:'24px',background:'linear-gradient(135deg,#12100E 0%,#1a1714 60%,#1e1510 100%)',position:'relative',overflow:'hidden',boxShadow:'0 8px 40px rgba(0,0,0,0.22)'}}>
-        <div style={{position:'absolute',top:'-80px',right:'-60px',width:'260px',height:'260px',borderRadius:'50%',background:'radial-gradient(circle,rgba(232,101,26,0.15),transparent 70%)',pointerEvents:'none'}}/>
-        <div style={{position:'absolute',bottom:'-50px',left:'30%',width:'200px',height:'200px',borderRadius:'50%',background:'radial-gradient(circle,rgba(0,191,165,0.10),transparent 70%)',pointerEvents:'none'}}/>
+      <div style={{marginBottom:'1.75rem',padding:'1.75rem 2rem',borderRadius:'24px',background:'linear-gradient(135deg,#1E1B4B 0%,#312E81 50%,#4C1D95 100%)',position:'relative',overflow:'hidden',boxShadow:'0 8px 40px rgba(0,0,0,0.22)'}}>
+        <div style={{position:'absolute',top:'-80px',right:'-60px',width:'260px',height:'260px',borderRadius:'50%',background:'radial-gradient(circle,rgba(168,85,247,0.25),transparent 70%)',pointerEvents:'none'}}/>
+        <div style={{position:'absolute',bottom:'-50px',left:'30%',width:'200px',height:'200px',borderRadius:'50%',background:'radial-gradient(circle,rgba(99,102,241,0.18),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{position:'relative',display:'flex',justifyContent:'space-between',alignItems:'flex-start',flexWrap:'wrap',gap:'1.5rem'}}>
           <div>
             <div style={{display:'inline-block',background:'rgba(232,101,26,0.18)',border:'1px solid rgba(232,101,26,0.35)',borderRadius:'8px',padding:'3px 12px',fontSize:'10px',fontWeight:'800',color:'#FF7043',marginBottom:'12px',letterSpacing:'1.5px'}}>ESPACE FORMATEUR</div>
