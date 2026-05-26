@@ -1,12 +1,16 @@
 'use client'
+export const dynamic = 'force-dynamic'
+
 import { useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+  )
+}
 
 interface Step {
   id: number
@@ -108,10 +112,10 @@ export default function OnboardingPage() {
   async function finalize() {
     setLoading(true)
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { user } } = await getSupabase().auth.getUser()
       if (user) {
-        await supabase.auth.updateUser({ data: { ...answers, onboarding_done: true } })
-        await supabase.from('profiles').update({ ...answers, onboarding_done: true }).eq('id', user.id)
+        await getSupabase().auth.updateUser({ data: { ...answers, onboarding_done: true } })
+        await getSupabase().from('profiles').update({ ...answers, onboarding_done: true }).eq('id', user.id)
       }
     } catch {}
     setLoading(false)

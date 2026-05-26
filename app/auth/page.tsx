@@ -1,12 +1,16 @@
 'use client'
+export const dynamic = 'force-dynamic'
+
 import { useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+  )
+}
 
 type Statut = 'apprenant' | 'formateur' | 'consultant' | 'autre'
 type Tab = 'login' | 'register'
@@ -39,7 +43,7 @@ export default function AuthPage() {
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true); setError(''); setSuccess('')
-    const { data, error: err } = await supabase.auth.signUp({
+    const { data, error: err } = await getSupabase().auth.signUp({
       email,
       password,
       options: {
@@ -48,7 +52,7 @@ export default function AuthPage() {
     })
     if (err) { setError(err.message); setLoading(false); return }
     if (data.user) {
-      await supabase.from('profiles').upsert({
+      await getSupabase().from('profiles').upsert({
         id: data.user.id,
         nom, prenom, statut, email,
         created_at: new Date().toISOString()
@@ -62,7 +66,7 @@ export default function AuthPage() {
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true); setError(''); setSuccess('')
-    const { data, error: err } = await supabase.auth.signInWithPassword({
+    const { data, error: err } = await getSupabase().auth.signInWithPassword({
       email: loginEmail, password: loginPassword
     })
     if (err) { setError(err.message); setLoading(false); return }
