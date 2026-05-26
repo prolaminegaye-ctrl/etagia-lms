@@ -495,23 +495,153 @@ export default function PassBacPage() {
           </div>
         )}
 
-        {/* FICHES */}
+        {/* FICHES MÉMO — Design premium engageant */}
         {activeTab === 'fiches' && (
           <div>
-            <h2 style={{ color: subj.color, fontSize: '1.25rem', fontWeight: 800, marginBottom: '1.2rem' }}>
-              {subj.icon} Fiches Mémo — {subj.label}
-            </h2>
-            {subj.chapters.filter(ch => ch.fiche).length === 0 ? (
-              <div style={{ ...sectionStyle, textAlign: 'center' as const, padding: '3rem' }}>
-                <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>📌</div>
-                <p style={{ color: 'rgba(30,27,46,0.50)' }}>Fiches mémo de {subj.label} — bientôt disponibles.</p>
+            {/* Header avec stats */}
+            <div style={{
+              background: `linear-gradient(135deg, ${subj.color}18 0%, ${subj.color}08 100%)`,
+              border: `1.5px solid ${subj.color}30`,
+              borderRadius: '16px',
+              padding: '1.25rem 1.5rem',
+              marginBottom: '1.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+            }}>
+              <div style={{
+                width: '52px', height: '52px', borderRadius: '14px', flexShrink: 0,
+                background: subj.color, display: 'flex', alignItems: 'center',
+                justifyContent: 'center', fontSize: '24px',
+                boxShadow: `0 4px 16px ${subj.color}40`,
+              }}>
+                {subj.icon}
               </div>
-            ) : subj.chapters.filter(ch => ch.fiche).map(ch => (
-              <div key={ch.id} style={{ ...sectionStyle, borderLeft: `4px solid ${subj.color}` }}>
-                <h3 style={{ color: subj.color, fontSize: '0.95rem', fontWeight: 700, marginBottom: '1rem' }}>{ch.title}</h3>
-                <pre style={{ color: 'rgba(30,27,46,0.85)', whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: '0.86rem', lineHeight: 1.85, margin: 0 }}>
-                  {ch.fiche}
-                </pre>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 800, fontSize: '1rem', color: '#1E1B2E', marginBottom: '4px' }}>
+                  Fiches Mémo — {subj.label}
+                </div>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  {[
+                    [`${subj.chapters.filter(ch => ch.fiche).length} fiches`, '📄'],
+                    [`${subj.chapters.filter(ch => ch.keyPoints).reduce((a, c) => a + (c.keyPoints?.length ?? 0), 0)} points clés`, '🎯'],
+                    ['Révision express', '⚡'],
+                  ].map(([label, icon]) => (
+                    <span key={label as string} style={{
+                      background: `${subj.color}18`, border: `1px solid ${subj.color}30`,
+                      borderRadius: '20px', padding: '3px 10px',
+                      fontSize: '11px', fontWeight: 700, color: subj.color,
+                    }}>{icon} {label}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {subj.chapters.filter(ch => ch.fiche).length === 0 ? (
+              <div style={{
+                background: '#fff', borderRadius: '18px', padding: '3rem 2rem',
+                textAlign: 'center', border: `1.5px dashed ${subj.color}40`,
+                boxShadow: '0 2px 12px rgba(30,27,46,0.04)',
+              }}>
+                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📌</div>
+                <div style={{ fontWeight: 800, fontSize: '1rem', color: '#1E1B2E', marginBottom: '8px' }}>
+                  Fiches bientôt disponibles
+                </div>
+                <p style={{ color: 'rgba(30,27,46,0.45)', fontSize: '0.88rem', maxWidth: '260px', margin: '0 auto' }}>
+                  Les fiches mémo de {subj.label} seront ajoutées très prochainement.
+                </p>
+              </div>
+            ) : subj.chapters.filter(ch => ch.fiche).map((ch, idx) => (
+              <div key={ch.id} style={{
+                background: '#fff',
+                borderRadius: '18px',
+                marginBottom: '1.25rem',
+                border: '1px solid rgba(30,27,46,0.08)',
+                boxShadow: '0 4px 20px rgba(30,27,46,0.06)',
+                overflow: 'hidden',
+              }}>
+                {/* Card header */}
+                <div style={{
+                  background: `linear-gradient(135deg, ${subj.color} 0%, ${subj.color}CC 100%)`,
+                  padding: '0.9rem 1.5rem',
+                  display: 'flex', alignItems: 'center', gap: '0.75rem',
+                }}>
+                  <div style={{
+                    width: '28px', height: '28px', borderRadius: '8px',
+                    background: 'rgba(255,255,255,0.22)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '13px', fontWeight: 900, color: '#fff', flexShrink: 0,
+                  }}>{idx + 1}</div>
+                  <h3 style={{ margin: 0, fontSize: '0.9rem', fontWeight: 800, color: '#fff', flex: 1 }}>
+                    {ch.title}
+                  </h3>
+                  <span style={{ fontSize: '10px', background: 'rgba(255,255,255,0.18)', color: '#fff', borderRadius: '6px', padding: '2px 8px', fontWeight: 700 }}>
+                    FICHE
+                  </span>
+                </div>
+
+                {/* Card body */}
+                <div style={{ padding: '1.25rem 1.5rem' }}>
+                  {/* Summary paragraphs */}
+                  {ch.summary && (
+                    <div style={{ marginBottom: '1rem' }}>
+                      {ch.summary.split('\n\n').map((para: string, pi: number) => (
+                        <p key={pi} style={{
+                          color: 'rgba(30,27,46,0.80)', fontSize: '0.875rem',
+                          lineHeight: 1.75, margin: '0 0 0.65rem', fontWeight: 400,
+                        }}>{para}</p>
+                      ))}
+                    </div>
+                  )}
+                  {!ch.summary && ch.fiche && (
+                    <p style={{
+                      color: 'rgba(30,27,46,0.75)', fontSize: '0.875rem',
+                      lineHeight: 1.75, margin: '0 0 1rem', fontWeight: 400,
+                    }}>{ch.fiche.split('\n')[0]}</p>
+                  )}
+
+                  {/* Key points */}
+                  {ch.keyPoints && ch.keyPoints.length > 0 && (
+                    <div>
+                      <div style={{
+                        fontSize: '10px', fontWeight: 800, textTransform: 'uppercase',
+                        letterSpacing: '1.5px', color: 'rgba(30,27,46,0.35)', marginBottom: '10px',
+                      }}>🎯 Points clés à retenir</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
+                        {ch.keyPoints.map((kp: string, ki: number) => (
+                          <div key={ki} style={{
+                            display: 'flex', gap: '10px', alignItems: 'flex-start',
+                            padding: '8px 12px',
+                            background: `${subj.color}08`,
+                            borderRadius: '10px',
+                            border: `1px solid ${subj.color}18`,
+                          }}>
+                            <span style={{
+                              width: '20px', height: '20px', borderRadius: '6px', flexShrink: 0,
+                              background: subj.color, color: '#fff',
+                              fontSize: '10px', fontWeight: 900,
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            }}>{ki + 1}</span>
+                            <span style={{ fontSize: '0.83rem', color: '#1E1B2E', lineHeight: 1.5, fontWeight: 500 }}>
+                              {kp}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Footer mémo pill */}
+                  <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'flex-end' }}>
+                    <span style={{
+                      fontSize: '11px', fontWeight: 700, color: subj.color,
+                      background: `${subj.color}12`, border: `1px solid ${subj.color}25`,
+                      borderRadius: '20px', padding: '4px 12px',
+                    }}>
+                      ✓ Mémorisé ? Passe aux flashcards →
+                    </span>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
