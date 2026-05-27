@@ -1,6 +1,5 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 type SessionStatus = 'live' | 'scheduled' | 'ended'
@@ -22,18 +21,18 @@ interface LiveSession {
   color: string
 }
 
-// ─── Mock sessions (remplacées par données réelles en prod) ──────────────────
+// ─── Mock sessions enrichies ─────────────────────────────────────────────────
 const INITIAL_SESSIONS: LiveSession[] = [
   {
     id: '1', title: 'Data Science — Module 3 : ML supervisé', host: 'Dr. Aminata Diallo',
-    hostInitials: 'AD', date: 'Aujourd\'hui', time: '15:00', duration: '90 min',
+    hostInitials: 'AD', date: "Aujourd'hui", time: '15:00', duration: '90 min',
     topic: 'Algorithmes de classification', participants: 24, maxParticipants: 50,
     status: 'live', meetingID: 'etagia-data-ml-001', attendeePW: 'ap', moderatorPW: 'mp',
     color: '#E8651A',
   },
   {
     id: '2', title: 'Marketing Digital — Stratégie Social Media', host: 'Moussa Konaté',
-    hostInitials: 'MK', date: 'Aujourd\'hui', time: '17:30', duration: '60 min',
+    hostInitials: 'MK', date: "Aujourd'hui", time: '17:30', duration: '60 min',
     topic: 'Algorithmes Facebook & Instagram', participants: 0, maxParticipants: 40,
     status: 'scheduled', meetingID: 'etagia-mkt-social-002', attendeePW: 'ap', moderatorPW: 'mp',
     color: '#00BFA5',
@@ -67,7 +66,6 @@ const STATUS_CFG: Record<SessionStatus, { label: string; dot: string; bg: string
 
 // ─── Main Component ──────────────────────────────────────────────────────────
 export default function LivePage() {
-  const router = useRouter()
   const [sessions, setSessions] = useState<LiveSession[]>(INITIAL_SESSIONS)
   const [filter, setFilter] = useState<'all' | SessionStatus>('all')
   const [showCreate, setShowCreate] = useState(false)
@@ -75,49 +73,163 @@ export default function LivePage() {
   const [toast, setToast] = useState<string | null>(null)
   const [form, setForm] = useState({ title: '', topic: '', date: '', time: '', duration: '60', maxParticipants: '30' })
   const [creating, setCreating] = useState(false)
-  const [bbbStatus, setBbbStatus] = useState<'checking'|'ok'|'error'|'demo'>('demo')
+  const [bbbStatus, setBbbStatus] = useState<'checking' | 'ok' | 'error' | 'demo'>('checking')
 
   const showToast = useCallback((msg: string) => {
     setToast(msg)
     setTimeout(() => setToast(null), 3500)
   }, [])
 
-  // Mode démo — BBB server non configuré en test
+  // ── Vérifier la connexion BBB au démarrage ─────────────────────────────────
+  useEffect(() => {
+    const checkBBB = async () => {
+      try {
+        const res = await fetch('/api/bbb', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'getMeetings' }),
+        })
+        if (res.status === 503) {
+          setBbbStatus('demo')
+        } else if (res.ok) {
+          setBbbStatus('ok')
+        } else {
+          setBbbStatus('error')
+        }
+      } catch {
+        setBbbStatus('error')
+      }
+    }
+    checkBBB()
+  }, [])
 
   const filtered = filter === 'all' ? sessions : sessions.filter(s => s.status === filter)
 
+  // ── Rejoindre une session ──────────────────────────────────────────────────
   const handleJoin = async (session: LiveSession, role: 'attendee' | 'moderator' = 'attendee') => {
     setJoining(session.id)
-    // Mode démo — simulation de connexion
-    await new Promise(r => setTimeout(r, 1200))
-    if (session.status === 'scheduled') {
-      setSessions(prev => prev.map(s => s.id === session.id ? { ...s, status: 'live', participants: 1 } : s))
-    } else {
-      setSessions(prev => prev.map(s => s.id === session.id ? { ...s, participants: s.participants + 1 } : s))
+
+    // Mode démo — simulation locale
+    if (bbbStatus === 'demo' || bbbStatus === 'checking') {
+      await new Promise(r => setTimeout(r, 1200))
+      if (session.status === 'scheduled') {
+        setSessions(prev => prev.map(s => s.id === session.id ? { ...s, status: 'live', participants: 1 } : s))
+      } else {
+        setSessions(prev => prev.map(s => s.id === session.id ? { ...s, participants: s.participants + 1 } : s))
+      }
+      showToast(role === 'moderator'
+        ? '🎙 Mode démo — Vous animez la session en tant que formateur'
+        : '🎯 Mode démo — Connexion simulée avec succès')
+      setJoining(null)
+      return
     }
-    showToast(role === 'moderator'
-      ? '🎙 Mode démo — Vous animez la session en tant que formateur'
-      : '🎯 Mode démo — Connexion à la salle simulée avec succès')
+
+    // Mode réel — BBB connecté
+    try {
+      // Si la session est programmée, on la crée d'abord côté BBB
+      if (session.status === 'scheduled') {
+        const createRes = await fetch('/api/bbb', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'createMeeting',
+            meetingID: session.meetingID,
+            name: session.title,
+            attendeePW: session.attendeePW,
+            moderatorPW: session.moderatorPW,
+          }),
+        })
+        if (!createRes.ok) {
+          const err = await createRes.json()
+          showToast('❌ Erreur création salle : ' + (err.message || err.error || 'Inconnu'))
+          setJoining(null)
+          return
+        }
+        setSessions(prev => prev.map(s => s.id === session.id ? { ...s, status: 'live', participants: 0 } : s))
+      }
+
+      // Obtenir le lien de connexion BBB
+      const joinRes = await fetch('/api/bbb', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'joinMeeting',
+          meetingID: session.meetingID,
+          fullName: role === 'moderator' ? 'Formateur ETAGIA' : 'Apprenant ETAGIA',
+          role,
+          attendeePW: session.attendeePW,
+          moderatorPW: session.moderatorPW,
+        }),
+      })
+      const joinData = await joinRes.json()
+
+      if (joinData.ok && joinData.joinUrl) {
+        setSessions(prev => prev.map(s =>
+          s.id === session.id ? { ...s, participants: s.participants + 1 } : s
+        ))
+        showToast(role === 'moderator' ? '🎙 Ouverture de la salle BBB en tant que formateur…' : '🎯 Connexion à la salle BBB…')
+        // Ouvrir la salle dans un nouvel onglet
+        window.open(joinData.joinUrl, '_blank', 'noopener,noreferrer')
+      } else {
+        showToast('❌ Impossible de rejoindre la salle : ' + (joinData.error || 'Vérifiez BBB_URL et BBB_SECRET'))
+      }
+    } catch (err) {
+      showToast('❌ Erreur réseau : ' + String(err))
+    }
     setJoining(null)
   }
 
+  // ── Créer une session ──────────────────────────────────────────────────────
   const handleCreate = async () => {
     if (!form.title || !form.date || !form.time) return
     setCreating(true)
-    // Mode démo — création locale sans serveur BBB
-    await new Promise(r => setTimeout(r, 800))
+
     const meetingID = 'etagia-' + Date.now()
     const newSession: LiveSession = {
-      id: meetingID, title: form.title, host: 'Lamine Gaye', hostInitials: 'LG',
+      id: meetingID, title: form.title, host: 'Formateur ETAGIA', hostInitials: 'FE',
       date: form.date, time: form.time, duration: form.duration + ' min', topic: form.topic,
       participants: 0, maxParticipants: parseInt(form.maxParticipants),
       status: 'scheduled', meetingID, attendeePW: 'ap', moderatorPW: 'mp',
       color: '#E8651A',
     }
-    setSessions(prev => [newSession, ...prev])
-    setShowCreate(false)
-    setForm({ title: '', topic: '', date: '', time: '', duration: '60', maxParticipants: '30' })
-    showToast('✅ Classe créée avec succès (mode démo)')
+
+    // Mode démo — création locale
+    if (bbbStatus === 'demo' || bbbStatus === 'checking') {
+      await new Promise(r => setTimeout(r, 800))
+      setSessions(prev => [newSession, ...prev])
+      setShowCreate(false)
+      setForm({ title: '', topic: '', date: '', time: '', duration: '60', maxParticipants: '30' })
+      showToast('✅ Classe créée (mode démo)')
+      setCreating(false)
+      return
+    }
+
+    // Mode réel — créer la salle sur BBB
+    try {
+      const res = await fetch('/api/bbb', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'createMeeting',
+          meetingID,
+          name: form.title,
+          attendeePW: 'ap',
+          moderatorPW: 'mp',
+        }),
+      })
+      const data = await res.json()
+
+      if (data.ok) {
+        setSessions(prev => [{ ...newSession, status: 'live' }, ...prev])
+        setShowCreate(false)
+        setForm({ title: '', topic: '', date: '', time: '', duration: '60', maxParticipants: '30' })
+        showToast('✅ Salle BBB créée avec succès — prête à accueillir des apprenants')
+      } else {
+        showToast('❌ Erreur BBB : ' + (data.message || data.error || 'Vérifiez vos variables Vercel'))
+      }
+    } catch (err) {
+      showToast('❌ Erreur réseau : ' + String(err))
+    }
     setCreating(false)
   }
 
@@ -126,6 +238,14 @@ export default function LivePage() {
     border: '1px solid rgba(28,25,23,0.12)', background: '#FAF9F7',
     color: '#1C1917', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box',
   }
+
+  // ── Statut BBB affiché ─────────────────────────────────────────────────────
+  const bbbBadge = {
+    checking: { dot: '#FCD34D', label: 'Vérification…',   bg: 'rgba(255,255,255,0.18)' },
+    ok:       { dot: '#4ADE80', label: '✓ BBB Connecté',  bg: 'rgba(74,222,128,0.22)' },
+    error:    { dot: '#FCA5A5', label: '⚠ Erreur BBB',    bg: 'rgba(252,165,165,0.22)' },
+    demo:     { dot: '#60A5FA', label: 'Mode démo actif', bg: 'rgba(255,255,255,0.18)' },
+  }[bbbStatus]
 
   return (
     <div style={{ maxWidth: '1000px' }}>
@@ -157,13 +277,13 @@ export default function LivePage() {
             <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '14px', margin: 0 }}>
               Sessions live BigBlueButton · Conférences · Q&amp;A en temps réel
             </p>
-            {/* BBB Status */}
+            {/* BBB Status badge */}
             <div style={{ marginTop: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px',
-              background: 'rgba(255,255,255,0.18)', borderRadius: '20px', padding: '5px 12px' }}>
-              <div style={{ width: '7px', height: '7px', borderRadius: '50%',
-                background: bbbStatus === 'ok' ? '#4ADE80' : bbbStatus === 'demo' ? '#60A5FA' : '#FCD34D' }} />
+              background: bbbBadge.bg, borderRadius: '20px', padding: '5px 12px' }}>
+              <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: bbbBadge.dot,
+                boxShadow: bbbStatus === 'ok' ? '0 0 0 3px rgba(74,222,128,0.35)' : 'none' }} />
               <span style={{ fontSize: '11px', fontWeight: '700', color: '#fff' }}>
-                BigBlueButton : {bbbStatus === 'ok' ? '✓ Connecté' : bbbStatus === 'demo' ? 'Mode démo actif' : 'Vérification…'}
+                BigBlueButton : {bbbBadge.label}
               </span>
             </div>
           </div>
@@ -177,14 +297,40 @@ export default function LivePage() {
         </div>
       </div>
 
-      {/* Mode démo — badge discret */}
+      {/* Bandeaux contextuels selon état BBB */}
       {bbbStatus === 'demo' && (
-        <div style={{ ...card, padding: '0.75rem 1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px',
+        <div style={{ ...card, padding: '0.75rem 1.25rem', marginBottom: '1.5rem',
+          display: 'flex', alignItems: 'center', gap: '10px',
           borderLeft: '3px solid #60A5FA', background: 'rgba(96,165,250,0.04)' }}>
           <span style={{ fontSize: '16px', flexShrink: 0 }}>🔵</span>
           <div style={{ fontSize: '12px', color: '#57534E', lineHeight: '1.5' }}>
-            <strong style={{ color: '#1C1917' }}>Mode démo actif</strong> — Les sessions sont simulées localement.
-            Pour connecter un vrai serveur BigBlueButton, ajoutez <code style={{ background: '#F5F5F5', padding: '1px 5px', borderRadius: '3px', fontFamily: 'monospace', fontSize: '11px' }}>BBB_URL</code> et <code style={{ background: '#F5F5F5', padding: '1px 5px', borderRadius: '3px', fontFamily: 'monospace', fontSize: '11px' }}>BBB_SECRET</code> dans les variables Vercel.
+            <strong style={{ color: '#1C1917' }}>Mode démo actif</strong> — Serveur BBB non configuré.
+            Ajoutez <code style={{ background: '#F5F5F5', padding: '1px 5px', borderRadius: '3px', fontFamily: 'monospace', fontSize: '11px' }}>BBB_URL</code> et{' '}
+            <code style={{ background: '#F5F5F5', padding: '1px 5px', borderRadius: '3px', fontFamily: 'monospace', fontSize: '11px' }}>BBB_SECRET</code> dans
+            Vercel › Settings › Environment Variables, puis redéployez.
+          </div>
+        </div>
+      )}
+      {bbbStatus === 'ok' && (
+        <div style={{ ...card, padding: '0.75rem 1.25rem', marginBottom: '1.5rem',
+          display: 'flex', alignItems: 'center', gap: '10px',
+          borderLeft: '3px solid #4ADE80', background: 'rgba(74,222,128,0.04)' }}>
+          <span style={{ fontSize: '16px', flexShrink: 0 }}>✅</span>
+          <div style={{ fontSize: '12px', color: '#57534E', lineHeight: '1.5' }}>
+            <strong style={{ color: '#1C1917' }}>BigBlueButton connecté</strong> — Les classes ouvertes redirigeront les apprenants
+            vers la vraie salle de visioconférence BBB dans un nouvel onglet.
+          </div>
+        </div>
+      )}
+      {bbbStatus === 'error' && (
+        <div style={{ ...card, padding: '0.75rem 1.25rem', marginBottom: '1.5rem',
+          display: 'flex', alignItems: 'center', gap: '10px',
+          borderLeft: '3px solid #FCA5A5', background: 'rgba(252,165,165,0.04)' }}>
+          <span style={{ fontSize: '16px', flexShrink: 0 }}>⚠️</span>
+          <div style={{ fontSize: '12px', color: '#57534E', lineHeight: '1.5' }}>
+            <strong style={{ color: '#1C1917' }}>Erreur de connexion BBB</strong> — Variables configurées mais le serveur
+            ne répond pas. Vérifiez que <code style={{ background: '#F5F5F5', padding: '1px 5px', borderRadius: '3px', fontFamily: 'monospace', fontSize: '11px' }}>BBB_URL</code> est
+            correct et que le serveur est en ligne.
           </div>
         </div>
       )}
@@ -248,7 +394,6 @@ export default function LivePage() {
                     whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{session.title}</div>
                   <div style={{ fontSize: '12px', color: '#57534E', marginBottom: '10px' }}>🎯 {session.topic}</div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-                    {/* Host */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
                       <div style={{ width: '26px', height: '26px', borderRadius: '50%',
                         background: `linear-gradient(135deg,${session.color},${session.color}99)`,
@@ -259,7 +404,6 @@ export default function LivePage() {
                     <span style={{ fontSize: '12px', color: '#A8A29E' }}>📅 {session.date} à {session.time}</span>
                     <span style={{ fontSize: '12px', color: '#A8A29E' }}>⏱ {session.duration}</span>
                   </div>
-                  {/* Participants bar */}
                   {session.status !== 'ended' && (
                     <div style={{ marginTop: '12px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
@@ -308,7 +452,6 @@ export default function LivePage() {
             </div>
           )
         })}
-
         {filtered.length === 0 && (
           <div style={{ ...card, padding: '3rem', textAlign: 'center' }}>
             <div style={{ fontSize: '40px', marginBottom: '12px' }}>📭</div>
@@ -348,6 +491,13 @@ export default function LivePage() {
               <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#1C1917', margin: 0 }}>Créer une classe en direct</h2>
               <button onClick={() => setShowCreate(false)} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#A8A29E' }}>✕</button>
             </div>
+            {bbbStatus === 'ok' && (
+              <div style={{ padding: '8px 12px', borderRadius: '8px', background: 'rgba(74,222,128,0.10)',
+                border: '1px solid rgba(74,222,128,0.25)', marginBottom: '12px',
+                fontSize: '12px', color: '#15803D', fontWeight: '600' }}>
+                ✅ Une vraie salle BBB sera créée et disponible immédiatement
+              </div>
+            )}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div>
                 <label style={{ fontSize: '12px', fontWeight: '700', color: '#57534E', display: 'block', marginBottom: '5px' }}>Titre de la session *</label>
