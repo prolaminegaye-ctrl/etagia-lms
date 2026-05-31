@@ -68,7 +68,7 @@ export default function EduGearsPage() {
       <div style={{ marginBottom: '2rem', padding: '1.5rem', background: 'linear-gradient(135deg,rgba(28,25,23,0.07),rgba(34,212,168,0.06))', border: '1px solid rgba(28,25,23,0.09)', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
         <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'linear-gradient(135deg,#E8651A,#00BFA5)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', flexShrink: 0 }}>🤖</div>
         <div style={{ flex: 1 }}>
-          <h1 style={{ fontSize: '22px', fontWeight: '800', background: 'linear-gradient(135deg,#1C1917,#E8651A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '4px' }}>EduGears AI</h1>
+          <h1 style={{ fontSize: '22px', fontWeight: '800', background: 'linear-gradient(135deg,#F6F7FB,#E8651A)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '4px' }}>EduGears AI</h1>
           <p style={{ color: '#A8A29E', fontSize: '13px' }}>10 outils d'intelligence artificielle pédagogique · LTI 1.3 Advantage</p>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
@@ -103,7 +103,7 @@ export default function EduGearsPage() {
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '12px' }}>
                 <div style={{ width: '42px', height: '42px', borderRadius: '11px', background: `${tool.color}22`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>{tool.icon}</div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: '700', fontSize: '14px', color: '#1C1917', marginBottom: '2px' }}>{tool.label}</div>
+                  <div style={{ fontWeight: '700', fontSize: '14px', color: '#F6F7FB', marginBottom: '2px' }}>{tool.label}</div>
                   <div style={{ fontSize: '10px', color: tool.color, fontWeight: '600', background: `${tool.color}18`, borderRadius: '4px', padding: '2px 7px', display: 'inline-block' }}>{tool.category}</div>
                 </div>
               </div>

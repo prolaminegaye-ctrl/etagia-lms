@@ -141,7 +141,7 @@ export default function PassBacMini() {
       minHeight: '100vh',
       fontFamily: '"Plus Jakarta Sans",system-ui,sans-serif',
       background: '#F0F2FF',
-      color: '#1E1B4B',
+      color: '#FFFFFF',
     }}>
       <style>{`
         @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
@@ -198,7 +198,7 @@ export default function PassBacMini() {
               {activeSubj.icon}
             </div>
             <div>
-              <h2 style={{ margin:0, fontSize:'1rem', fontWeight:'800', color:'#1E1B4B' }}>{activeSubj.label}</h2>
+              <h2 style={{ margin:0, fontSize:'1rem', fontWeight:'800', color:'#FFFFFF' }}>{activeSubj.label}</h2>
               <p style={{ margin:0, fontSize:'11px', color:'rgba(30,27,75,0.45)' }}>{activeSubj.desc}</p>
             </div>
           </div>
@@ -217,7 +217,7 @@ export default function PassBacMini() {
                 transition:'all .2s',
               }}>
                 <div style={{ fontSize:'20px', marginBottom:'6px' }}>{card.icon}</div>
-                <div style={{ fontWeight:'700', fontSize:'12px', color:'#1E1B4B' }}>{card.label}</div>
+                <div style={{ fontWeight:'700', fontSize:'12px', color:'#FFFFFF' }}>{card.label}</div>
                 <div style={{ fontSize:'10px', color:'rgba(30,27,75,0.45)', marginTop:'2px' }}>{card.sub}</div>
               </div>
             ))}
@@ -234,7 +234,7 @@ export default function PassBacMini() {
               {["Théorème de Pythagore : a² + b² = c²","Discriminant : Δ = b² − 4ac","Dérivée de xⁿ = n·xⁿ⁻¹"].map((tip, i) => (
                 <div key={i} style={{ display:'flex', gap:'10px', alignItems:'flex-start' }}>
                   <span style={{ width:'22px', height:'22px', borderRadius:'6px', background:`${activeSubj.color}18`, color:activeSubj.color, fontSize:'11px', fontWeight:'800', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>{i+1}</span>
-                  <span style={{ fontSize:'13px', color:'#1E1B4B', lineHeight:1.5 }}>{tip}</span>
+                  <span style={{ fontSize:'13px', color:'#FFFFFF', lineHeight:1.5 }}>{tip}</span>
                 </div>
               ))}
             </div>

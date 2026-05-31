@@ -45,7 +45,7 @@ const DEFAULT: WLConfig = {
   secondaryColor: '#00BFA5',
   accentColor: '#D4A017',
   bgColor: '#FAF9F7',
-  textColor: '#1C1917',
+  textColor: '#F6F7FB',
   fontBody: 'Plus Jakarta Sans',
   fontDisplay: 'Syne',
   customDomain: '',
@@ -85,7 +85,7 @@ const FONTS = ['Plus Jakarta Sans','Syne','Inter','Poppins','DM Sans','Outfit','
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const card: React.CSSProperties = { background:'#FFFFFF', border:'1px solid rgba(28,25,23,0.08)', borderRadius:'16px', boxShadow:'0 2px 12px rgba(28,25,23,0.04)' }
-const inp: React.CSSProperties = { width:'100%', padding:'9px 12px', borderRadius:'9px', border:'1px solid rgba(28,25,23,0.12)', background:'#FAF9F7', color:'#1C1917', fontSize:'13px', fontFamily:'inherit', outline:'none', boxSizing:'border-box' as const }
+const inp: React.CSSProperties = { width:'100%', padding:'9px 12px', borderRadius:'9px', border:'1px solid rgba(28,25,23,0.12)', background:'#FAF9F7', color:'#F6F7FB', fontSize:'13px', fontFamily:'inherit', outline:'none', boxSizing:'border-box' as const }
 const label: React.CSSProperties = { fontSize:'11px', fontWeight:'700', color:'#57534E', textTransform:'uppercase' as const, letterSpacing:'0.5px', display:'block', marginBottom:'5px' }
 
 // ─── Toggle switch ─────────────────────────────────────────────────────────────
@@ -156,7 +156,7 @@ export default function WhiteLabelPage() {
               <span style={{ fontSize:'12px', fontWeight:'700', color:'#fff' }}>{cfg.enabled ? '✅ White Label actif' : '⭕ Désactivé'}</span>
               <Toggle checked={cfg.enabled} onChange={v => set('enabled', v)} />
             </div>
-            <button onClick={save} style={{ background:'#fff', border:'none', borderRadius:'12px', padding:'10px 20px', fontWeight:'800', fontSize:'13px', color: cfg.enabled ? cfg.primaryColor : '#1C1917', cursor:'pointer', boxShadow:'0 4px 16px rgba(0,0,0,0.15)' }}>
+            <button onClick={save} style={{ background:'#fff', border:'none', borderRadius:'12px', padding:'10px 20px', fontWeight:'800', fontSize:'13px', color: cfg.enabled ? cfg.primaryColor : '#F6F7FB', cursor:'pointer', boxShadow:'0 4px 16px rgba(0,0,0,0.15)' }}>
               {saved ? '✓ Enregistré !' : '💾 Enregistrer'}
             </button>
           </div>
@@ -168,7 +168,7 @@ export default function WhiteLabelPage() {
         <div style={{ ...card, padding:'12px 16px', marginBottom:'1.25rem', display:'flex', alignItems:'center', gap:'12px', borderLeft:'4px solid #D4A017', background:'rgba(212,160,23,0.05)' }}>
           <span style={{ fontSize:'18px' }}>💡</span>
           <div style={{ fontSize:'13px', color:'#57534E' }}>
-            <strong style={{ color:'#1C1917' }}>Mode White Label désactivé.</strong> Activez le toggle ci-dessus pour appliquer le branding personnalisé aux organisations.
+            <strong style={{ color:'#F6F7FB' }}>Mode White Label désactivé.</strong> Activez le toggle ci-dessus pour appliquer le branding personnalisé aux organisations.
           </div>
         </div>
       )}
@@ -197,7 +197,7 @@ export default function WhiteLabelPage() {
           {/* ── IDENTITÉ ──────────────────────────────────────────────── */}
           {tab === 'identite' && (
             <div style={{ ...card, padding:'1.5rem' }}>
-              <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#1C1917', marginBottom:'1.25rem' }}>🏷 Identité de la plateforme</h2>
+              <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#F6F7FB', marginBottom:'1.25rem' }}>🏷 Identité de la plateforme</h2>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'16px', marginBottom:'16px' }}>
                 <div>
                   <span style={label}>Nom de la plateforme</span>
@@ -238,7 +238,7 @@ export default function WhiteLabelPage() {
                     {cfg.orgName.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <div style={{ fontWeight:'800', fontSize:'16px', color:'#1C1917' }}>{cfg.orgName || 'Mon Académie'}</div>
+                    <div style={{ fontWeight:'800', fontSize:'16px', color:'#F6F7FB' }}>{cfg.orgName || 'Mon Académie'}</div>
                     <div style={{ fontSize:'12px', color:'#A8A29E' }}>{cfg.tagline}</div>
                   </div>
                 </div>
@@ -249,7 +249,7 @@ export default function WhiteLabelPage() {
           {/* ── COULEURS ──────────────────────────────────────────────── */}
           {tab === 'couleurs' && (
             <div style={{ ...card, padding:'1.5rem' }}>
-              <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#1C1917', marginBottom:'1.25rem' }}>🎨 Palette de couleurs</h2>
+              <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#F6F7FB', marginBottom:'1.25rem' }}>🎨 Palette de couleurs</h2>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'20px' }}>
                 <div>
                   <ColorPick label="Couleur principale (Primary)" value={cfg.primaryColor} onChange={v=>set('primaryColor',v)} />
@@ -319,7 +319,7 @@ export default function WhiteLabelPage() {
           {/* ── TYPOGRAPHIE ────────────────────────────────────────────── */}
           {tab === 'typo' && (
             <div style={{ ...card, padding:'1.5rem' }}>
-              <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#1C1917', marginBottom:'1.25rem' }}>✍ Typographie</h2>
+              <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#F6F7FB', marginBottom:'1.25rem' }}>✍ Typographie</h2>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'16px', marginBottom:'20px' }}>
                 <div>
                   <span style={label}>Police du corps de texte</span>
@@ -337,7 +337,7 @@ export default function WhiteLabelPage() {
               {/* Font preview */}
               <div style={{ padding:'20px', background:'#FAF9F7', borderRadius:'12px', border:'1px solid rgba(28,25,23,0.08)' }}>
                 <div style={{ fontSize:'11px', fontWeight:'700', color:'#A8A29E', marginBottom:'12px' }}>APERÇU TYPOGRAPHIQUE</div>
-                <div style={{ fontFamily:`'${cfg.fontDisplay}',sans-serif`, fontSize:'28px', fontWeight:'800', color:'#1C1917', marginBottom:'8px', lineHeight:1.2 }}>
+                <div style={{ fontFamily:`'${cfg.fontDisplay}',sans-serif`, fontSize:'28px', fontWeight:'800', color:'#F6F7FB', marginBottom:'8px', lineHeight:1.2 }}>
                   {cfg.orgName || 'Mon Académie'} — Titre H1
                 </div>
                 <div style={{ fontFamily:`'${cfg.fontDisplay}',sans-serif`, fontSize:'18px', fontWeight:'700', color:'#57534E', marginBottom:'10px' }}>
@@ -357,7 +357,7 @@ export default function WhiteLabelPage() {
           {/* ── DOMAINE ────────────────────────────────────────────────── */}
           {tab === 'domaine' && (
             <div style={{ ...card, padding:'1.5rem' }}>
-              <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#1C1917', marginBottom:'1.25rem' }}>🌐 Nom de domaine personnalisé</h2>
+              <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#F6F7FB', marginBottom:'1.25rem' }}>🌐 Nom de domaine personnalisé</h2>
               <div style={{ marginBottom:'16px' }}>
                 <span style={label}>Domaine personnalisé</span>
                 <div style={{ display:'flex', gap:'8px' }}>
@@ -372,7 +372,7 @@ export default function WhiteLabelPage() {
               </div>
               <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'14px 16px', background:'#FAF9F7', borderRadius:'10px', border:'1px solid rgba(28,25,23,0.08)', marginBottom:'12px' }}>
                 <div>
-                  <div style={{ fontWeight:'600', fontSize:'13px', color:'#1C1917' }}>SSL / HTTPS automatique</div>
+                  <div style={{ fontWeight:'600', fontSize:'13px', color:'#F6F7FB' }}>SSL / HTTPS automatique</div>
                   <div style={{ fontSize:'11px', color:'#A8A29E' }}>Let&apos;s Encrypt — certificat auto-renouvelé</div>
                 </div>
                 <Toggle checked={cfg.sslEnabled} onChange={v=>set('sslEnabled',v)} />
@@ -387,7 +387,7 @@ export default function WhiteLabelPage() {
                   ].map((r,i) => (
                     <div key={i} style={{ display:'grid', gridTemplateColumns:'80px 80px 1fr', gap:'8px', alignItems:'center' }}>
                       <span style={{ fontSize:'11px', fontWeight:'700', background:'#E8F5E9', color:'#2E7D32', padding:'2px 8px', borderRadius:'4px', textAlign:'center' }}>{r.type}</span>
-                      <code style={{ fontSize:'11px', color:'#1C1917', background:'#F4F4F4', padding:'2px 8px', borderRadius:'4px' }}>{r.host}</code>
+                      <code style={{ fontSize:'11px', color:'#F6F7FB', background:'#F4F4F4', padding:'2px 8px', borderRadius:'4px' }}>{r.host}</code>
                       <code style={{ fontSize:'11px', color:'#57534E', background:'#F4F4F4', padding:'2px 8px', borderRadius:'4px', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{r.value}</code>
                     </div>
                   ))}
@@ -399,13 +399,13 @@ export default function WhiteLabelPage() {
           {/* ── EMAILS ─────────────────────────────────────────────────── */}
           {tab === 'emails' && (
             <div style={{ ...card, padding:'1.5rem' }}>
-              <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#1C1917', marginBottom:'1.25rem' }}>📧 Templates d&apos;emails automatiques</h2>
+              <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#F6F7FB', marginBottom:'1.25rem' }}>📧 Templates d&apos;emails automatiques</h2>
               <div style={{ marginBottom:'16px' }}>
                 <span style={label}>Adresse expéditeur</span>
                 <input value={cfg.emailSender} onChange={e=>set('emailSender',e.target.value)} style={inp} placeholder="noreply@mon-academie.com" />
               </div>
               <div style={{ marginBottom:'20px' }}>
-                <div style={{ fontSize:'12px', fontWeight:'700', color:'#1C1917', marginBottom:'10px' }}>📬 Email de bienvenue</div>
+                <div style={{ fontSize:'12px', fontWeight:'700', color:'#F6F7FB', marginBottom:'10px' }}>📬 Email de bienvenue</div>
                 <div style={{ marginBottom:'8px' }}>
                   <span style={label}>Objet</span>
                   <input value={cfg.emailSubjectWelcome} onChange={e=>set('emailSubjectWelcome',e.target.value)} style={inp} />
@@ -416,7 +416,7 @@ export default function WhiteLabelPage() {
                 </div>
               </div>
               <div style={{ marginBottom:'16px' }}>
-                <div style={{ fontSize:'12px', fontWeight:'700', color:'#1C1917', marginBottom:'10px' }}>🏆 Email certificat</div>
+                <div style={{ fontSize:'12px', fontWeight:'700', color:'#F6F7FB', marginBottom:'10px' }}>🏆 Email certificat</div>
                 <span style={label}>Objet</span>
                 <input value={cfg.emailSubjectCert} onChange={e=>set('emailSubjectCert',e.target.value)} style={inp} />
               </div>
@@ -434,7 +434,7 @@ export default function WhiteLabelPage() {
           {/* ── CERTIFICATS ────────────────────────────────────────────── */}
           {tab === 'certificats' && (
             <div style={{ ...card, padding:'1.5rem' }}>
-              <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#1C1917', marginBottom:'1.25rem' }}>🏆 Personnalisation des certificats</h2>
+              <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#F6F7FB', marginBottom:'1.25rem' }}>🏆 Personnalisation des certificats</h2>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'16px', marginBottom:'16px' }}>
                 <div>
                   <span style={label}>Logo sur le certificat (URL)</span>
@@ -458,11 +458,11 @@ export default function WhiteLabelPage() {
                 <div style={{ background:cfg.certBackground, borderRadius:'12px', border:`3px solid ${cfg.primaryColor}`, padding:'24px', textAlign:'center', position:'relative', overflow:'hidden' }}>
                   <div style={{ position:'absolute', top:0, left:0, right:0, height:'6px', background:`linear-gradient(90deg,${cfg.primaryColor},${cfg.accentColor})` }} />
                   <div style={{ fontSize:'11px', fontWeight:'700', letterSpacing:'3px', color:cfg.primaryColor, textTransform:'uppercase', marginBottom:'8px' }}>CERTIFICAT DE RÉUSSITE</div>
-                  <div style={{ fontSize:'22px', fontWeight:'800', color:'#1C1917', marginBottom:'6px', fontFamily:'Syne,sans-serif' }}>Prénom Nom</div>
+                  <div style={{ fontSize:'22px', fontWeight:'800', color:'#F6F7FB', marginBottom:'6px', fontFamily:'Syne,sans-serif' }}>Prénom Nom</div>
                   <div style={{ fontSize:'12px', color:'#57534E', marginBottom:'10px' }}>a complété avec succès la formation</div>
                   <div style={{ fontSize:'15px', fontWeight:'700', color:cfg.primaryColor, marginBottom:'16px' }}>« Nom du cours »</div>
                   <div style={{ fontSize:'11px', color:'#A8A29E', marginBottom:'12px' }}>Délivré le 17 mai 2026</div>
-                  <div style={{ fontSize:'13px', fontWeight:'800', color:'#1C1917' }}>{cfg.orgName}</div>
+                  <div style={{ fontSize:'13px', fontWeight:'800', color:'#F6F7FB' }}>{cfg.orgName}</div>
                   {cfg.certSignature && <img src={cfg.certSignature} alt="signature" style={{ height:'40px', marginTop:'8px', objectFit:'contain' }} />}
                 </div>
               </div>
@@ -472,7 +472,7 @@ export default function WhiteLabelPage() {
           {/* ── PAGE CONNEXION ─────────────────────────────────────────── */}
           {tab === 'login' && (
             <div style={{ ...card, padding:'1.5rem' }}>
-              <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#1C1917', marginBottom:'1.25rem' }}>🔐 Page de connexion</h2>
+              <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#F6F7FB', marginBottom:'1.25rem' }}>🔐 Page de connexion</h2>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'16px', marginBottom:'16px' }}>
                 <div>
                   <span style={label}>Titre</span>
@@ -504,7 +504,7 @@ export default function WhiteLabelPage() {
                     <div style={{ width:'40%', borderRadius:'8px', background:`url(${cfg.loginBanner}) center/cover`, minHeight:'120px' }} />
                   )}
                   <div style={{ flex:1 }}>
-                    <div style={{ fontWeight:'800', fontSize:'16px', color:'#1C1917', marginBottom:'4px' }}>{cfg.loginTitle}</div>
+                    <div style={{ fontWeight:'800', fontSize:'16px', color:'#F6F7FB', marginBottom:'4px' }}>{cfg.loginTitle}</div>
                     <div style={{ fontSize:'12px', color:'#A8A29E', marginBottom:'14px' }}>{cfg.loginSubtitle}</div>
                     <div style={{ background:'#fff', borderRadius:'8px', padding:'8px 12px', marginBottom:'8px', border:'1px solid rgba(28,25,23,0.10)', fontSize:'12px', color:'#A8A29E' }}>Email</div>
                     <div style={{ background:'#fff', borderRadius:'8px', padding:'8px 12px', marginBottom:'10px', border:'1px solid rgba(28,25,23,0.10)', fontSize:'12px', color:'#A8A29E' }}>Mot de passe</div>
@@ -520,7 +520,7 @@ export default function WhiteLabelPage() {
           {/* ── MÉDIAS ─────────────────────────────────────────────────── */}
           {tab === 'medias' && (
             <div style={{ ...card, padding:'1.5rem' }}>
-              <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#1C1917', marginBottom:'1.25rem' }}>🖼 Médias & Bannières</h2>
+              <h2 style={{ fontSize:'16px', fontWeight:'800', color:'#F6F7FB', marginBottom:'1.25rem' }}>🖼 Médias & Bannières</h2>
               <div style={{ marginBottom:'16px' }}>
                 <span style={label}>Bannière principale (Hero) — URL image</span>
                 <input value={cfg.bannerUrl} onChange={e=>set('bannerUrl',e.target.value)} style={inp} placeholder="https://votre-cdn.com/banner.jpg" />
@@ -532,7 +532,7 @@ export default function WhiteLabelPage() {
               <div style={{ padding:'14px', background:'#FAF9F7', borderRadius:'12px', border:'1px dashed rgba(28,25,23,0.15)' }}>
                 <div style={{ textAlign:'center', padding:'20px' }}>
                   <div style={{ fontSize:'28px', marginBottom:'8px' }}>📁</div>
-                  <div style={{ fontWeight:'700', fontSize:'13px', color:'#1C1917', marginBottom:'4px' }}>Upload direct d&apos;images</div>
+                  <div style={{ fontWeight:'700', fontSize:'13px', color:'#F6F7FB', marginBottom:'4px' }}>Upload direct d&apos;images</div>
                   <div style={{ fontSize:'12px', color:'#A8A29E', marginBottom:'12px' }}>PNG, JPG, SVG, WebP — max 5 MB</div>
                   <button style={{ background:cfg.primaryColor, border:'none', borderRadius:'9px', padding:'9px 20px', color:'#fff', fontWeight:'700', fontSize:'13px', cursor:'pointer' }}>
                     Parcourir les fichiers

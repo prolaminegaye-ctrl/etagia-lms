@@ -18,7 +18,7 @@ const g = () => Math.random().toString(36).slice(2, 8)
 
 const S = {
   card:  { background: '#FFFFFF', border: '1px solid rgba(28,25,23,0.07)', borderRadius: '16px' } as React.CSSProperties,
-  inp:   { background: 'rgba(232,101,26,0.06)', color: '#1C1917', border: '1px solid rgba(28,25,23,0.09)', borderRadius: '10px', padding: '10px 14px', width: '100%', fontSize: '14px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' as const } as React.CSSProperties,
+  inp:   { background: 'rgba(232,101,26,0.06)', color: '#F6F7FB', border: '1px solid rgba(28,25,23,0.09)', borderRadius: '10px', padding: '10px 14px', width: '100%', fontSize: '14px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' as const } as React.CSSProperties,
   btn:   { background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '10px', padding: '10px 20px', color: '#fff', fontWeight: '700', fontSize: '14px', cursor: 'pointer' } as React.CSSProperties,
   ghost: { background: '#FAF9F7', border: '1px solid rgba(28,25,23,0.09)', borderRadius: '10px', padding: '10px 18px', color: '#78716C', fontSize: '13px', cursor: 'pointer', fontWeight: '600' as const } as React.CSSProperties,
   lbl:   { fontSize: '11px', color: '#A8A29E', display: 'block', marginBottom: '5px', fontWeight: '700', textTransform: 'uppercase' as const, letterSpacing: '0.7px' },
@@ -292,7 +292,7 @@ export default function CreerCours() {
     <div style={{ minHeight: '100vh', background: '#FAF9F7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ ...S.card, padding: '3rem', textAlign: 'center', maxWidth: '480px', width: '100%' }}>
         <div style={{ fontSize: '64px', marginBottom: '1rem' }}>🎉</div>
-        <h2 style={{ fontSize: '22px', fontWeight: '900', color: '#1C1917', marginBottom: '8px' }}>Cours sauvegardé !</h2>
+        <h2 style={{ fontSize: '22px', fontWeight: '900', color: '#F6F7FB', marginBottom: '8px' }}>Cours sauvegardé !</h2>
         <p style={{ color: '#A8A29E', marginBottom: '2rem' }}>{info.title} · {modules.length} modules</p>
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button style={S.ghost} onClick={() => { setSaved(false); setStep(0); setModules([]); setInfo({ title: '', description: '', level: 'débutant', category: 'Tech', duration: '3h', audience: '' }) }}>+ Nouveau cours</button>
@@ -334,7 +334,7 @@ export default function CreerCours() {
           {/* STEP 0 */}
           {step === 0 && (
             <div style={{ maxWidth: '680px', margin: '0 auto' }}>
-              <h1 style={{ fontSize: '24px', fontWeight: '900', color: '#1C1917', marginBottom: '6px' }}>Créer un cours</h1>
+              <h1 style={{ fontSize: '24px', fontWeight: '900', color: '#F6F7FB', marginBottom: '6px' }}>Créer un cours</h1>
               <p style={{ color: '#A8A29E', fontSize: '13px', marginBottom: '2rem' }}>L'IA génère la structure — vous personnalisez le contenu.</p>
               <div style={{ ...S.card, padding: '2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
                 <div style={{ gridColumn: '1/-1' }}><label style={S.lbl}>Titre *</label><input style={S.inp} value={info.title} onChange={e => setInfo({ ...info, title: e.target.value })} placeholder="Ex: Maîtriser l'art de la vente consultative" /></div>
@@ -358,7 +358,7 @@ export default function CreerCours() {
                 {busy && <div style={{ fontSize: '48px', marginBottom: '1rem', display: 'inline-block', animation: 'spin 1.2s linear infinite' }}>⚙️</div>}
                 {!busy && !aiError && <div style={{ fontSize: '48px', marginBottom: '1rem' }}>✅</div>}
                 {aiError && <div style={{ fontSize: '48px', marginBottom: '1rem' }}>❌</div>}
-                <div style={{ fontSize: '15px', fontWeight: '700', color: '#1C1917', marginBottom: '8px' }}>{aiLog || aiError || 'Structure générée !'}</div>
+                <div style={{ fontSize: '15px', fontWeight: '700', color: '#F6F7FB', marginBottom: '8px' }}>{aiLog || aiError || 'Structure générée !'}</div>
                 {aiError && <button style={{ ...S.btn, marginTop: '1rem' }} onClick={() => setStep(0)}>← Retour</button>}
               </div>
             </div>
@@ -369,7 +369,7 @@ export default function CreerCours() {
             <div style={{ maxWidth: '760px', margin: '0 auto' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
                 <div>
-                  <h2 style={{ fontSize: '20px', fontWeight: '900', color: '#1C1917', margin: '0 0 3px' }}>{info.title || 'Nouveau cours'}</h2>
+                  <h2 style={{ fontSize: '20px', fontWeight: '900', color: '#F6F7FB', margin: '0 0 3px' }}>{info.title || 'Nouveau cours'}</h2>
                   <p style={{ color: '#A8A29E', fontSize: '12px', margin: 0 }}>{modules.length} modules · {modules.reduce((a, m) => a + m.blocks.length, 0)} blocs</p>
                 </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
@@ -517,7 +517,7 @@ export default function CreerCours() {
             <div style={{ maxWidth: '560px', margin: '0 auto' }}>
               <div style={{ ...S.card, padding: '2.5rem', textAlign: 'center' }}>
                 <div style={{ fontSize: '48px', marginBottom: '1rem' }}>🚀</div>
-                <h2 style={{ fontSize: '22px', fontWeight: '800', marginBottom: '8px', color: '#1C1917' }}>Prêt à publier !</h2>
+                <h2 style={{ fontSize: '22px', fontWeight: '800', marginBottom: '8px', color: '#F6F7FB' }}>Prêt à publier !</h2>
                 <p style={{ color: '#A8A29E', marginBottom: '4px', fontSize: '15px', fontWeight: '600' }}>{info.title}</p>
                 <p style={{ color: '#57534E', fontSize: '13px', marginBottom: '2rem' }}>
                   {modules.length} modules · {modules.reduce((a, m) => a + m.blocks.length, 0)} blocs · Niveau {info.level} · {info.duration}

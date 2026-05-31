@@ -28,14 +28,14 @@ const INITIAL_SESSIONS: LiveSession[] = [
     hostInitials: 'AD', date: "Aujourd'hui", time: '15:00', duration: '90 min',
     topic: 'Algorithmes de classification', participants: 24, maxParticipants: 50,
     status: 'live', meetingID: 'etagia-data-ml-001', attendeePW: 'ap', moderatorPW: 'mp',
-    color: '#E8651A',
+    color: '#4255FF',
   },
   {
     id: '2', title: 'Marketing Digital — Stratégie Social Media', host: 'Moussa Konaté',
     hostInitials: 'MK', date: "Aujourd'hui", time: '17:30', duration: '60 min',
     topic: 'Algorithmes Facebook & Instagram', participants: 0, maxParticipants: 40,
     status: 'scheduled', meetingID: 'etagia-mkt-social-002', attendeePW: 'ap', moderatorPW: 'mp',
-    color: '#00BFA5',
+    color: '#4255FF',
   },
   {
     id: '3', title: 'Leadership & Management — Session Live Q&A', host: 'Fatou Sarr',
@@ -60,7 +60,7 @@ const card: React.CSSProperties = {
 }
 const STATUS_CFG: Record<SessionStatus, { label: string; dot: string; bg: string; text: string }> = {
   live:      { label: '🔴 EN DIRECT', dot: '#EF4444', bg: 'rgba(239,68,68,0.10)', text: '#DC2626' },
-  scheduled: { label: '🕐 Programmée', dot: '#00BFA5', bg: 'rgba(0,191,165,0.10)', text: '#00897B' },
+  scheduled: { label: '🕐 Programmée', dot: '#4255FF', bg: 'rgba(0,191,165,0.10)', text: '#00897B' },
   ended:     { label: '✓ Terminée',   dot: '#A8A29E', bg: 'rgba(168,162,158,0.12)', text: '#78716C' },
 }
 
@@ -190,7 +190,7 @@ export default function LivePage() {
       date: form.date, time: form.time, duration: form.duration + ' min', topic: form.topic,
       participants: 0, maxParticipants: parseInt(form.maxParticipants),
       status: 'scheduled', meetingID, attendeePW: 'ap', moderatorPW: 'mp',
-      color: '#E8651A',
+      color: '#4255FF',
     }
 
     // Mode démo — création locale
@@ -262,8 +262,8 @@ export default function LivePage() {
 
       {/* Header */}
       <div style={{ marginBottom: '2rem', padding: '2rem', borderRadius: '24px',
-        background: 'linear-gradient(135deg,#E8651A 0%,#D4A017 100%)',
-        boxShadow: '0 8px 32px rgba(232,101,26,0.28)', position: 'relative', overflow: 'hidden' }}>
+        background: 'linear-gradient(135deg,#4255FF 0%,#D4A017 100%)',
+        boxShadow: '0 8px 32px rgba(66,85,255,0.28)', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '-60px', right: '-40px', width: '240px', height: '240px',
           borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,255,255,0.12),transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
@@ -289,7 +289,7 @@ export default function LivePage() {
           </div>
           <button onClick={() => setShowCreate(true)} style={{
             background: '#fff', border: 'none', borderRadius: '14px', padding: '12px 22px',
-            fontWeight: '800', fontSize: '14px', color: '#E8651A', cursor: 'pointer',
+            fontWeight: '800', fontSize: '14px', color: '#4255FF', cursor: 'pointer',
             boxShadow: '0 4px 20px rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', gap: '8px',
           }}>
             <span style={{ fontSize: '18px' }}>+</span> Créer une classe
@@ -339,8 +339,8 @@ export default function LivePage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1rem', marginBottom: '1.5rem' }}>
         {[
           { label: 'En direct maintenant', value: sessions.filter(s=>s.status==='live').length.toString(), icon: '🔴', color: '#EF4444', bg: 'rgba(239,68,68,0.07)' },
-          { label: 'Programmées', value: sessions.filter(s=>s.status==='scheduled').length.toString(), icon: '📅', color: '#00BFA5', bg: 'rgba(0,191,165,0.07)' },
-          { label: 'Participants actifs', value: sessions.filter(s=>s.status==='live').reduce((a,s)=>a+s.participants,0).toString(), icon: '👥', color: '#E8651A', bg: 'rgba(232,101,26,0.07)' },
+          { label: 'Programmées', value: sessions.filter(s=>s.status==='scheduled').length.toString(), icon: '📅', color: '#4255FF', bg: 'rgba(0,191,165,0.07)' },
+          { label: 'Participants actifs', value: sessions.filter(s=>s.status==='live').reduce((a,s)=>a+s.participants,0).toString(), icon: '👥', color: '#4255FF', bg: 'rgba(66,85,255,0.07)' },
         ].map(s => (
           <div key={s.label} style={{ ...card, padding: '1.1rem 1.25rem', background: s.bg, border: `1px solid ${s.color}22` }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -359,8 +359,8 @@ export default function LivePage() {
         {(['all','live','scheduled','ended'] as const).map(f => (
           <button key={f} onClick={()=>setFilter(f)} style={{
             padding: '7px 16px', borderRadius: '20px', fontSize: '12px', fontWeight: '700',
-            border: `1px solid ${filter===f ? '#E8651A' : 'rgba(28,25,23,0.10)'}`,
-            background: filter===f ? '#E8651A' : 'transparent',
+            border: `1px solid ${filter===f ? '#4255FF' : 'rgba(28,25,23,0.10)'}`,
+            background: filter===f ? '#4255FF' : 'transparent',
             color: filter===f ? '#fff' : '#A8A29E', cursor: 'pointer', transition: 'all .15s',
           }}>
             { f==='all' ? 'Toutes' : f==='live' ? '🔴 En direct' : f==='scheduled' ? 'Programmées' : 'Terminées' }
@@ -421,9 +421,9 @@ export default function LivePage() {
                   {session.status === 'live' && (
                     <>
                       <button onClick={() => handleJoin(session, 'attendee')} disabled={joining===session.id}
-                        style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '10px',
+                        style={{ background: 'linear-gradient(135deg,#4255FF,#D4A017)', border: 'none', borderRadius: '10px',
                           padding: '10px 20px', color: '#fff', fontWeight: '800', fontSize: '13px', cursor: 'pointer',
-                          boxShadow: '0 4px 16px rgba(232,101,26,0.35)', opacity: joining===session.id ? 0.7 : 1,
+                          boxShadow: '0 4px 16px rgba(66,85,255,0.35)', opacity: joining===session.id ? 0.7 : 1,
                           whiteSpace: 'nowrap' }}>
                         {joining===session.id ? '…' : '▶ Rejoindre'}
                       </button>
@@ -437,7 +437,7 @@ export default function LivePage() {
                   )}
                   {session.status === 'scheduled' && (
                     <button onClick={() => handleJoin(session, 'moderator')} disabled={joining===session.id}
-                      style={{ background: 'linear-gradient(135deg,#00BFA5,#00897B)', border: 'none', borderRadius: '10px',
+                      style={{ background: 'linear-gradient(135deg,#4255FF,#00897B)', border: 'none', borderRadius: '10px',
                         padding: '10px 20px', color: '#fff', fontWeight: '800', fontSize: '13px', cursor: 'pointer',
                         boxShadow: '0 4px 16px rgba(0,191,165,0.30)', opacity: joining===session.id ? 0.7 : 1,
                         whiteSpace: 'nowrap' }}>
@@ -475,7 +475,7 @@ export default function LivePage() {
           </div>
         </div>
         <a href="https://bigbluebutton.org" target="_blank" rel="noopener noreferrer"
-          style={{ fontSize: '12px', fontWeight: '600', color: '#E8651A', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+          style={{ fontSize: '12px', fontWeight: '600', color: '#4255FF', textDecoration: 'none', whiteSpace: 'nowrap' }}>
           En savoir plus →
         </a>
       </div>
@@ -535,10 +535,10 @@ export default function LivePage() {
                 </div>
               </div>
               <button onClick={handleCreate} disabled={creating || !form.title || !form.date || !form.time}
-                style={{ background: creating ? '#A8A29E' : 'linear-gradient(135deg,#E8651A,#D4A017)',
+                style={{ background: creating ? '#A8A29E' : 'linear-gradient(135deg,#4255FF,#D4A017)',
                   border: 'none', borderRadius: '12px', padding: '14px', color: '#fff', fontWeight: '800',
                   fontSize: '15px', cursor: creating ? 'not-allowed' : 'pointer',
-                  boxShadow: creating ? 'none' : '0 4px 20px rgba(232,101,26,0.35)', marginTop: '4px' }}>
+                  boxShadow: creating ? 'none' : '0 4px 20px rgba(66,85,255,0.35)', marginTop: '4px' }}>
                 {creating ? 'Création en cours…' : '🎥 Créer la classe BigBlueButton'}
               </button>
             </div>

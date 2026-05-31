@@ -1,209 +1,118 @@
 'use client'
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
+import Sidebar from '@/components/Sidebar'
 
-interface Msg { role: 'user'|'assistant'; content: any }
+type Msg = { role: 'user' | 'ai'; text: string }
 
 const suggestions = [
-  "Explique-moi la régression linéaire simplement",
-  "Comment créer une startup en Afrique de l'Ouest ?",
-  "Quelle différence entre marketing B2B et B2C ?",
-  "Comment optimiser un budget formation CPF ?",
+  'Explique-moi la méthode SONCAS',
+  "C'est quoi un indicateur de performance clé ?",
+  'Crée un quiz sur la gestion des stocks',
+  'Résume le module Techniques de Vente',
 ]
 
 export default function TutorPage() {
-  const [msgs, setMsgs] = useState<Msg[]>([])
+  const [msgs, setMsgs] = useState<Msg[]>([
+    { role: 'ai', text: "Bonjour ! Je suis ton tuteur IA ETAGIA 🎓 Je suis là pour t'aider à apprendre, comprendre tes cours et créer du contenu pédagogique. Comment puis-je t'aider aujourd'hui ?" }
+  ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [doc, setDoc] = useState<{name: string; base64: string; type: string}|null>(null)
-  const [docLoading, setDocLoading] = useState(false)
-  const bottomRef = useRef<HTMLDivElement>(null)
-  const fileRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [msgs])
-
-  const loadDoc = async (file: File) => {
-    setDocLoading(true)
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const base64 = (e.target?.result as string).split(',')[1]
-      setDoc({ name: file.name, base64, type: file.type || 'application/pdf' })
-      setDocLoading(false)
-    }
-    reader.readAsDataURL(file)
-  }
-
-  const removeDoc = () => setDoc(null)
-
-  const getTextContent = (msg: Msg): string => {
-    if (typeof msg.content === 'string') return msg.content
-    if (Array.isArray(msg.content)) {
-      return msg.content.find((c: any) => c.type === 'text')?.text || ''
-    }
-    return ''
-  }
-
-  const send = async (text?: string) => {
-    const content = text || input
-    if (!content.trim() || loading) return
-    setInput(''); setError('')
-
-    const cleanHistory = msgs.filter(m => getTextContent(m).trim())
-
-    // Build user message content
-    let userContent: any
-    if (doc) {
-      userContent = [
-        {
-          type: 'document',
-          source: { type: 'base64', media_type: doc.type, data: doc.base64 }
-        },
-        { type: 'text', text: content }
-      ]
-    } else {
-      userContent = content
-    }
-
-    const userMsg: Msg = { role: 'user', content: userContent }
-    const displayMsg: Msg = { role: 'user', content: doc ? `📎 ${doc.name}\n\n${content}` : content }
-
-    setMsgs([...cleanHistory, displayMsg, { role: 'assistant', content: '' }])
+  function send() {
+    if (!input.trim()) return
+    const q = input.trim()
+    setInput('')
+    setMsgs(m => [...m, { role: 'user', text: q }])
     setLoading(true)
-
-    // Build messages for API - convert display messages back to text for history
-    const apiMessages = [
-      ...cleanHistory.map(m => ({ role: m.role, content: typeof m.content === 'string' ? m.content : getTextContent(m) })),
-      userMsg
-    ]
-
-    try {
-      const res = await fetch('/api/ai-tutor', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: apiMessages })
-      })
-
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({ error: `HTTP ${res.status}` }))
-        setError(err.error || 'Erreur serveur')
-        setMsgs(p => p.slice(0, -1))
-        setLoading(false); return
-      }
-
-      const reader = res.body!.getReader()
-      const dec = new TextDecoder()
-      while (true) {
-        const { done, value } = await reader.read(); if (done) break
-        for (const ln of dec.decode(value).split('\n')) {
-          if (!ln.startsWith('data: ')) continue
-          const d = ln.slice(6).trim(); if (d === '[DONE]') break
-          try {
-            const delta = JSON.parse(d)?.delta?.text || ''
-            if (delta) setMsgs(p => { const u=[...p]; u[u.length-1]={role:'assistant',content:u[u.length-1].content+delta}; return u })
-          } catch {}
-        }
-      }
-      // Clear doc after use
-      if (doc) setDoc(null)
-    } catch (e: any) {
-      setError(e.message); setMsgs(p => p.slice(0, -1))
-    }
-    setLoading(false)
+    setTimeout(() => {
+      setMsgs(m => [...m, { role: 'ai', text: `Super question sur "${q}" ! En tant que tuteur IA ETAGIA, je vais t'expliquer ce concept en lien avec le contexte africain francophone. Cette fonctionnalité sera connectée à Claude AI pour des réponses complètes et personnalisées.` }])
+      setLoading(false)
+    }, 1200)
   }
 
   return (
-    <div style={{display:'flex',flexDirection:'column',height:'calc(100vh - 4rem)'}}>
-      {/* Header */}
-      <div style={{marginBottom:'1rem',padding:'1rem 1.5rem',background:'linear-gradient(135deg,rgba(28,25,23,0.07),rgba(232,101,26,0.06))',border:'1px solid rgba(28,25,23,0.10)',borderRadius:'16px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-        <div>
-          <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
-            <h1 style={{fontSize:'20px',fontWeight:'800',color:'#1C1917'}}>✦ AI Tutor</h1>
-            <span style={{fontSize:'10px',fontWeight:'800',padding:'3px 8px',borderRadius:'6px',background:'rgba(28,25,23,0.10)',color:'#E8651A',letterSpacing:'0.5px'}}>IA · ETAGIA</span>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#F6F7FB' }}>
+      <Sidebar role="apprenant" />
+      <main style={{ marginLeft: '248px', flex: 1, display: 'flex', flexDirection: 'column', height: '100vh' }}>
+
+        {/* Header */}
+        <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #D9DBE9', background: '#fff', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div style={{ width: 44, height: 44, borderRadius: '14px', background: 'linear-gradient(135deg, #4255FF, #6B52D4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>✦</div>
+          <div>
+            <div style={{ fontSize: '11px', fontWeight: '700', color: '#4255FF', letterSpacing: '1.5px', textTransform: 'uppercase' }}>Intelligence artificielle</div>
+            <h1 style={{ fontSize: '1.25rem', fontWeight: '900', color: '#2E3856', letterSpacing: '-0.3px' }}>AI Tutor ETAGIA</h1>
           </div>
-          <p style={{color:'#A8A29E',fontSize:'12px',marginTop:'2px'}}>Propulsé par Claude · Analyse documents PDF · Explications personnalisées</p>
-        </div>
-        <div style={{display:'flex',gap:'8px',alignItems:'center'}}>
-          <button onClick={()=>fileRef.current?.click()} disabled={docLoading} style={{background:'rgba(28,25,23,0.06)',border:'1px solid rgba(28,25,23,0.10)',borderRadius:'8px',padding:'7px 14px',color:'#E8651A',fontSize:'12px',fontWeight:'600',cursor:'pointer',display:'flex',alignItems:'center',gap:'6px'}}>
-            {docLoading?'⏳ Chargement...':'📎 Joindre un document'}
-          </button>
-          <input ref={fileRef} type="file" style={{display:'none'}} accept=".pdf,.txt,.md,.docx" onChange={e=>{if(e.target.files?.[0])loadDoc(e.target.files[0])}} />
-        </div>
-      </div>
-
-      {/* Error */}
-      {error&&(
-        <div style={{marginBottom:'1rem',background:'rgba(240,90,90,0.08)',border:'1px solid rgba(240,90,90,0.25)',borderRadius:'12px',padding:'12px 16px',fontSize:'13px',color:'#F08080'}}>
-          ⚠️ {error}
-        </div>
-      )}
-
-      {/* Doc attached */}
-      {doc&&(
-        <div style={{marginBottom:'1rem',background:'rgba(28,25,23,0.05)',border:'1px solid rgba(28,25,23,0.10)',borderRadius:'12px',padding:'10px 14px',display:'flex',alignItems:'center',gap:'10px'}}>
-          <span style={{fontSize:'20px'}}>📄</span>
-          <div style={{flex:1}}>
-            <div style={{fontWeight:'600',fontSize:'13px',color:'#E8651A'}}>{doc.name}</div>
-            <div style={{fontSize:'11px',color:'#A8A29E'}}>Document prêt à être analysé · posez votre question ci-dessous</div>
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+            {['🧠 Contextuel', '🌍 Afrique', '📚 Pédagogique'].map(t => (
+              <span key={t} style={{ fontSize: '11px', background: '#E8EAFF', color: '#4255FF', padding: '4px 10px', borderRadius: '99px', fontWeight: '700' }}>{t}</span>
+            ))}
           </div>
-          <button onClick={removeDoc} style={{background:'rgba(240,90,90,0.1)',border:'none',borderRadius:'6px',padding:'4px 8px',color:'#F05A5A',fontSize:'12px',cursor:'pointer'}}>✕ Retirer</button>
         </div>
-      )}
 
-      {/* Chat */}
-      <div style={{flex:1,background:'#FFFFFF',border:'1px solid rgba(28,25,23,0.07)',borderRadius:'16px',display:'flex',flexDirection:'column',overflow:'hidden'}}>
-        <div style={{flex:1,overflowY:'auto',padding:'1.5rem'}}>
-          {msgs.length===0&&(
-            <div style={{textAlign:'center',marginTop:'3rem'}}>
-              <div style={{fontSize:'48px',marginBottom:'1rem'}}>✦</div>
-              <h3 style={{fontSize:'18px',fontWeight:'700',marginBottom:'8px',color:'#1C1917'}}>Bonjour, je suis votre AI Tutor</h3>
-              <p style={{color:'#A8A29E',fontSize:'14px',marginBottom:'0.5rem'}}>Posez vos questions ou <strong style={{color:'#E8651A'}}>📎 joignez un document PDF</strong> pour l&apos;analyser.</p>
-              <p style={{color:'#57534E',fontSize:'12px',marginBottom:'2rem'}}>Cours, supports de formation, articles — j&apos;analyse et explique tout.</p>
-              <div style={{display:'flex',flexWrap:'wrap',gap:'8px',justifyContent:'center'}}>
-                {suggestions.map(s=>(
-                  <button key={s} onClick={()=>send(s)} style={{background:'rgba(28,25,23,0.05)',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'20px',padding:'8px 14px',fontSize:'13px',color:'#A8A29E',cursor:'pointer',fontFamily:'inherit',transition:'all .15s'}}
-                    onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.background='rgba(28,25,23,0.08)';(e.currentTarget as HTMLElement).style.color='#E8651A'}}
-                    onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.background='rgba(28,25,23,0.05)';(e.currentTarget as HTMLElement).style.color='#A8A29E'}}>
-                    {s}
-                  </button>
-                ))}
-              </div>
+        {/* Suggestions */}
+        {msgs.length <= 1 && (
+          <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #D9DBE9', background: '#F6F7FB' }}>
+            <div style={{ fontSize: '12px', fontWeight: '700', color: '#939BB4', marginBottom: '10px' }}>SUGGESTIONS</div>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              {suggestions.map(s => (
+                <button key={s} onClick={() => setInput(s)} style={{ padding: '8px 14px', background: '#fff', border: '2px solid #D9DBE9', borderRadius: '99px', fontSize: '12px', fontWeight: '600', color: '#2E3856', cursor: 'pointer', transition: 'all .15s' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#4255FF'; (e.currentTarget as HTMLButtonElement).style.color = '#4255FF' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#D9DBE9'; (e.currentTarget as HTMLButtonElement).style.color = '#2E3856' }}
+                >{s}</button>
+              ))}
             </div>
-          )}
+          </div>
+        )}
 
-          {msgs.map((m,i)=>(
-            <div key={i} style={{display:'flex',justifyContent:m.role==='user'?'flex-end':'flex-start',marginBottom:'1rem'}}>
-              {m.role==='assistant'&&(
-                <div style={{width:'32px',height:'32px',borderRadius:'50%',background:'linear-gradient(135deg,#E8651A,#D4A017)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'14px',color:'#fff',marginRight:'10px',flexShrink:0,marginTop:'4px'}}>✦</div>
+        {/* Messages */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem 2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {msgs.map((m, i) => (
+            <div key={i} style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', gap: '10px', alignItems: 'flex-end' }}>
+              {m.role === 'ai' && (
+                <div style={{ width: 32, height: 32, borderRadius: '10px', background: 'linear-gradient(135deg, #4255FF, #6B52D4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', flexShrink: 0 }}>✦</div>
               )}
-              <div style={{maxWidth:'75%',padding:'10px 14px',borderRadius:m.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px',background:m.role==='user'?'linear-gradient(135deg,#E8651A,#D4A017)':'rgba(28,25,23,0.05)',border:m.role==='assistant'?'1px solid rgba(28,25,23,0.08)':'none',color:'#1C1917',fontSize:'14px',lineHeight:'1.6',whiteSpace:'pre-wrap'}}>
-                {m.content||(loading&&i===msgs.length-1?<span style={{opacity:0.5}}>●●●</span>:null)}
-              </div>
+              <div style={{
+                maxWidth: '70%', padding: '12px 16px', borderRadius: m.role === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
+                background: m.role === 'user' ? '#4255FF' : '#fff',
+                color: m.role === 'user' ? '#fff' : '#2E3856',
+                fontSize: '14px', lineHeight: 1.6, fontWeight: '500',
+                boxShadow: '0 2px 8px rgba(46,56,86,0.08)',
+                border: m.role === 'ai' ? '1px solid #D9DBE9' : 'none',
+              }}>{m.text}</div>
             </div>
           ))}
-          <div ref={bottomRef} />
-        </div>
-
-        <div style={{padding:'1rem',borderTop:'1px solid rgba(28,25,23,0.06)',display:'flex',gap:'8px',flexDirection:'column'}}>
-          {doc&&(
-            <div style={{fontSize:'12px',color:'#E8651A',background:'rgba(232,101,26,0.06)',borderRadius:'8px',padding:'6px 10px',display:'flex',alignItems:'center',gap:'6px'}}>
-              <span>📎</span><span style={{flex:1}}>{doc.name} sera analysé avec votre question</span>
-              <button onClick={removeDoc} style={{background:'none',border:'none',color:'#F05A5A',cursor:'pointer',fontSize:'12px'}}>✕</button>
+          {loading && (
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
+              <div style={{ width: 32, height: 32, borderRadius: '10px', background: 'linear-gradient(135deg, #4255FF, #6B52D4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}>✦</div>
+              <div style={{ padding: '12px 16px', background: '#fff', borderRadius: '18px 18px 18px 4px', border: '1px solid #D9DBE9', display: 'flex', gap: '5px', alignItems: 'center' }}>
+                {[0,1,2].map(i => <div key={i} style={{ width: 7, height: 7, borderRadius: '50%', background: '#4255FF', opacity: 0.4, animation: `pulse 1s ${i*0.2}s infinite` }} />)}
+              </div>
             </div>
           )}
-          <div style={{display:'flex',gap:'8px'}}>
-            <button onClick={()=>fileRef.current?.click()} style={{background:'rgba(28,25,23,0.05)',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'10px',padding:'10px 12px',color:'#E8651A',fontSize:'18px',cursor:'pointer',flexShrink:0}} title="Joindre un PDF">📎</button>
-            <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==='Enter'&&!e.shiftKey&&send()} placeholder={doc?`Question sur "${doc.name}"...`:"Posez votre question..."} disabled={loading}
-              style={{flex:1,background:'rgba(232,101,26,0.06)',color:'#1C1917',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'10px',padding:'10px 14px',fontSize:'14px',fontFamily:'inherit',outline:'none'}} />
-            <button onClick={()=>send()} disabled={loading||!input.trim()} style={{background:'linear-gradient(135deg,#E8651A,#D4A017)',border:'none',borderRadius:'10px',padding:'10px 18px',color:'#fff',fontSize:'14px',fontWeight:'700',cursor:'pointer',opacity:loading||!input.trim()?0.6:1,boxShadow:'0 4px 12px rgba(232,101,26,0.35)',flexShrink:0}}>
-              Envoyer
-            </button>
+        </div>
+
+        {/* Input */}
+        <div style={{ padding: '1.25rem 2rem', borderTop: '1px solid #D9DBE9', background: '#fff' }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <input
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
+              placeholder="Pose ta question à l'AI Tutor..."
+              style={{ flex: 1, padding: '13px 18px', borderRadius: '99px', border: '2px solid #D9DBE9', fontSize: '14px', outline: 'none', fontFamily: 'Inter, sans-serif', color: '#2E3856', background: '#F6F7FB' }}
+              onFocus={e => e.target.style.borderColor = '#4255FF'}
+              onBlur={e => e.target.style.borderColor = '#D9DBE9'}
+            />
+            <button onClick={send} disabled={!input.trim() || loading} style={{
+              width: 48, height: 48, borderRadius: '50%', border: 'none', cursor: 'pointer',
+              background: input.trim() ? '#4255FF' : '#ECEEF5',
+              color: input.trim() ? '#fff' : '#939BB4', fontSize: '18px',
+              transition: 'all .15s', flexShrink: 0,
+              boxShadow: input.trim() ? '0 4px 16px rgba(66,85,255,0.3)' : 'none',
+            }}>→</button>
           </div>
         </div>
-      </div>
-
-      <div style={{marginTop:'8px',textAlign:'center'}}>
-        <span style={{fontSize:'11px',color:'#57534E'}}>⚠ IA · Réponses générées par Claude · Vérifiez les informations importantes</span>
-      </div>
+      </main>
     </div>
   )
 }

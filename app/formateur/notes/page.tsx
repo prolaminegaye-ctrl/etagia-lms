@@ -18,7 +18,7 @@ const TAG_CFG: Record<NoteTag, { label: string; color: string; bg: string }> = {
   perso:      { label:'Perso',      color:'#EF4444', bg:'rgba(239,68,68,0.10)' },
 }
 
-const NOTE_COLORS = ['#fff','#FFF8F0','#F0FDF4','#EFF6FF','#FDF4FF','#FFFBEB']
+const NOTE_COLORS = ['#fff','#FFF8F0','#F0FDF4','#E8EAFF','#FDF4FF','#FFFBEB']
 
 const now = () => new Date().toISOString()
 const fmtDate = (iso: string) => {

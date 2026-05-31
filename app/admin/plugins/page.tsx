@@ -37,7 +37,7 @@ const card: React.CSSProperties = {
 const inpStyle: React.CSSProperties = {
   width: '100%', padding: '9px 12px', borderRadius: '9px', fontSize: '13px',
   border: '1px solid rgba(28,25,23,0.12)', background: '#FAF9F7',
-  color: '#1C1917',  outline: 'none', boxSizing: 'border-box' as const,
+  color: '#F6F7FB',  outline: 'none', boxSizing: 'border-box' as const,
   fontFamily: 'monospace',
 }
 
@@ -79,7 +79,7 @@ export default function PluginsPage() {
     <div style={{ marginBottom: '10px' }}>
       <div style={{ fontSize: '11px', fontWeight: '700', color: '#A8A29E', marginBottom: '4px', textTransform: 'uppercase' as const, letterSpacing: '0.5px' }}>{label}</div>
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-        <input readOnly value={value} style={{ ...inpStyle, flex: 1, color: highlight ? '#E8651A' : '#1C1917', fontWeight: highlight ? '700' : '400' }} />
+        <input readOnly value={value} style={{ ...inpStyle, flex: 1, color: highlight ? '#E8651A' : '#F6F7FB', fontWeight: highlight ? '700' : '400' }} />
         <CopyBtn text={value} id={id} />
       </div>
     </div>
@@ -90,7 +90,7 @@ export default function PluginsPage() {
 
       {/* Header */}
       <div style={{ marginBottom: '2rem', padding: '1.75rem', borderRadius: '20px',
-        background: 'linear-gradient(135deg,#1C1917 0%,#2C1E14 100%)',
+        background: 'linear-gradient(135deg,#F6F7FB 0%,#2C1E14 100%)',
         boxShadow: '0 4px 24px rgba(0,0,0,0.20)', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '-40px', right: '-20px', width: '200px', height: '200px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(232,101,26,0.15),transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
@@ -117,7 +117,7 @@ export default function PluginsPage() {
           {jwksStatus === 'ok' ? '✅' : jwksStatus === 'error' ? '❌' : jwksStatus === 'checking' ? '⏳' : '🔐'}
         </span>
         <div style={{ flex: 1 }}>
-          <div style={{ fontWeight: '700', fontSize: '13px', color: '#1C1917' }}>
+          <div style={{ fontWeight: '700', fontSize: '13px', color: '#F6F7FB' }}>
             Endpoint JWKS — <code style={{ fontFamily: 'monospace', fontSize: '12px', color: '#E8651A' }}>{PLATFORM_URL}/api/lti/certs</code>
           </div>
           <div style={{ fontSize: '12px', color: '#A8A29E' }}>
@@ -145,7 +145,7 @@ export default function PluginsPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ fontSize: '22px' }}>{p.icon}</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: '700', fontSize: '13px', color: '#1C1917' }}>{p.name}</div>
+                  <div style={{ fontWeight: '700', fontSize: '13px', color: '#F6F7FB' }}>{p.name}</div>
                   <div style={{ fontSize: '11px', color: '#A8A29E' }}>{p.protocol}</div>
                 </div>
                 <span style={{
@@ -168,7 +168,7 @@ export default function PluginsPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1.25rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(28,25,23,0.06)' }}>
                 <span style={{ fontSize: '28px' }}>{plugin.icon}</span>
                 <div>
-                  <div style={{ fontWeight: '800', fontSize: '16px', color: '#1C1917' }}>{plugin.name}</div>
+                  <div style={{ fontWeight: '800', fontSize: '16px', color: '#F6F7FB' }}>{plugin.name}</div>
                   <div style={{ fontSize: '12px', color: '#A8A29E' }}>{plugin.desc}</div>
                 </div>
               </div>
@@ -187,7 +187,7 @@ export default function PluginsPage() {
                     </a>
                   </div>
 
-                  <div style={{ fontWeight: '800', fontSize: '13px', color: '#1C1917', marginBottom: '12px' }}>
+                  <div style={{ fontWeight: '800', fontSize: '13px', color: '#F6F7FB', marginBottom: '12px' }}>
                     🔧 Configuration LTI 1.3 — URLs de la plateforme ETAGIA LMS
                   </div>
                   <div style={{ fontSize: '12px', color: '#A8A29E', marginBottom: '14px', padding: '10px', background: 'rgba(0,191,165,0.06)', borderRadius: '8px', border: '1px solid rgba(0,191,165,0.15)' }}>
@@ -202,7 +202,7 @@ export default function PluginsPage() {
                   <Row label="Dynamic Registration" value={`${PLATFORM_URL}/api/lti/register`} id="reg" />
 
                   <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid rgba(28,25,23,0.06)' }}>
-                    <div style={{ fontWeight: '800', fontSize: '13px', color: '#1C1917', marginBottom: '12px' }}>
+                    <div style={{ fontWeight: '800', fontSize: '13px', color: '#F6F7FB', marginBottom: '12px' }}>
                       🤖 URLs de l&apos;outil EduGears (côté outil — ne pas modifier)
                     </div>
                     <Row label="Login Initiation URL" value="https://lti-api.edugears.ai/lti/login" id="eg-login" />
@@ -226,7 +226,7 @@ export default function PluginsPage() {
               {plugin.id !== 'edugears' && (
                 <div style={{ padding: '2rem', textAlign: 'center', color: '#A8A29E' }}>
                   <div style={{ fontSize: '32px', marginBottom: '8px' }}>{plugin.icon}</div>
-                  <div style={{ fontWeight: '600', color: '#1C1917', marginBottom: '6px' }}>{plugin.name}</div>
+                  <div style={{ fontWeight: '600', color: '#F6F7FB', marginBottom: '6px' }}>{plugin.name}</div>
                   <div style={{ fontSize: '13px' }}>Configuration disponible prochainement.</div>
                 </div>
               )}

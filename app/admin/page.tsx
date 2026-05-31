@@ -1,97 +1,120 @@
 'use client'
+import { useRouter } from 'next/navigation'
+import Sidebar from '@/components/Sidebar'
 
 const kpis = [
-  { label: 'Utilisateurs total', value: '1 248', icon: '◎', color: '#E8651A', grad: 'linear-gradient(135deg,#E8651A,#D4A017)', delta: '+12 ce mois' },
-  { label: 'Cours publiés', value: '47', icon: '◈', color: '#00BFA5', grad: 'linear-gradient(135deg,#00BFA5,#7C3AED)', delta: '+3 cette semaine' },
-  { label: 'Organisations', value: '8', icon: '▦', color: '#FFB300', grad: 'linear-gradient(135deg,#D4A017,#E8651A)', delta: '2 actives' },
-  { label: 'Taux complétion', value: '71%', icon: '✦', color: '#7C3AED', grad: 'linear-gradient(135deg,#7C3AED,#00BFA5)', delta: '+4% ce mois' },
+  { label: 'Utilisateurs',    value: '1 284', bg: '#E8EAFF', color: '#4255FF', icon: '👥', delta: '+12 ce mois' },
+  { label: 'Cours actifs',    value: '94',    bg: '#C9F0F0', color: '#0F766E', icon: '📚', delta: '+3 cette semaine' },
+  { label: 'Revenus',         value: '4.2M',  bg: '#FFBF80', color: '#C2410C', icon: '💰', delta: '+18% vs mois préc.', sub: ' FCFA' },
+  { label: 'Satisfaction',    value: '4.7/5', bg: '#CCFBDC', color: '#16A34A', icon: '⭐', delta: 'Excellent' },
+  { label: 'Sessions live',   value: '38',    bg: '#FFD6FD', color: '#9333EA', icon: '🎥', delta: 'Ce mois' },
+  { label: 'Certifications',  value: '217',   bg: '#FEF3C7', color: '#D97706', icon: '🏅', delta: 'Délivrées' },
+]
+
+const adminLinks = [
+  { label: 'Utilisateurs',   href: '/admin/users',       bg: '#E8EAFF', color: '#4255FF', icon: '◎' },
+  { label: 'Marketplace',    href: '/admin/market',      bg: '#C9F0F0', color: '#0F766E', icon: '🏪' },
+  { label: 'Analytics',      href: '/admin/analytics',   bg: '#FFD6FD', color: '#9333EA', icon: '〜' },
+  { label: 'White Label',    href: '/admin/white-label', bg: '#FFBF80', color: '#C2410C', icon: '🏷' },
+  { label: 'Mon Équipe',     href: '/admin/team',        bg: '#CCFBDC', color: '#16A34A', icon: '👥' },
+  { label: 'Export CSV',     href: '/admin/export',      bg: '#FEF3C7', color: '#D97706', icon: '📊' },
+  { label: 'Plugins & LTI', href: '/admin/plugins',     bg: '#EDE9FE', color: '#6B52D4', icon: '🔌' },
+  { label: 'Classes live',   href: '/live',              bg: '#FFE4E4', color: '#DC2626', icon: '🎥' },
 ]
 
 const recentUsers = [
-  { name: 'Fatou Diallo', email: 'fatou@sjt.sn', role: 'Apprenant', status: 'Actif', org: 'SJT' },
-  { name: 'Moussa Traoré', email: 'moussa@etagia.com', role: 'Formateur', status: 'Actif', org: 'ETAGIA' },
-  { name: 'Aïda Koné', email: 'aida@sjt.sn', role: 'Apprenant', status: 'Inactif', org: 'SJT' },
-  { name: 'Ibrahim Diop', email: 'ibrahim@etagia.com', role: 'Admin', status: 'Actif', org: 'ETAGIA' },
+  { name: 'Aminata Diallo',  role: 'Apprenante', country: '🇸🇳', status: 'Actif',   color: '#4255FF' },
+  { name: 'Kofi Mensah',     role: 'Formateur',  country: '🇨🇮', status: 'Actif',   color: '#0F766E' },
+  { name: 'Fatou Ba',        role: 'Apprenante', country: '🇬🇳', status: 'En attente', color: '#D97706' },
+  { name: 'Ibrahim Traoré',  role: 'Admin',      country: '🇨🇲', status: 'Actif',   color: '#6B52D4' },
 ]
 
 export default function AdminPage() {
+  const router = useRouter()
   return (
-    <div>
-      <div style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div>
-          <h1 style={{ fontSize: '26px', fontWeight: '800', color: '#1C1917', fontFamily: 'Syne,sans-serif', marginBottom: '4px' }}>Panel Admin</h1>
-          <p style={{ color: '#A8A29E', fontSize: '14px' }}>Vue globale de la plateforme ETAGIA LMS</p>
-        </div>
-        <span style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', color: '#fff', fontSize: '12px', fontWeight: '700', padding: '7px 16px', borderRadius: '20px', boxShadow: '0 4px 14px rgba(232,101,26,0.30)' }}>
-          ⚙️ Super Admin
-        </span>
-      </div>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#F6F7FB' }}>
+      <Sidebar role="admin" />
+      <main style={{ marginLeft: '248px', flex: 1, padding: '2rem', maxWidth: '1200px' }}>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1rem', marginBottom: '2.5rem' }}>
-        {kpis.map(k => (
-          <div key={k.label} style={{ background: '#FFFFFF', border: '1.5px solid rgba(28,25,23,0.07)', borderRadius: '18px', padding: '1.25rem', position: 'relative', overflow: 'hidden', boxShadow: '0 2px 12px rgba(28,25,23,0.05)' }}>
-            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: k.grad }} />
-            <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: k.color + '15', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', color: k.color, marginBottom: '14px', marginTop: '4px' }}>{k.icon}</div>
-            <div style={{ fontSize: '28px', fontWeight: '800', color: k.color, fontFamily: 'Syne,sans-serif', marginBottom: '4px', lineHeight: 1 }}>{k.value}</div>
-            <div style={{ fontSize: '13px', color: '#57534E', marginBottom: '5px' }}>{k.label}</div>
-            <div style={{ fontSize: '11px', color: '#00BFA5', fontWeight: '700' }}>{k.delta}</div>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: '1.5rem' }}>
-        <div>
-          <h2 style={{ fontSize: '16px', fontWeight: '700', marginBottom: '1rem', color: '#1C1917', fontFamily: 'Syne,sans-serif' }}>Utilisateurs récents</h2>
-          <div style={{ background: '#FFFFFF', border: '1.5px solid rgba(28,25,23,0.07)', borderRadius: '18px', overflow: 'hidden', boxShadow: '0 2px 12px rgba(28,25,23,0.05)' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <thead>
-                <tr style={{ borderBottom: '1.5px solid rgba(28,25,23,0.07)', background: '#FAF9F7' }}>
-                  {['NOM', 'RÔLE', 'ORG', 'STATUT'].map(h => (
-                    <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontSize: '10px', fontWeight: '700', color: '#A8A29E', letterSpacing: '1.2px' }}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {recentUsers.map((u, i) => (
-                  <tr key={u.email} style={{ borderBottom: i < recentUsers.length-1 ? '1px solid rgba(28,25,23,0.05)' : 'none', transition: 'background .1s' }}>
-                    <td style={{ padding: '14px 16px' }}>
-                      <div style={{ fontWeight: '600', fontSize: '13px', color: '#1C1917' }}>{u.name}</div>
-                      <div style={{ fontSize: '11px', color: '#A8A29E' }}>{u.email}</div>
-                    </td>
-                    <td style={{ padding: '14px 16px', fontSize: '13px', color: '#57534E' }}>{u.role}</td>
-                    <td style={{ padding: '14px 16px', fontSize: '13px', color: '#57534E' }}>{u.org}</td>
-                    <td style={{ padding: '14px 16px' }}>
-                      <span style={{ fontSize: '11px', fontWeight: '700', padding: '3px 10px', borderRadius: '20px', background: u.status === 'Actif' ? 'rgba(0,191,165,0.12)' : 'rgba(28,25,23,0.06)', color: u.status === 'Actif' ? '#00BFA5' : '#A8A29E' }}>{u.status}</span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        {/* Header */}
+        <div style={{ marginBottom: '2rem' }}>
+          <div style={{ fontSize: '11px', fontWeight: '700', color: '#4255FF', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '4px' }}>Administration</div>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: '900', color: '#2E3856', letterSpacing: '-0.5px' }}>Vue d'ensemble</h1>
+          <p style={{ color: '#586380', fontSize: '14px', marginTop: '4px' }}>Gérez la plateforme ETAGIA LMS depuis ce tableau de bord.</p>
         </div>
 
-        <div>
-          <h2 style={{ fontSize: '16px', fontWeight: '700', marginBottom: '1rem', color: '#1C1917', fontFamily: 'Syne,sans-serif' }}>Actions rapides</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
-            {[
-              { href: '/admin/users', label: 'Gérer les utilisateurs', icon: '◎', color: '#E8651A' },
-              { href: '/admin/cours', label: 'Gérer les cours', icon: '◈', color: '#00BFA5' },
-              { href: '/admin/orgs', label: 'Gérer les organisations', icon: '▦', color: '#FFB300' },
-              { href: '/admin/analytics', label: 'Analytics', icon: '〜', color: '#7C3AED' },
-              { href: '/admin/export', label: 'Export CSV', icon: '📊', color: '#E8651A' },
-            ].map(a => (
-              <a key={a.href} href={a.href}
-                style={{ background: '#FFFFFF', border: '1.5px solid rgba(28,25,23,0.07)', borderRadius: '14px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px', padding: '13px 16px', transition: 'all .15s', boxShadow: '0 1px 6px rgba(28,25,23,0.04)' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = a.color + '44'; (e.currentTarget as HTMLElement).style.background = '#FFF5F2' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(28,25,23,0.07)'; (e.currentTarget as HTMLElement).style.background = '#FFFFFF' }}>
-                <div style={{ width: '34px', height: '34px', borderRadius: '9px', background: a.color + '15', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', color: a.color }}>{a.icon}</div>
-                <span style={{ fontWeight: '500', fontSize: '13px', color: '#1C1917' }}>{a.label}</span>
-                <span style={{ marginLeft: 'auto', color: '#A8A29E', fontSize: '13px' }}>→</span>
-              </a>
+        {/* KPIs */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+          {kpis.map(({ label, value, bg, color, icon, delta, sub }) => (
+            <div key={label} style={{ background: '#fff', border: '1px solid #D9DBE9', borderRadius: '16px', padding: '1.25rem', boxShadow: '0 2px 8px rgba(46,56,86,0.07)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                <div style={{ width: 40, height: 40, borderRadius: '12px', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>{icon}</div>
+                <span style={{ fontSize: '10px', background: bg, color, padding: '3px 9px', borderRadius: '99px', fontWeight: '700' }}>{delta}</span>
+              </div>
+              <div style={{ fontSize: '22px', fontWeight: '900', color: '#2E3856', letterSpacing: '-0.5px' }}>{value}<span style={{ fontSize: '11px', color: '#939BB4' }}>{sub}</span></div>
+              <div style={{ fontSize: '12px', color: '#939BB4', marginTop: '3px' }}>{label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Admin actions grid */}
+        <div style={{ marginBottom: '2rem' }}>
+          <div style={{ fontSize: '11px', fontWeight: '700', color: '#4255FF', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '12px' }}>Accès rapide</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '10px' }}>
+            {adminLinks.map(({ label, href, bg, color, icon }) => (
+              <button key={label} onClick={() => router.push(href)} style={{
+                padding: '1.125rem', borderRadius: '16px', border: 'none', cursor: 'pointer',
+                background: bg, color, fontWeight: '700', fontSize: '13px',
+                display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '8px',
+                transition: 'transform .15s', textAlign: 'left',
+              }}
+              onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px)'}
+              onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)'}
+              >
+                <span style={{ fontSize: '22px' }}>{icon}</span>
+                {label}
+              </button>
             ))}
           </div>
         </div>
-      </div>
+
+        {/* Recent users */}
+        <div style={{ background: '#fff', border: '1px solid #D9DBE9', borderRadius: '20px', padding: '1.5rem', boxShadow: '0 2px 8px rgba(46,56,86,0.07)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+            <div>
+              <div style={{ fontSize: '11px', fontWeight: '700', color: '#4255FF', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '3px' }}>Derniers inscrits</div>
+              <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#2E3856' }}>Utilisateurs récents</h3>
+            </div>
+            <button onClick={() => router.push('/admin/users')} style={{ fontSize: '12px', color: '#4255FF', background: '#E8EAFF', border: 'none', borderRadius: '8px', padding: '6px 14px', cursor: 'pointer', fontWeight: '700' }}>Gérer →</button>
+          </div>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr>
+                {['Utilisateur', 'Rôle', 'Pays', 'Statut'].map(h => (
+                  <th key={h} style={{ padding: '10px 12px', textAlign: 'left', fontSize: '11px', fontWeight: '700', color: '#939BB4', letterSpacing: '0.8px', textTransform: 'uppercase', borderBottom: '2px solid #ECEEF5' }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {recentUsers.map(({ name, role, country, status, color }) => (
+                <tr key={name}>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #ECEEF5' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{ width: 32, height: 32, borderRadius: '50%', background: color + '22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '800', color, flexShrink: 0 }}>{name[0]}</div>
+                      <span style={{ fontWeight: '600', fontSize: '13px', color: '#2E3856' }}>{name}</span>
+                    </div>
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #ECEEF5', fontSize: '13px', color: '#586380' }}>{role}</td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #ECEEF5', fontSize: '16px' }}>{country}</td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #ECEEF5' }}>
+                    <span style={{ fontSize: '11px', fontWeight: '700', padding: '3px 9px', borderRadius: '99px', background: status === 'Actif' ? '#CCFBDC' : '#FEF3C7', color: status === 'Actif' ? '#16A34A' : '#D97706' }}>{status}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </main>
     </div>
   )
 }
