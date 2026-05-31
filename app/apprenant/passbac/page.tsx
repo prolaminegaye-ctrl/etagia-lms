@@ -1,6 +1,6 @@
 'use client'
-
-import { useState } from 'react'
+import PageHero from '@/components/PageHero'
+mport { useState } from 'react'
 
 type Tab = 'cours' | 'fiches' | 'flashcards' | 'quiz' | 'examens' | 'conseils'
 type Subject = 'maths' | 'physique' | 'svt' | 'francais' | 'philosophie' | 'histoire' | 'geographie' | 'anglais'

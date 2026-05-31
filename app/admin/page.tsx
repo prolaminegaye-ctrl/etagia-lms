@@ -1,6 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/Sidebar'
+import PageHero from '@/components/PageHero'
 
 const kpis = [
   { label: 'Utilisateurs',    value: '1 284', bg: '#E8EAFF', color: '#4255FF', icon: '👥', delta: '+12 ce mois' },
@@ -36,12 +37,12 @@ export default function AdminPage() {
       <Sidebar role="admin" />
       <main style={{ marginLeft: '248px', flex: 1, padding: '2rem', maxWidth: '1200px' }}>
 
-        {/* Header */}
-        <div style={{ marginBottom: '2rem' }}>
-          <div style={{ fontSize: '11px', fontWeight: '700', color: '#4255FF', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '4px' }}>Administration</div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: '900', color: '#2E3856', letterSpacing: '-0.5px' }}>Vue d'ensemble</h1>
-          <p style={{ color: '#586380', fontSize: '14px', marginTop: '4px' }}>Gérez la plateforme ETAGIA LMS depuis ce tableau de bord.</p>
-        </div>
+        <PageHero
+          eyebrow="Administration"
+          title="Vue d'ensemble"
+          subtitle="Gérez la plateforme ETAGIA LMS depuis ce tableau de bord central."
+          stats={[{value:'1 284',label:'Utilisateurs'},{value:'94',label:'Cours actifs'},{value:'4.2M',label:'FCFA revenus'},{value:'4.7/5',label:'Satisfaction'}]}
+        />
 
         {/* KPIs */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>

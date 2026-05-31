@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/Sidebar'
+import PageHero from '@/components/PageHero'
 
 const COURSES = [
   { id: 1, title: 'Data Science avec Python',      cat: 'Tech',        progress: 72, done: 17, total: 24, color: '#4255FF', bg: '#E8EAFF', emoji: '🐍' },
@@ -33,8 +34,12 @@ export default function CoursPage() {
       <Sidebar role="apprenant" />
       <main style={{ marginLeft: '248px', flex: 1, padding: '2rem', maxWidth: '1100px' }}>
 
-        <div style={{ fontSize: '11px', fontWeight: '700', color: '#4255FF', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '4px' }}>Formation</div>
-        <h1 style={{ fontSize: '1.75rem', fontWeight: '900', color: '#2E3856', letterSpacing: '-0.5px', marginBottom: '1.5rem' }}>Mes cours</h1>
+        <PageHero
+          eyebrow="Formation"
+          title="Mes cours"
+          subtitle="Reprenez où vous vous étiez arrêté. Chaque leçon compte."
+          stats={[{value:'6',label:'Cours inscrits'},{value:'4',label:'En cours'},{value:'1',label:'Terminé'},{value:'68%',label:'Progression moy.'}]}
+        />
 
         {/* Search + filters */}
         <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap', alignItems: 'center' }}>

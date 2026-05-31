@@ -1,5 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
+import PageHero from '@/components/PageHero'
 
 const kpis = [
   { label: 'Cours en cours',  value: '4',      icon: '📚', bg: '#C9F0F0', color: '#0F766E', delta: '+1 ce mois' },

@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Sidebar from '@/components/Sidebar'
+import PageHero from '@/components/PageHero'
 
 const badges = [
   { label: '🔥 Streak 7j',  bg: '#FFBF80', color: '#C2410C' },
@@ -29,8 +30,12 @@ export default function ProfilPage() {
     <div style={{ display: 'flex', minHeight: '100vh', background: '#F6F7FB' }}>
       <Sidebar role="admin" />
       <main style={{ marginLeft: '248px', flex: 1, padding: '2rem', maxWidth: '900px' }}>
-        <div style={{ fontSize: '11px', fontWeight: '700', color: '#4255FF', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '4px' }}>Compte</div>
-        <h1 style={{ fontSize: '1.75rem', fontWeight: '900', color: '#2E3856', letterSpacing: '-0.5px', marginBottom: '2rem' }}>Mon profil</h1>
+        <PageHero
+          eyebrow="Compte"
+          title="Mon profil"
+          subtitle="Gérez vos informations, sécurité et suivez vos compétences acquises."
+          stats={[{value:'12',label:'Cours terminés'},{value:'3',label:'Certifications'},{value:'82%',label:'Score moyen'},{value:'7j',label:'Streak actuel'}]}
+        />
 
         {/* Profile card */}
         <div style={{ background: '#fff', border: '1px solid #D9DBE9', borderRadius: '24px', padding: '2rem', boxShadow: '0 2px 8px rgba(46,56,86,0.07)', marginBottom: '1.5rem' }}>

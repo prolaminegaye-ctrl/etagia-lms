@@ -1,6 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/Sidebar'
+import PageHero from '@/components/PageHero'
 
 const stats = [
   { label: 'Apprenants actifs', value: '127',  bg: '#C9F0F0', color: '#0F766E', icon: '👥' },
@@ -31,12 +32,12 @@ export default function FormateurPage() {
       <Sidebar role="formateur" />
       <main style={{ marginLeft: '248px', flex: 1, padding: '2rem', maxWidth: '1100px' }}>
 
-        {/* Header */}
-        <div style={{ marginBottom: '2rem' }}>
-          <div style={{ fontSize: '11px', fontWeight: '700', color: '#4255FF', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '4px' }}>Espace Formateur</div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: '900', color: '#2E3856', letterSpacing: '-0.5px' }}>Tableau de bord</h1>
-          <p style={{ color: '#586380', fontSize: '14px', marginTop: '4px' }}>Gérez vos cours et suivez la progression de vos apprenants.</p>
-        </div>
+        <PageHero
+          eyebrow="Espace Formateur"
+          title="Tableau de bord"
+          subtitle="Gérez vos cours et suivez la progression de vos apprenants."
+          stats={[{value:'127',label:'Apprenants actifs'},{value:'8',label:'Cours publiés'},{value:'74%',label:'Completion'},{value:'340K',label:'FCFA/mois'}]}
+        />
 
         {/* Stats */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>

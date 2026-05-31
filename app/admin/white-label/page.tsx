@@ -138,6 +138,21 @@ export default function WhiteLabelPage() {
         background: cfg.enabled ? `linear-gradient(135deg,${cfg.primaryColor} 0%,${cfg.accentColor} 100%)` : 'linear-gradient(135deg,#1E1B4B 0%,#4C1D95 100%)',
         boxShadow: cfg.enabled ? `0 8px 32px ${cfg.primaryColor}44` : '0 4px 20px rgba(0,0,0,0.20)',
         position:'relative', overflow:'hidden', transition:'all .4s' }}>
+
+      {/* Hero orange */}
+      <div style={{
+        borderRadius: '24px', padding: '2rem 2.5rem', marginBottom: '2rem',
+        background: 'linear-gradient(135deg, #F4591F 0%, #FF8C42 45%, #FFB347 100%)',
+        position: 'relative', overflow: 'hidden', color: '#fff',
+        boxShadow: '0 8px 32px rgba(244,89,31,0.25)',
+      }}>
+        <div style={{ position: 'absolute', top: -60, right: -40, width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,255,255,0.07)', pointerEvents: 'none' }} />
+        <div style={{ position: 'relative' }}>
+          <div style={{ fontSize: '10px', fontWeight: '800', color: 'rgba(255,255,255,0.7)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '6px' }}>White Label</div>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: '900', color: '#fff', letterSpacing: '-0.4px', marginBottom: '4px' }}>White Label</h1>
+          <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: '14px' }}>Personnalisez ETAGIA aux couleurs de votre organisation.</p>
+        </div>
+      </div>
         <div style={{ position:'absolute', top:'-50px', right:'-30px', width:'200px', height:'200px', borderRadius:'50%', background:'radial-gradient(circle,rgba(255,255,255,0.10),transparent 70%)', pointerEvents:'none' }} />
         <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', position:'relative' }}>
           <div>

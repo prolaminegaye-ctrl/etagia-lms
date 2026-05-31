@@ -35,16 +35,22 @@ export default function TutorPage() {
       <Sidebar role="apprenant" />
       <main style={{ marginLeft: '248px', flex: 1, display: 'flex', flexDirection: 'column', height: '100vh' }}>
 
-        {/* Header */}
-        <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #D9DBE9', background: '#fff', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{ width: 44, height: 44, borderRadius: '14px', background: 'linear-gradient(135deg, #4255FF, #6B52D4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>✦</div>
+        {/* Header orange gradient */}
+        <div style={{
+          padding: '1.5rem 2rem',
+          background: 'linear-gradient(135deg, #F4591F 0%, #FF8C42 50%, #FFB347 100%)',
+          display: 'flex', alignItems: 'center', gap: '1rem',
+          position: 'relative', overflow: 'hidden',
+        }}>
+          <div style={{ position: 'absolute', top: -40, right: -30, width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
+          <div style={{ width: 44, height: 44, borderRadius: '14px', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)', border: '1.5px solid rgba(255,255,255,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>✦</div>
           <div>
-            <div style={{ fontSize: '11px', fontWeight: '700', color: '#4255FF', letterSpacing: '1.5px', textTransform: 'uppercase' }}>Intelligence artificielle</div>
-            <h1 style={{ fontSize: '1.25rem', fontWeight: '900', color: '#2E3856', letterSpacing: '-0.3px' }}>AI Tutor ETAGIA</h1>
+            <div style={{ fontSize: '10px', fontWeight: '800', color: 'rgba(255,255,255,0.75)', letterSpacing: '2px', textTransform: 'uppercase' }}>Intelligence artificielle</div>
+            <h1 style={{ fontSize: '1.25rem', fontWeight: '900', color: '#fff', letterSpacing: '-0.3px' }}>AI Tutor ETAGIA</h1>
           </div>
           <div style={{ marginLeft: 'auto', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
             {['🧠 Contextuel', '🌍 Afrique', '📚 Pédagogique'].map(t => (
-              <span key={t} style={{ fontSize: '11px', background: '#E8EAFF', color: '#4255FF', padding: '4px 10px', borderRadius: '99px', fontWeight: '700' }}>{t}</span>
+              <span key={t} style={{ fontSize: '11px', background: 'rgba(255,255,255,0.2)', color: '#fff', padding: '4px 10px', borderRadius: '99px', fontWeight: '700', border: '1px solid rgba(255,255,255,0.3)' }}>{t}</span>
             ))}
           </div>
         </div>

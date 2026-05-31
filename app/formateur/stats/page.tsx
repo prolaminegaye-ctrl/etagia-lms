@@ -21,7 +21,16 @@ const card: React.CSSProperties = { background:'#FFFFFF', border:'1.5px solid rg
 
 export default function StatsPage() {
   return (
-    <div>
+    <div
+
+      {/* Hero orange */}
+      <div style={{ borderRadius: '20px', padding: '1.75rem 2rem', marginBottom: '2rem', background: 'linear-gradient(135deg, #F4591F 0%, #FF8C42 50%, #FFB347 100%)', boxShadow: '0 6px 24px rgba(244,89,31,0.25)', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: -50, right: -30, width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
+        <div style={{ fontSize: '10px', fontWeight: '800', color: 'rgba(255,255,255,0.7)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Statistiques</div>
+        <h1 style={{ fontSize: '1.4rem', fontWeight: '900', color: '#fff', letterSpacing: '-0.3px', marginBottom: '3px' }}>Statistiques</h1>
+        <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '13px' }}>Analysez vos performances pédagogiques.</p>
+      </div>
+>
       <div style={{marginBottom:'2rem',padding:'2rem',background:'linear-gradient(135deg,#E8651A 0%,#FFB300 100%)',borderRadius:'24px',boxShadow:'0 8px 32px rgba(232,101,26,0.28)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:'-60px',right:'-40px',width:'200px',height:'200px',borderRadius:'50%',background:'rgba(255,255,255,0.08)',pointerEvents:'none'}}/>
         <h1 style={{fontSize:'24px',fontWeight:'800',color:'#FFFFFF',fontFamily:'Syne,sans-serif',position:'relative'}}>Statistiques</h1>

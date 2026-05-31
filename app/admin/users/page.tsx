@@ -123,6 +123,21 @@ export default function UsersPage() {
       {(modal==='add'||modal==='edit')&&(
         <div style={{position:'fixed',inset:0,background:'#FAF9F7',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
           <div style={{background:'#FFFFFF',border:'1px solid rgba(232,101,26,0.30)',borderRadius:'20px',padding:'2rem',width:'100%',maxWidth:'500px'}}>
+
+      {/* Hero orange */}
+      <div style={{
+        borderRadius: '24px', padding: '2rem 2.5rem', marginBottom: '2rem',
+        background: 'linear-gradient(135deg, #F4591F 0%, #FF8C42 45%, #FFB347 100%)',
+        position: 'relative', overflow: 'hidden', color: '#fff',
+        boxShadow: '0 8px 32px rgba(244,89,31,0.25)',
+      }}>
+        <div style={{ position: 'absolute', top: -60, right: -40, width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,255,255,0.07)', pointerEvents: 'none' }} />
+        <div style={{ position: 'relative' }}>
+          <div style={{ fontSize: '10px', fontWeight: '800', color: 'rgba(255,255,255,0.7)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '6px' }}>Utilisateurs</div>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: '900', color: '#fff', letterSpacing: '-0.4px', marginBottom: '4px' }}>Gestion des utilisateurs</h1>
+          <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: '14px' }}>Administrez les comptes et permissions des utilisateurs.</p>
+        </div>
+      </div>
             <h2 style={{fontSize:'20px',fontWeight:'800',color:'#1C1917',marginBottom:'1.5rem'}}>{modal==='add'?'+ Inviter un utilisateur':'✏️ Modifier l\'utilisateur'}</h2>
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem',marginBottom:'1.5rem'}}>
               <div style={{gridColumn:'1/-1'}}><label style={S.lbl}>Nom complet *</label><input style={S.inp} value={form.name||''} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Prénom Nom" /></div>

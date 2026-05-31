@@ -100,6 +100,16 @@ export default function TeamPage() {
   return (
     <div style={{ padding:'32px', maxWidth:'1000px', margin:'0 auto', fontFamily:'"Plus Jakarta Sans",system-ui,sans-serif' }}>
 
+
+      {/* Hero orange */}
+      <div style={{ borderRadius: '24px', padding: '2rem 2.5rem', marginBottom: '2rem', background: 'linear-gradient(135deg, #F4591F 0%, #FF8C42 45%, #FFB347 100%)', position: 'relative', overflow: 'hidden', boxShadow: '0 8px 32px rgba(244,89,31,0.25)' }}>
+        <div style={{ position: 'absolute', top: -60, right: -40, width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,255,255,0.07)', pointerEvents: 'none' }} />
+        <div style={{ position: 'relative' }}>
+          <div style={{ fontSize: '10px', fontWeight: '800', color: 'rgba(255,255,255,0.7)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '6px' }}>Équipe</div>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: '900', color: '#fff', letterSpacing: '-0.4px', marginBottom: '4px' }}>Mon Équipe</h1>
+          <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: '14px' }}>Gérez les rôles et accès de votre équipe.</p>
+        </div>
+      </div>
       {/* Header */}
       <div style={{ marginBottom:'32px', display:'flex', alignItems:'flex-start', justifyContent:'space-between', flexWrap:'wrap', gap:'16px' }}>
         <div>

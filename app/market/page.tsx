@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 const MarketChatbot = dynamic(() => import('@/components/MarketChatbot'), { ssr: false })
+import PageHero from '@/components/PageHero'
 import { ETAGIA_CATALOG, EtProduct } from '@/lib/market-catalog'
 
 type ProductType = 'livre' | 'cours' | 'logiciel' | 'ressource'
@@ -180,17 +181,29 @@ export default function MarketPage() {
         </div>
       )}
 
-      {/* ── HEADER */}
-      <div style={{ marginBottom: '2rem' }}>
+      {/* ── HERO ORANGE */}
+      <div style={{
+        borderRadius: '24px', padding: '2rem 2.5rem', marginBottom: '2rem',
+        background: 'linear-gradient(135deg, #F4591F 0%, #FF8C42 45%, #FFB347 100%)',
+        position: 'relative', overflow: 'hidden', color: '#fff',
+        boxShadow: '0 8px 32px rgba(244,89,31,0.28)',
+      }}>
+        <div style={{ position: 'absolute', top: -70, right: -50, width: 240, height: 240, borderRadius: '50%', background: 'rgba(255,255,255,0.07)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -50, left: '30%', width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.05)', pointerEvents: 'none' }} />
+        <div style={{ position: 'relative' }}>
+          <div style={{ fontSize: '10px', fontWeight: '800', color: 'rgba(255,255,255,0.7)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '6px' }}>Marketplace</div>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: '900', color: '#fff', letterSpacing: '-0.5px', margin: '0 0 6px' }}>🛒 Marketplace ETAGIA</h1>
+          <p style={{ color: 'rgba(255,255,255,0.80)', fontSize: '14px', marginBottom: '1.25rem' }}>
+            Modules professionnels certifiés · Contexte africain francophone
+          </p>
+          <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+            {[['200+','Modules'],['4.7/5','Satisfaction'],['Sécurisé','Paiement'],['À vie','Accès PDF']].map(([v,l]) => (
+              <div key={l}><div style={{ fontSize: '18px', fontWeight: '900', color: '#fff' }}>{v}</div><div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.65)' }}>{l}</div></div>
+            ))}
+          </div>
+        </div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <h1 style={{ fontSize: '28px', fontWeight: '800', fontFamily: 'var(--font-display)', margin: 0 }}>
-              🛒 Marketplace ETAGIA
-            </h1>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginTop: '6px' }}>
-              Modules professionnels certifiés · Contexte africain francophone
-            </p>
-          </div>
           {purchasedCount > 0 && (
             <div style={{ background: 'rgba(74,127,245,0.1)', border: '1px solid rgba(74,127,245,0.25)', borderRadius: '12px', padding: '10px 18px', textAlign: 'center' }}>
               <div style={{ fontSize: '18px', fontWeight: '800', color: 'var(--accent)' }}>{purchasedCount} achat{purchasedCount > 1 ? 's' : ''}</div>

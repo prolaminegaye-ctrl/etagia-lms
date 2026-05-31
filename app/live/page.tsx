@@ -1,4 +1,5 @@
 'use client'
+import PageHero from '@/components/PageHero'
 import { useState, useEffect, useCallback } from 'react'
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -262,8 +263,8 @@ export default function LivePage() {
 
       {/* Header */}
       <div style={{ marginBottom: '2rem', padding: '2rem', borderRadius: '24px',
-        background: 'linear-gradient(135deg,#4255FF 0%,#D4A017 100%)',
-        boxShadow: '0 8px 32px rgba(66,85,255,0.28)', position: 'relative', overflow: 'hidden' }}>
+        background: 'linear-gradient(135deg, #F4591F 0%, #FF8C42 45%, #FFB347 100%)',
+        boxShadow: '0 8px 32px rgba(244,89,31,0.30)', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '-60px', right: '-40px', width: '240px', height: '240px',
           borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,255,255,0.12),transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>

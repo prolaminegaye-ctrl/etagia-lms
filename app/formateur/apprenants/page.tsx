@@ -22,7 +22,16 @@ export default function ApprenantPage() {
   const avg = (arr: number[]) => Math.round(arr.reduce((a,b)=>a+b,0)/arr.length)
 
   return (
-    <div>
+    <div
+
+      {/* Hero orange */}
+      <div style={{ borderRadius: '20px', padding: '1.75rem 2rem', marginBottom: '2rem', background: 'linear-gradient(135deg, #F4591F 0%, #FF8C42 50%, #FFB347 100%)', boxShadow: '0 6px 24px rgba(244,89,31,0.25)', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: -50, right: -30, width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
+        <div style={{ fontSize: '10px', fontWeight: '800', color: 'rgba(255,255,255,0.7)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Apprenants</div>
+        <h1 style={{ fontSize: '1.4rem', fontWeight: '900', color: '#fff', letterSpacing: '-0.3px', marginBottom: '3px' }}>Mes Apprenants</h1>
+        <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '13px' }}>Suivez la progression de vos apprenants.</p>
+      </div>
+>
       <div style={{marginBottom:'2rem',padding:'1.5rem',background:'linear-gradient(135deg,rgba(28,25,23,0.06),rgba(34,212,168,0.05))',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'20px'}}>
         <h1 style={{fontSize:'24px',fontWeight:'800',background:'linear-gradient(135deg,#1C1917,#E8651A)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Mes apprenants</h1>
         <p style={{color:'#A8A29E',fontSize:'13px',marginTop:'3px'}}>{apprenants.length} apprenants · Progression moyenne {avg(apprenants.map(a=>a.progress))}% · Score moyen {avg(apprenants.map(a=>a.score))}/100</p>

@@ -86,7 +86,16 @@ export default function NotesPage() {
   const wordCount = activeNote?.content.trim().split(/\s+/).filter(Boolean).length || 0
 
   return (
-    <div style={{ maxWidth:'1100px', height:'calc(100vh - 120px)', display:'flex', flexDirection:'column' }}>
+    <div
+
+      {/* Hero orange */}
+      <div style={{ borderRadius: '20px', padding: '1.75rem 2rem', marginBottom: '2rem', background: 'linear-gradient(135deg, #F4591F 0%, #FF8C42 50%, #FFB347 100%)', boxShadow: '0 6px 24px rgba(244,89,31,0.25)', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: -50, right: -30, width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
+        <div style={{ fontSize: '10px', fontWeight: '800', color: 'rgba(255,255,255,0.7)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Notes</div>
+        <h1 style={{ fontSize: '1.4rem', fontWeight: '900', color: '#fff', letterSpacing: '-0.3px', marginBottom: '3px' }}>Bloc-note</h1>
+        <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '13px' }}>Vos notes et ressources personnelles.</p>
+      </div>
+ style={{ maxWidth:'1100px', height:'calc(100vh - 120px)', display:'flex', flexDirection:'column' }}>
 
       {/* Header */}
       <div style={{ marginBottom:'1.25rem', padding:'1.5rem 2rem', borderRadius:'20px', background:'linear-gradient(135deg,#1C1917 0%,#2C1E14 100%)', boxShadow:'0 4px 24px rgba(0,0,0,0.18)', position:'relative', overflow:'hidden', flexShrink:0 }}>
