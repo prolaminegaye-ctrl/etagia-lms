@@ -44,6 +44,15 @@ const navAdmin = [
   { href: '/admin/plugins', icon: '🔌', label: 'Plugins & LTI' },
 ]
 
+const badgeColors: Record<string, { bg: string; color: string }> = {
+  NEW:  { bg: '#EFF6FF', color: '#1565C0' },
+  LIVE: { bg: '#FFF0F0', color: '#E53E3E' },
+  IA:   { bg: '#F5F3FF', color: '#7C3AED' },
+  BAC:  { bg: '#FFFBEB', color: '#D97706' },
+  ADMIN:{ bg: '#FFF3EE', color: '#F4591F' },
+  PRO:  { bg: '#F0FDF4', color: '#16A34A' },
+}
+
 export default function Sidebar({ role = 'apprenant' }: { role?: string }) {
   const path = usePathname()
   const nav = role === 'formateur' ? navFormateur : role === 'admin' ? navAdmin : navApprenant
@@ -51,116 +60,131 @@ export default function Sidebar({ role = 'apprenant' }: { role?: string }) {
   return (
     <aside style={{
       width: '248px', minHeight: '100vh',
-      background: 'linear-gradient(180deg, #1E1B4B 0%, #2D2A5E 60%, #1E1B4B 100%)',
-      borderRight: '1px solid rgba(139,92,246,0.18)',
+      background: '#FFFFFF',
+      borderRight: '1px solid #E2E8F0',
       display: 'flex', flexDirection: 'column',
       position: 'fixed', top: 0, left: 0, zIndex: 10,
-      boxShadow: '4px 0 32px rgba(99,102,241,0.15)',
+      boxShadow: '1px 0 12px rgba(15,23,42,0.06)',
     }}>
+
       {/* Logo */}
-      <div style={{ padding: '1.25rem 1.25rem 1rem', borderBottom: '1px solid rgba(139,92,246,0.12)' }}>
-        <Link href="/dashboard">
-          <img src="/logo.svg" alt="ETAGIA LMS" style={{ height: '44px', width: 'auto' }} />
+      <div style={{ padding: '1.25rem 1.25rem 1rem', borderBottom: '1px solid #F1F5F9' }}>
+        <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+          <div style={{
+            width: '36px', height: '36px', borderRadius: '10px',
+            background: 'linear-gradient(135deg, #1565C0 0%, #F4591F 100%)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '16px', flexShrink: 0,
+          }}>🎓</div>
+          <div>
+            <div style={{ fontSize: '15px', fontWeight: '800', color: '#0F172A', letterSpacing: '-0.3px', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              ETAGIA
+            </div>
+            <div style={{ fontSize: '9px', color: '#94A3B8', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '600' }}>
+              LMS · Afrique
+            </div>
+          </div>
         </Link>
-        <div style={{ marginTop: '6px', fontSize: '9px', color: 'rgba(199,191,255,0.45)', letterSpacing: '2px', textTransform: 'uppercase' }}>
-          EdTech · Afrique francophone
-        </div>
       </div>
 
       {/* Role switcher */}
-      <div style={{ padding: '0.75rem', borderBottom: '1px solid rgba(139,92,246,0.08)' }}>
-        <div style={{ display: 'flex', gap: '2px', background: 'rgba(139,92,246,0.12)', borderRadius: '10px', padding: '3px' }}>
+      <div style={{ padding: '0.75rem 0.875rem', borderBottom: '1px solid #F1F5F9' }}>
+        <div style={{ display: 'flex', gap: '3px', background: '#F1F5F9', borderRadius: '10px', padding: '3px' }}>
           {[
             { r: 'apprenant', label: 'Apprenant', href: '/dashboard' },
             { r: 'formateur', label: 'Formateur', href: '/formateur' },
             { r: 'admin',     label: 'Admin',     href: '/admin' },
           ].map(({ r, label, href }) => (
             <Link key={r} href={href} style={{
-              flex: 1, textAlign: 'center', padding: '6px 2px', borderRadius: '7px',
-              fontSize: '10px', fontWeight: '700', transition: 'all .15s',
-              background: role === r ? 'linear-gradient(135deg,#6366F1,#A855F7)' : 'transparent',
-              color: role === r ? '#fff' : 'rgba(199,191,255,0.45)',
+              flex: 1, textAlign: 'center', padding: '5px 2px', borderRadius: '7px',
+              fontSize: '9.5px', fontWeight: '700', transition: 'all .15s',
               textDecoration: 'none',
+              ...(role === r
+                ? { background: '#FFFFFF', color: '#1565C0', boxShadow: '0 1px 4px rgba(15,23,42,0.08)' }
+                : { color: '#94A3B8' }),
             }}>{label}</Link>
           ))}
         </div>
       </div>
 
       {/* Navigation */}
-      <nav style={{ flex: 1, padding: '0.5rem 0.625rem', overflowY: 'auto' }}>
-        <div style={{ fontSize: '9px', color: 'rgba(199,191,255,0.30)', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', padding: '8px 10px 4px' }}>
-          Navigation
-        </div>
-        {nav.map(item => {
-          const active = path === item.href || (item.href.length > 8 && path.startsWith(item.href))
-          const isLive = (item as any).badge === 'LIVE'
-          const isIA   = (item as any).badge === 'IA'
+      <nav style={{ flex: 1, padding: '0.75rem 0.75rem', overflowY: 'auto' }}>
+        {nav.map(({ href, icon, label, badge }) => {
+          const active = path === href || path.startsWith(href + '/')
+          const badgeStyle = badge ? badgeColors[badge] : null
           return (
-            <Link key={item.href} href={item.href} style={{
+            <Link key={href} href={href} style={{
               display: 'flex', alignItems: 'center', gap: '10px',
-              padding: '9px 10px', borderRadius: '10px', marginBottom: '2px',
-              background: active ? 'rgba(129,140,248,0.16)' : 'transparent',
-              color: active ? '#A5B4FC' : 'rgba(199,191,255,0.60)',
-              fontSize: '13.5px', fontWeight: active ? '700' : '400',
-              transition: 'all .15s',
-              borderLeft: active ? '2.5px solid #818CF8' : '2.5px solid transparent',
+              padding: '8px 10px', borderRadius: '10px',
+              marginBottom: '2px',
               textDecoration: 'none',
-            }}>
-              <span style={{ fontSize: '15px' }}>{item.icon}</span>
-              <span style={{ flex: 1 }}>{item.label}</span>
-              {(item as any).badge && (
+              transition: 'all .15s',
+              ...(active ? {
+                background: '#EFF6FF',
+                color: '#1565C0',
+              } : {
+                color: '#475569',
+              }),
+            }}
+            onMouseEnter={e => { if (!active) (e.currentTarget as HTMLAnchorElement).style.background = '#F8FAFB' }}
+            onMouseLeave={e => { if (!active) (e.currentTarget as HTMLAnchorElement).style.background = 'transparent' }}
+            >
+              <span style={{ fontSize: '14px', width: '18px', textAlign: 'center', flexShrink: 0 }}>{icon}</span>
+              <span style={{ flex: 1, fontSize: '13px', fontWeight: active ? '600' : '500' }}>{label}</span>
+              {badge && badgeStyle && (
                 <span style={{
-                  fontSize: '9px', borderRadius: '4px', padding: '2px 5px', fontWeight: '800',
-                  background: isLive
-                    ? (active ? 'rgba(239,68,68,0.25)' : 'rgba(239,68,68,0.15)')
-                    : isIA
-                    ? (active ? 'rgba(168,85,247,0.30)' : 'rgba(168,85,247,0.18)')
-                    : (active ? 'rgba(99,102,241,0.30)' : 'rgba(99,102,241,0.18)'),
-                  color: isLive ? '#EF4444' : isIA ? '#C084FC' : '#818CF8',
-                }}>
-                  {isLive && active ? '● ' : ''}{(item as any).badge}
-                </span>
+                  fontSize: '9px', fontWeight: '700', padding: '1px 6px',
+                  borderRadius: '99px', flexShrink: 0,
+                  background: badgeStyle.bg, color: badgeStyle.color,
+                  letterSpacing: '0.3px',
+                }}>{badge}</span>
+              )}
+              {active && (
+                <span style={{
+                  width: '4px', height: '4px', borderRadius: '50%',
+                  background: '#1565C0', flexShrink: 0,
+                }} />
               )}
             </Link>
           )
         })}
       </nav>
 
-      {/* Progress banner */}
-      <div style={{ margin: '0 0.625rem 0.5rem', padding: '10px 12px', borderRadius: '10px',
-        background: 'rgba(99,102,241,0.14)', border: '1px solid rgba(129,140,248,0.22)',
-        display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <span style={{ fontSize: '16px' }}>⚡</span>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: '11px', fontWeight: '800', color: '#A5B4FC' }}>7 jours de streak !</div>
-          <div style={{ fontSize: '10px', color: 'rgba(199,191,255,0.40)' }}>Continuez comme ça</div>
-        </div>
+      {/* Footer */}
+      <div style={{
+        padding: '0.875rem 1rem',
+        borderTop: '1px solid #F1F5F9',
+      }}>
+        {/* BBB status */}
         <div style={{
-          width: '28px', height: '28px', borderRadius: '50%',
-          background: 'conic-gradient(#6366F1 200deg, rgba(99,102,241,0.20) 0deg)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '10px', fontWeight: '800', color: '#A5B4FC',
-        }}>7</div>
-      </div>
+          display: 'flex', alignItems: 'center', gap: '8px',
+          padding: '8px 10px', borderRadius: '10px',
+          background: '#F0FDF4', marginBottom: '8px',
+        }}>
+          <span style={{ fontSize: '11px' }}>🟢</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: '11px', fontWeight: '600', color: '#16A34A' }}>BigBlueButton</div>
+            <div style={{ fontSize: '10px', color: '#86EFAC', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Connecté</div>
+          </div>
+        </div>
 
-      {/* User card */}
-      <div style={{ padding: '0.75rem', borderTop: '1px solid rgba(139,92,246,0.12)' }}>
-        <div style={{ background: 'rgba(99,102,241,0.10)', border: '1px solid rgba(139,92,246,0.20)',
-          borderRadius: '12px', padding: '10px 12px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ width: '34px', height: '34px', borderRadius: '50%', flexShrink: 0, position: 'relative',
-            background: 'linear-gradient(135deg,#6366F1,#A855F7)',
+        {/* User pill */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: '8px',
+          padding: '8px 10px', borderRadius: '10px',
+          background: '#F8FAFB', cursor: 'pointer',
+        }}>
+          <div style={{
+            width: '30px', height: '30px', borderRadius: '50%',
+            background: 'linear-gradient(135deg, #1565C0, #F4591F)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '13px', fontWeight: '800', color: '#fff' }}>
-            LG
-            <div style={{ position: 'absolute', bottom: 0, right: 0, width: '9px', height: '9px',
-              borderRadius: '50%', background: '#4ADE80', border: '2px solid #1E1B4B' }} />
+            fontSize: '12px', color: '#FFF', fontWeight: '700', flexShrink: 0,
+          }}>L</div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: '12px', fontWeight: '600', color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Lamine Gaye</div>
+            <div style={{ fontSize: '10px', color: '#94A3B8' }}>Admin</div>
           </div>
-          <div>
-            <div style={{ fontWeight: '600', fontSize: '13px', color: 'rgba(224,221,255,0.95)' }}>Lamine Gaye</div>
-            <div style={{ fontSize: '11px', color: 'rgba(199,191,255,0.40)', textTransform: 'capitalize' }}>
-              {role}
-            </div>
-          </div>
+          <span style={{ fontSize: '10px', color: '#94A3B8' }}>⚙</span>
         </div>
       </div>
     </aside>

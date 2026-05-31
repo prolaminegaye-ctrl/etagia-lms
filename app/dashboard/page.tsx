@@ -2,108 +2,168 @@
 import { useRouter } from 'next/navigation'
 
 const kpis = [
-  { label: 'Cours en cours', value: '4', color: '#E8651A', grad: 'linear-gradient(135deg,#E8651A,#D4A017)', delta: '+1 ce mois', icon: '📚' },
-  { label: 'Progression', value: '68%', color: '#00BFA5', grad: 'linear-gradient(135deg,#00BFA5,#7C3AED)', delta: '+5% semaine', icon: '📈' },
-  { label: 'Score moyen', value: '82/100', color: '#FFB300', grad: 'linear-gradient(135deg,#D4A017,#E8651A)', delta: 'Top 15%', icon: '🏆' },
-  { label: 'Heures semaine', value: '12h', color: '#7C3AED', grad: 'linear-gradient(135deg,#7C3AED,#00BFA5)', delta: 'Obj: 15h', icon: '⏱' },
+  { label: 'Cours en cours',  value: '4',     icon: '📚', color: '#1565C0', bg: '#EFF6FF', delta: '+1 ce mois' },
+  { label: 'Progression moy', value: '68%',   icon: '📈', color: '#16A34A', bg: '#F0FDF4', delta: '+5% semaine' },
+  { label: 'Score moyen',     value: '82/100',icon: '🏆', color: '#F4591F', bg: '#FFF3EE', delta: 'Top 15%' },
+  { label: 'Heures semaine',  value: '12h',   icon: '⏱',  color: '#7C3AED', bg: '#F5F3FF', delta: 'Obj : 15h' },
 ]
 
 const courses = [
-  { title: 'Data Science avec Python', progress: 72, cat: 'Tech', color: '#E8651A', done: 17, total: 24 },
-  { title: 'Marketing Digital Afrique', progress: 45, cat: 'Business', color: '#00BFA5', done: 8, total: 18 },
-  { title: 'Leadership & Management', progress: 30, cat: 'Soft Skills', color: '#FFB300', done: 4, total: 12 },
+  { title: 'Data Science avec Python',    progress: 72, cat: 'Tech',       color: '#1565C0', done: 17, total: 24 },
+  { title: 'Marketing Digital Afrique',   progress: 45, cat: 'Business',   color: '#F4591F', done: 8,  total: 18 },
+  { title: 'Leadership & Management',     progress: 30, cat: 'Soft Skills',color: '#7C3AED', done: 4,  total: 12 },
 ]
 
 const reco = [
-  { title: 'IA Générative pour pros', tag: 'Nouveau', color: '#7C3AED', emoji: '🤖' },
-  { title: 'Comptabilité SME Afrique', tag: 'Populaire', color: '#00BFA5', emoji: '💼' },
-  { title: 'Pitch & Fundraising', tag: 'Tendance', color: '#E8651A', emoji: '🚀' },
+  { title: 'IA Générative pour pros',  tag: 'Nouveau',  color: '#1565C0', emoji: '🤖' },
+  { title: 'Comptabilité SME Afrique', tag: 'Populaire',color: '#16A34A', emoji: '💼' },
+  { title: 'Pitch & Fundraising',      tag: 'Tendance', color: '#F4591F', emoji: '🚀' },
+]
+
+const activities = [
+  { text: 'Quiz validé — Data Science Ch.4', time: 'Il y a 2h', icon: '✅', color: '#16A34A' },
+  { text: 'Nouveau cours : IA Générative',   time: 'Ce matin',  icon: '🆕', color: '#1565C0' },
+  { text: 'Session live planifiée demain',   time: 'Demain 14h', icon: '🎥', color: '#F4591F' },
 ]
 
 export default function DashboardPage() {
   const router = useRouter()
+
   return (
-    <div>
-      {/* Hero */}
-      <div style={{ marginBottom: '2rem', padding: '2rem', borderRadius: '24px', background: 'linear-gradient(135deg,#E8651A 0%,#FFB300 100%)', position: 'relative', overflow: 'hidden', boxShadow: '0 8px 32px rgba(232,101,26,0.26)' }}>
-        <div style={{ position: 'absolute', top: '-80px', right: '-60px', width: '280px', height: '280px', borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: '-50px', left: '20%', width: '200px', height: '200px', borderRadius: '50%', background: 'rgba(0,0,0,0.08)', pointerEvents: 'none' }} />
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
-          <div>
-            <div style={{ fontSize: '13px', fontWeight: '600', color: 'rgba(255,255,255,0.75)', marginBottom: '6px', letterSpacing: '0.5px' }}>DIMANCHE 17 MAI 2026</div>
-            <h1 style={{ fontSize: '32px', fontWeight: '800', color: '#FFFFFF', marginBottom: '6px', fontFamily: 'Syne,sans-serif', lineHeight: 1.1 }}>Bonjour, Lamine 👋</h1>
-            <p style={{ color: 'rgba(255,255,255,0.80)', fontSize: '14px' }}>Vous êtes sur une belle lancée. Continuez !</p>
+    <div style={{ padding: '2rem', maxWidth: '1100px' }}>
+
+      {/* Hero banner */}
+      <div style={{
+        borderRadius: '20px', padding: '2rem 2.5rem', marginBottom: '2rem',
+        background: 'linear-gradient(135deg, #0D47A1 0%, #1565C0 50%, #1976D2 100%)',
+        position: 'relative', overflow: 'hidden', color: '#fff',
+        boxShadow: '0 8px 40px rgba(21,101,192,0.25)',
+      }}>
+        <div style={{ position: 'absolute', top: -80, right: -60, width: 280, height: 280, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -60, right: '20%', width: 180, height: 180, borderRadius: '50%', background: 'rgba(244,89,31,0.15)', pointerEvents: 'none' }} />
+        <div style={{ position: 'relative' }}>
+          <div style={{ fontSize: '11px', letterSpacing: '1.5px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.65)', marginBottom: '6px', fontWeight: 700 }}>Tableau de bord</div>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: '800', fontFamily: "'Plus Jakarta Sans', sans-serif", margin: '0 0 6px', color: '#fff' }}>
+            Bonjour, Lamine 👋
+          </h1>
+          <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '14px', marginBottom: '1.25rem' }}>
+            Continuez sur votre lancée — 68% de progression cette semaine.
+          </p>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <button onClick={() => router.push('/cours')} style={{
+              background: '#fff', color: '#1565C0', fontWeight: 700, fontSize: '13px',
+              padding: '8px 20px', borderRadius: '99px', border: 'none', cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+            }}>Mes cours →</button>
+            <button onClick={() => router.push('/live')} style={{
+              background: 'rgba(244,89,31,0.85)', color: '#fff', fontWeight: 700, fontSize: '13px',
+              padding: '8px 20px', borderRadius: '99px', border: 'none', cursor: 'pointer',
+            }}>🎥 Classe live</button>
           </div>
-          <div style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: '18px', padding: '16px 22px', textAlign: 'center' }}>
-            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.70)', marginBottom: '4px', fontWeight: '600' }}>Objectif hebdo</div>
-            <div style={{ fontSize: '26px', fontWeight: '800', color: '#FFFFFF', fontFamily: 'Syne,sans-serif' }}>15h/sem</div>
-            <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.85)', marginTop: '4px', fontWeight: '600' }}>✓ 12h cette semaine</div>
-          </div>
+        </div>
+        {/* Stats row */}
+        <div style={{ display: 'flex', gap: '2rem', marginTop: '1.5rem', flexWrap: 'wrap' }}>
+          {[['12', 'Cours terminés'], ['4', 'En cours'], ['3', 'Certifications'], ['82%', 'Score moyen']].map(([v, l]) => (
+            <div key={l}>
+              <div style={{ fontSize: '20px', fontWeight: '800', color: '#fff' }}>{v}</div>
+              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>{l}</div>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* KPIs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1rem', marginBottom: '2rem' }}>
-        {kpis.map(k => (
-          <div key={k.label} style={{ background: '#FFFFFF', border: '1.5px solid rgba(28,25,23,0.07)', borderRadius: '18px', padding: '1.25rem', position: 'relative', overflow: 'hidden', boxShadow: '0 2px 12px rgba(28,25,23,0.05)', transition: 'transform .2s,box-shadow .2s' }}>
-            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: k.grad, borderRadius: '18px 18px 0 0' }} />
-            <div style={{ fontSize: '22px', marginBottom: '8px', marginTop: '4px' }}>{k.icon}</div>
-            <div style={{ fontSize: '28px', fontWeight: '800', color: k.color, fontFamily: 'Syne,sans-serif', marginBottom: '3px', lineHeight: 1 }}>{k.value}</div>
-            <div style={{ fontSize: '12px', color: '#57534E', marginBottom: '6px' }}>{k.label}</div>
-            <div style={{ fontSize: '11px', color: '#00BFA5', fontWeight: '700' }}>{k.delta}</div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(210px,1fr))', gap: '1rem', marginBottom: '2rem' }}>
+        {kpis.map(({ label, value, icon, color, bg, delta }) => (
+          <div key={label} style={{
+            background: '#fff', border: '1px solid #E2E8F0', borderRadius: '16px',
+            padding: '1.25rem', boxShadow: '0 1px 4px rgba(15,23,42,0.06)',
+            transition: 'all .18s',
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+              <div style={{ width: 40, height: 40, borderRadius: '10px', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>{icon}</div>
+              <span style={{ fontSize: '10px', background: bg, color, padding: '2px 8px', borderRadius: '99px', fontWeight: 700 }}>{delta}</span>
+            </div>
+            <div style={{ fontSize: '24px', fontWeight: '800', color: '#0F172A', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{value}</div>
+            <div style={{ fontSize: '12px', color: '#94A3B8', marginTop: '2px' }}>{label}</div>
           </div>
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1.5rem' }}>
-        {/* Courses */}
-        <div>
-          <h2 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '1rem', color: '#1C1917', fontFamily: 'Syne,sans-serif' }}>Continuer l&apos;apprentissage</h2>
-          {courses.map(c => (
-            <div key={c.title} onClick={() => router.push('/cours')}
-              style={{ background: '#FFFFFF', border: '1.5px solid rgba(28,25,23,0.07)', borderRadius: '16px', padding: '1.1rem 1.25rem', cursor: 'pointer', marginBottom: '0.75rem', transition: 'all .15s', boxShadow: '0 2px 8px rgba(28,25,23,0.04)' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = c.color + '55'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)'; (e.currentTarget as HTMLElement).style.boxShadow = `0 6px 20px ${c.color}18` }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(28,25,23,0.07)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 8px rgba(28,25,23,0.04)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                <div>
-                  <div style={{ fontWeight: '600', fontSize: '14px', color: '#1C1917', marginBottom: '4px' }}>{c.title}</div>
-                  <span style={{ fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '6px', background: c.color + '15', color: c.color }}>{c.cat}</span>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '24px', fontWeight: '800', color: c.color, fontFamily: 'Syne,sans-serif' }}>{c.progress}%</div>
-                  <div style={{ fontSize: '11px', color: '#A8A29E' }}>{c.done}/{c.total} leçons</div>
-                </div>
-              </div>
-              <div style={{ height: '6px', background: '#F5F3F0', borderRadius: '3px', overflow: 'hidden' }}>
-                <div style={{ height: '100%', width: `${c.progress}%`, background: `linear-gradient(90deg,${c.color},${c.color}CC)`, borderRadius: '3px', transition: 'width .5s ease' }} />
-              </div>
+      {/* 2-col layout */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '1.5rem', marginBottom: '2rem' }}>
+
+        {/* Cours en cours */}
+        <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '20px', padding: '1.5rem', boxShadow: '0 1px 4px rgba(15,23,42,0.06)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+            <div>
+              <div style={{ fontSize: '11px', fontWeight: 700, color: '#1565C0', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: 2 }}>En cours</div>
+              <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0F172A', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Mes formations</h3>
             </div>
-          ))}
+            <button onClick={() => router.push('/cours')} style={{ fontSize: '12px', color: '#1565C0', background: '#EFF6FF', border: 'none', borderRadius: '8px', padding: '6px 12px', cursor: 'pointer', fontWeight: 600 }}>Voir tout</button>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {courses.map(({ title, progress, cat, color, done, total }) => (
+              <div key={title} onClick={() => router.push('/cours')} style={{
+                padding: '1rem', borderRadius: '14px', border: '1px solid #F1F5F9',
+                background: '#FAFBFC', cursor: 'pointer', transition: 'all .15s',
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                  <div>
+                    <div style={{ fontWeight: '600', fontSize: '14px', color: '#0F172A', marginBottom: '3px' }}>{title}</div>
+                    <span style={{ fontSize: '10px', background: '#EFF6FF', color: '#1565C0', padding: '2px 8px', borderRadius: '99px', fontWeight: 700 }}>{cat}</span>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '18px', fontWeight: '800', color, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{progress}%</div>
+                    <div style={{ fontSize: '10px', color: '#94A3B8' }}>{done}/{total} leçons</div>
+                  </div>
+                </div>
+                <div style={{ height: '5px', background: '#F1F5F9', borderRadius: '99px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: `${progress}%`, background: color, borderRadius: '99px', transition: 'width 0.5s' }} />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Right column */}
-        <div>
-          <h2 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '1rem', color: '#1C1917', fontFamily: 'Syne,sans-serif' }}>Recommandé</h2>
-          {reco.map(r => (
-            <div key={r.title} onClick={() => router.push('/cours')}
-              style={{ background: '#FFFFFF', border: '1.5px solid rgba(28,25,23,0.07)', borderRadius: '14px', padding: '13px 15px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '0.6rem', transition: 'all .15s', boxShadow: '0 1px 6px rgba(28,25,23,0.04)' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#FFF5F2'; (e.currentTarget as HTMLElement).style.borderColor = '#E8651A22' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#FFFFFF'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(28,25,23,0.07)' }}>
-              <span style={{ fontSize: '22px' }}>{r.emoji}</span>
-              <span style={{ flex: 1, fontWeight: '500', fontSize: '13px', color: '#1C1917' }}>{r.title}</span>
-              <span style={{ fontSize: '10px', fontWeight: '700', padding: '3px 9px', borderRadius: '20px', background: r.color + '15', color: r.color }}>{r.tag}</span>
-            </div>
-          ))}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
 
-          {/* AI Tutor CTA */}
-          <div onClick={() => router.push('/tutor')}
-            style={{ marginTop: '1rem', padding: '1.5rem', textAlign: 'center', cursor: 'pointer', background: 'linear-gradient(135deg,#12100E 0%,#1C1714 100%)', borderRadius: '18px', border: '1px solid rgba(255,255,255,0.08)', transition: 'all .2s', boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(0,0,0,0.25)' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)' }}>
-            <div style={{ fontSize: '32px', marginBottom: '10px' }}>✦</div>
-            <div style={{ fontWeight: '800', fontSize: '16px', marginBottom: '6px', background: 'linear-gradient(135deg,#E8651A,#D4A017)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontFamily: 'Syne,sans-serif' }}>AI Tutor ETAGIA</div>
-            <div style={{ fontSize: '12px', color: 'rgba(245,240,232,0.55)', marginBottom: '16px', lineHeight: 1.5 }}>Posez vos questions, obtenez des explications personnalisées en temps réel</div>
-            <div style={{ display: 'inline-block', background: 'linear-gradient(135deg,#E8651A,#D4A017)', borderRadius: '10px', padding: '9px 22px', color: '#fff', fontSize: '13px', fontWeight: '700', boxShadow: '0 4px 16px rgba(232,101,26,0.30)' }}>Ouvrir le Tutor →</div>
+          {/* Activité récente */}
+          <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '20px', padding: '1.25rem', boxShadow: '0 1px 4px rgba(15,23,42,0.06)' }}>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: '#1565C0', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '4px' }}>Activité</div>
+            <h3 style={{ fontSize: '14px', fontWeight: '700', marginBottom: '1rem', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Récente</h3>
+            {activities.map(({ text, time, icon, color }) => (
+              <div key={text} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', padding: '8px 0', borderBottom: '1px solid #F8FAFB' }}>
+                <div style={{ width: 28, height: 28, borderRadius: '8px', background: color + '15', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', flexShrink: 0 }}>{icon}</div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: '12px', color: '#0F172A', fontWeight: 500, lineHeight: 1.4 }}>{text}</div>
+                  <div style={{ fontSize: '10px', color: '#94A3B8', marginTop: '2px' }}>{time}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Recommandations */}
+          <div style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: '20px', padding: '1.25rem', boxShadow: '0 1px 4px rgba(15,23,42,0.06)' }}>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: '#F4591F', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '4px' }}>Pour vous</div>
+            <h3 style={{ fontSize: '14px', fontWeight: '700', marginBottom: '1rem', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Recommandés</h3>
+            {reco.map(({ title, tag, color, emoji }) => (
+              <div key={title} onClick={() => router.push('/market')} style={{
+                display: 'flex', alignItems: 'center', gap: '10px',
+                padding: '8px', borderRadius: '10px', cursor: 'pointer',
+                marginBottom: '4px', transition: 'background .15s',
+              }}
+              onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.background = '#F8FAFB'}
+              onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.background = 'transparent'}
+              >
+                <div style={{ width: 32, height: 32, borderRadius: '8px', background: color + '15', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px' }}>{emoji}</div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: '12px', fontWeight: 600, color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</div>
+                </div>
+                <span style={{ fontSize: '9px', background: color + '15', color, padding: '2px 7px', borderRadius: '99px', fontWeight: 700, flexShrink: 0 }}>{tag}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

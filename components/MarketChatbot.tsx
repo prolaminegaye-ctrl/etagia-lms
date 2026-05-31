@@ -82,7 +82,7 @@ export default function MarketChatbot({ products, userProfile, onProductClick }:
       <button onClick={() => setOpen(o => !o)} style={{
         position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 500,
         width: '58px', height: '58px', borderRadius: '50%',
-        background: open ? 'var(--bg-secondary)' : 'linear-gradient(135deg, #E8651A 0%, #4A7FF5 100%)',
+        background: open ? 'var(--bg-secondary)' : 'linear-gradient(135deg, #F4591F 0%, #4A7FF5 100%)',
         border: '2px solid var(--border)', cursor: 'pointer',
         fontSize: '24px', boxShadow: '0 8px 32px rgba(0,0,0,0.35)',
         transition: 'all .25s', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -106,7 +106,7 @@ export default function MarketChatbot({ products, userProfile, onProductClick }:
         }}>
           {/* Header */}
           <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--border)', background: 'linear-gradient(135deg, rgba(232,101,26,0.08), rgba(74,127,245,0.08))', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'linear-gradient(135deg,#E8651A,#4A7FF5)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', flexShrink: 0 }}>🤖</div>
+            <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'linear-gradient(135deg,#F4591F,#4A7FF5)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', flexShrink: 0 }}>🤖</div>
             <div>
               <div style={{ fontWeight: '700', fontSize: '14px', fontFamily: 'var(--font-display)' }}>Eya — Assistante ETAGIA</div>
               <div style={{ fontSize: '11px', color: '#4ADE80', display: 'flex', alignItems: 'center', gap: '4px' }}>
