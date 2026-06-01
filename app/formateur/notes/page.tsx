@@ -86,8 +86,7 @@ export default function NotesPage() {
   const wordCount = activeNote?.content.trim().split(/\s+/).filter(Boolean).length || 0
 
   return (
-    <div
-
+    <div>
       {/* Hero orange */}
       <div style={{ borderRadius: '20px', padding: '1.75rem 2rem', marginBottom: '2rem', background: 'linear-gradient(135deg, #F4591F 0%, #FF8C42 50%, #FFB347 100%)', boxShadow: '0 6px 24px rgba(244,89,31,0.25)', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: -50, right: -30, width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
