@@ -29,7 +29,6 @@ export default function StatsPage() {
         <h1 style={{ fontSize: '1.4rem', fontWeight: '900', color: '#fff', letterSpacing: '-0.3px', marginBottom: '3px' }}>Statistiques</h1>
         <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '13px' }}>Analysez vos performances pédagogiques.</p>
       </div>
->
       <div style={{marginBottom:'2rem',padding:'2rem',background:'linear-gradient(135deg,#E8651A 0%,#FFB300 100%)',borderRadius:'24px',boxShadow:'0 8px 32px rgba(232,101,26,0.28)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:'-60px',right:'-40px',width:'200px',height:'200px',borderRadius:'50%',background:'rgba(255,255,255,0.08)',pointerEvents:'none'}}/>
         <h1 style={{fontSize:'24px',fontWeight:'800',color:'#FFFFFF',fontFamily:'Syne,sans-serif',position:'relative'}}>Statistiques</h1>

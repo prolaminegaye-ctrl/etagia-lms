@@ -107,7 +107,7 @@ export default function LoginPage() {
           )}
 
           <button type="submit" disabled={loading} style={{
-            width: '100%', padding: '14px', borderRadius: var(--radius-full, '99px'),
+            width: '100%', padding: '14px', borderRadius: '99px',
             background: loading ? '#939BB4' : '#4255FF',
             color: '#fff', fontWeight: '800', fontSize: '15px', border: 'none',
             cursor: loading ? 'not-allowed' : 'pointer',

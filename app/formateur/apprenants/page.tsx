@@ -30,7 +30,6 @@ export default function ApprenantPage() {
         <h1 style={{ fontSize: '1.4rem', fontWeight: '900', color: '#fff', letterSpacing: '-0.3px', marginBottom: '3px' }}>Mes Apprenants</h1>
         <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '13px' }}>Suivez la progression de vos apprenants.</p>
       </div>
->
       <div style={{marginBottom:'2rem',padding:'1.5rem',background:'linear-gradient(135deg,rgba(28,25,23,0.06),rgba(34,212,168,0.05))',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'20px'}}>
         <h1 style={{fontSize:'24px',fontWeight:'800',background:'linear-gradient(135deg,#1C1917,#E8651A)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Mes apprenants</h1>
         <p style={{color:'#A8A29E',fontSize:'13px',marginTop:'3px'}}>{apprenants.length} apprenants · Progression moyenne {avg(apprenants.map(a=>a.progress))}% · Score moyen {avg(apprenants.map(a=>a.score))}/100</p>

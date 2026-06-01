@@ -94,7 +94,7 @@ export default function NotesPage() {
         <h1 style={{ fontSize: '1.4rem', fontWeight: '900', color: '#fff', letterSpacing: '-0.3px', marginBottom: '3px' }}>Bloc-note</h1>
         <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '13px' }}>Vos notes et ressources personnelles.</p>
       </div>
- style={{ maxWidth:'1100px', height:'calc(100vh - 120px)', display:'flex', flexDirection:'column' }}>
+    <div style={{ maxWidth:'1100px', height:'calc(100vh - 120px)', display:'flex', flexDirection:'column' }}>
 
       {/* Header */}
       <div style={{ marginBottom:'1.25rem', padding:'1.5rem 2rem', borderRadius:'20px', background:'linear-gradient(135deg,#1C1917 0%,#2C1E14 100%)', boxShadow:'0 4px 24px rgba(0,0,0,0.18)', position:'relative', overflow:'hidden', flexShrink:0 }}>

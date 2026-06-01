@@ -97,7 +97,7 @@ export default function CalendrierPage() {
         <h1 style={{ fontSize: '1.4rem', fontWeight: '900', color: '#fff', letterSpacing: '-0.3px', marginBottom: '3px' }}>Calendrier & Planning</h1>
         <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '13px' }}>Organisez vos sessions de formation.</p>
       </div>
- style={{ maxWidth:'1100px' }}>
+    <div style={{ maxWidth:'1100px' }}>
 
       {/* Header */}
       <div style={{ marginBottom:'1.75rem', padding:'1.75rem 2rem', borderRadius:'20px', background:'linear-gradient(135deg,#E8651A 0%,#D4A017 100%)', boxShadow:'0 8px 32px rgba(232,101,26,0.28)', position:'relative', overflow:'hidden' }}>
