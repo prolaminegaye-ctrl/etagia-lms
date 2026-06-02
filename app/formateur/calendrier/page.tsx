@@ -89,7 +89,8 @@ export default function CalendrierPage() {
   const labelStyle: React.CSSProperties = { fontSize:'11px', fontWeight:'700', color:'#57534E', textTransform:'uppercase' as const, letterSpacing:'0.5px', display:'block', marginBottom:'5px' }
 
   return (
-    <div>
+    <div style={{ maxWidth:'1100px' }}>
+
       {/* Hero orange */}
       <div style={{ borderRadius: '20px', padding: '1.75rem 2rem', marginBottom: '2rem', background: 'linear-gradient(135deg, #F4591F 0%, #FF8C42 50%, #FFB347 100%)', boxShadow: '0 6px 24px rgba(244,89,31,0.25)', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: -50, right: -30, width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
@@ -97,8 +98,6 @@ export default function CalendrierPage() {
         <h1 style={{ fontSize: '1.4rem', fontWeight: '900', color: '#fff', letterSpacing: '-0.3px', marginBottom: '3px' }}>Calendrier & Planning</h1>
         <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '13px' }}>Organisez vos sessions de formation.</p>
       </div>
-    <div style={{ maxWidth:'1100px' }}>
-
       {/* Header */}
       <div style={{ marginBottom:'1.75rem', padding:'1.75rem 2rem', borderRadius:'20px', background:'linear-gradient(135deg,#E8651A 0%,#D4A017 100%)', boxShadow:'0 8px 32px rgba(232,101,26,0.28)', position:'relative', overflow:'hidden' }}>
         <div style={{ position:'absolute', top:'-50px', right:'-30px', width:'200px', height:'200px', borderRadius:'50%', background:'radial-gradient(circle,rgba(255,255,255,0.12),transparent 70%)', pointerEvents:'none' }} />
