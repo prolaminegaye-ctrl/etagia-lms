@@ -3,54 +3,54 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const navApprenant = [
-  { href: '/dashboard',              icon: '⊞',  label: 'Dashboard' },
-  { href: '/market',                 icon: '🛒',  label: 'Marketplace',     badge: 'NEW' },
-  { href: '/cours',                  icon: '◈',   label: 'Mes cours' },
-  { href: '/live',                   icon: '🎥',  label: 'Classes en direct', badge: 'LIVE' },
-  { href: '/tutor',                  icon: '✦',   label: 'AI Tutor',          badge: 'IA' },
-  { href: '/apprenant/adaptive',     icon: '🧠',  label: 'Parcours adaptatif' },
-  { href: '/apprenant/diagnostic',   icon: '📋',  label: 'Éval. diagnostic' },
-  { href: '/apprenant/satisfaction', icon: '⭐',  label: 'Satisfaction' },
-  { href: '/profil',                 icon: '◉',   label: 'Profil' },
-  { href: '/apprenant/passbac',      icon: '🎓',  label: "Mon Pass'BAC",      badge: 'BAC' },
-  { href: '/guide',                  icon: '📖',  label: 'Guide utilisateur' },
+  { href: '/dashboard',              label: 'Tableau de bord' },
+  { href: '/market',                 label: 'Marketplace',        badge: 'NEW' },
+  { href: '/cours',                  label: 'Mes cours' },
+  { href: '/live',                   label: 'Classes en direct',  badge: 'LIVE' },
+  { href: '/tutor',                  label: 'AI Tutor',           badge: 'IA' },
+  { href: '/apprenant/adaptive',     label: 'Parcours adaptatif' },
+  { href: '/apprenant/diagnostic',   label: 'Éval. diagnostic' },
+  { href: '/apprenant/satisfaction', label: 'Satisfaction' },
+  { href: '/profil',                 label: 'Profil' },
+  { href: '/apprenant/passbac',      label: "Mon Pass'BAC",       badge: 'BAC' },
+  { href: '/guide',                  label: 'Guide utilisateur' },
 ]
 const navFormateur = [
-  { href: '/formateur',              icon: '⊞',  label: 'Dashboard' },
-  { href: '/market',                 icon: '🛒',  label: 'Marketplace',     badge: 'NEW' },
-  { href: '/formateur/creer',        icon: '✦',   label: 'Créer un cours',   badge: 'IA' },
-  { href: '/formateur/import',       icon: '↑',   label: 'Importer SCORM/H5P' },
-  { href: '/formateur/cours',        icon: '◈',   label: 'Mes cours' },
-  { href: '/live',                   icon: '🎥',  label: 'Classes en direct', badge: 'LIVE' },
-  { href: '/formateur/viewer',       icon: '👁',  label: 'Visualiseur' },
-  { href: '/formateur/apprenants',   icon: '◎',   label: 'Apprenants' },
-  { href: '/formateur/edugears',     icon: '🤖',  label: 'EduGears AI',       badge: 'IA' },
-  { href: '/formateur/stats',        icon: '〜',  label: 'Statistiques' },
-  { href: '/formateur/calendrier',   icon: '📅',  label: 'Planning' },
-  { href: '/formateur/notes',        icon: '📓',  label: 'Bloc-note' },
-  { href: '/guide',                  icon: '📖',  label: 'Guide utilisateur' },
+  { href: '/formateur',              label: 'Dashboard' },
+  { href: '/market',                 label: 'Marketplace',        badge: 'NEW' },
+  { href: '/formateur/creer',        label: 'Créer un cours',     badge: 'IA' },
+  { href: '/formateur/import',       label: 'Importer SCORM/H5P' },
+  { href: '/formateur/cours',        label: 'Mes cours' },
+  { href: '/live',                   label: 'Classes en direct',  badge: 'LIVE' },
+  { href: '/formateur/viewer',       label: 'Visualiseur' },
+  { href: '/formateur/apprenants',   label: 'Apprenants' },
+  { href: '/formateur/edugears',     label: 'EduGears AI',        badge: 'IA' },
+  { href: '/formateur/stats',        label: 'Statistiques' },
+  { href: '/formateur/calendrier',   label: 'Planning' },
+  { href: '/formateur/notes',        label: 'Bloc-note' },
+  { href: '/guide',                  label: 'Guide' },
 ]
 const navAdmin = [
-  { href: '/admin',                  icon: '⊞',  label: 'Dashboard' },
-  { href: '/admin/users',            icon: '◎',   label: 'Utilisateurs' },
-  { href: '/admin/cours',            icon: '◈',   label: 'Cours' },
-  { href: '/admin/market',           icon: '🏪',  label: 'Marketplace',     badge: 'ADMIN' },
-  { href: '/live',                   icon: '🎥',  label: 'Classes en direct', badge: 'LIVE' },
-  { href: '/admin/orgs',             icon: '▦',   label: 'Organisations' },
-  { href: '/admin/analytics',        icon: '〜',  label: 'Analytics' },
-  { href: '/admin/export',           icon: '📊',  label: 'Export CSV' },
-  { href: '/admin/white-label',      icon: '🏷',  label: 'White Label',       badge: 'PRO' },
-  { href: '/admin/team',             icon: '👥',  label: 'Mon Équipe' },
-  { href: '/admin/plugins',          icon: '🔌',  label: 'Plugins & LTI' },
+  { href: '/admin',                  label: 'Dashboard' },
+  { href: '/admin/users',            label: 'Utilisateurs' },
+  { href: '/admin/cours',            label: 'Cours' },
+  { href: '/admin/market',           label: 'Marketplace',        badge: 'ADMIN' },
+  { href: '/live',                   label: 'Classes en direct',  badge: 'LIVE' },
+  { href: '/admin/orgs',             label: 'Organisations' },
+  { href: '/admin/analytics',        label: 'Analytics' },
+  { href: '/admin/export',           label: 'Export CSV' },
+  { href: '/admin/white-label',      label: 'White Label',        badge: 'PRO' },
+  { href: '/admin/team',             label: 'Mon Équipe' },
+  { href: '/admin/plugins',          label: 'Plugins & LTI' },
 ]
 
-const BADGES: Record<string, { bg: string; color: string }> = {
-  NEW:   { bg: '#E8EAFF', color: '#4255FF' },
-  LIVE:  { bg: '#FFE4E4', color: '#DC2626' },
-  IA:    { bg: '#EDE9FE', color: '#6B52D4' },
-  BAC:   { bg: '#FEF3C7', color: '#D97706' },
-  ADMIN: { bg: '#FFF3EE', color: '#F4591F' },
-  PRO:   { bg: '#CCFBDC', color: '#16A34A' },
+const BADGE_TONES: Record<string, { bg: string; color: string }> = {
+  NEW:   { bg: 'var(--gold-soft)',  color: 'var(--gold)' },
+  LIVE:  { bg: 'var(--red-soft)',   color: 'var(--red-deep)' },
+  IA:    { bg: 'var(--sage-soft)',  color: 'var(--ink-mut)' },
+  BAC:   { bg: 'var(--gold-soft)',  color: 'var(--gold)' },
+  ADMIN: { bg: 'var(--red-soft)',   color: 'var(--red-deep)' },
+  PRO:   { bg: 'var(--green-soft)', color: 'var(--green)' },
 }
 
 export default function Sidebar({ role = 'apprenant' }: { role?: string }) {
@@ -59,93 +59,105 @@ export default function Sidebar({ role = 'apprenant' }: { role?: string }) {
 
   return (
     <aside style={{
-      width: '248px', minHeight: '100vh',
-      background: '#FFFFFF',
-      borderRight: '1px solid #D9DBE9',
+      width: '220px', minHeight: '100vh',
+      background: 'var(--card)',
+      borderRight: '1px solid var(--line-strong)',
       display: 'flex', flexDirection: 'column',
       position: 'fixed', top: 0, left: 0, zIndex: 10,
-      boxShadow: '2px 0 12px rgba(46,56,86,0.05)',
     }}>
 
-      {/* Logo ETAGIA */}
-      <div style={{ padding: '1.25rem 1.25rem 1rem', borderBottom: '1px solid #ECEEF5' }}>
-        <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+      {/* Logo */}
+      <div style={{ padding: '22px 22px 18px', borderBottom: '1px solid var(--line)' }}>
+        <Link href="/dashboard" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{
-            width: '38px', height: '38px', borderRadius: '11px',
-            background: 'linear-gradient(135deg, #4255FF 0%, #F4591F 100%)',
+            width: 36, height: 36, borderRadius: 'var(--r-md)',
+            background: 'var(--ink)', flexShrink: 0,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '18px', flexShrink: 0, boxShadow: '0 2px 8px rgba(66,85,255,0.3)',
-          }}>🎓</div>
+          }}>
+            <span style={{ fontFamily: 'var(--serif)', fontSize: 20, color: 'var(--paper)', fontWeight: 700, lineHeight: 1 }}>E</span>
+          </div>
           <div>
-            <div style={{ fontSize: '16px', fontWeight: '900', color: '#2E3856', letterSpacing: '-0.4px' }}>ETAGIA</div>
-            <div style={{ fontSize: '9px', color: '#939BB4', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '700' }}>LMS · Afrique</div>
+            <div style={{ fontFamily: 'var(--serif)', fontSize: 18, fontWeight: 600, color: 'var(--ink)', letterSpacing: '-0.02em', lineHeight: 1 }}>ETAGIA</div>
+            <div style={{ fontFamily: 'var(--sans)', fontSize: 9, color: 'var(--ink-soft)', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700, marginTop: 3 }}>Académie</div>
           </div>
         </Link>
       </div>
 
       {/* Role switcher */}
-      <div style={{ padding: '0.75rem 0.875rem', borderBottom: '1px solid #ECEEF5' }}>
-        <div style={{ display: 'flex', background: '#F6F7FB', borderRadius: '10px', padding: '3px', gap: '2px' }}>
+      <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--line-hair)' }}>
+        <div style={{ display: 'flex', gap: 4 }}>
           {[
-            { r: 'apprenant', label: 'Apprenant', href: '/dashboard' },
-            { r: 'formateur', label: 'Formateur', href: '/formateur' },
-            { r: 'admin',     label: 'Admin',     href: '/admin' },
+            { r: 'apprenant', label: 'Appr.', href: '/dashboard' },
+            { r: 'formateur', label: 'Form.',  href: '/formateur' },
+            { r: 'admin',     label: 'Admin',  href: '/admin' },
           ].map(({ r, label, href }) => (
             <Link key={r} href={href} style={{
-              flex: 1, textAlign: 'center', padding: '5px 2px', borderRadius: '7px',
-              fontSize: '9.5px', fontWeight: '700', transition: 'all .15s', textDecoration: 'none',
+              flex: 1, textAlign: 'center', padding: '6px 4px',
+              borderRadius: 'var(--r-xs)',
+              fontFamily: 'var(--sans)', fontSize: 10, fontWeight: 700,
+              letterSpacing: '0.05em', textTransform: 'uppercase',
+              textDecoration: 'none', transition: 'all .15s',
               ...(role === r
-                ? { background: '#4255FF', color: '#FFFFFF', boxShadow: '0 2px 6px rgba(66,85,255,0.3)' }
-                : { color: '#939BB4' }),
+                ? { background: 'var(--ink)', color: 'var(--paper)' }
+                : { color: 'var(--ink-soft)', background: 'transparent' }),
             }}>{label}</Link>
           ))}
         </div>
       </div>
 
-      {/* Nav items */}
-      <nav style={{ flex: 1, padding: '0.625rem 0.75rem', overflowY: 'auto' }}>
-        {nav.map(({ href, icon, label, badge }) => {
+      {/* Nav */}
+      <nav style={{ flex: 1, padding: '8px 0', overflowY: 'auto' }}>
+        {nav.map(({ href, label, badge }) => {
           const active = path === href || (href !== '/' && path.startsWith(href + '/'))
-          const bs = badge ? BADGES[badge] : null
+          const bs = badge ? BADGE_TONES[badge] : null
           return (
             <Link key={href} href={href} style={{
-              display: 'flex', alignItems: 'center', gap: '9px',
-              padding: '8px 10px', borderRadius: '10px', marginBottom: '1px',
-              textDecoration: 'none', transition: 'all .15s',
-              ...(active
-                ? { background: '#E8EAFF', color: '#4255FF' }
-                : { color: '#586380' }),
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '10px 22px',
+              borderBottom: '1px solid var(--line-hair)',
+              textDecoration: 'none', transition: 'background .12s',
+              background: active ? 'var(--red-soft)' : 'transparent',
             }}
-            onMouseEnter={e => { if (!active) (e.currentTarget as HTMLAnchorElement).style.background = '#F6F7FB' }}
+            onMouseEnter={e => { if (!active) (e.currentTarget as HTMLAnchorElement).style.background = 'var(--card-2)' }}
             onMouseLeave={e => { if (!active) (e.currentTarget as HTMLAnchorElement).style.background = 'transparent' }}
             >
-              <span style={{ fontSize: '14px', width: '18px', textAlign: 'center', flexShrink: 0 }}>{icon}</span>
-              <span style={{ flex: 1, fontSize: '13px', fontWeight: active ? '700' : '500' }}>{label}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                {active && <span className="dot" />}
+                {!active && <span style={{ width: 7, display: 'inline-block' }} />}
+                <span style={{
+                  fontFamily: 'var(--serif)', fontSize: 14,
+                  fontWeight: active ? 600 : 500,
+                  color: active ? 'var(--red-deep)' : 'var(--ink-mut)',
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase' as const,
+                }}>{label}</span>
+              </div>
               {bs && (
-                <span style={{ fontSize: '9px', fontWeight: '700', padding: '2px 7px', borderRadius: '99px', background: bs.bg, color: bs.color, flexShrink: 0 }}>{badge}</span>
+                <span style={{
+                  fontSize: 9, fontWeight: 700, padding: '3px 7px',
+                  borderRadius: 999, background: bs.bg, color: bs.color,
+                  letterSpacing: '0.04em',
+                }}>{badge}</span>
               )}
             </Link>
           )
         })}
       </nav>
 
-      {/* Footer */}
-      <div style={{ padding: '0.75rem', borderTop: '1px solid #ECEEF5' }}>
-        {/* BBB pill */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '7px 10px', borderRadius: '10px', background: '#CCFBDC', marginBottom: '6px' }}>
-          <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#16A34A', flexShrink: 0 }} />
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: '11px', fontWeight: '700', color: '#15803D' }}>BigBlueButton connecté</div>
+      {/* Footer user */}
+      <div style={{ padding: '14px 16px', borderTop: '1px solid var(--line)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            width: 32, height: 32, borderRadius: 'var(--r-sm)',
+            background: 'var(--ink)', flexShrink: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <span style={{ fontFamily: 'var(--serif)', fontSize: 15, color: 'var(--paper)', fontWeight: 600 }}>L</span>
           </div>
-        </div>
-        {/* User */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '9px', padding: '8px 10px', borderRadius: '10px', background: '#F6F7FB', cursor: 'pointer' }}>
-          <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg, #4255FF, #F4591F)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', color: '#fff', fontWeight: '800', flexShrink: 0 }}>L</div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: '12px', fontWeight: '700', color: '#2E3856', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Lamine Gaye</div>
-            <div style={{ fontSize: '10px', color: '#939BB4' }}>Admin</div>
+            <div style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 600, color: 'var(--ink)' }}>Lamine Gaye</div>
+            <div style={{ fontFamily: 'var(--sans)', fontSize: 10, color: 'var(--ink-soft)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Admin</div>
           </div>
-          <span style={{ fontSize: '11px', color: '#939BB4' }}>⚙</span>
         </div>
       </div>
     </aside>
