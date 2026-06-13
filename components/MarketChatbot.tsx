@@ -83,7 +83,7 @@ export default function MarketChatbot({ products, userProfile, onProductClick }:
         position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 500,
         width: '58px', height: '58px', borderRadius: '50%',
         background: open ? 'var(--bg-secondary)' : 'linear-gradient(135deg, #F4591F 0%, #4A7FF5 100%)',
-        border: '2px solid var(--border)', cursor: 'pointer',
+        border: '2px solid var(--line)', cursor: 'pointer',
         fontSize: '24px', boxShadow: '0 8px 32px rgba(0,0,0,0.35)',
         transition: 'all .25s', display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
@@ -92,7 +92,7 @@ export default function MarketChatbot({ products, userProfile, onProductClick }:
 
       {/* Unread dot */}
       {!open && messages.length > 1 && (
-        <div style={{ position:'fixed', bottom:'3.7rem', right:'1.7rem', zIndex:501, width:'14px', height:'14px', borderRadius:'50%', background:'#EF4444', border:'2px solid var(--bg-primary)' }} />
+        <div style={{ position:'fixed', bottom:'3.7rem', right:'1.7rem', zIndex:501, width:'14px', height:'14px', borderRadius:'50%', background:'#EF4444', border:'2px solid var(--canvas)' }} />
       )}
 
       {/* Chat Panel */}
@@ -100,12 +100,12 @@ export default function MarketChatbot({ products, userProfile, onProductClick }:
         <div style={{
           position: 'fixed', bottom: '6rem', right: '2rem', zIndex: 500,
           width: '380px', maxHeight: '540px', display: 'flex', flexDirection: 'column',
-          background: 'var(--bg-card)', border: '1px solid var(--border)',
+          background: 'var(--surface)', border: '1px solid var(--line)',
           borderRadius: '20px', boxShadow: '0 24px 60px rgba(0,0,0,0.45)',
           overflow: 'hidden', animation: 'chatOpen .25s ease',
         }}>
           {/* Header */}
-          <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--border)', background: 'linear-gradient(135deg, rgba(232,101,26,0.08), rgba(74,127,245,0.08))', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--line)', background: 'linear-gradient(135deg, rgba(232,101,26,0.08), rgba(74,127,245,0.08))', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'linear-gradient(135deg,#F4591F,#4A7FF5)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', flexShrink: 0 }}>🤖</div>
             <div>
               <div style={{ fontWeight: '700', fontSize: '14px', fontFamily: 'var(--font-display)' }}>Eya — Assistante ETAGIA</div>
@@ -125,9 +125,9 @@ export default function MarketChatbot({ products, userProfile, onProductClick }:
                 <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: m.role === 'user' ? 'flex-end' : 'flex-start', gap: '6px' }}>
                   <div style={{
                     maxWidth: '88%', padding: '10px 13px', borderRadius: m.role === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-                    background: m.role === 'user' ? 'var(--accent)' : 'var(--bg-secondary)',
-                    border: m.role === 'assistant' ? '1px solid var(--border)' : 'none',
-                    fontSize: '13px', lineHeight: 1.5, color: m.role === 'user' ? '#fff' : 'var(--text-primary)',
+                    background: m.role === 'user' ? 'var(--orange)' : 'var(--bg-secondary)',
+                    border: m.role === 'assistant' ? '1px solid var(--line)' : 'none',
+                    fontSize: '13px', lineHeight: 1.5, color: m.role === 'user' ? '#fff' : 'var(--ink)',
                   }} dangerouslySetInnerHTML={{ __html: renderMsg(m.content) }} />
                   {/* Product chips */}
                   {mentioned.length > 0 && (
@@ -141,7 +141,7 @@ export default function MarketChatbot({ products, userProfile, onProductClick }:
                         }}>
                           <span style={{ fontSize: '18px' }}>{p.cover}</span>
                           <div style={{ flex: 1 }}>
-                            <div style={{ fontSize: '12px', fontWeight: '600', color: 'var(--text-primary)' }}>{p.title}</div>
+                            <div style={{ fontSize: '12px', fontWeight: '600', color: 'var(--ink)' }}>{p.title}</div>
                             <div style={{ fontSize: '11px', color: '#4A7FF5' }}>{fmt(p.price)} — Voir le produit →</div>
                           </div>
                         </button>
@@ -153,9 +153,9 @@ export default function MarketChatbot({ products, userProfile, onProductClick }:
             })}
             {loading && (
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
-                <div style={{ padding: '10px 14px', background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '16px 16px 16px 4px', display: 'flex', gap: '4px', alignItems: 'center' }}>
+                <div style={{ padding: '10px 14px', background: 'var(--bg-secondary)', border: '1px solid var(--line)', borderRadius: '16px 16px 16px 4px', display: 'flex', gap: '4px', alignItems: 'center' }}>
                   {[0,1,2].map(i => (
-                    <div key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent)', animation: `bounce .8s ${i*0.15}s infinite` }} />
+                    <div key={i} style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--orange)', animation: `bounce .8s ${i*0.15}s infinite` }} />
                   ))}
                 </div>
               </div>
@@ -166,7 +166,7 @@ export default function MarketChatbot({ products, userProfile, onProductClick }:
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '4px' }}>
                 <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '2px' }}>Suggestions :</div>
                 {SUGGESTIONS.map(s => (
-                  <button key={s} onClick={() => send(s.replace(/^[\S\s]{2}\s/, ''))} style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '8px', padding: '8px 10px', fontSize: '12px', color: 'var(--text-secondary)', cursor: 'pointer', textAlign: 'left', transition: 'all .15s' }}>
+                  <button key={s} onClick={() => send(s.replace(/^[\S\s]{2}\s/, ''))} style={{ background: 'var(--bg-secondary)', border: '1px solid var(--line)', borderRadius: '8px', padding: '8px 10px', fontSize: '12px', color: 'var(--ink-mut)', cursor: 'pointer', textAlign: 'left', transition: 'all .15s' }}>
                     {s}
                   </button>
                 ))}
@@ -176,7 +176,7 @@ export default function MarketChatbot({ products, userProfile, onProductClick }:
           </div>
 
           {/* Input */}
-          <div style={{ padding: '10px', borderTop: '1px solid var(--border)', display: 'flex', gap: '8px' }}>
+          <div style={{ padding: '10px', borderTop: '1px solid var(--line)', display: 'flex', gap: '8px' }}>
             <input
               ref={inputRef}
               value={input}
@@ -184,9 +184,9 @@ export default function MarketChatbot({ products, userProfile, onProductClick }:
               onKeyDown={e => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), send(input))}
               placeholder="Posez votre question..."
               disabled={loading}
-              style={{ flex: 1, background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '10px', padding: '9px 12px', color: 'var(--text-primary)', fontSize: '13px', outline: 'none', fontFamily: 'var(--font-body)' }}
+              style={{ flex: 1, background: 'var(--bg-secondary)', border: '1px solid var(--line)', borderRadius: '10px', padding: '9px 12px', color: 'var(--ink)', fontSize: '13px', outline: 'none', fontFamily: 'var(--font-body)' }}
             />
-            <button onClick={() => send(input)} disabled={loading || !input.trim()} style={{ background: input.trim() && !loading ? 'var(--accent)' : 'var(--bg-secondary)', border: 'none', borderRadius: '10px', width: '38px', height: '38px', cursor: input.trim() && !loading ? 'pointer' : 'not-allowed', fontSize: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all .2s' }}>
+            <button onClick={() => send(input)} disabled={loading || !input.trim()} style={{ background: input.trim() && !loading ? 'var(--orange)' : 'var(--bg-secondary)', border: 'none', borderRadius: '10px', width: '38px', height: '38px', cursor: input.trim() && !loading ? 'pointer' : 'not-allowed', fontSize: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all .2s' }}>
               {loading ? '⏳' : '➤'}
             </button>
           </div>

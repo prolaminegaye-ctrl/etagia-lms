@@ -31,14 +31,14 @@ export default function TutorPage() {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#F6F7FB' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--canvas)' }}>
       <Sidebar role="apprenant" />
       <main style={{ marginLeft: '248px', flex: 1, display: 'flex', flexDirection: 'column', height: '100vh' }}>
 
         {/* Header orange gradient */}
         <div style={{
           padding: '1.5rem 2rem',
-          background: 'linear-gradient(135deg, #F4591F 0%, #FF8C42 50%, #FFB347 100%)',
+          background: 'var(--grad-ia)',
           display: 'flex', alignItems: 'center', gap: '1rem',
           position: 'relative', overflow: 'hidden',
         }}>
@@ -57,13 +57,13 @@ export default function TutorPage() {
 
         {/* Suggestions */}
         {msgs.length <= 1 && (
-          <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #D9DBE9', background: '#F6F7FB' }}>
-            <div style={{ fontSize: '12px', fontWeight: '700', color: '#939BB4', marginBottom: '10px' }}>SUGGESTIONS</div>
+          <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #D9DBE9', background: 'var(--canvas)' }}>
+            <div style={{ fontSize: '12px', fontWeight: '700', color: 'var(--ink-soft)', marginBottom: '10px' }}>SUGGESTIONS</div>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {suggestions.map(s => (
-                <button key={s} onClick={() => setInput(s)} style={{ padding: '8px 14px', background: '#fff', border: '2px solid #D9DBE9', borderRadius: '99px', fontSize: '12px', fontWeight: '600', color: '#2E3856', cursor: 'pointer', transition: 'all .15s' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#4255FF'; (e.currentTarget as HTMLButtonElement).style.color = '#4255FF' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#D9DBE9'; (e.currentTarget as HTMLButtonElement).style.color = '#2E3856' }}
+                <button key={s} onClick={() => setInput(s)} style={{ padding: '8px 14px', background: 'var(--surface)', border: '2px solid #D9DBE9', borderRadius: '99px', fontSize: '12px', fontWeight: '600', color: 'var(--ink)', cursor: 'pointer', transition: 'all .15s' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--turq)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--turq)' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--line)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--ink)' }}
                 >{s}</button>
               ))}
             </div>
@@ -75,12 +75,12 @@ export default function TutorPage() {
           {msgs.map((m, i) => (
             <div key={i} style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', gap: '10px', alignItems: 'flex-end' }}>
               {m.role === 'ai' && (
-                <div style={{ width: 32, height: 32, borderRadius: '10px', background: 'linear-gradient(135deg, #4255FF, #6B52D4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', flexShrink: 0 }}>✦</div>
+                <div style={{ width: 32, height: 32, borderRadius: '10px', background: 'var(--grad-ia)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', flexShrink: 0 }}>✦</div>
               )}
               <div style={{
                 maxWidth: '70%', padding: '12px 16px', borderRadius: m.role === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                background: m.role === 'user' ? '#4255FF' : '#fff',
-                color: m.role === 'user' ? '#fff' : '#2E3856',
+                background: m.role === 'user' ? 'var(--turq)' : '#fff',
+                color: m.role === 'user' ? '#fff' : 'var(--ink)',
                 fontSize: '14px', lineHeight: 1.6, fontWeight: '500',
                 boxShadow: '0 2px 8px rgba(46,56,86,0.08)',
                 border: m.role === 'ai' ? '1px solid #D9DBE9' : 'none',
@@ -89,30 +89,30 @@ export default function TutorPage() {
           ))}
           {loading && (
             <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
-              <div style={{ width: 32, height: 32, borderRadius: '10px', background: 'linear-gradient(135deg, #4255FF, #6B52D4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}>✦</div>
-              <div style={{ padding: '12px 16px', background: '#fff', borderRadius: '18px 18px 18px 4px', border: '1px solid #D9DBE9', display: 'flex', gap: '5px', alignItems: 'center' }}>
-                {[0,1,2].map(i => <div key={i} style={{ width: 7, height: 7, borderRadius: '50%', background: '#4255FF', opacity: 0.4, animation: `pulse 1s ${i*0.2}s infinite` }} />)}
+              <div style={{ width: 32, height: 32, borderRadius: '10px', background: 'var(--grad-ia)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}>✦</div>
+              <div style={{ padding: '12px 16px', background: 'var(--surface)', borderRadius: '18px 18px 18px 4px', border: '1px solid #D9DBE9', display: 'flex', gap: '5px', alignItems: 'center' }}>
+                {[0,1,2].map(i => <div key={i} style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--turq)', opacity: 0.4, animation: `pulse 1s ${i*0.2}s infinite` }} />)}
               </div>
             </div>
           )}
         </div>
 
         {/* Input */}
-        <div style={{ padding: '1.25rem 2rem', borderTop: '1px solid #D9DBE9', background: '#fff' }}>
+        <div style={{ padding: '1.25rem 2rem', borderTop: '1px solid #D9DBE9', background: 'var(--surface)' }}>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             <input
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
               placeholder="Pose ta question à l'AI Tutor..."
-              style={{ flex: 1, padding: '13px 18px', borderRadius: '99px', border: '2px solid #D9DBE9', fontSize: '14px', outline: 'none', fontFamily: 'Inter, sans-serif', color: '#2E3856', background: '#F6F7FB' }}
-              onFocus={e => e.target.style.borderColor = '#4255FF'}
-              onBlur={e => e.target.style.borderColor = '#D9DBE9'}
+              style={{ flex: 1, padding: '13px 18px', borderRadius: '99px', border: '2px solid #D9DBE9', fontSize: '14px', outline: 'none', fontFamily: 'Inter, sans-serif', color: 'var(--ink)', background: 'var(--canvas)' }}
+              onFocus={e => e.target.style.borderColor = 'var(--turq)'}
+              onBlur={e => e.target.style.borderColor = 'var(--line)'}
             />
             <button onClick={send} disabled={!input.trim() || loading} style={{
               width: 48, height: 48, borderRadius: '50%', border: 'none', cursor: 'pointer',
-              background: input.trim() ? '#4255FF' : '#ECEEF5',
-              color: input.trim() ? '#fff' : '#939BB4', fontSize: '18px',
+              background: input.trim() ? 'var(--turq)' : '#ECEEF5',
+              color: input.trim() ? '#fff' : 'var(--ink-soft)', fontSize: '18px',
               transition: 'all .15s', flexShrink: 0,
               boxShadow: input.trim() ? '0 4px 16px rgba(66,85,255,0.3)' : 'none',
             }}>→</button>

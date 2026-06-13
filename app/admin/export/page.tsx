@@ -57,25 +57,25 @@ export default function ExportPage() {
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
-          <h1 style={{ fontSize: '26px', fontWeight: '700', marginBottom: '4px', color: 'var(--text-primary)' }}>📊 Export CSV</h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>Exportez vos données pour analyse externe</p>
+          <h1 style={{ fontSize: '26px', fontWeight: '700', marginBottom: '4px', color: 'var(--ink)' }}>📊 Export CSV</h1>
+          <p style={{ color: 'var(--ink-mut)', fontSize: '14px' }}>Exportez vos données pour analyse externe</p>
         </div>
         <button onClick={downloadAll} className="btn-primary">⬇ Tout exporter</button>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '1rem' }}>
         {exports.map(e => (
-          <div key={e.id} style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '16px', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div key={e.id} style={{ background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '16px', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                 <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(232,101,26,0.10)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', color: '#E8651A' }}>{e.icon}</div>
                 <div>
-                  <div style={{ fontWeight: '600', fontSize: '15px', color: 'var(--text-primary)' }}>{e.label}</div>
+                  <div style={{ fontWeight: '600', fontSize: '15px', color: 'var(--ink)' }}>{e.label}</div>
                   <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{e.rows.toLocaleString()} lignes estimées</div>
                 </div>
               </div>
             </div>
-            <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>{e.desc}</p>
+            <p style={{ fontSize: '13px', color: 'var(--ink-mut)', lineHeight: '1.5' }}>{e.desc}</p>
             <button onClick={() => download(e.id, e.label)} style={{ background: 'rgba(232,101,26,0.10)', border: '1px solid rgba(232,101,26,0.25)', borderRadius: '10px', padding: '9px 16px', color: '#E8651A', fontSize: '13px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '6px', justifyContent: 'center' }}>
               ⬇ Télécharger .csv
             </button>

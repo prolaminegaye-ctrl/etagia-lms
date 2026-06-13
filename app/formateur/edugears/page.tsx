@@ -98,12 +98,12 @@ export default function EduGearsPage() {
         {filtered.map(tool => {
           const isLoading = launching === tool.id
           return (
-            <div key={tool.id} style={{ background: '#FFFFFF', border: '1px solid rgba(28,25,23,0.07)', borderRadius: '16px', padding: '1.25rem', position: 'relative', overflow: 'hidden' }}>
+            <div key={tool.id} style={{ background: 'var(--surface)', border: '1px solid rgba(28,25,23,0.07)', borderRadius: '16px', padding: '1.25rem', position: 'relative', overflow: 'hidden' }}>
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: tool.color, opacity: 0.7 }} />
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '12px' }}>
                 <div style={{ width: '42px', height: '42px', borderRadius: '11px', background: `${tool.color}22`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>{tool.icon}</div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: '700', fontSize: '14px', color: '#F6F7FB', marginBottom: '2px' }}>{tool.label}</div>
+                  <div style={{ fontWeight: '700', fontSize: '14px', color: 'var(--canvas)', marginBottom: '2px' }}>{tool.label}</div>
                   <div style={{ fontSize: '10px', color: tool.color, fontWeight: '600', background: `${tool.color}18`, borderRadius: '4px', padding: '2px 7px', display: 'inline-block' }}>{tool.category}</div>
                 </div>
               </div>
