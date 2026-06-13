@@ -29,14 +29,14 @@ const INITIAL_SESSIONS: LiveSession[] = [
     hostInitials: 'AD', date: "Aujourd'hui", time: '15:00', duration: '90 min',
     topic: 'Algorithmes de classification', participants: 24, maxParticipants: 50,
     status: 'live', meetingID: 'etagia-data-ml-001', attendeePW: 'ap', moderatorPW: 'mp',
-    color: '#4255FF',
+    color: 'var(--turq)',
   },
   {
     id: '2', title: 'Marketing Digital — Stratégie Social Media', host: 'Moussa Konaté',
     hostInitials: 'MK', date: "Aujourd'hui", time: '17:30', duration: '60 min',
     topic: 'Algorithmes Facebook & Instagram', participants: 0, maxParticipants: 40,
     status: 'scheduled', meetingID: 'etagia-mkt-social-002', attendeePW: 'ap', moderatorPW: 'mp',
-    color: '#4255FF',
+    color: 'var(--turq)',
   },
   {
     id: '3', title: 'Leadership & Management — Session Live Q&A', host: 'Fatou Sarr',
@@ -56,12 +56,12 @@ const INITIAL_SESSIONS: LiveSession[] = [
 
 // ─── Palette ─────────────────────────────────────────────────────────────────
 const card: React.CSSProperties = {
-  background: '#FFFFFF', border: '1px solid rgba(28,25,23,0.08)',
+  background: 'var(--surface)', border: '1px solid rgba(28,25,23,0.08)',
   borderRadius: '16px', boxShadow: '0 2px 12px rgba(28,25,23,0.04)',
 }
 const STATUS_CFG: Record<SessionStatus, { label: string; dot: string; bg: string; text: string }> = {
-  live:      { label: '🔴 EN DIRECT', dot: '#EF4444', bg: 'rgba(239,68,68,0.10)', text: '#DC2626' },
-  scheduled: { label: '🕐 Programmée', dot: '#4255FF', bg: 'rgba(0,191,165,0.10)', text: '#00897B' },
+  live:      { label: '🔴 EN DIRECT', dot: '#EF4444', bg: 'rgba(239,68,68,0.10)', text: 'var(--orange)' },
+  scheduled: { label: '🕐 Programmée', dot: 'var(--turq)', bg: 'rgba(0,191,165,0.10)', text: '#00897B' },
   ended:     { label: '✓ Terminée',   dot: '#A8A29E', bg: 'rgba(168,162,158,0.12)', text: '#78716C' },
 }
 
@@ -191,7 +191,7 @@ export default function LivePage() {
       date: form.date, time: form.time, duration: form.duration + ' min', topic: form.topic,
       participants: 0, maxParticipants: parseInt(form.maxParticipants),
       status: 'scheduled', meetingID, attendeePW: 'ap', moderatorPW: 'mp',
-      color: '#4255FF',
+      color: 'var(--turq)',
     }
 
     // Mode démo — création locale
@@ -289,8 +289,8 @@ export default function LivePage() {
             </div>
           </div>
           <button onClick={() => setShowCreate(true)} style={{
-            background: '#fff', border: 'none', borderRadius: '14px', padding: '12px 22px',
-            fontWeight: '800', fontSize: '14px', color: '#4255FF', cursor: 'pointer',
+            background: 'var(--surface)', border: 'none', borderRadius: '14px', padding: '12px 22px',
+            fontWeight: '800', fontSize: '14px', color: 'var(--turq)', cursor: 'pointer',
             boxShadow: '0 4px 20px rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', gap: '8px',
           }}>
             <span style={{ fontSize: '18px' }}>+</span> Créer une classe
@@ -340,8 +340,8 @@ export default function LivePage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1rem', marginBottom: '1.5rem' }}>
         {[
           { label: 'En direct maintenant', value: sessions.filter(s=>s.status==='live').length.toString(), icon: '🔴', color: '#EF4444', bg: 'rgba(239,68,68,0.07)' },
-          { label: 'Programmées', value: sessions.filter(s=>s.status==='scheduled').length.toString(), icon: '📅', color: '#4255FF', bg: 'rgba(0,191,165,0.07)' },
-          { label: 'Participants actifs', value: sessions.filter(s=>s.status==='live').reduce((a,s)=>a+s.participants,0).toString(), icon: '👥', color: '#4255FF', bg: 'rgba(66,85,255,0.07)' },
+          { label: 'Programmées', value: sessions.filter(s=>s.status==='scheduled').length.toString(), icon: '📅', color: 'var(--turq)', bg: 'rgba(0,191,165,0.07)' },
+          { label: 'Participants actifs', value: sessions.filter(s=>s.status==='live').reduce((a,s)=>a+s.participants,0).toString(), icon: '👥', color: 'var(--turq)', bg: 'rgba(66,85,255,0.07)' },
         ].map(s => (
           <div key={s.label} style={{ ...card, padding: '1.1rem 1.25rem', background: s.bg, border: `1px solid ${s.color}22` }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -360,8 +360,8 @@ export default function LivePage() {
         {(['all','live','scheduled','ended'] as const).map(f => (
           <button key={f} onClick={()=>setFilter(f)} style={{
             padding: '7px 16px', borderRadius: '20px', fontSize: '12px', fontWeight: '700',
-            border: `1px solid ${filter===f ? '#4255FF' : 'rgba(28,25,23,0.10)'}`,
-            background: filter===f ? '#4255FF' : 'transparent',
+            border: `1px solid ${filter===f ? 'var(--turq)' : 'rgba(28,25,23,0.10)'}`,
+            background: filter===f ? 'var(--turq)' : 'transparent',
             color: filter===f ? '#fff' : '#A8A29E', cursor: 'pointer', transition: 'all .15s',
           }}>
             { f==='all' ? 'Toutes' : f==='live' ? '🔴 En direct' : f==='scheduled' ? 'Programmées' : 'Terminées' }
@@ -476,7 +476,7 @@ export default function LivePage() {
           </div>
         </div>
         <a href="https://bigbluebutton.org" target="_blank" rel="noopener noreferrer"
-          style={{ fontSize: '12px', fontWeight: '600', color: '#4255FF', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+          style={{ fontSize: '12px', fontWeight: '600', color: 'var(--turq)', textDecoration: 'none', whiteSpace: 'nowrap' }}>
           En savoir plus →
         </a>
       </div>
@@ -486,7 +486,7 @@ export default function LivePage() {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 100,
           display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}
           onClick={e => { if (e.target === e.currentTarget) setShowCreate(false) }}>
-          <div style={{ background: '#fff', borderRadius: '20px', padding: '2rem', width: '100%', maxWidth: '500px',
+          <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '2rem', width: '100%', maxWidth: '500px',
             boxShadow: '0 24px 64px rgba(0,0,0,0.20)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
               <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#1C1917', margin: 0 }}>Créer une classe en direct</h2>

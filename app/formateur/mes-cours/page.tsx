@@ -19,7 +19,7 @@ type SavedCourse = {
 }
 
 const S = {
-  card: { background: '#fff', border: '1px solid rgba(28,25,23,0.08)', borderRadius: '16px' } as React.CSSProperties,
+  card: { background: 'var(--surface)', border: '1px solid rgba(28,25,23,0.08)', borderRadius: '16px' } as React.CSSProperties,
   btn: { background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '9px', padding: '8px 18px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer' } as React.CSSProperties,
   ghost: { background: '#FAF9F7', border: '1px solid rgba(28,25,23,0.08)', borderRadius: '9px', padding: '7px 14px', color: '#78716C', fontSize: '12px', cursor: 'pointer', fontWeight: '600' } as React.CSSProperties,
   tag: { borderRadius: '20px', padding: '3px 10px', fontSize: '10px', fontWeight: '700' as const },
@@ -100,7 +100,7 @@ export default function MesCours() {
       {/* Search + filter */}
       <div style={{ display: 'flex', gap: '10px', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         <input
-          style={{ background: '#fff', border: '1px solid rgba(28,25,23,0.09)', borderRadius: '10px', padding: '9px 14px', fontSize: '13px', outline: 'none', flex: '1 1 220px', color: '#1C1917', fontFamily: 'inherit' }}
+          style={{ background: 'var(--surface)', border: '1px solid rgba(28,25,23,0.09)', borderRadius: '10px', padding: '9px 14px', fontSize: '13px', outline: 'none', flex: '1 1 220px', color: '#1C1917', fontFamily: 'inherit' }}
           placeholder="🔍 Rechercher un cours…"
           value={search} onChange={e => setSearch(e.target.value)}
         />

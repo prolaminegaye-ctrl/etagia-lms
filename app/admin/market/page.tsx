@@ -262,7 +262,7 @@ export default function AdminMarketPage() {
             <Field label="Catégorie">
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
                 {TYPES.map(t => (
-                  <button key={t.id} onClick={() => setForm(f => ({ ...f, type: t.id }))} style={{ ...typeBtn, background: form.type === t.id ? 'rgba(232,101,26,0.15)' : 'var(--bg-secondary)', border: `1px solid ${form.type === t.id ? '#E8651A' : 'var(--border)'}`, color: form.type === t.id ? '#E8651A' : 'var(--text-secondary)' }}>
+                  <button key={t.id} onClick={() => setForm(f => ({ ...f, type: t.id }))} style={{ ...typeBtn, background: form.type === t.id ? 'rgba(232,101,26,0.15)' : 'var(--bg-secondary)', border: `1px solid ${form.type === t.id ? '#E8651A' : 'var(--line)'}`, color: form.type === t.id ? '#E8651A' : 'var(--ink-mut)' }}>
                     {t.label}
                   </button>
                 ))}
@@ -271,7 +271,7 @@ export default function AdminMarketPage() {
             <Field label="Émoji cover">
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                 {COVERS.map(c => (
-                  <button key={c} onClick={() => setForm(f => ({ ...f, cover: c }))} style={{ fontSize: '20px', padding: '4px', borderRadius: '6px', border: `2px solid ${form.cover === c ? 'var(--accent)' : 'transparent'}`, background: form.cover === c ? 'rgba(74,127,245,0.1)' : 'transparent', cursor: 'pointer' }}>{c}</button>
+                  <button key={c} onClick={() => setForm(f => ({ ...f, cover: c }))} style={{ fontSize: '20px', padding: '4px', borderRadius: '6px', border: `2px solid ${form.cover === c ? 'var(--orange)' : 'transparent'}`, background: form.cover === c ? 'rgba(74,127,245,0.1)' : 'transparent', cursor: 'pointer' }}>{c}</button>
                 ))}
               </div>
             </Field>
@@ -284,7 +284,7 @@ export default function AdminMarketPage() {
                 <input type="number" value={form.price / 100} onChange={e => setForm(f => ({ ...f, price: Math.round(parseFloat(e.target.value || '0') * 100) }))} style={{ ...inp, paddingRight: '60px' }} min="0" step="100" />
                 <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '11px', color: 'var(--text-muted)' }}>FCFA</span>
               </div>
-              <div style={{ fontSize: '12px', color: 'var(--accent)', marginTop: '4px', fontWeight: '600' }}>{fmt(form.price)}</div>
+              <div style={{ fontSize: '12px', color: 'var(--orange)', marginTop: '4px', fontWeight: '600' }}>{fmt(form.price)}</div>
             </Field>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               <Field label="Pages (livres)">
@@ -302,7 +302,7 @@ export default function AdminMarketPage() {
           <Card>
             <SectionTitle>Fichier PDF & Statut</SectionTitle>
             <Field label="Fichier du module (PDF recommandé)">
-              <div style={{ border: '2px dashed var(--border)', borderRadius: '10px', padding: '16px', textAlign: 'center', cursor: 'pointer', background: 'var(--bg-secondary)' }} onClick={() => fileRef.current?.click()}>
+              <div style={{ border: '2px dashed var(--line)', borderRadius: '10px', padding: '16px', textAlign: 'center', cursor: 'pointer', background: 'var(--bg-secondary)' }} onClick={() => fileRef.current?.click()}>
                 {form.fileName ? (
                   <div>
                     <div style={{ fontSize: '24px', marginBottom: '4px' }}>📄</div>
@@ -326,8 +326,8 @@ export default function AdminMarketPage() {
             </Field>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginTop: '4px' }}>
               {([['new', 'Nouveau', '🆕'], ['bestseller', 'Bestseller', '🏆'], ['featured', 'Mis en avant', '⭐']] as [string, string, string][]).map(([key, label, icon]) => (
-                <label key={key} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', padding: '8px', background: 'var(--bg-secondary)', borderRadius: '8px', border: `1px solid ${(form as any)[key] ? 'var(--accent)' : 'var(--border)'}` }}>
-                  <input type="checkbox" checked={!!(form as any)[key]} onChange={e => setForm(f => ({ ...f, [key]: e.target.checked }))} style={{ accentColor: 'var(--accent)' }} />
+                <label key={key} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', padding: '8px', background: 'var(--bg-secondary)', borderRadius: '8px', border: `1px solid ${(form as any)[key] ? 'var(--orange)' : 'var(--line)'}` }}>
+                  <input type="checkbox" checked={!!(form as any)[key]} onChange={e => setForm(f => ({ ...f, [key]: e.target.checked }))} style={{ accentColor: 'var(--orange)' }} />
                   <span style={{ fontSize: '12px' }}>{icon} {label}</span>
                 </label>
               ))}
@@ -335,7 +335,7 @@ export default function AdminMarketPage() {
             <Field label="Statut" style={{ marginTop: '12px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                 {(['published', 'draft'] as ProductStatus[]).map(s => (
-                  <button key={s} onClick={() => setForm(f => ({ ...f, status: s }))} style={{ padding: '9px', borderRadius: '8px', border: `1px solid ${form.status === s ? (s === 'published' ? '#4ADE80' : '#E8651A') : 'var(--border)'}`, background: form.status === s ? (s === 'published' ? 'rgba(74,222,128,0.1)' : 'rgba(232,101,26,0.1)') : 'var(--bg-secondary)', color: form.status === s ? (s === 'published' ? '#4ADE80' : '#E8651A') : 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '600' }}>
+                  <button key={s} onClick={() => setForm(f => ({ ...f, status: s }))} style={{ padding: '9px', borderRadius: '8px', border: `1px solid ${form.status === s ? (s === 'published' ? '#4ADE80' : '#E8651A') : 'var(--line)'}`, background: form.status === s ? (s === 'published' ? 'rgba(74,222,128,0.1)' : 'rgba(232,101,26,0.1)') : 'var(--bg-secondary)', color: form.status === s ? (s === 'published' ? '#4ADE80' : '#E8651A') : 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', fontWeight: '600' }}>
                     {s === 'published' ? '✅ Publié' : '⏸ Brouillon'}
                   </button>
                 ))}
@@ -345,7 +345,7 @@ export default function AdminMarketPage() {
         </div>
       </div>
 
-      <div style={{ marginTop: '2rem', marginBottom: '2rem', display: 'flex', gap: '12px', alignItems: 'center', padding: '1.25rem', background: '#FFFFFF', borderRadius: '14px', border: '1px solid rgba(28,25,23,0.10)', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
+      <div style={{ marginTop: '2rem', marginBottom: '2rem', display: 'flex', gap: '12px', alignItems: 'center', padding: '1.25rem', background: 'var(--surface)', borderRadius: '14px', border: '1px solid rgba(28,25,23,0.10)', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
         <button onClick={handleSubmit} style={{
           background: 'linear-gradient(135deg, #E8651A 0%, #D4A017 100%)',
           border: 'none', borderRadius: '12px', padding: '13px 32px',
@@ -371,9 +371,9 @@ export default function AdminMarketPage() {
 
   /* ── LIST VIEW ── */
   return (
-    <div style={{ color: 'var(--text-primary)' }}>
+    <div style={{ color: 'var(--ink)' }}>
       {toast && (
-        <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 9999, background: 'var(--bg-card)', border: '1px solid rgba(74,127,245,0.4)', borderRadius: '12px', padding: '12px 20px', fontSize: '14px', fontWeight: '600', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}>{toast}</div>
+        <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 9999, background: 'var(--surface)', border: '1px solid rgba(74,127,245,0.4)', borderRadius: '12px', padding: '12px 20px', fontSize: '14px', fontWeight: '600', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}>{toast}</div>
       )}
 
       {/* Hidden input pour upload rapide en ligne */}
@@ -383,7 +383,7 @@ export default function AdminMarketPage() {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <h1 style={{ margin: 0, fontSize: '26px', fontWeight: '800', fontFamily: 'var(--font-display)' }}>🏪 Gestion Marketplace</h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginTop: '4px' }}>Gérez vos produits, PDFs et prix — {products.length} modules au total</p>
+          <p style={{ color: 'var(--ink-mut)', fontSize: '13px', marginTop: '4px' }}>Gérez vos produits, PDFs et prix — {products.length} modules au total</p>
         </div>
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           <button onClick={syncFromCatalog} style={{ ...btnSec, display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px' }}>
@@ -404,7 +404,7 @@ export default function AdminMarketPage() {
           { icon: '📊', label: 'Ventes totales', val: totalSales.toLocaleString('fr'), sub: 'toutes catégories' },
           { icon: '⭐', label: 'Note moyenne', val: avgRating.toFixed(1), sub: 'sur 5.0' },
         ].map(k => (
-          <div key={k.label} style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+          <div key={k.label} style={{ background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '12px', padding: '14px 16px' }}>
             <div style={{ fontSize: '22px', marginBottom: '6px' }}>{k.icon}</div>
             <div style={{ fontSize: '18px', fontWeight: '800', fontFamily: 'var(--font-display)' }}>{k.val}</div>
             <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>{k.label}</div>
@@ -434,8 +434,8 @@ export default function AdminMarketPage() {
       </div>
 
       {/* Table */}
-      <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '16px', overflow: 'hidden' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '36px 1fr 90px 110px 70px 70px 90px 150px', gap: '0', padding: '10px 16px', borderBottom: '1px solid var(--border)', fontSize: '11px', fontWeight: '700', color: 'var(--text-muted)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '16px', overflow: 'hidden' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '36px 1fr 90px 110px 70px 70px 90px 150px', gap: '0', padding: '10px 16px', borderBottom: '1px solid var(--line)', fontSize: '11px', fontWeight: '700', color: 'var(--text-muted)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
           <span></span><span>Produit</span><span>Type</span><span>Prix</span><span>Ventes</span><span>Fichier</span><span>Statut</span><span>Actions</span>
         </div>
         {filtered.length === 0 && (
@@ -463,7 +463,7 @@ export default function AdminMarketPage() {
               {p.type === 'livre' ? '📚' : p.type === 'cours' ? '📄' : p.type === 'logiciel' ? '💾' : '🎁'} {p.type}
             </span>
             <div>
-              <span style={{ fontSize: '13px', fontWeight: '700', color: 'var(--accent)' }}>{fmt(p.price)}</span>
+              <span style={{ fontSize: '13px', fontWeight: '700', color: 'var(--orange)' }}>{fmt(p.price)}</span>
               <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{(p.price / 100).toLocaleString('fr')} FCFA</div>
             </div>
             <span style={{ fontSize: '13px' }}>{p.sales.toLocaleString('fr')}</span>
@@ -495,10 +495,10 @@ export default function AdminMarketPage() {
       {/* Delete confirmation */}
       {confirmDel && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '16px', padding: '2rem', maxWidth: '380px', width: '100%', textAlign: 'center' }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '16px', padding: '2rem', maxWidth: '380px', width: '100%', textAlign: 'center' }}>
             <div style={{ fontSize: '40px', marginBottom: '1rem' }}>⚠️</div>
             <h3 style={{ fontFamily: 'var(--font-display)', margin: '0 0 8px' }}>Confirmer la suppression</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '1.5rem' }}>Cette action est irréversible.</p>
+            <p style={{ color: 'var(--ink-mut)', fontSize: '13px', marginBottom: '1.5rem' }}>Cette action est irréversible.</p>
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
               <button onClick={() => handleDelete(confirmDel)} style={{ background: '#EF4444', border: 'none', borderRadius: '10px', padding: '10px 24px', color: '#fff', fontWeight: '700', cursor: 'pointer' }}>Supprimer</button>
               <button onClick={() => setConfirmDel(null)} style={btnSec}>Annuler</button>
@@ -510,8 +510,8 @@ export default function AdminMarketPage() {
       {/* PDF Preview Modal */}
       {pdfPreview && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', zIndex: 2000, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
-          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '16px', width: '100%', maxWidth: '900px', maxHeight: '90vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '16px', width: '100%', maxWidth: '900px', maxHeight: '90vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderBottom: '1px solid var(--line)' }}>
               <span style={{ fontWeight: '700', fontSize: '14px' }}>📄 {pdfPreview.name}</span>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <a href={pdfPreview.url} download style={{ ...btnAcc, fontSize: '12px', padding: '6px 14px', textDecoration: 'none' }}>⬇️ Télécharger</a>
@@ -528,7 +528,7 @@ export default function AdminMarketPage() {
 
 /* ── Helpers ── */
 const Card = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ background: '#FFFFFF', border: '1px solid rgba(28,25,23,0.10)', borderRadius: '14px', padding: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>{children}</div>
+  <div style={{ background: 'var(--surface)', border: '1px solid rgba(28,25,23,0.10)', borderRadius: '14px', padding: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>{children}</div>
 )
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
   <div style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '1.5px', textTransform: 'uppercase', color: 'rgba(28,25,23,0.45)', marginBottom: '12px' }}>{children}</div>
@@ -540,8 +540,8 @@ const Field = ({ label, children, style }: { label: string; children: React.Reac
   </div>
 )
 const inp: React.CSSProperties = { width: '100%', background: '#FAF9F7', border: '1px solid rgba(28,25,23,0.12)', borderRadius: '8px', padding: '9px 12px', color: '#1C1917', fontSize: '13px', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' }
-const btnAcc: React.CSSProperties = { background: 'var(--accent)', border: 'none', borderRadius: '10px', padding: '9px 18px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer', fontFamily: 'var(--font-display)' }
-const btnSec: React.CSSProperties = { background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '10px', padding: '9px 18px', color: 'var(--text-secondary)', fontWeight: '500', fontSize: '13px', cursor: 'pointer', fontFamily: 'var(--font-display)' }
-const iconBtn: React.CSSProperties = { background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '7px', width: '30px', height: '30px', cursor: 'pointer', fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center' }
-const selStyle: React.CSSProperties = { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '8px', padding: '8px 12px', color: 'var(--text-secondary)', fontSize: '13px', outline: 'none', cursor: 'pointer' }
+const btnAcc: React.CSSProperties = { background: 'var(--orange)', border: 'none', borderRadius: '10px', padding: '9px 18px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer', fontFamily: 'var(--font-display)' }
+const btnSec: React.CSSProperties = { background: 'var(--bg-secondary)', border: '1px solid var(--line)', borderRadius: '10px', padding: '9px 18px', color: 'var(--ink-mut)', fontWeight: '500', fontSize: '13px', cursor: 'pointer', fontFamily: 'var(--font-display)' }
+const iconBtn: React.CSSProperties = { background: 'var(--bg-secondary)', border: '1px solid var(--line)', borderRadius: '7px', width: '30px', height: '30px', cursor: 'pointer', fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center' }
+const selStyle: React.CSSProperties = { background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '8px', padding: '8px 12px', color: 'var(--ink-mut)', fontSize: '13px', outline: 'none', cursor: 'pointer' }
 const typeBtn: React.CSSProperties = { borderRadius: '8px', padding: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: '600', fontFamily: 'inherit', transition: 'all .15s' }

@@ -220,7 +220,7 @@ export default function TeamPage() {
                   <span style={{
                     display:'inline-flex', alignItems:'center', gap:'5px', padding:'4px 10px', borderRadius:'8px', fontSize:'11px', fontWeight:'700',
                     background: m.status === 'actif' ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.1)',
-                    color: m.status === 'actif' ? '#059669' : '#D97706',
+                    color: m.status === 'actif' ? '#059669' : 'var(--gold-700)',
                   }}>
                     <span style={{ width:'6px', height:'6px', borderRadius:'50%', background: m.status === 'actif' ? '#10B981' : '#F59E0B' }} />
                     {m.status === 'actif' ? 'Actif' : 'En attente'}

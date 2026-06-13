@@ -171,11 +171,11 @@ export default function MarketPage() {
   const totalSpent = catalogProducts.filter(p => purchases.includes(p.id)).reduce((s, p) => s + p.price, 0)
 
   return (
-    <div style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-body)' }}>
+    <div style={{ color: 'var(--ink)', fontFamily: 'var(--font-body)' }}>
 
       {/* ── TOAST */}
       {toast && (
-        <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 9999, background: 'linear-gradient(135deg,#1C1714,#2a2118)', border: '1px solid rgba(74,127,245,0.4)', borderRadius: '12px', padding: '12px 20px', fontSize: '14px', fontWeight: '600', boxShadow: '0 8px 32px rgba(0,0,0,0.4)', animation: 'slideUp .3s ease', color: 'var(--text-primary)' }}>
+        <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 9999, background: 'linear-gradient(135deg,#1C1714,#2a2118)', border: '1px solid rgba(74,127,245,0.4)', borderRadius: '12px', padding: '12px 20px', fontSize: '14px', fontWeight: '600', boxShadow: '0 8px 32px rgba(0,0,0,0.4)', animation: 'slideUp .3s ease', color: 'var(--ink)' }}>
           {toast}
         </div>
       )}
@@ -187,13 +187,13 @@ export default function MarketPage() {
             <h1 style={{ fontSize: '28px', fontWeight: '800', fontFamily: 'var(--font-display)', margin: 0 }}>
               🛒 Marketplace ETAGIA
             </h1>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginTop: '6px' }}>
+            <p style={{ color: 'var(--ink-mut)', fontSize: '14px', marginTop: '6px' }}>
               Modules professionnels certifiés · Contexte africain francophone
             </p>
           </div>
           {purchasedCount > 0 && (
             <div style={{ background: 'rgba(74,127,245,0.1)', border: '1px solid rgba(74,127,245,0.25)', borderRadius: '12px', padding: '10px 18px', textAlign: 'center' }}>
-              <div style={{ fontSize: '18px', fontWeight: '800', color: 'var(--accent)' }}>{purchasedCount} achat{purchasedCount > 1 ? 's' : ''}</div>
+              <div style={{ fontSize: '18px', fontWeight: '800', color: 'var(--orange)' }}>{purchasedCount} achat{purchasedCount > 1 ? 's' : ''}</div>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{fmt(totalSpent)} dépensés</div>
             </div>
           )}
@@ -207,7 +207,7 @@ export default function MarketPage() {
             { icon: '🔒', val: 'Achat sécurisé', sub: 'paiement protégé' },
             { icon: '♾️', val: 'Accès à vie', sub: 'PDF téléchargeable' },
           ].map(s => (
-            <div key={s.val} style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div key={s.val} style={{ background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '12px', padding: '12px 14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span style={{ fontSize: '22px' }}>{s.icon}</span>
               <div>
                 <div style={{ fontSize: '13px', fontWeight: '700' }}>{s.val}</div>
@@ -223,10 +223,10 @@ export default function MarketPage() {
         <div style={{ position: 'relative', flex: '1', minWidth: '220px' }}>
           <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '14px' }}>🔍</span>
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Rechercher un module..."
-            style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '10px', padding: '9px 12px 9px 34px', color: 'var(--text-primary)', fontSize: '13px', outline: 'none', fontFamily: 'var(--font-body)', boxSizing: 'border-box' }} />
+            style={{ width: '100%', background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '10px', padding: '9px 12px 9px 34px', color: 'var(--ink)', fontSize: '13px', outline: 'none', fontFamily: 'var(--font-body)', boxSizing: 'border-box' }} />
         </div>
         <select value={sort} onChange={e => setSort(e.target.value as any)}
-          style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '10px', padding: '9px 12px', color: 'var(--text-secondary)', fontSize: '13px', outline: 'none', cursor: 'pointer' }}>
+          style={{ background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '10px', padding: '9px 12px', color: 'var(--ink-mut)', fontSize: '13px', outline: 'none', cursor: 'pointer' }}>
           <option value="pop">Les plus populaires</option>
           <option value="price_asc">Prix croissant</option>
           <option value="price_desc">Prix décroissant</option>
@@ -238,9 +238,9 @@ export default function MarketPage() {
       <div style={{ display: 'flex', gap: '8px', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         {CATS.map(c => (
           <button key={c.id} onClick={() => setCat(c.id)} style={{
-            background: cat === c.id ? 'var(--accent)' : 'var(--bg-card)',
-            border: `1px solid ${cat === c.id ? 'var(--accent)' : 'var(--border)'}`,
-            borderRadius: '20px', padding: '7px 16px', color: cat === c.id ? '#fff' : 'var(--text-secondary)',
+            background: cat === c.id ? 'var(--orange)' : 'var(--surface)',
+            border: `1px solid ${cat === c.id ? 'var(--orange)' : 'var(--line)'}`,
+            borderRadius: '20px', padding: '7px 16px', color: cat === c.id ? '#fff' : 'var(--ink-mut)',
             fontSize: '13px', fontWeight: cat === c.id ? '700' : '400',
             cursor: 'pointer', fontFamily: 'var(--font-display)', transition: 'all .15s',
             display: 'flex', alignItems: 'center', gap: '6px',
@@ -260,7 +260,7 @@ export default function MarketPage() {
           const hasPdf = !!(p as any).fileDataUrl
           return (
             <div key={p.id} id={`product-${p.id}`} style={{
-              background: 'var(--bg-card)', border: `1px solid ${bought ? 'rgba(74,127,245,0.35)' : 'var(--border)'}`,
+              background: 'var(--surface)', border: `1px solid ${bought ? 'rgba(74,127,245,0.35)' : 'var(--line)'}`,
               borderRadius: '16px', overflow: 'hidden', transition: 'transform .18s, box-shadow .18s',
               position: 'relative',
             }}
@@ -324,11 +324,11 @@ export default function MarketPage() {
                 {!bought ? (
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div>
-                      <div style={{ fontSize: '18px', fontWeight: '800', color: 'var(--accent)', fontFamily: 'var(--font-display)' }}>{fmt(p.price)}</div>
+                      <div style={{ fontSize: '18px', fontWeight: '800', color: 'var(--orange)', fontFamily: 'var(--font-display)' }}>{fmt(p.price)}</div>
                     </div>
                     <div style={{ display: 'flex', gap: '6px' }}>
-                      <button onClick={() => setDetail(p)} style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '8px', padding: '8px 10px', color: 'var(--text-secondary)', fontSize: '12px', cursor: 'pointer' }}>Détails</button>
-                      <button onClick={() => startBuy(p)} style={{ background: 'var(--accent)', border: 'none', borderRadius: '8px', padding: '8px 14px', color: '#fff', fontWeight: '700', fontSize: '12px', cursor: 'pointer', fontFamily: 'var(--font-display)' }}>
+                      <button onClick={() => setDetail(p)} style={{ background: 'var(--bg-secondary)', border: '1px solid var(--line)', borderRadius: '8px', padding: '8px 10px', color: 'var(--ink-mut)', fontSize: '12px', cursor: 'pointer' }}>Détails</button>
+                      <button onClick={() => startBuy(p)} style={{ background: 'var(--orange)', border: 'none', borderRadius: '8px', padding: '8px 14px', color: '#fff', fontWeight: '700', fontSize: '12px', cursor: 'pointer', fontFamily: 'var(--font-display)' }}>
                         🛒 Acheter
                       </button>
                     </div>
@@ -371,15 +371,15 @@ export default function MarketPage() {
               <button onClick={() => setDetail(null)} style={closeBtn}>✕</button>
             </div>
             <div style={{ textAlign: 'center', fontSize: '60px', margin: '1rem 0' }}>{detail.cover}</div>
-            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '1rem' }}>{detail.shortLongDesc || detail.desc}</p>
+            <p style={{ color: 'var(--ink-mut)', lineHeight: 1.7, marginBottom: '1rem' }}>{detail.shortLongDesc || detail.desc}</p>
 
             {/* Chapitres */}
             {detail.chapitres && detail.chapitres.length > 0 && (
               <div style={{ background: 'var(--bg-secondary)', borderRadius: '10px', padding: '12px', marginBottom: '1rem' }}>
                 <div style={{ fontSize: '12px', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>📋 Chapitres inclus</div>
                 {detail.chapitres.map((c, i) => (
-                  <div key={i} style={{ fontSize: '13px', color: 'var(--text-secondary)', padding: '4px 0', display: 'flex', gap: '8px' }}>
-                    <span style={{ color: 'var(--accent)', fontWeight: '700', minWidth: '20px' }}>{i + 1}.</span>{c}
+                  <div key={i} style={{ fontSize: '13px', color: 'var(--ink-mut)', padding: '4px 0', display: 'flex', gap: '8px' }}>
+                    <span style={{ color: 'var(--orange)', fontWeight: '700', minWidth: '20px' }}>{i + 1}.</span>{c}
                   </div>
                 ))}
               </div>
@@ -394,9 +394,9 @@ export default function MarketPage() {
               {detail.duree && <span style={chip}>⏱ {detail.duree}</span>}
               {detail.tags?.slice(0, 4).map(t => <span key={t} style={chip}>#{t}</span>)}
             </div>
-            <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '24px', fontWeight: '800', color: 'var(--accent)', fontFamily: 'var(--font-display)' }}>{fmt(detail.price)}</span>
-              <button onClick={() => { setDetail(null); startBuy(detail) }} style={{ background: 'var(--accent)', border: 'none', borderRadius: '10px', padding: '11px 24px', color: '#fff', fontWeight: '700', fontSize: '14px', cursor: 'pointer', fontFamily: 'var(--font-display)' }}>
+            <div style={{ borderTop: '1px solid var(--line)', paddingTop: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: '24px', fontWeight: '800', color: 'var(--orange)', fontFamily: 'var(--font-display)' }}>{fmt(detail.price)}</span>
+              <button onClick={() => { setDetail(null); startBuy(detail) }} style={{ background: 'var(--orange)', border: 'none', borderRadius: '10px', padding: '11px 24px', color: '#fff', fontWeight: '700', fontSize: '14px', cursor: 'pointer', fontFamily: 'var(--font-display)' }}>
                 🛒 Acheter maintenant
               </button>
             </div>
@@ -424,7 +424,7 @@ export default function MarketPage() {
                     <div style={{ fontWeight: '700', fontSize: '14px' }}>{modal.title}</div>
                     <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{modal.author}</div>
                     {modal.chapitres && <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>📋 {modal.chapitres.length} chapitres inclus</div>}
-                    <div style={{ fontSize: '18px', fontWeight: '800', color: 'var(--accent)', marginTop: '3px' }}>{fmt(modal.price)}</div>
+                    <div style={{ fontSize: '18px', fontWeight: '800', color: 'var(--orange)', marginTop: '3px' }}>{fmt(modal.price)}</div>
                   </div>
                 </div>
 
@@ -437,7 +437,7 @@ export default function MarketPage() {
                     '📚 Ajout automatique à vos cours',
                     '▶️ Lecture en ligne dans le player',
                   ].map(item => (
-                    <div key={item} style={{ fontSize: '12px', color: 'var(--text-secondary)', padding: '3px 0' }}>{item}</div>
+                    <div key={item} style={{ fontSize: '12px', color: 'var(--ink-mut)', padding: '3px 0' }}>{item}</div>
                   ))}
                 </div>
 
@@ -465,7 +465,7 @@ export default function MarketPage() {
                     <span key={b} style={{ fontSize: '11px', color: 'var(--text-muted)', background: 'var(--bg-secondary)', borderRadius: '5px', padding: '3px 8px' }}>{b}</span>
                   ))}
                 </div>
-                <button onClick={confirmBuy} style={{ width: '100%', background: 'linear-gradient(135deg,var(--accent),#D4A017)', border: 'none', borderRadius: '10px', padding: '13px', color: '#fff', fontWeight: '800', fontSize: '15px', cursor: 'pointer', fontFamily: 'var(--font-display)' }}>
+                <button onClick={confirmBuy} style={{ width: '100%', background: 'linear-gradient(135deg,var(--orange),#D4A017)', border: 'none', borderRadius: '10px', padding: '13px', color: '#fff', fontWeight: '800', fontSize: '15px', cursor: 'pointer', fontFamily: 'var(--font-display)' }}>
                   ✓ Confirmer l&apos;achat — {fmt(modal.price)}
                 </button>
               </>
@@ -477,7 +477,7 @@ export default function MarketPage() {
                 <div style={{ fontWeight: '700', fontSize: '16px', marginBottom: '8px' }}>Traitement en cours...</div>
                 <div style={{ color: 'var(--text-muted)', fontSize: '13px' }}>Vérification du paiement</div>
                 <div style={{ marginTop: '1.5rem', height: '4px', background: 'var(--bg-secondary)', borderRadius: '99px', overflow: 'hidden' }}>
-                  <div style={{ height: '100%', width: '100%', background: 'linear-gradient(90deg,var(--accent),var(--teal))', animation: 'progress 2.2s ease forwards', borderRadius: '99px' }} />
+                  <div style={{ height: '100%', width: '100%', background: 'linear-gradient(90deg,var(--orange),var(--turq))', animation: 'progress 2.2s ease forwards', borderRadius: '99px' }} />
                 </div>
               </div>
             )}
@@ -486,7 +486,7 @@ export default function MarketPage() {
               <div style={{ textAlign: 'center', padding: '1rem' }}>
                 <div style={{ fontSize: '64px', marginBottom: '1rem' }}>🎉</div>
                 <h2 style={{ fontFamily: 'var(--font-display)', margin: '0 0 8px', fontSize: '22px' }}>Achat confirmé !</h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '1.5rem' }}>
+                <p style={{ color: 'var(--ink-mut)', fontSize: '14px', marginBottom: '1.5rem' }}>
                   <strong>{modal.title}</strong> est maintenant débloqué dans votre espace.
                 </p>
                 <div style={{ background: 'rgba(74,127,245,0.08)', border: '1px solid rgba(74,127,245,0.2)', borderRadius: '12px', padding: '12px', marginBottom: '1.5rem', textAlign: 'left' }}>
@@ -495,9 +495,9 @@ export default function MarketPage() {
                     `⬇️ Télécharger le PDF complet`,
                     '📚 Ajouté à "Mes cours" automatiquement',
                     '▶️ Lire directement dans le player',
-                  ].map(o => <div key={o} style={{ fontSize: '13px', color: 'var(--text-secondary)', padding: '4px 0' }}>{o}</div>)}
+                  ].map(o => <div key={o} style={{ fontSize: '13px', color: 'var(--ink-mut)', padding: '4px 0' }}>{o}</div>)}
                 </div>
-                <button onClick={() => setModal(null)} style={{ width: '100%', background: 'var(--accent)', border: 'none', borderRadius: '10px', padding: '12px', color: '#fff', fontWeight: '700', fontSize: '14px', cursor: 'pointer', fontFamily: 'var(--font-display)' }}>
+                <button onClick={() => setModal(null)} style={{ width: '100%', background: 'var(--orange)', border: 'none', borderRadius: '10px', padding: '12px', color: '#fff', fontWeight: '700', fontSize: '14px', cursor: 'pointer', fontFamily: 'var(--font-display)' }}>
                   Accéder au contenu →
                 </button>
               </div>
@@ -535,23 +535,23 @@ const overlay: React.CSSProperties = {
   backdropFilter: 'blur(4px)',
 }
 const modalBox: React.CSSProperties = {
-  background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '20px',
+  background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '20px',
   padding: '1.75rem', width: '100%', maxHeight: '90vh', overflowY: 'auto',
   boxShadow: '0 32px 80px rgba(0,0,0,0.5)',
 }
 const closeBtn: React.CSSProperties = {
-  background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '8px',
-  width: '32px', height: '32px', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: '14px',
+  background: 'var(--bg-secondary)', border: '1px solid var(--line)', borderRadius: '8px',
+  width: '32px', height: '32px', cursor: 'pointer', color: 'var(--ink-mut)', fontSize: '14px',
   display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
 }
 const chip: React.CSSProperties = {
-  background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '6px',
+  background: 'var(--bg-secondary)', border: '1px solid var(--line)', borderRadius: '6px',
   padding: '3px 8px', fontSize: '11px', color: 'var(--text-muted)',
 }
-const labelS: React.CSSProperties = { fontSize: '12px', color: 'var(--text-secondary)', display: 'block', marginBottom: '5px' }
+const labelS: React.CSSProperties = { fontSize: '12px', color: 'var(--ink-mut)', display: 'block', marginBottom: '5px' }
 const inputS: React.CSSProperties = {
-  width: '100%', background: 'var(--bg-secondary)', border: '1px solid var(--border)',
-  borderRadius: '8px', padding: '9px 12px', color: 'var(--text-primary)', fontSize: '13px',
+  width: '100%', background: 'var(--bg-secondary)', border: '1px solid var(--line)',
+  borderRadius: '8px', padding: '9px 12px', color: 'var(--ink)', fontSize: '13px',
   outline: 'none', fontFamily: 'var(--font-body)', boxSizing: 'border-box',
 }
 const actionBtn = (color: string): React.CSSProperties => ({

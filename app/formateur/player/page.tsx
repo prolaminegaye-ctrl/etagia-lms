@@ -33,7 +33,7 @@ function QuizBlock({ block, onComplete }: { block: Block; onComplete: () => void
   const isRight = selected === correct
 
   return (
-    <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid rgba(28,25,23,0.08)', padding: '1.5rem' }}>
+    <div style={{ background: 'var(--surface)', borderRadius: '16px', border: '1px solid rgba(28,25,23,0.08)', padding: '1.5rem' }}>
       <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
         <span style={{ fontSize: '24px', flexShrink: 0 }}>❓</span>
         <div style={{ fontSize: '17px', fontWeight: '700', color: '#1C1917', lineHeight: 1.4 }}>{q.question || block.title}</div>
@@ -43,7 +43,7 @@ function QuizBlock({ block, onComplete }: { block: Block; onComplete: () => void
           let bg = 'rgba(28,25,23,0.04)', border = '1px solid rgba(28,25,23,0.1)', color = '#1C1917'
           if (validated) {
             if (opt === correct) { bg = 'rgba(16,185,129,0.1)'; border = '1.5px solid #10B981'; color = '#059669' }
-            else if (opt === selected) { bg = 'rgba(239,68,68,0.08)'; border = '1.5px solid #EF4444'; color = '#DC2626' }
+            else if (opt === selected) { bg = 'rgba(239,68,68,0.08)'; border = '1.5px solid #EF4444'; color = 'var(--orange)' }
           } else if (opt === selected) { bg = 'rgba(232,101,26,0.1)'; border = '1.5px solid #E8651A'; color = '#E8651A' }
           return (
             <div key={i} onClick={() => !validated && setSelected(opt)}
@@ -57,7 +57,7 @@ function QuizBlock({ block, onComplete }: { block: Block; onComplete: () => void
         })}
       </div>
       {validated && (
-        <div style={{ background: isRight ? 'rgba(16,185,129,0.08)' : 'rgba(239,68,68,0.06)', border: `1px solid ${isRight ? 'rgba(16,185,129,0.25)' : 'rgba(239,68,68,0.2)'}`, borderRadius: '10px', padding: '12px 16px', marginBottom: '1rem', fontSize: '14px', color: isRight ? '#059669' : '#DC2626' }}>
+        <div style={{ background: isRight ? 'rgba(16,185,129,0.08)' : 'rgba(239,68,68,0.06)', border: `1px solid ${isRight ? 'rgba(16,185,129,0.25)' : 'rgba(239,68,68,0.2)'}`, borderRadius: '10px', padding: '12px 16px', marginBottom: '1rem', fontSize: '14px', color: isRight ? '#059669' : 'var(--orange)' }}>
           {isRight ? '🎉 Bonne réponse !' : `❌ Réponse correcte : ${correct}`}
           {q.explication && <div style={{ marginTop: '6px', color: '#57534E', fontSize: '13px' }}>{q.explication}</div>}
         </div>
@@ -161,7 +161,7 @@ function BlockRenderer({ block, onQuizComplete }: { block: Block; onQuizComplete
 
       {/* Text */}
       {block.type === 'text' && block.content && (
-        <div style={{ fontSize: '15px', lineHeight: '1.75', color: '#44403C', background: '#fff', borderRadius: '12px', padding: '1.5rem', border: '1px solid rgba(28,25,23,0.07)', whiteSpace: 'pre-wrap' }}>
+        <div style={{ fontSize: '15px', lineHeight: '1.75', color: '#44403C', background: 'var(--surface)', borderRadius: '12px', padding: '1.5rem', border: '1px solid rgba(28,25,23,0.07)', whiteSpace: 'pre-wrap' }}>
           {block.content}
         </div>
       )}
@@ -252,7 +252,7 @@ function PlayerInner() {
 
   if (notFound) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FAF9F7' }}>
-      <div style={{ background: '#fff', borderRadius: '20px', padding: '3rem', textAlign: 'center', maxWidth: '420px' }}>
+      <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '3rem', textAlign: 'center', maxWidth: '420px' }}>
         <div style={{ fontSize: '56px', marginBottom: '1rem' }}>🔍</div>
         <h2 style={{ fontWeight: '900', color: '#1C1917', marginBottom: '8px' }}>Cours introuvable</h2>
         <p style={{ color: '#A8A29E', marginBottom: '1.5rem' }}>Ce cours n'existe pas ou a été supprimé.</p>
@@ -297,7 +297,7 @@ function PlayerInner() {
     <div style={{ minHeight: '100vh', background: '#F5F4F2', display: 'flex', flexDirection: 'column' }}>
 
       {/* ── Top bar ── */}
-      <div style={{ background: '#fff', borderBottom: '1px solid rgba(28,25,23,0.08)', padding: '0 1.5rem', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', position: 'sticky', top: 0, zIndex: 100 }}>
+      <div style={{ background: 'var(--surface)', borderBottom: '1px solid rgba(28,25,23,0.08)', padding: '0 1.5rem', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', position: 'sticky', top: 0, zIndex: 100 }}>
         <button onClick={() => router.push('/formateur/cours')} style={{ background: 'none', border: '1px solid rgba(28,25,23,0.1)', borderRadius: '8px', padding: '5px 12px', cursor: 'pointer', fontSize: '12px', color: '#78716C', fontWeight: '600' }}>← Mes cours</button>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontWeight: '800', fontSize: '15px', color: '#1C1917', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{course.title}</div>
@@ -316,7 +316,7 @@ function PlayerInner() {
 
         {/* ── Sidebar ── */}
         {sidebarOpen && (
-          <div style={{ width: '260px', background: '#fff', borderRight: '1px solid rgba(28,25,23,0.08)', overflowY: 'auto', flexShrink: 0 }}>
+          <div style={{ width: '260px', background: 'var(--surface)', borderRight: '1px solid rgba(28,25,23,0.08)', overflowY: 'auto', flexShrink: 0 }}>
             <div style={{ padding: '1rem' }}>
               {modules.map((mod, mi) => (
                 <div key={mod.id} style={{ marginBottom: '6px' }}>

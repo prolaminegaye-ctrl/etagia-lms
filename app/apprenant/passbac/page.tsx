@@ -12,7 +12,7 @@ interface ExamSubject { subject: string; duration: string; questions: string[] }
 
 const curriculum: Record<Subject, { label: string; icon: string; color: string; chapters: Chapter[]; flashcards: Flashcard[]; quiz: QuizQuestion[] }> = {
   histoire: {
-    label: 'Histoire', icon: '📜', color: '#C0392B',
+    label: 'Histoire', icon: '📜', color: 'var(--orange-700)',
     chapters: [
       { id: 'h1', title: 'Conséquences de la Seconde Guerre Mondiale',
         summary: 'La Seconde Guerre Mondiale (1939–1945) est le conflit le plus meurtrier de l\'histoire avec près de 60 millions de morts, dont 40 millions de civils. Elle provoque la destruction des économies européennes, la Shoah (6 millions de Juifs exterminés), et l\'utilisation des bombes atomiques sur Hiroshima et Nagasaki (août 1945).\n\nDes solutions sont mises en place pour reconstruire l\'ordre mondial. L\'ONU est créée le 26 juin 1945 à San Francisco pour maintenir la paix internationale. Les procès de Nuremberg (1945–46) établissent le concept de crime contre l\'humanité. Le Plan Marshall (1947) apporte 12 milliards de dollars pour reconstruire l\'Europe occidentale, mais le monde se bipolaise autour des deux superpuissances : USA et URSS.',
@@ -63,7 +63,7 @@ const curriculum: Record<Subject, { label: string; icon: string; color: string; 
     ]
   },
   geographie: {
-    label: 'Géographie', icon: '🌍', color: '#27AE60',
+    label: 'Géographie', icon: '🌍', color: 'var(--turq-700)',
     chapters: [
       { id: 'g1', title: 'Le Système-Monde',
         summary: 'Le système-monde est l\'organisation hiérarchisée de l\'espace planétaire autour de centres dominants (le "cœur") et de périphéries. La "Triade" formée par les États-Unis, l\'Union Européenne et le Japon concentre les richesses, les technologies et les décisions économiques mondiales. Avec la mondialisation, des pays émergents (BRICS) rééquilibrent progressivement ce système.\n\nLes flux caractérisent ce système : flux commerciaux (marchandises), financiers (capitaux), migratoires (personnes) et informationnels (données). Les institutions comme le FMI, la Banque Mondiale et l\'OMC encadrent ces échanges. La métropolisation concentre les activités dans quelques grandes métropoles mondiales (New York, Tokyo, Londres, Paris), créant de fortes inégalités spatiales.',
@@ -249,7 +249,7 @@ const curriculum: Record<Subject, { label: string; icon: string; color: string; 
     ]
   },
   francais: {
-    label: 'Français', icon: '📚', color: '#C0392B',
+    label: 'Français', icon: '📚', color: 'var(--orange-700)',
     chapters: [
       { id: 'fr1', title: 'Le Surréalisme',
         summary: 'Le surréalisme est né officiellement en 1924 avec la publication du Manifeste du Surréalisme d\'André Breton. Héritier du dadaïsme et profondément influencé par la psychanalyse de Freud, il cherche à libérer l\'écriture et l\'art de la censure de la raison consciente. La technique de l\'écriture automatique consiste à écrire sans contrôle de la raison, en laissant jaillir l\'inconscient.\n\nEn Afrique francophone, le surréalisme influence profondément la Négritude, mouvement littéraire fondé par Aimé Césaire (Martinique), Léopold Sédar Senghor (Sénégal) et Léon-Gontran Damas (Guyane) dans les années 1930. La Négritude revendique l\'identité africaine, la beauté de la culture noire et la dignité des peuples colonisés, en réponse à l\'assimilation coloniale. Senghor développe l\'esthétique du "rythme nègre" et de l\'image-analogie.',
@@ -407,7 +407,7 @@ export default function PassBacPage() {
   }
 
   const sectionStyle: React.CSSProperties = {
-    background: '#FFFFFF',
+    background: 'var(--surface)',
     borderRadius: '14px',
     padding: '1.75rem',
     marginBottom: '1.5rem',
@@ -539,7 +539,7 @@ export default function PassBacPage() {
 
             {subj.chapters.filter(ch => ch.fiche).length === 0 ? (
               <div style={{
-                background: '#fff', borderRadius: '18px', padding: '3rem 2rem',
+                background: 'var(--surface)', borderRadius: '18px', padding: '3rem 2rem',
                 textAlign: 'center', border: `1.5px dashed ${subj.color}40`,
                 boxShadow: '0 2px 12px rgba(30,27,46,0.04)',
               }}>
@@ -553,7 +553,7 @@ export default function PassBacPage() {
               </div>
             ) : subj.chapters.filter(ch => ch.fiche).map((ch, idx) => (
               <div key={ch.id} style={{
-                background: '#fff',
+                background: 'var(--surface)',
                 borderRadius: '18px',
                 marginBottom: '1.25rem',
                 border: '1px solid rgba(30,27,46,0.08)',
@@ -767,7 +767,7 @@ export default function PassBacPage() {
                     let color = 'rgba(30,27,46,0.70)'
                     let icon = ''
                     if (quizSubmitted) {
-                      if (isCorrect) { bg = 'rgba(39,174,96,0.12)'; border = '#27AE60'; color = '#1A6B3A'; icon = ' ✅' }
+                      if (isCorrect) { bg = 'rgba(39,174,96,0.12)'; border = 'var(--turq-700)'; color = '#1A6B3A'; icon = ' ✅' }
                       else if (selected && !isCorrect) { bg = 'rgba(231,76,60,0.12)'; border = '#E74C3C'; color = '#9B2335'; icon = ' ❌' }
                     } else if (selected) {
                       bg = subj.color + '15'; border = subj.color; color = subj.color
@@ -797,7 +797,7 @@ export default function PassBacPage() {
               </button>
             ) : (
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' as const }}>
-                <div style={{ background: '#F8F6FF', borderRadius: '14px', padding: '1.25rem 1.75rem', border: `2px solid ${quizScore === subj.quiz.length ? '#27AE60' : quizScore >= Math.ceil(subj.quiz.length / 2) ? '#E8651A' : '#E74C3C'}`, textAlign: 'center' as const }}>
+                <div style={{ background: '#F8F6FF', borderRadius: '14px', padding: '1.25rem 1.75rem', border: `2px solid ${quizScore === subj.quiz.length ? 'var(--turq-700)' : quizScore >= Math.ceil(subj.quiz.length / 2) ? '#E8651A' : '#E74C3C'}`, textAlign: 'center' as const }}>
                   <div style={{ fontSize: '2rem', fontWeight: 800, color: '#1E1B2E' }}>{quizScore}/{subj.quiz.length}</div>
                   <div style={{ fontSize: '1.4rem', margin: '0.2rem 0' }}>{quizScore === subj.quiz.length ? '🎉' : quizScore >= Math.ceil(subj.quiz.length / 2) ? '👍' : '📚'}</div>
                   <div style={{ fontSize: '0.8rem', color: 'rgba(30,27,46,0.50)', fontWeight: 600 }}>
@@ -858,7 +858,7 @@ export default function PassBacPage() {
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(270px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
               {conseilsBac.map((c, i) => (
-                <div key={i} style={{ background: '#FFFFFF', borderRadius: '16px', padding: '1.5rem', border: '1px solid rgba(232,101,26,0.10)', boxShadow: '0 2px 12px rgba(30,27,46,0.04)' }}>
+                <div key={i} style={{ background: 'var(--surface)', borderRadius: '16px', padding: '1.5rem', border: '1px solid rgba(232,101,26,0.10)', boxShadow: '0 2px 12px rgba(30,27,46,0.04)' }}>
                   <div style={{ fontSize: '1.85rem', marginBottom: '0.65rem' }}>{c.icon}</div>
                   <h3 style={{ color: '#E8651A', fontSize: '0.95rem', fontWeight: 700, marginBottom: '0.45rem', margin: '0 0 0.45rem' }}>{c.title}</h3>
                   <p style={{ color: 'rgba(30,27,46,0.65)', fontSize: '0.86rem', lineHeight: 1.7, margin: 0 }}>{c.tip}</p>

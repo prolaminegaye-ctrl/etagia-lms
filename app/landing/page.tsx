@@ -305,7 +305,7 @@ export default function LandingPage() {
             {[
               { name:'UniConnect', type:'Université', primary:'#4F46E5', bg:'#EEF2FF', emoji:'🎓' },
               { name:'CorpLearn', type:'Entreprise', primary:'#059669', bg:'#ECFDF5', emoji:'💼' },
-              { name:'Académie Pro', type:'Centre de formation', primary:'#DC2626', bg:'#FEF2F2', emoji:'🚀' },
+              { name:'Académie Pro', type:'Centre de formation', primary:'var(--orange)', bg:'#FEF2F2', emoji:'🚀' },
             ].map(ex => (
               <div key={ex.name} style={{ background:ex.bg, borderRadius:'16px', overflow:'hidden', border:`1px solid ${ex.primary}25` }}>
                 <div style={{ background:ex.primary, padding:'12px 16px', display:'flex', alignItems:'center', gap:'8px' }}>
