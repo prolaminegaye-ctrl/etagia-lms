@@ -42,6 +42,12 @@ const navAdmin = [
   { href: '/admin/white-label',      label: 'White Label',        badge: 'PRO' },
   { href: '/admin/team',             label: 'Mon Équipe' },
   { href: '/admin/plugins',          label: 'Plugins & LTI' },
+  { href: '/admin/connexions',        label: 'Connexions',         badge: 'NEW' },
+  { href: '/admin/revenus',           label: 'Revenus & MRR' },
+  { href: '/admin/factures',          label: 'Factures' },
+  { href: '/admin/devis',             label: 'Devis' },
+  { href: '/admin/crm',               label: 'CRM & Pipeline' },
+  { href: '/admin/comptabilite',      label: 'Comptabilité' },
 ]
 
 const BADGE_TONES: Record<string, { bg: string; color: string }> = {

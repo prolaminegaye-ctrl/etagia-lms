@@ -20,6 +20,12 @@ const adminLinks = [
   { label: 'Mon Équipe',     href: '/admin/team',        bg: 'var(--turq-50)', color: 'var(--turq-700)', icon: '👥' },
   { label: 'Export CSV',     href: '/admin/export',      bg: 'var(--gold-50)', color: 'var(--gold-700)', icon: '📊' },
   { label: 'Plugins & LTI', href: '/admin/plugins',     bg: 'var(--violet-50)', color: 'var(--violet)', icon: '🔌' },
+  { label: 'Connexions',    href: '/admin/connexions',   bg: 'var(--turq-50)',    color: 'var(--turq-700)',   icon: '🔗' },
+  { label: 'Revenus MRR',  href: '/admin/revenus',      bg: 'var(--orange-50)',  color: 'var(--orange-700)', icon: '📈' },
+  { label: 'Factures',     href: '/admin/factures',     bg: 'var(--gold-50)',    color: 'var(--gold-700)',   icon: '🧾' },
+  { label: 'Devis',        href: '/admin/devis',        bg: 'var(--violet-50)',  color: 'var(--violet)',     icon: '📝' },
+  { label: 'CRM Pipeline', href: '/admin/crm',          bg: 'var(--turq-50)',    color: 'var(--turq-700)',   icon: '🎯' },
+  { label: 'Comptabilité', href: '/admin/comptabilite', bg: 'var(--gold-50)',    color: 'var(--gold-700)',   icon: '🏦' },
   { label: 'Classes live',   href: '/live',              bg: 'var(--orange-50)', color: 'var(--orange)', icon: '🎥' },
 ]
 
