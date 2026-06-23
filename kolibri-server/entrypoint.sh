@@ -1,7 +1,7 @@
 #!/bin/bash
 # ─────────────────────────────────────────────────────────────────────────────
-#  ETAGIA × Kolibri — Script de démarrage automatique
-#  Initialise Kolibri, crée l'admin, importe le canal KA Français
+#  ETAGIA × Kolibri — Entrypoint Railway
+#  Kolibri démarre sur port 9090, Nginx proxy sur port 8080
 # ─────────────────────────────────────────────────────────────────────────────
 
 set -e
@@ -12,25 +12,40 @@ ADMIN_PASS="${KOLIBRI_ADMIN_PASSWORD:-Etagia2025!}"
 ADMIN_EMAIL="${KOLIBRI_ADMIN_EMAIL:-prolaminegaye@gmail.com}"
 
 echo "════════════════════════════════════════"
-echo "  ETAGIA × Kolibri — Démarrage"
+echo "  ETAGIA × Kolibri — Démarrage Railway"
+echo "  Kolibri: port 9090 | Nginx: port 8080"
 echo "════════════════════════════════════════"
 
-# Initialiser la base de données Kolibri (si premier démarrage)
-echo "📦 Initialisation Kolibri..."
+# ── Démarrer Nginx (health check + proxy) ──────────────────────────────────
+echo "🌐 Démarrage Nginx (port 8080)..."
+nginx -g "daemon off;" &
+NGINX_PID=$!
+echo "✓ Nginx PID: $NGINX_PID"
+
+# ── Initialiser Kolibri ────────────────────────────────────────────────────
+echo "📦 Initialisation Kolibri (port 9090)..."
+export KOLIBRI_HTTP_PORT=9090
+export KOLIBRI_LANG="${KOLIBRI_LANG:-fr}"
+export KOLIBRI_ALLOW_GUEST_ACCESS="${KOLIBRI_ALLOW_GUEST_ACCESS:-1}"
+
 kolibri manage migrate --noinput 2>/dev/null || true
 
-# Créer le compte admin si pas existant
-echo "👤 Vérification du compte admin..."
+# Créer admin si nécessaire
+echo "👤 Configuration admin..."
 kolibri manage shell -c "
 from kolibri.core.auth.models import FacilityUser, Facility
-from django.contrib.auth.models import User
+from kolibri.core.device.models import DevicePermissions, DeviceSettings
 
-# Créer la facility si nécessaire
 facility, _ = Facility.objects.get_or_create(name='ETAGIA LMS')
 
-# Créer le superuser si nécessaire
+# Activer accès invité
+s, _ = DeviceSettings.objects.get_or_create()
+s.allow_guest_access = True
+s.setup_wizard_finished = True
+s.save()
+
+# Créer admin
 try:
-    from kolibri.core.device.models import DevicePermissions
     su = FacilityUser.objects.filter(username='${ADMIN_USER}').first()
     if not su:
         su = FacilityUser.objects.create_user(
@@ -44,37 +59,18 @@ try:
         )
         print('✓ Admin créé')
     else:
-        print('✓ Admin existe déjà')
+        print('✓ Admin existe')
 except Exception as e:
     print(f'Admin: {e}')
-" 2>/dev/null || echo "⚠ Admin init ignoré"
+" 2>/dev/null || echo "⚠ Init ignorée"
 
-# Activer l'accès invité pour l'API ETAGIA
-echo "🔓 Activation accès API..."
-kolibri manage shell -c "
-from kolibri.core.device.models import DeviceSettings
-s, _ = DeviceSettings.objects.get_or_create()
-s.allow_guest_access = True
-s.setup_wizard_finished = True
-s.save()
-print('✓ Accès API activé')
-" 2>/dev/null || echo "⚠ Settings ignorés"
-
-# Importer les métadonnées du canal KA Français (rapide, ~10 MB)
-echo "📚 Import métadonnées canal Khan Academy Français..."
+# ── Importer les métadonnées du canal KA Français ─────────────────────────
+echo "📚 Import canal Khan Academy Français..."
 kolibri manage importchannel network "${KA_FR_CHANNEL}" 2>/dev/null && \
-  echo "✓ Métadonnées importées" || \
-  echo "⚠ Import différé (réseau)"
+  echo "✓ Canal importé" || echo "⚠ Import différé (réseau)"
 
-# Si KOLIBRI_IMPORT_CONTENT=1, télécharger une sélection de contenu
-if [ "${KOLIBRI_IMPORT_CONTENT:-0}" = "1" ]; then
-  echo "📥 Téléchargement contenu (KOLIBRI_IMPORT_CONTENT=1)..."
-  kolibri manage importcontent network "${KA_FR_CHANNEL}" \
-    --node_ids="${KOLIBRI_CONTENT_NODES:-}" 2>/dev/null || echo "⚠ Contenu différé"
-fi
-
-echo "✅ Kolibri prêt — démarrage du serveur sur port 8080"
+echo "✅ Lancement Kolibri sur port 9090..."
 echo "════════════════════════════════════════"
 
-# Démarrer Kolibri
-exec kolibri start --foreground --port=8080
+# ── Démarrer Kolibri (foreground) ─────────────────────────────────────────
+exec kolibri start --foreground --port=9090
