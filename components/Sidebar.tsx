@@ -25,6 +25,7 @@ const navFormateur = [
   { href: '/formateur/viewer',       label: 'Visualiseur' },
   { href: '/formateur/apprenants',   label: 'Apprenants' },
   { href: '/formateur/edugears',     label: 'EduGears AI',        badge: 'IA' },
+  { href: '/formateur/khan-academy', label: 'Khan Academy',       badge: 'NEW' },
   { href: '/formateur/stats',        label: 'Statistiques' },
   { href: '/formateur/calendrier',   label: 'Planning' },
   { href: '/formateur/notes',        label: 'Bloc-note' },
