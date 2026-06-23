@@ -1,13 +1,9 @@
 [build]
 dockerfile = "kolibri-server/Dockerfile"
-dockerfilePath = "kolibri-server/Dockerfile"
 
 [deploy]
 startCommand = "/entrypoint.sh"
-healthcheckPath = "/api/public/v1/info/"
-healthcheckTimeout = 120
+healthcheckPath = "/"
+healthcheckTimeout = 300
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
-
-[[services]]
-name = "kolibri"
