@@ -1,0 +1,48 @@
+version: '3.8'
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  ETAGIA LMS — Kolibri Server (Khan Academy Offline)
+#  À déployer sur le VPS Hostinger avec : docker compose up -d
+#  Prérequis : Docker + Docker Compose installés sur le VPS
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  kolibri:
+    image: learningequality/kolibri:latest
+    container_name: etagia-kolibri
+    restart: unless-stopped
+    ports:
+      - "8080:8080"          # Port Kolibri accessible depuis ETAGIA
+    environment:
+      - KOLIBRI_HTTP_PORT=8080
+      - KOLIBRI_LANG=fr      # Interface en français
+      # Désactiver l'auth pour l'API (accès depuis ETAGIA uniquement)
+      - KOLIBRI_ALLOW_GUEST_ACCESS=1
+    volumes:
+      - kolibri_data:/root/.kolibri          # Données Kolibri (config, DB)
+      - kolibri_content:/root/.kolibri/content  # Contenu KA (~30 GB FR)
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/public/v1/info/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Nginx reverse proxy + CORS pour ETAGIA
+  nginx:
+    image: nginx:alpine
+    container_name: etagia-kolibri-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro              # Certificats SSL (optionnel)
+    depends_on:
+      - kolibri
+
+volumes:
+  kolibri_data:
+    driver: local
+  kolibri_content:
+    driver: local
