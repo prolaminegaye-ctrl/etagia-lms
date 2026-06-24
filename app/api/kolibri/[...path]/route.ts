@@ -12,6 +12,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 
+// Canal KA Français correct : 878ec2e6f88c5c268b1be6f202833cd4
 const KOLIBRI_URL   = process.env.KOLIBRI_SERVER_URL ?? 'https://kolibri-v2-production.up.railway.app'
 const KOLIBRI_TOKEN = process.env.KOLIBRI_API_KEY    ?? ''
 
