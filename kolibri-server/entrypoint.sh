@@ -1,6 +1,6 @@
 #!/bin/bash
 # ─────────────────────────────────────────────────────────────────────────────
-#  ETAGIA × Kolibri — Entrypoint Railway (simplifié, sans health check HTTP)
+#  ETAGIA × Kolibri — Entrypoint Railway (Kolibri 0.19.4)
 # ─────────────────────────────────────────────────────────────────────────────
 
 set -e
@@ -14,48 +14,27 @@ PORT="${PORT:-8080}"
 export KOLIBRI_HTTP_PORT="$PORT"
 
 echo "════════════════════════════════════════"
-echo "  ETAGIA × Kolibri — port $PORT"
+echo "  ETAGIA × Kolibri 0.19.4 — port $PORT"
 echo "════════════════════════════════════════"
 
 # Migrations
 echo "📦 Migration base de données..."
 kolibri manage migrate --noinput 2>/dev/null || true
 
-# Config device + admin
-echo "⚙️  Configuration..."
-kolibri manage shell -c "
-from kolibri.core.auth.models import FacilityUser, Facility
-from kolibri.core.device.models import DevicePermissions, DeviceSettings
+# Provision device + admin (commande officielle Kolibri 0.19)
+echo "⚙️  Provision device..."
+kolibri manage provisiondevice \
+  --facility "ETAGIA LMS" \
+  --preset formal \
+  --superusername "$ADMIN_USER" \
+  --superuserpassword "$ADMIN_PASS" \
+  --language_id fr \
+  --allow_guest_access 2>/dev/null && echo "✓ Device provisionné" || echo "⚠ Déjà provisionné — OK"
 
-facility, _ = Facility.objects.get_or_create(name='ETAGIA LMS')
-s, _ = DeviceSettings.objects.get_or_create()
-s.allow_guest_access = True
-s.setup_wizard_finished = True
-s.save()
-
-try:
-    su = FacilityUser.objects.filter(username='${ADMIN_USER}').first()
-    if not su:
-        su = FacilityUser.objects.create_user(
-            username='${ADMIN_USER}',
-            password='${ADMIN_PASS}',
-            facility=facility
-        )
-        DevicePermissions.objects.get_or_create(
-            user=su,
-            defaults={'is_superuser': True, 'can_manage_content': True}
-        )
-        print('✓ Admin créé')
-    else:
-        print('✓ Admin OK')
-except Exception as e:
-    print(f'Admin: {e}')
-" 2>/dev/null || echo "⚠ Config ignorée"
-
-# Import canal KA Français (métadonnées ~10MB, rapide)
+# Import canal KA Français (métadonnées seulement, ~10MB)
 echo "📚 Import canal Khan Academy Français..."
-kolibri manage importchannel network "${KA_FR_CHANNEL}" 2>/dev/null && \
-  echo "✓ Canal importé" || echo "⚠ Canal: import différé"
+kolibri manage importchannel network $KA_FR_CHANNEL 2>/dev/null && \
+  echo "✓ Canal importé" || echo "⚠ Import canal différé"
 
 echo "✅ Démarrage Kolibri sur port $PORT"
 exec kolibri start --foreground --port="$PORT"
