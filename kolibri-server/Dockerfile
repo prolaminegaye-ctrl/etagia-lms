@@ -1,6 +1,7 @@
 # ─────────────────────────────────────────────────────────────────────────────
 #  ETAGIA × Kolibri — Dockerfile Railway
-#  Kolibri sur le port injecté par Railway ($PORT ou 8080)
+#  Canal KA FR: 878ec2e6f88c5c268b1be6f202833cd4
+#  Bust: 2026-06-24
 # ─────────────────────────────────────────────────────────────────────────────
 
 FROM learningequality/kolibri:latest
