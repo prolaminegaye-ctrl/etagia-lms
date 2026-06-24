@@ -12,7 +12,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 
-const KOLIBRI_URL   = process.env.KOLIBRI_SERVER_URL ?? 'http://localhost:8080'
+const KOLIBRI_URL   = process.env.KOLIBRI_SERVER_URL ?? 'https://kolibri-v2-production.up.railway.app'
 const KOLIBRI_TOKEN = process.env.KOLIBRI_API_KEY    ?? ''
 
 /* ── Types Kolibri ────────────────────────────────────────────────────────── */
