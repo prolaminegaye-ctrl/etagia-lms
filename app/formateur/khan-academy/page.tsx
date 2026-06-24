@@ -12,12 +12,18 @@ import {
   KA_DOMAINS,
   getDomainWithCount,
   searchModules,
-  LEVEL_COLORS,
   KIND_ICONS,
   type KAModule,
   type KALevel,
   type KAKind,
 } from '@/lib/khan-academy-catalog'
+
+/* Badges niveau — thème sombre (formateur) */
+const LEVEL_COLORS: Record<KALevel, string> = {
+  'débutant':      'bg-emerald-900/40 border-emerald-700/50 text-emerald-400',
+  'intermédiaire': 'bg-amber-900/40   border-amber-700/50   text-amber-400',
+  'avancé':        'bg-red-900/40     border-red-700/50     text-red-400',
+}
 
 /* ─── Modal lecteur ──────────────────────────────────────────────────────── */
 function ModulePlayer({
