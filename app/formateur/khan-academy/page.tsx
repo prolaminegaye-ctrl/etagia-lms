@@ -1,9 +1,9 @@
 'use client'
 
 /**
- * ETAGIA LMS — Khan Academy Français
- * Modules de formation en ligne, 100% en français
- * Plugin standalone — aucune dépendance Kolibri
+ * ETAGIA LMS — Khan Academy · Vue Formateur
+ * Design système chaud ETAGIA : or / orange / turquoise / crème
+ * Imports corrigés : KIND_META + LEVEL_META (nouveaux exports catalogue)
  */
 
 import { useState, useMemo, useCallback } from 'react'
@@ -12,64 +12,112 @@ import {
   KA_DOMAINS,
   getDomainWithCount,
   searchModules,
-  KIND_ICONS,
+  KIND_META,
+  LEVEL_META,
   type KAModule,
   type KALevel,
   type KAKind,
 } from '@/lib/khan-academy-catalog'
 
-/* Badges niveau — thème sombre (formateur) */
-const LEVEL_COLORS: Record<KALevel, string> = {
-  'débutant':      'bg-emerald-900/40 border-emerald-700/50 text-emerald-400',
-  'intermédiaire': 'bg-amber-900/40   border-amber-700/50   text-amber-400',
-  'avancé':        'bg-red-900/40     border-red-700/50     text-red-400',
+/* ── Design tokens ETAGIA ──────────────────────────────────────────────────── */
+const T = {
+  canvas:   '#FAF6EE',
+  ink:      '#2A2118',
+  inkMuted: '#6E6155',
+  inkLight: '#AB9E8C',
+  gold:     '#F4B01E',
+  goldDark: '#C28705',
+  orange:   '#FB6514',
+  turq:     '#0FB6CC',
+  border:   'rgba(42,33,24,.10)',
+  card:     '#FFFFFF',
+  fontBody: "'Hanken Grotesk', sans-serif",
+  fontDisp: "'Newsreader', Georgia, serif",
 }
 
-/* ─── Modal lecteur ──────────────────────────────────────────────────────── */
-function ModulePlayer({
-  module,
-  onClose,
-}: {
-  module: KAModule
-  onClose: () => void
-}) {
+/* ── Modal lecteur ─────────────────────────────────────────────────────────── */
+function ModuleModal({ module, onClose }: { module: KAModule; onClose: () => void }) {
+  const domain = KA_DOMAINS.find(d => d.id === module.domain)
+  const lm = LEVEL_META[module.level]
+  const km = KIND_META[module.kind]
+  const kaSearchUrl = `https://fr.khanacademy.org/search?page_search_query=${encodeURIComponent(module.title)}`
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
       onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 100,
+        background: 'rgba(42,33,24,.55)',
+        backdropFilter: 'blur(4px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: '1rem',
+      }}
     >
       <div
-        className="relative w-full max-w-4xl bg-[#0f172a] rounded-2xl overflow-hidden shadow-2xl border border-white/10"
         onClick={e => e.stopPropagation()}
+        style={{
+          background: T.card,
+          borderRadius: '20px',
+          maxWidth: '680px', width: '100%',
+          overflow: 'hidden',
+          boxShadow: '0 24px 80px rgba(42,33,24,.22)',
+          border: `1px solid ${T.border}`,
+        }}
       >
+        {/* Bandeau domaine */}
+        <div style={{
+          height: '6px',
+          background: `linear-gradient(90deg, ${domain?.color ?? T.gold}, ${T.orange})`,
+        }} />
+
         {/* Header */}
-        <div className="flex items-start justify-between p-5 border-b border-white/10">
-          <div className="flex-1 pr-4">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-sm text-slate-400">
-                {KIND_ICONS[module.kind]}{' '}
-                {module.kind === 'course' ? 'Parcours' : module.kind === 'video' ? 'Vidéo' : module.kind}
-              </span>
-              <span className={`text-xs px-2 py-0.5 rounded-full border ${LEVEL_COLORS[module.level]}`}>
-                {module.level}
-              </span>
+        <div style={{ padding: '1.5rem 1.5rem 1rem', borderBottom: `1px solid ${T.border}` }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem' }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '13px', color: domain?.color ?? T.gold, fontFamily: T.fontBody, fontWeight: 600 }}>
+                  {domain?.icon} {domain?.label}
+                </span>
+                <span style={{
+                  fontSize: '11px', fontFamily: T.fontBody, fontWeight: 700,
+                  color: lm.color, background: lm.bg,
+                  padding: '2px 8px', borderRadius: '20px',
+                  border: `1px solid ${lm.color}33`,
+                }}>
+                  {lm.label}
+                </span>
+                <span style={{
+                  fontSize: '11px', fontFamily: T.fontBody,
+                  color: T.inkMuted, background: '#F5EEDF',
+                  padding: '2px 8px', borderRadius: '20px',
+                }}>
+                  {km.icon} {km.label}
+                </span>
+              </div>
+              <h2 style={{ fontFamily: T.fontDisp, fontSize: '1.25rem', fontWeight: 700, color: T.ink, lineHeight: 1.3, margin: 0 }}>
+                {module.title}
+              </h2>
+              <p style={{ fontFamily: T.fontBody, fontSize: '13.5px', color: T.inkMuted, marginTop: '6px', lineHeight: 1.5 }}>
+                {module.description}
+              </p>
             </div>
-            <h2 className="text-lg font-semibold text-white">{module.title}</h2>
-            <p className="text-sm text-slate-400 mt-1">{module.description}</p>
+            <button
+              onClick={onClose}
+              style={{
+                background: '#F5EEDF', border: 'none', borderRadius: '50%',
+                width: '32px', height: '32px', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '18px', color: T.inkMuted, flexShrink: 0,
+              }}
+            >×</button>
           </div>
-          <button
-            onClick={onClose}
-            className="text-slate-400 hover:text-white transition-colors text-2xl leading-none shrink-0"
-          >
-            ×
-          </button>
         </div>
 
-        {/* Contenu */}
+        {/* Contenu vidéo ou preview */}
         {module.youtubeId ? (
-          <div className="relative bg-black" style={{ paddingBottom: '56.25%', height: 0 }}>
+          <div style={{ position: 'relative', paddingBottom: '52%', background: '#000' }}>
             <iframe
-              className="absolute inset-0 w-full h-full"
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none' }}
               src={`https://www.youtube-nocookie.com/embed/${module.youtubeId}?hl=fr&cc_lang_pref=fr&cc_load_policy=1&rel=0`}
               title={module.title}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -77,102 +125,169 @@ function ModulePlayer({
             />
           </div>
         ) : (
-          <div className="bg-[#0a0f1a]" style={{ height: '60vh' }}>
-            <iframe
-              className="w-full h-full"
-              src={module.kaUrl}
-              title={module.title}
-              allow="fullscreen"
-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation"
-            />
+          <div style={{
+            background: 'linear-gradient(135deg,#FFF7E2,#FFF1E8)',
+            padding: '2.5rem 2rem',
+            textAlign: 'center',
+          }}>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>{domain?.icon}</div>
+            <p style={{ fontFamily: T.fontBody, fontSize: '14px', color: T.inkMuted, maxWidth: '360px', margin: '0 auto', lineHeight: 1.6 }}>
+              Ce parcours interactif s'ouvre sur Khan Academy Français.<br />
+              Cliquez sur le bouton ci-dessous pour y accéder directement.
+            </p>
+            {module.duration && (
+              <div style={{ marginTop: '12px', fontFamily: T.fontBody, fontSize: '13px', color: T.goldDark, fontWeight: 600 }}>
+                ⏱ Durée estimée : {module.duration}
+              </div>
+            )}
           </div>
         )}
 
-        {/* Footer */}
-        <div className="flex items-center justify-between p-4 border-t border-white/10">
-          <div className="flex items-center gap-3">
-            {module.duration && (
-              <span className="text-sm text-slate-400">⏱ {module.duration}</span>
-            )}
-            <div className="flex gap-1">
-              {module.tags.slice(0, 3).map(tag => (
-                <span key={tag} className="text-xs px-2 py-0.5 bg-white/5 text-slate-400 rounded-full">
-                  {tag}
-                </span>
-              ))}
-            </div>
+        {/* Footer actions */}
+        <div style={{
+          padding: '1rem 1.5rem',
+          borderTop: `1px solid ${T.border}`,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap',
+        }}>
+          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+            {module.tags.slice(0, 3).map(tag => (
+              <span key={tag} style={{
+                fontSize: '11px', fontFamily: T.fontBody,
+                background: '#F5EEDF', color: T.inkMuted,
+                padding: '3px 8px', borderRadius: '20px',
+                border: `1px solid ${T.border}`,
+              }}>
+                #{tag}
+              </span>
+            ))}
           </div>
-          <a
-            href={module.kaUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm px-4 py-2 bg-[#1BAA8E] hover:bg-[#17967d] text-white rounded-lg transition-colors"
-          >
-            Ouvrir sur KA <span>↗</span>
-          </a>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <a
+              href={module.kaUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontFamily: T.fontBody, fontWeight: 700, fontSize: '13px',
+                color: T.inkMuted,
+                padding: '8px 16px',
+                borderRadius: '10px',
+                border: `1px solid ${T.border}`,
+                textDecoration: 'none',
+                background: '#F5EEDF',
+              }}
+            >
+              Voir le cours ↗
+            </a>
+            <a
+              href={kaSearchUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontFamily: T.fontBody, fontWeight: 700, fontSize: '13px',
+                color: '#FFFFFF',
+                padding: '8px 16px',
+                borderRadius: '10px',
+                textDecoration: 'none',
+                background: `linear-gradient(125deg,${T.gold},${T.orange})`,
+                boxShadow: '0 2px 8px rgba(251,101,20,.25)',
+              }}
+            >
+              🎓 Assigner aux apprenants
+            </a>
+          </div>
         </div>
       </div>
     </div>
   )
 }
 
-/* ─── Carte module ───────────────────────────────────────────────────────── */
-function ModuleCard({
-  module,
-  onClick,
-}: {
-  module: KAModule
-  onClick: () => void
-}) {
+/* ── Carte module ──────────────────────────────────────────────────────────── */
+function ModuleCard({ module, onClick }: { module: KAModule; onClick: () => void }) {
+  const [hovered, setHovered] = useState(false)
   const domain = KA_DOMAINS.find(d => d.id === module.domain)
+  const lm = LEVEL_META[module.level]
+  const km = KIND_META[module.kind]
 
   return (
     <button
       onClick={onClick}
-      className="group text-left w-full bg-white/[0.03] hover:bg-white/[0.07] border border-white/10 hover:border-white/20 rounded-xl p-4 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: 'flex', flexDirection: 'column',
+        textAlign: 'left', width: '100%',
+        background: T.card,
+        border: `1px solid ${hovered ? (domain?.color ?? T.gold) + '55' : T.border}`,
+        borderRadius: '16px',
+        overflow: 'hidden',
+        cursor: 'pointer',
+        transition: 'all .2s',
+        transform: hovered ? 'translateY(-3px)' : 'none',
+        boxShadow: hovered ? `0 8px 28px rgba(42,33,24,.10)` : '0 1px 4px rgba(42,33,24,.05)',
+      }}
     >
-      {/* Domain badge + kind */}
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-xs font-medium text-slate-400">
-          {domain?.icon} {domain?.label.split('&')[0].split('—')[0].trim()}
-        </span>
-        <span className="text-xs text-slate-500">
-          {KIND_ICONS[module.kind]}
-          {module.kind === 'course' ? ' Parcours' : module.kind === 'video' ? ' Vidéo' : ' ' + module.kind}
-        </span>
-      </div>
+      {/* Bande couleur domaine */}
+      <div style={{ height: '4px', background: domain?.color ?? T.gold, flexShrink: 0 }} />
 
-      {/* Title */}
-      <h3 className="font-semibold text-white text-sm leading-snug mb-2 group-hover:text-[#1BAA8E] transition-colors line-clamp-2">
-        {module.title}
-      </h3>
+      <div style={{ padding: '1rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {/* Domain + kind */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: '11px', fontFamily: T.fontBody, color: domain?.color ?? T.gold, fontWeight: 600 }}>
+            {domain?.icon} {domain?.label.split('&')[0].trim()}
+          </span>
+          <span style={{ fontSize: '11px', fontFamily: T.fontBody, color: T.inkMuted }}>
+            {km.icon} {km.label}
+          </span>
+        </div>
 
-      {/* Description */}
-      <p className="text-xs text-slate-400 leading-relaxed line-clamp-2 mb-3">
-        {module.description}
-      </p>
+        {/* Titre */}
+        <h3 style={{
+          fontFamily: T.fontDisp, fontSize: '14.5px', fontWeight: 700,
+          color: hovered ? (domain?.color ?? T.gold) : T.ink,
+          lineHeight: 1.4, margin: 0, flex: 1,
+          display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+          transition: 'color .15s',
+        }}>
+          {module.title}
+        </h3>
 
-      {/* Footer */}
-      <div className="flex items-center justify-between">
-        <span className={`text-xs px-2 py-0.5 rounded-full border ${LEVEL_COLORS[module.level]}`}>
-          {module.level}
-        </span>
-        {module.duration && (
-          <span className="text-xs text-slate-500">⏱ {module.duration}</span>
-        )}
+        {/* Description */}
+        <p style={{
+          fontFamily: T.fontBody, fontSize: '12.5px', color: T.inkMuted,
+          lineHeight: 1.5, margin: 0,
+          display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+        }}>
+          {module.description}
+        </p>
+
+        {/* Footer */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '4px' }}>
+          <span style={{
+            fontSize: '11px', fontFamily: T.fontBody, fontWeight: 700,
+            color: lm.color, background: lm.bg,
+            padding: '2px 8px', borderRadius: '20px',
+            border: `1px solid ${lm.color}33`,
+          }}>
+            {lm.label}
+          </span>
+          {module.duration && (
+            <span style={{ fontSize: '11px', fontFamily: T.fontBody, color: T.inkLight }}>
+              ⏱ {module.duration}
+            </span>
+          )}
+        </div>
       </div>
     </button>
   )
 }
 
-/* ─── Page principale ────────────────────────────────────────────────────── */
-export default function KhanAcademyPage() {
+/* ── Page principale ───────────────────────────────────────────────────────── */
+export default function FormateurKhanAcademyPage() {
   const [selectedDomain, setSelectedDomain] = useState<string | null>(null)
   const [selectedLevel, setSelectedLevel]   = useState<KALevel | null>(null)
   const [selectedKind, setSelectedKind]     = useState<KAKind | null>(null)
   const [search, setSearch]                 = useState('')
   const [activeModule, setActiveModule]     = useState<KAModule | null>(null)
-  const [viewMode, setViewMode]             = useState<'grid' | 'list'>('grid')
 
   const domainsWithCount = useMemo(() => getDomainWithCount(), [])
 
@@ -185,58 +300,68 @@ export default function KhanAcademyPage() {
   }, [search, selectedDomain, selectedLevel, selectedKind])
 
   const resetFilters = useCallback(() => {
-    setSelectedDomain(null)
-    setSelectedLevel(null)
-    setSelectedKind(null)
-    setSearch('')
+    setSelectedDomain(null); setSelectedLevel(null)
+    setSelectedKind(null); setSearch('')
   }, [])
 
-  const hasActiveFilters = selectedDomain || selectedLevel || selectedKind || search.trim()
+  const hasFilters = Boolean(selectedDomain || selectedLevel || selectedKind || search.trim())
 
-  /* Stats */
   const stats = useMemo(() => ({
     total:   KA_MODULES.length,
-    video:   KA_MODULES.filter(m => m.kind === 'video').length,
-    course:  KA_MODULES.filter(m => m.kind === 'course').length,
+    videos:  KA_MODULES.filter(m => m.kind === 'video').length,
+    cours:   KA_MODULES.filter(m => m.kind === 'course').length,
     domains: KA_DOMAINS.length,
   }), [])
 
   return (
-    <div className="min-h-screen bg-[#060d1a] text-white">
+    <div style={{ minHeight: '100vh', background: T.canvas, fontFamily: T.fontBody }}>
 
-      {/* ── Hero ── */}
-      <div className="relative overflow-hidden border-b border-white/10">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1BAA8E]/10 via-transparent to-blue-900/10 pointer-events-none" />
-        <div className="relative max-w-7xl mx-auto px-6 py-12">
-          <div className="flex items-start justify-between gap-6 flex-wrap">
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <div style={{
+        background: 'linear-gradient(135deg,#FFF7E2 0%,#FFF1E8 60%,#FAF6EE 100%)',
+        borderBottom: `1px solid ${T.border}`,
+        padding: '2.5rem 2rem 2rem',
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap' }}>
             <div>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1BAA8E] to-blue-500 flex items-center justify-center text-xl">
-                  🎓
-                </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                <div style={{
+                  width: '48px', height: '48px', borderRadius: '14px', flexShrink: 0,
+                  background: `linear-gradient(125deg,${T.gold},${T.orange})`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '22px', boxShadow: '0 4px 14px rgba(244,176,30,.30)',
+                }}>🎓</div>
                 <div>
-                  <p className="text-xs text-slate-400 uppercase tracking-wider">ETAGIA × Khan Academy</p>
-                  <h1 className="text-xl font-bold text-white">Formation en ligne — Français</h1>
+                  <p style={{ fontFamily: T.fontBody, fontSize: '11px', color: T.inkLight, letterSpacing: '0.12em', textTransform: 'uppercase', margin: 0 }}>
+                    ETAGIA × KHAN ACADEMY — FORMATEUR
+                  </p>
+                  <h1 style={{ fontFamily: T.fontDisp, fontSize: '1.5rem', fontWeight: 700, color: T.ink, margin: 0, lineHeight: 1.2 }}>
+                    Bibliothèque pédagogique française
+                  </h1>
                 </div>
               </div>
-              <p className="text-slate-300 max-w-xl text-sm leading-relaxed">
-                Accédez à <strong className="text-white">{stats.total} modules de formation</strong> en français,
-                sélectionnés parmi les meilleurs contenus Khan Academy.
-                Informatique, finance, entrepreneuriat, sciences — tout pour progresser professionnellement.
+              <p style={{ fontSize: '14px', color: T.inkMuted, maxWidth: '520px', lineHeight: 1.6, margin: 0 }}>
+                <strong style={{ color: T.ink }}>{stats.total} modules de formation</strong> en français,
+                vérifiés et sélectionnés sur Khan Academy. Assignez-les à vos apprenants, 100% gratuit.
               </p>
             </div>
 
-            {/* Stats pills */}
-            <div className="flex items-center gap-3 flex-wrap">
+            {/* KPIs */}
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
               {[
-                { label: 'Modules', value: stats.total },
-                { label: 'Vidéos', value: stats.video },
-                { label: 'Parcours', value: stats.course },
-                { label: 'Domaines', value: stats.domains },
+                { label: 'Modules', value: stats.total, color: T.gold },
+                { label: 'Vidéos', value: stats.videos, color: T.turq },
+                { label: 'Parcours', value: stats.cours, color: T.orange },
+                { label: 'Domaines', value: stats.domains, color: T.goldDark },
               ].map(s => (
-                <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-center">
-                  <div className="text-2xl font-bold text-[#1BAA8E]">{s.value}</div>
-                  <div className="text-xs text-slate-400">{s.label}</div>
+                <div key={s.label} style={{
+                  background: T.card, border: `1px solid ${T.border}`,
+                  borderRadius: '14px', padding: '12px 18px', textAlign: 'center',
+                  boxShadow: '0 2px 8px rgba(42,33,24,.05)',
+                }}>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 800, color: s.color, fontFamily: T.fontDisp }}>{s.value}</div>
+                  <div style={{ fontSize: '11px', color: T.inkMuted }}>{s.label}</div>
                 </div>
               ))}
             </div>
@@ -244,191 +369,147 @@ export default function KhanAcademyPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      {/* ── Filtres ──────────────────────────────────────────────────────── */}
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.5rem 2rem 0' }}>
 
-        {/* ── Barre de filtres ── */}
-        <div className="flex flex-col gap-4 mb-8">
-
-          {/* Recherche + view toggle */}
-          <div className="flex items-center gap-3">
-            <div className="relative flex-1 max-w-lg">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">🔍</span>
-              <input
-                type="text"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                placeholder="Rechercher un module de formation..."
-                className="w-full pl-9 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#1BAA8E]/50 transition-all"
-              />
-            </div>
-            <div className="flex border border-white/10 rounded-xl overflow-hidden">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`px-3 py-2.5 text-sm transition-colors ${viewMode === 'grid' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'}`}
-              >
-                ⊞
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`px-3 py-2.5 text-sm transition-colors ${viewMode === 'list' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'}`}
-              >
-                ☰
-              </button>
-            </div>
-            {hasActiveFilters && (
-              <button
-                onClick={resetFilters}
-                className="px-3 py-2.5 text-xs text-slate-400 hover:text-white border border-white/10 rounded-xl transition-colors"
-              >
-                Réinitialiser
-              </button>
-            )}
+        {/* Recherche */}
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '1rem' }}>
+          <div style={{ flex: 1, maxWidth: '440px', position: 'relative' }}>
+            <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '14px' }}>🔍</span>
+            <input
+              type="text"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Rechercher un module de formation…"
+              style={{
+                width: '100%', paddingLeft: '36px', paddingRight: '12px',
+                paddingTop: '10px', paddingBottom: '10px',
+                border: `1px solid ${T.border}`, borderRadius: '12px',
+                fontFamily: T.fontBody, fontSize: '14px', color: T.ink,
+                background: T.card, outline: 'none',
+                boxSizing: 'border-box',
+              }}
+            />
           </div>
+          {hasFilters && (
+            <button onClick={resetFilters} style={{
+              fontFamily: T.fontBody, fontSize: '13px', color: T.inkMuted,
+              background: '#F5EEDF', border: `1px solid ${T.border}`,
+              borderRadius: '10px', padding: '9px 14px', cursor: 'pointer',
+            }}>
+              ↺ Réinitialiser
+            </button>
+          )}
+        </div>
 
-          {/* Domaines */}
-          <div className="flex gap-2 flex-wrap">
-            <button
-              onClick={() => setSelectedDomain(null)}
-              className={`px-3 py-1.5 text-xs rounded-lg border transition-all ${
-                !selectedDomain
-                  ? 'bg-[#1BAA8E]/20 border-[#1BAA8E]/40 text-[#1BAA8E]'
-                  : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
-              }`}
+        {/* Domaines */}
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '10px' }}>
+          <button
+            onClick={() => setSelectedDomain(null)}
+            style={{
+              fontFamily: T.fontBody, fontSize: '12px', fontWeight: 600,
+              padding: '6px 14px', borderRadius: '20px', cursor: 'pointer',
+              border: `1px solid ${selectedDomain === null ? T.gold : T.border}`,
+              background: selectedDomain === null ? '#FFF7E2' : T.card,
+              color: selectedDomain === null ? T.goldDark : T.inkMuted,
+            }}
+          >
+            Tous ({KA_MODULES.length})
+          </button>
+          {domainsWithCount.map(d => (
+            <button key={d.id}
+              onClick={() => setSelectedDomain(selectedDomain === d.id ? null : d.id)}
+              style={{
+                fontFamily: T.fontBody, fontSize: '12px', fontWeight: 600,
+                padding: '6px 14px', borderRadius: '20px', cursor: 'pointer',
+                border: `1px solid ${selectedDomain === d.id ? d.color : T.border}`,
+                background: selectedDomain === d.id ? d.colorLight : T.card,
+                color: selectedDomain === d.id ? d.color : T.inkMuted,
+              }}
             >
-              Tous ({KA_MODULES.length})
+              {d.icon} {d.label.split('&')[0].split('—')[0].trim()} ({d.count})
             </button>
-            {domainsWithCount.map(d => (
-              <button
-                key={d.id}
-                onClick={() => setSelectedDomain(selectedDomain === d.id ? null : d.id)}
-                className={`px-3 py-1.5 text-xs rounded-lg border transition-all ${
-                  selectedDomain === d.id
-                    ? 'bg-[#1BAA8E]/20 border-[#1BAA8E]/40 text-[#1BAA8E]'
-                    : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20 hover:text-white'
-                }`}
-              >
-                {d.icon} {d.label.split('&')[0].split('—')[0].trim()} ({d.count})
-              </button>
-            ))}
-          </div>
-
-          {/* Niveau + Type */}
-          <div className="flex items-center gap-4 flex-wrap">
-            <div className="flex items-center gap-1">
-              <span className="text-xs text-slate-500 mr-1">Niveau :</span>
-              {(['débutant', 'intermédiaire', 'avancé'] as KALevel[]).map(l => (
-                <button
-                  key={l}
-                  onClick={() => setSelectedLevel(selectedLevel === l ? null : l)}
-                  className={`px-2.5 py-1 text-xs rounded-lg border transition-all capitalize ${
-                    selectedLevel === l
-                      ? LEVEL_COLORS[l]
-                      : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
-                  }`}
-                >
-                  {l}
-                </button>
-              ))}
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="text-xs text-slate-500 mr-1">Type :</span>
-              {([
-                { value: 'video' as KAKind, label: '▶ Vidéo' },
-                { value: 'course' as KAKind, label: '📚 Parcours' },
-              ]).map(k => (
-                <button
-                  key={k.value}
-                  onClick={() => setSelectedKind(selectedKind === k.value ? null : k.value)}
-                  className={`px-2.5 py-1 text-xs rounded-lg border transition-all ${
-                    selectedKind === k.value
-                      ? 'bg-white/10 border-white/30 text-white'
-                      : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
-                  }`}
-                >
-                  {k.label}
-                </button>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
 
-        {/* ── Résultats ── */}
-        <div className="mb-4">
-          <p className="text-sm text-slate-400">
-            {filtered.length} module{filtered.length > 1 ? 's' : ''} de formation
-            {hasActiveFilters && <span className="text-slate-500"> (filtré{filtered.length > 1 ? 's' : ''})</span>}
-          </p>
-        </div>
-
-        {filtered.length === 0 ? (
-          <div className="text-center py-20 text-slate-500">
-            <div className="text-4xl mb-3">🔍</div>
-            <p>Aucun module trouvé pour cette recherche.</p>
-            <button onClick={resetFilters} className="mt-4 text-[#1BAA8E] hover:underline text-sm">
-              Réinitialiser les filtres
-            </button>
-          </div>
-        ) : viewMode === 'grid' ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {filtered.map(m => (
-              <ModuleCard key={m.id} module={m} onClick={() => setActiveModule(m)} />
-            ))}
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {filtered.map(m => {
-              const domain = KA_DOMAINS.find(d => d.id === m.domain)
+        {/* Niveaux + types */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '12px', color: T.inkLight }}>Niveau :</span>
+            {(Object.keys(LEVEL_META) as KALevel[]).map(l => {
+              const lm = LEVEL_META[l]
+              const active = selectedLevel === l
               return (
-                <button
-                  key={m.id}
-                  onClick={() => setActiveModule(m)}
-                  className="group w-full text-left flex items-center gap-4 bg-white/[0.03] hover:bg-white/[0.07] border border-white/10 hover:border-white/20 rounded-xl px-5 py-4 transition-all"
+                <button key={l}
+                  onClick={() => setSelectedLevel(active ? null : l)}
+                  style={{
+                    fontFamily: T.fontBody, fontSize: '12px', fontWeight: 600,
+                    padding: '4px 12px', borderRadius: '20px', cursor: 'pointer',
+                    border: `1px solid ${active ? lm.color + '55' : T.border}`,
+                    background: active ? lm.bg : T.card,
+                    color: active ? lm.color : T.inkMuted,
+                  }}
                 >
-                  <div className="shrink-0 w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center text-lg">
-                    {domain?.icon}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <h3 className="text-sm font-medium text-white group-hover:text-[#1BAA8E] transition-colors truncate">
-                        {m.title}
-                      </h3>
-                      <span className={`shrink-0 text-xs px-1.5 py-0.5 rounded-full border ${LEVEL_COLORS[m.level]}`}>
-                        {m.level}
-                      </span>
-                    </div>
-                    <p className="text-xs text-slate-500 truncate">{m.description}</p>
-                  </div>
-                  <div className="shrink-0 flex items-center gap-3 text-xs text-slate-500">
-                    {m.duration && <span>⏱ {m.duration}</span>}
-                    <span className="text-[#1BAA8E] opacity-0 group-hover:opacity-100 transition-opacity">▶</span>
-                  </div>
+                  {lm.label}
                 </button>
               )
             })}
           </div>
-        )}
-
-        {/* ── Footer ── */}
-        <div className="mt-12 pt-8 border-t border-white/10 text-center">
-          <p className="text-xs text-slate-600">
-            Contenus fournis par{' '}
-            <a
-              href="https://fr.khanacademy.org"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-slate-500 hover:text-white transition-colors"
-            >
-              Khan Academy Français
-            </a>{' '}
-            — Plateforme éducative gratuite. Tous droits réservés à Khan Academy.
-          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '12px', color: T.inkLight }}>Type :</span>
+            {(['video', 'course'] as KAKind[]).map(k => {
+              const km = KIND_META[k]
+              const active = selectedKind === k
+              return (
+                <button key={k}
+                  onClick={() => setSelectedKind(active ? null : k)}
+                  style={{
+                    fontFamily: T.fontBody, fontSize: '12px', fontWeight: 600,
+                    padding: '4px 12px', borderRadius: '20px', cursor: 'pointer',
+                    border: `1px solid ${active ? T.turq + '55' : T.border}`,
+                    background: active ? '#E6FBFD' : T.card,
+                    color: active ? '#0A8797' : T.inkMuted,
+                  }}
+                >
+                  {km.icon} {km.label}
+                </button>
+              )
+            })}
+          </div>
         </div>
+
+        {/* Compteur */}
+        <p style={{ fontSize: '13px', color: T.inkMuted, marginBottom: '1.25rem' }}>
+          <strong style={{ color: T.ink }}>{filtered.length}</strong> module{filtered.length > 1 ? 's' : ''} de formation
+          {hasFilters && <span> (filtré{filtered.length > 1 ? 's' : ''})</span>}
+        </p>
+
+        {/* Grille */}
+        {filtered.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '4rem 0', color: T.inkLight }}>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔍</div>
+            <p style={{ fontFamily: T.fontBody, fontSize: '15px' }}>Aucun module trouvé pour votre recherche.</p>
+            <button onClick={resetFilters} style={{
+              marginTop: '12px', fontFamily: T.fontBody, fontSize: '13px', fontWeight: 600,
+              color: T.goldDark, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline',
+            }}>Réinitialiser les filtres</button>
+          </div>
+        ) : (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+            gap: '1rem',
+            paddingBottom: '3rem',
+          }}>
+            {filtered.map(m => (
+              <ModuleCard key={m.id} module={m} onClick={() => setActiveModule(m)} />
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* ── Modal lecteur ── */}
-      {activeModule && (
-        <ModulePlayer module={activeModule} onClose={() => setActiveModule(null)} />
-      )}
+      {/* Modal */}
+      {activeModule && <ModuleModal module={activeModule} onClose={() => setActiveModule(null)} />}
     </div>
   )
 }
