@@ -1,33 +1,22 @@
 'use client'
 
 /**
- * ETAGIA LMS — Khan Academy Apprenant
- * Modules de formation en ligne, 100% en français
- * Avec suivi de progression localStorage → KPI dashboard
+ * ETAGIA LMS — Bibliothèque de formation Khan Academy
+ * Design système chaud : Or · Orange · Turquoise · Fond crème
+ * Contenu 100% français — fr.khanacademy.org
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import Sidebar from '@/components/Sidebar'
 import {
-  KA_MODULES,
-  KA_DOMAINS,
-  getDomainWithCount,
-  searchModules,
-  LEVEL_COLORS,
-  KIND_ICONS,
-  type KAModule,
-  type KALevel,
-  type KAKind,
+  KA_MODULES, KA_DOMAINS, getDomainWithCount,
+  type KAModule, type KADomain, type KALevel, type KAKind,
+  LEVEL_META, KIND_META,
 } from '@/lib/khan-academy-catalog'
 
-/* ─── Progression localStorage ──────────────────────────────────────────── */
+/* ── Progression localStorage ─────────────────────────────────────────────── */
 const STORAGE_KEY = 'etagia_ka_progress'
-
-interface KAProgress {
-  openedAt: string    // ISO date
-  domain: string
-  kind: string
-  durationMin: number
-}
+interface KAProgress { openedAt: string; domain: string; kind: string; durationMin: number }
 
 function loadProgress(): Record<string, KAProgress> {
   if (typeof window === 'undefined') return {}
@@ -39,9 +28,9 @@ function saveProgress(moduleId: string, module: KAModule) {
   const prog = loadProgress()
   if (!prog[moduleId]) {
     prog[moduleId] = {
-      openedAt:   new Date().toISOString(),
-      domain:     module.domain,
-      kind:       module.kind,
+      openedAt: new Date().toISOString(),
+      domain: module.domain,
+      kind: module.kind,
       durationMin: parseInt(module.duration ?? '0') || 0,
     }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(prog))
@@ -49,436 +38,532 @@ function saveProgress(moduleId: string, module: KAModule) {
   }
 }
 
-/* ─── Modal lecteur / lancement ─────────────────────────────────────────── */
-function ModuleModal({
-  module,
-  onClose,
-}: {
-  module: KAModule
-  onClose: () => void
-}) {
-  const domain = KA_DOMAINS.find(d => d.id === module.domain)
+/* ── Couleurs domaines ────────────────────────────────────────────────────── */
+function getDomainMeta(domainId: string) {
+  return KA_DOMAINS.find(d => d.id === domainId) ?? {
+    color: '#F4B01E', colorLight: '#FFF7E2', label: domainId, icon: '📖',
+  }
+}
 
-  const handleOpen = useCallback(() => {
-    saveProgress(module.id, module)
-    window.open(module.kaUrl, '_blank', 'noopener,noreferrer')
-  }, [module])
+/* ══════════════════════════════════════════════════════════════════════════ */
+export default function KAPage() {
+  const [progress, setProgress]   = useState<Record<string, KAProgress>>({})
+  const [domain, setDomain]       = useState<string>('all')
+  const [level, setLevel]         = useState<KALevel | 'all'>('all')
+  const [kind, setKind]           = useState<KAKind | 'all'>('all')
+  const [search, setSearch]       = useState('')
+  const [selected, setSelected]   = useState<KAModule | null>(null)
+
+  useEffect(() => {
+    setProgress(loadProgress())
+    const h = () => setProgress(loadProgress())
+    window.addEventListener('ka-progress-update', h)
+    return () => window.removeEventListener('ka-progress-update', h)
+  }, [])
+
+  const domains = getDomainWithCount()
+  const viewed  = Object.keys(progress).length
+  const total   = KA_MODULES.length
+  const pct     = Math.round((viewed / total) * 100)
+
+  const filtered = useMemo(() => {
+    let mods = KA_MODULES
+    if (domain !== 'all') mods = mods.filter(m => m.domain === domain)
+    if (level  !== 'all') mods = mods.filter(m => m.level  === level)
+    if (kind   !== 'all') mods = mods.filter(m => m.kind   === kind)
+    if (search.trim()) {
+      const q = search.toLowerCase()
+      mods = mods.filter(m =>
+        m.title.toLowerCase().includes(q) ||
+        m.description.toLowerCase().includes(q) ||
+        m.tags.some(t => t.toLowerCase().includes(q))
+      )
+    }
+    return mods
+  }, [domain, level, kind, search])
+
+  function openModule(mod: KAModule) {
+    setSelected(mod)
+  }
+
+  function launchExternal(mod: KAModule) {
+    saveProgress(mod.id, mod)
+    setProgress(loadProgress())
+    window.open(mod.kaUrl, '_blank', 'noopener,noreferrer')
+  }
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-      onClick={onClose}
-    >
-      <div
-        className="relative w-full max-w-2xl bg-[#0f172a] rounded-2xl overflow-hidden shadow-2xl border border-white/10"
-        onClick={e => e.stopPropagation()}
-      >
-        {/* Header coloré */}
-        <div className="h-1.5 w-full bg-gradient-to-r from-[#1BAA8E] to-blue-500" />
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#FAF6EE' }}>
+      <Sidebar role="apprenant" />
 
-        <div className="p-6">
-          {/* Badges */}
-          <div className="flex items-center gap-2 mb-4">
-            <span className="text-lg">{domain?.icon}</span>
-            <span className="text-xs text-slate-400 font-medium">{domain?.label}</span>
-            <span className="text-slate-600">·</span>
-            <span className={`text-xs px-2 py-0.5 rounded-full border ${LEVEL_COLORS[module.level]}`}>
-              {module.level}
-            </span>
-            <span className="text-slate-600">·</span>
-            <span className="text-xs text-slate-400">
-              {KIND_ICONS[module.kind]} {module.kind === 'course' ? 'Parcours' : 'Vidéo'}
-            </span>
-          </div>
+      <main style={{ marginLeft: '220px', flex: 1, padding: '0', fontFamily: "'Hanken Grotesk', sans-serif" }}>
 
-          {/* Titre */}
-          <h2 className="text-xl font-bold text-white mb-2 leading-tight">{module.title}</h2>
-          <p className="text-sm text-slate-300 leading-relaxed mb-6">{module.description}</p>
+        {/* ── Hero ── */}
+        <div style={{
+          background: 'linear-gradient(135deg,#2A2118 0%,#3D2F1E 60%,#4A3728 100%)',
+          padding: '2.5rem 2.5rem 5rem',
+          position: 'relative',
+          overflow: 'hidden',
+        }}>
+          {/* Décors */}
+          <div style={{ position: 'absolute', top: -60, right: -60, width: 280, height: 280, borderRadius: '50%', background: 'rgba(244,176,30,.08)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', bottom: -40, left: '40%', width: 200, height: 200, borderRadius: '50%', background: 'rgba(251,101,20,.06)', pointerEvents: 'none' }} />
 
-          {/* Tags */}
-          <div className="flex gap-2 flex-wrap mb-6">
-            {module.tags.map(tag => (
-              <span key={tag} className="text-xs px-2.5 py-1 bg-white/5 text-slate-400 rounded-full border border-white/10">
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          {/* Zone contenu */}
-          {module.youtubeId ? (
-            /* Vidéo YouTube — embed direct */
-            <div className="rounded-xl overflow-hidden mb-6 bg-black" style={{ paddingBottom: '56.25%', position: 'relative', height: 0 }}>
-              <iframe
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
-                src={`https://www.youtube-nocookie.com/embed/${module.youtubeId}?hl=fr&cc_lang_pref=fr&cc_load_policy=1&rel=0&autoplay=1`}
-                title={module.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                onPlay={() => saveProgress(module.id, module)}
-              />
+          <div style={{ position: 'relative', maxWidth: 900 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+              <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#F4B01E' }}>Bibliothèque de formation</span>
+              <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#F4B01E', display: 'inline-block', opacity: 0.5 }} />
+              <span style={{ fontSize: 10, fontWeight: 600, color: '#AB9E8C', letterSpacing: '0.05em' }}>fr.khanacademy.org · 100% français</span>
             </div>
-          ) : (
-            /* Parcours KA — lancement externe (cookies bloqués dans iframe) */
-            <div className="rounded-xl bg-gradient-to-br from-[#1BAA8E]/10 to-blue-900/10 border border-[#1BAA8E]/20 p-6 mb-6 text-center">
-              <div className="text-4xl mb-3">🎓</div>
-              <p className="text-sm text-slate-300 mb-1">Ce parcours interactif s&apos;ouvre sur Khan Academy</p>
-              <p className="text-xs text-slate-500 mb-4">Contenu en français · {module.duration && `Durée estimée : ${module.duration}`}</p>
-              <button
-                onClick={handleOpen}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#1BAA8E] hover:bg-[#17967d] text-white rounded-xl font-semibold text-sm transition-all hover:shadow-lg hover:shadow-[#1BAA8E]/30 hover:-translate-y-0.5"
-              >
-                Commencer le parcours <span className="text-base">↗</span>
-              </button>
-              <p className="text-xs text-slate-600 mt-3">S&apos;ouvre dans un nouvel onglet · Progression sauvegardée</p>
-            </div>
-          )}
 
-          {/* Footer */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs text-slate-500">
-              {module.duration && <span>⏱ {module.duration}</span>}
+            <h1 style={{
+              fontFamily: "'Newsreader', Georgia, serif",
+              fontSize: 'clamp(1.8rem, 3vw, 2.6rem)',
+              fontWeight: 700,
+              color: '#FAF6EE',
+              lineHeight: 1.15,
+              letterSpacing: '-0.02em',
+              marginBottom: 10,
+            }}>
+              Khan Academy — Formations gratuites
+            </h1>
+            <p style={{ color: '#AB9E8C', fontSize: 14, maxWidth: 540, lineHeight: 1.6 }}>
+              {total} modules soigneusement sélectionnés · 6 domaines professionnels · Contenu validé en français
+            </p>
+
+            {/* KPI strip */}
+            <div style={{ display: 'flex', gap: 24, marginTop: 28, flexWrap: 'wrap' }}>
+              {[
+                { value: total,    label: 'Modules',   color: '#F4B01E' },
+                { value: viewed,   label: 'Consultés', color: '#0FB6CC' },
+                { value: pct+'%', label: 'Progression', color: '#FB6514' },
+                { value: 6,        label: 'Domaines',  color: '#C28705' },
+              ].map(k => (
+                <div key={k.label}>
+                  <div style={{ fontSize: 'clamp(1.4rem,2vw,1.8rem)', fontWeight: 800, color: k.color, lineHeight: 1, fontFamily: "'Unbounded', sans-serif" }}>{k.value}</div>
+                  <div style={{ fontSize: 11, color: '#6E6155', marginTop: 3 }}>{k.label}</div>
+                </div>
+              ))}
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={onClose}
-                className="px-4 py-2 text-sm text-slate-400 hover:text-white border border-white/10 rounded-lg transition-colors"
-              >
-                Fermer
-              </button>
-              {!module.youtubeId && (
-                <button
-                  onClick={handleOpen}
-                  className="px-4 py-2 text-sm bg-[#1BAA8E] hover:bg-[#17967d] text-white rounded-lg transition-colors"
-                >
-                  Ouvrir sur KA ↗
-                </button>
-              )}
+
+            {/* Barre de progression */}
+            <div style={{ marginTop: 20, maxWidth: 400 }}>
+              <div style={{ height: 5, background: 'rgba(255,255,255,.08)', borderRadius: 3, overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${pct}%`, background: 'linear-gradient(90deg,#F4B01E,#FB6514)', borderRadius: 3, transition: 'width .5s ease' }} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+
+        {/* ── Corps ── */}
+        <div style={{ padding: '0 2rem 3rem', maxWidth: 1200, margin: '0 auto' }}>
+
+          {/* Domaines — cards horizontales scrollables */}
+          <div style={{ marginTop: '-2.5rem', marginBottom: '2rem' }}>
+            <div style={{
+              display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 4,
+              scrollbarWidth: 'none',
+            }}>
+              <button
+                onClick={() => setDomain('all')}
+                style={{
+                  flexShrink: 0,
+                  padding: '12px 20px',
+                  borderRadius: 12,
+                  border: 'none',
+                  cursor: 'pointer',
+                  background: domain === 'all' ? 'linear-gradient(125deg,#F6B829 0%,#F0894A 52%,#DD5E3A 100%)' : '#FFFFFF',
+                  color: domain === 'all' ? '#FFFFFF' : '#6E6155',
+                  fontFamily: "'Hanken Grotesk', sans-serif",
+                  fontWeight: 700,
+                  fontSize: 13,
+                  boxShadow: '0 4px 16px rgba(74,48,28,.12)',
+                  transition: 'all .2s',
+                }}
+              >
+                Tous ({total})
+              </button>
+
+              {domains.map(d => (
+                <button
+                  key={d.id}
+                  onClick={() => setDomain(d.id)}
+                  style={{
+                    flexShrink: 0,
+                    padding: '12px 18px',
+                    borderRadius: 12,
+                    border: 'none',
+                    cursor: 'pointer',
+                    background: domain === d.id ? d.color : '#FFFFFF',
+                    color: domain === d.id ? '#FFFFFF' : '#2A2118',
+                    fontFamily: "'Hanken Grotesk', sans-serif",
+                    fontWeight: domain === d.id ? 700 : 500,
+                    fontSize: 13,
+                    boxShadow: '0 4px 16px rgba(74,48,28,.10)',
+                    transition: 'all .2s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                  }}
+                >
+                  <span>{d.icon}</span>
+                  <span style={{ whiteSpace: 'nowrap' }}>{d.label}</span>
+                  <span style={{
+                    fontSize: 10,
+                    fontWeight: 800,
+                    background: domain === d.id ? 'rgba(255,255,255,.25)' : d.colorLight,
+                    color: domain === d.id ? '#FFFFFF' : d.color,
+                    padding: '2px 7px',
+                    borderRadius: 20,
+                  }}>{d.count}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Filtres + recherche */}
+          <div style={{
+            background: '#FFFFFF',
+            border: '1px solid rgba(42,33,24,.09)',
+            borderRadius: 14,
+            padding: '14px 16px',
+            marginBottom: 24,
+            display: 'flex',
+            gap: 12,
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            boxShadow: '0 2px 8px rgba(74,48,28,.06)',
+          }}>
+            {/* Recherche */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '1 1 200px', background: '#FAF6EE', border: '1px solid rgba(42,33,24,.12)', borderRadius: 10, padding: '8px 14px' }}>
+              <span style={{ color: '#AB9E8C', fontSize: 15 }}>🔍</span>
+              <input
+                placeholder="Rechercher un module..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                style={{ border: 'none', background: 'transparent', outline: 'none', flex: 1, fontSize: 13, color: '#2A2118', fontFamily: "'Hanken Grotesk', sans-serif" }}
+              />
+              {search && (
+                <button onClick={() => setSearch('')} style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#AB9E8C', fontSize: 12 }}>✕</button>
+              )}
+            </div>
+
+            {/* Niveau */}
+            <select
+              value={level}
+              onChange={e => setLevel(e.target.value as any)}
+              style={{ padding: '8px 12px', borderRadius: 10, border: '1px solid rgba(42,33,24,.12)', background: '#FAF6EE', color: '#2A2118', fontSize: 13, fontFamily: "'Hanken Grotesk', sans-serif", outline: 'none', cursor: 'pointer' }}
+            >
+              <option value="all">Tous niveaux</option>
+              <option value="débutant">Débutant</option>
+              <option value="intermédiaire">Intermédiaire</option>
+              <option value="avancé">Avancé</option>
+            </select>
+
+            {/* Type */}
+            <select
+              value={kind}
+              onChange={e => setKind(e.target.value as any)}
+              style={{ padding: '8px 12px', borderRadius: 10, border: '1px solid rgba(42,33,24,.12)', background: '#FAF6EE', color: '#2A2118', fontSize: 13, fontFamily: "'Hanken Grotesk', sans-serif", outline: 'none', cursor: 'pointer' }}
+            >
+              <option value="all">Tous types</option>
+              <option value="video">▶ Vidéo</option>
+              <option value="course">📚 Parcours</option>
+              <option value="exercise">✏️ Exercice</option>
+            </select>
+
+            <div style={{ marginLeft: 'auto', fontSize: 12, color: '#AB9E8C', fontWeight: 600, whiteSpace: 'nowrap' }}>
+              {filtered.length} résultat{filtered.length !== 1 ? 's' : ''}
+            </div>
+          </div>
+
+          {/* Grille de modules */}
+          {filtered.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '4rem 0', color: '#AB9E8C' }}>
+              <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
+              <div style={{ fontWeight: 600, fontSize: 15 }}>Aucun module trouvé</div>
+              <div style={{ fontSize: 13, marginTop: 4 }}>Essayez d'autres filtres ou mots-clés</div>
+            </div>
+          ) : (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))',
+              gap: 16,
+            }}>
+              {filtered.map(mod => (
+                <ModuleCard
+                  key={mod.id}
+                  mod={mod}
+                  done={!!progress[mod.id]}
+                  onClick={() => openModule(mod)}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </main>
+
+      {/* ── Modal ── */}
+      {selected && (
+        <ModuleModal
+          mod={selected}
+          done={!!progress[selected.id]}
+          onClose={() => setSelected(null)}
+          onLaunch={() => { launchExternal(selected); setSelected(null) }}
+        />
+      )}
     </div>
   )
 }
 
-/* ─── Carte module ───────────────────────────────────────────────────────── */
-function ModuleCard({
-  module,
-  isOpened,
-  onClick,
-}: {
-  module: KAModule
-  isOpened: boolean
-  onClick: () => void
-}) {
-  const domain = KA_DOMAINS.find(d => d.id === module.domain)
+/* ── ModuleCard ───────────────────────────────────────────────────────────── */
+function ModuleCard({ mod, done, onClick }: { mod: KAModule; done: boolean; onClick: () => void }) {
+  const dm = getDomainMeta(mod.domain)
+  const lm = LEVEL_META[mod.level]
+  const km = KIND_META[mod.kind]
 
   return (
     <button
       onClick={onClick}
-      className={`group text-left w-full border rounded-xl p-4 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 relative ${
-        isOpened
-          ? 'bg-[#1BAA8E]/5 border-[#1BAA8E]/30 hover:border-[#1BAA8E]/50'
-          : 'bg-white/[0.03] border-white/10 hover:bg-white/[0.07] hover:border-white/20'
-      }`}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        background: '#FFFFFF',
+        border: `1px solid ${done ? dm.color + '44' : 'rgba(42,33,24,.09)'}`,
+        borderRadius: 14,
+        padding: 0,
+        cursor: 'pointer',
+        textAlign: 'left',
+        transition: 'all .2s',
+        boxShadow: done ? `0 0 0 2px ${dm.color}22, 0 4px 16px rgba(74,48,28,.08)` : '0 2px 8px rgba(74,48,28,.06)',
+        overflow: 'hidden',
+        position: 'relative',
+      }}
+      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 28px rgba(74,48,28,.14)` }}
+      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = ''; (e.currentTarget as HTMLElement).style.boxShadow = done ? `0 0 0 2px ${dm.color}22, 0 4px 16px rgba(74,48,28,.08)` : '0 2px 8px rgba(74,48,28,.06)' }}
     >
-      {/* Badge "Consulté" */}
-      {isOpened && (
-        <div className="absolute top-3 right-3 text-xs px-1.5 py-0.5 bg-[#1BAA8E]/20 text-[#1BAA8E] rounded-full border border-[#1BAA8E]/30">
-          ✓ Vu
+      {/* Bande couleur domaine */}
+      <div style={{ height: 5, background: dm.color, width: '100%' }} />
+
+      <div style={{ padding: '16px 18px' }}>
+        {/* En-tête row */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            {/* Type badge */}
+            <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 20, background: dm.colorLight, color: dm.color, letterSpacing: '0.04em' }}>
+              {km.icon} {km.label}
+            </span>
+            {/* Niveau badge */}
+            <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 20, background: lm.bg, color: lm.color, letterSpacing: '0.04em' }}>
+              {lm.label}
+            </span>
+          </div>
+
+          {done && (
+            <span style={{ fontSize: 11, fontWeight: 700, color: '#12A596', background: '#E6FBF8', padding: '3px 8px', borderRadius: 20, flexShrink: 0 }}>
+              ✓ Vu
+            </span>
+          )}
         </div>
-      )}
 
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-xs font-medium text-slate-400">
-          {domain?.icon} {domain?.label.split('&')[0].split('—')[0].trim()}
-        </span>
-        <span className="text-xs text-slate-500">
-          {KIND_ICONS[module.kind]}
-          {module.kind === 'course' ? ' Parcours' : ' Vidéo'}
-        </span>
-      </div>
+        {/* Titre */}
+        <h3 style={{
+          fontFamily: "'Newsreader', Georgia, serif",
+          fontSize: 15,
+          fontWeight: 700,
+          color: '#2A2118',
+          lineHeight: 1.35,
+          marginBottom: 8,
+          letterSpacing: '-0.01em',
+        }}>
+          {mod.title}
+        </h3>
 
-      <h3 className={`font-semibold text-sm leading-snug mb-2 line-clamp-2 transition-colors ${
-        isOpened ? 'text-[#1BAA8E]' : 'text-white group-hover:text-[#1BAA8E]'
-      }`}>
-        {module.title}
-      </h3>
+        {/* Description */}
+        <p style={{ fontSize: 12.5, color: '#6E6155', lineHeight: 1.55, marginBottom: 12, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+          {mod.description}
+        </p>
 
-      <p className="text-xs text-slate-400 leading-relaxed line-clamp-2 mb-3">
-        {module.description}
-      </p>
-
-      <div className="flex items-center justify-between">
-        <span className={`text-xs px-2 py-0.5 rounded-full border ${LEVEL_COLORS[module.level]}`}>
-          {module.level}
-        </span>
-        {module.duration && (
-          <span className="text-xs text-slate-500">⏱ {module.duration}</span>
-        )}
+        {/* Footer */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            {mod.tags.slice(0, 2).map(t => (
+              <span key={t} style={{ fontSize: 10, color: '#AB9E8C', background: '#FAF6EE', padding: '2px 7px', borderRadius: 20, border: '1px solid rgba(42,33,24,.08)' }}>
+                {t}
+              </span>
+            ))}
+          </div>
+          {mod.duration && (
+            <span style={{ fontSize: 11, color: '#AB9E8C', fontWeight: 600, flexShrink: 0 }}>
+              ⏱ {mod.duration}
+            </span>
+          )}
+        </div>
       </div>
     </button>
   )
 }
 
-/* ─── Page principale ────────────────────────────────────────────────────── */
-export default function KhanAcademyApprenantPage() {
-  const [selectedDomain, setSelectedDomain] = useState<string | null>(null)
-  const [selectedLevel, setSelectedLevel]   = useState<KALevel | null>(null)
-  const [selectedKind, setSelectedKind]     = useState<KAKind | null>(null)
-  const [search, setSearch]                 = useState('')
-  const [activeModule, setActiveModule]     = useState<KAModule | null>(null)
-  const [viewMode, setViewMode]             = useState<'grid' | 'list'>('grid')
-  const [progress, setProgress]             = useState<Record<string, KAProgress>>({})
-
-  /* Charger progression */
-  useEffect(() => {
-    setProgress(loadProgress())
-    const handler = () => setProgress(loadProgress())
-    window.addEventListener('ka-progress-update', handler)
-    return () => window.removeEventListener('ka-progress-update', handler)
-  }, [])
-
-  const domainsWithCount = useMemo(() => getDomainWithCount(), [])
-  const openedCount      = Object.keys(progress).length
-
-  const filtered = useMemo(() => {
-    let modules = search.trim() ? searchModules(search) : KA_MODULES
-    if (selectedDomain) modules = modules.filter(m => m.domain === selectedDomain)
-    if (selectedLevel)  modules = modules.filter(m => m.level  === selectedLevel)
-    if (selectedKind)   modules = modules.filter(m => m.kind   === selectedKind)
-    return modules
-  }, [search, selectedDomain, selectedLevel, selectedKind])
-
-  const resetFilters = useCallback(() => {
-    setSelectedDomain(null)
-    setSelectedLevel(null)
-    setSelectedKind(null)
-    setSearch('')
-  }, [])
-
-  const hasActiveFilters = selectedDomain || selectedLevel || selectedKind || search.trim()
-
-  const handleOpen = useCallback((m: KAModule) => {
-    setActiveModule(m)
-    /* Pour les vidéos YT, on marque immédiatement à l'ouverture de la modal */
-    if (m.youtubeId) saveProgress(m.id, m)
-  }, [])
-
-  /* Stats */
-  const stats = [
-    { label: 'Modules',    value: KA_MODULES.length,   color: '#1BAA8E' },
-    { label: 'Consultés',  value: openedCount,          color: '#6C29FF' },
-    { label: 'Domaines',   value: KA_DOMAINS.length,    color: '#F0B429' },
-    { label: 'Progression',value: `${Math.round(openedCount / KA_MODULES.length * 100)}%`, color: '#D63384' },
-  ]
+/* ── ModuleModal ──────────────────────────────────────────────────────────── */
+function ModuleModal({ mod, done, onClose, onLaunch }: {
+  mod: KAModule; done: boolean; onClose: () => void; onLaunch: () => void
+}) {
+  const dm = getDomainMeta(mod.domain)
+  const lm = LEVEL_META[mod.level]
+  const km = KIND_META[mod.kind]
 
   return (
-    <div className="min-h-screen bg-[#060d1a] text-white">
+    <div
+      onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 100,
+        background: 'rgba(42,33,24,.55)',
+        backdropFilter: 'blur(4px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 24,
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          background: '#FFFFFF',
+          borderRadius: 20,
+          maxWidth: 580,
+          width: '100%',
+          boxShadow: '0 24px 80px rgba(42,33,24,.30)',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Bande couleur */}
+        <div style={{ height: 6, background: dm.color }} />
 
-      {/* ── Hero ── */}
-      <div className="relative overflow-hidden border-b border-white/10">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1BAA8E]/10 via-transparent to-violet-900/10 pointer-events-none" />
-        <div className="relative max-w-7xl mx-auto px-6 py-10">
-          <div className="flex items-start justify-between gap-6 flex-wrap">
-            <div>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1BAA8E] to-violet-500 flex items-center justify-center text-xl shadow-lg shadow-[#1BAA8E]/20">
-                  🎓
-                </div>
-                <div>
-                  <p className="text-xs text-slate-400 uppercase tracking-wider font-medium">ETAGIA × Khan Academy</p>
-                  <h1 className="text-xl font-bold text-white">Formation en ligne — Français</h1>
-                </div>
-              </div>
-              <p className="text-slate-300 max-w-xl text-sm leading-relaxed">
-                <strong className="text-white">{KA_MODULES.length} modules de formation</strong> en français sélectionnés parmi les meilleurs contenus Khan Academy —
-                informatique, finance, entrepreneuriat, sciences.
-              </p>
-            </div>
-
-            {/* Stats */}
-            <div className="flex items-center gap-3 flex-wrap">
-              {stats.map(s => (
-                <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-center min-w-[70px]">
-                  <div className="text-xl font-bold" style={{ color: s.color }}>{s.value}</div>
-                  <div className="text-xs text-slate-400">{s.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Barre de progression globale */}
-          {openedCount > 0 && (
-            <div className="mt-5 max-w-md">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs text-slate-400">Progression globale</span>
-                <span className="text-xs text-[#1BAA8E] font-semibold">{openedCount} / {KA_MODULES.length} modules</span>
-              </div>
-              <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-[#1BAA8E] to-violet-500 rounded-full transition-all duration-700"
-                  style={{ width: `${(openedCount / KA_MODULES.length) * 100}%` }}
-                />
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 py-8">
-
-        {/* ── Filtres ── */}
-        <div className="flex flex-col gap-4 mb-8">
-
-          <div className="flex items-center gap-3">
-            <div className="relative flex-1 max-w-lg">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">🔍</span>
-              <input
-                type="text"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                placeholder="Rechercher un module de formation..."
-                className="w-full pl-9 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#1BAA8E]/50 transition-all"
-              />
-            </div>
-            <div className="flex border border-white/10 rounded-xl overflow-hidden">
-              <button onClick={() => setViewMode('grid')} className={`px-3 py-2.5 text-sm transition-colors ${viewMode === 'grid' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'}`}>⊞</button>
-              <button onClick={() => setViewMode('list')} className={`px-3 py-2.5 text-sm transition-colors ${viewMode === 'list' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'}`}>☰</button>
-            </div>
-            {hasActiveFilters && (
-              <button onClick={resetFilters} className="px-3 py-2.5 text-xs text-slate-400 hover:text-white border border-white/10 rounded-xl transition-colors">
-                Réinitialiser
-              </button>
-            )}
-          </div>
-
-          {/* Domaines */}
-          <div className="flex gap-2 flex-wrap">
-            <button
-              onClick={() => setSelectedDomain(null)}
-              className={`px-3 py-1.5 text-xs rounded-lg border transition-all ${!selectedDomain ? 'bg-[#1BAA8E]/20 border-[#1BAA8E]/40 text-[#1BAA8E]' : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'}`}
-            >
-              Tous ({KA_MODULES.length})
-            </button>
-            {domainsWithCount.map(d => (
-              <button
-                key={d.id}
-                onClick={() => setSelectedDomain(selectedDomain === d.id ? null : d.id)}
-                className={`px-3 py-1.5 text-xs rounded-lg border transition-all ${selectedDomain === d.id ? 'bg-[#1BAA8E]/20 border-[#1BAA8E]/40 text-[#1BAA8E]' : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20 hover:text-white'}`}
-              >
-                {d.icon} {d.label.split('&')[0].split('—')[0].trim()} ({d.count})
-              </button>
-            ))}
-          </div>
-
-          {/* Niveau + Type */}
-          <div className="flex items-center gap-4 flex-wrap">
-            <div className="flex items-center gap-1">
-              <span className="text-xs text-slate-500 mr-1">Niveau :</span>
-              {(['débutant', 'intermédiaire', 'avancé'] as KALevel[]).map(l => (
-                <button
-                  key={l}
-                  onClick={() => setSelectedLevel(selectedLevel === l ? null : l)}
-                  className={`px-2.5 py-1 text-xs rounded-lg border transition-all capitalize ${selectedLevel === l ? LEVEL_COLORS[l] : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'}`}
-                >
-                  {l}
-                </button>
-              ))}
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="text-xs text-slate-500 mr-1">Type :</span>
-              {([{ value: 'video' as KAKind, label: '▶ Vidéo' }, { value: 'course' as KAKind, label: '📚 Parcours' }]).map(k => (
-                <button
-                  key={k.value}
-                  onClick={() => setSelectedKind(selectedKind === k.value ? null : k.value)}
-                  className={`px-2.5 py-1 text-xs rounded-lg border transition-all ${selectedKind === k.value ? 'bg-white/10 border-white/30 text-white' : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'}`}
-                >
-                  {k.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* ── Résultats ── */}
-        <div className="mb-4">
-          <p className="text-sm text-slate-400">
-            {filtered.length} module{filtered.length > 1 ? 's' : ''}
-            {hasActiveFilters && <span className="text-slate-500"> (filtré{filtered.length > 1 ? 's' : ''})</span>}
-            {openedCount > 0 && <span className="ml-2 text-[#1BAA8E] font-medium">· {openedCount} consulté{openedCount > 1 ? 's' : ''}</span>}
-          </p>
-        </div>
-
-        {filtered.length === 0 ? (
-          <div className="text-center py-20 text-slate-500">
-            <div className="text-4xl mb-3">🔍</div>
-            <p>Aucun module trouvé.</p>
-            <button onClick={resetFilters} className="mt-4 text-[#1BAA8E] hover:underline text-sm">Réinitialiser</button>
-          </div>
-        ) : viewMode === 'grid' ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {filtered.map(m => (
-              <ModuleCard
-                key={m.id}
-                module={m}
-                isOpened={!!progress[m.id]}
-                onClick={() => handleOpen(m)}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {filtered.map(m => {
-              const domain = KA_DOMAINS.find(d => d.id === m.domain)
-              const isOpened = !!progress[m.id]
-              return (
-                <button
-                  key={m.id}
-                  onClick={() => handleOpen(m)}
-                  className={`group w-full text-left flex items-center gap-4 border rounded-xl px-5 py-4 transition-all ${
-                    isOpened
-                      ? 'bg-[#1BAA8E]/5 border-[#1BAA8E]/30 hover:border-[#1BAA8E]/50'
-                      : 'bg-white/[0.03] hover:bg-white/[0.07] border-white/10 hover:border-white/20'
-                  }`}
-                >
-                  <div className="shrink-0 w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center text-lg">
-                    {domain?.icon}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <h3 className={`text-sm font-medium truncate transition-colors ${isOpened ? 'text-[#1BAA8E]' : 'text-white group-hover:text-[#1BAA8E]'}`}>
-                        {m.title}
-                      </h3>
-                      <span className={`shrink-0 text-xs px-1.5 py-0.5 rounded-full border ${LEVEL_COLORS[m.level]}`}>{m.level}</span>
-                      {isOpened && <span className="shrink-0 text-xs text-[#1BAA8E]">✓</span>}
-                    </div>
-                    <p className="text-xs text-slate-500 truncate">{m.description}</p>
-                  </div>
-                  <div className="shrink-0 text-xs text-slate-500">
-                    {m.duration && <span>⏱ {m.duration}</span>}
-                  </div>
-                </button>
-              )
-            })}
+        {/* Embed YouTube si disponible */}
+        {mod.youtubeId && (
+          <div style={{ position: 'relative', paddingBottom: '52%', background: '#2A2118' }}>
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${mod.youtubeId}?rel=0&modestbranding=1`}
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none' }}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              title={mod.title}
+            />
           </div>
         )}
 
-        <div className="mt-12 pt-8 border-t border-white/10 text-center">
-          <p className="text-xs text-slate-600">
-            Contenus fournis par{' '}
-            <a href="https://fr.khanacademy.org" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-white transition-colors">
-              Khan Academy Français
-            </a>{' '}
-            · Plateforme éducative gratuite · Tous droits réservés Khan Academy
+        <div style={{ padding: '22px 24px 24px' }}>
+          {/* Badges */}
+          <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap', alignItems: 'center' }}>
+            <span style={{ fontSize: 10, fontWeight: 800, padding: '3px 9px', borderRadius: 20, background: dm.colorLight, color: dm.color, letterSpacing: '0.06em' }}>
+              {dm.icon} {KA_DOMAINS.find(d => d.id === mod.domain)?.label ?? mod.domain}
+            </span>
+            <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 9px', borderRadius: 20, background: lm.bg, color: lm.color }}>
+              {lm.label}
+            </span>
+            <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 9px', borderRadius: 20, background: '#FAF6EE', color: '#6E6155' }}>
+              {km.icon} {km.label}
+            </span>
+            {mod.duration && (
+              <span style={{ fontSize: 10, fontWeight: 600, color: '#AB9E8C' }}>⏱ {mod.duration}</span>
+            )}
+            {done && (
+              <span style={{ marginLeft: 'auto', fontSize: 11, fontWeight: 700, color: '#12A596', background: '#E6FBF8', padding: '3px 9px', borderRadius: 20 }}>✓ Déjà vu</span>
+            )}
+          </div>
+
+          {/* Titre */}
+          <h2 style={{
+            fontFamily: "'Newsreader', Georgia, serif",
+            fontSize: 20,
+            fontWeight: 700,
+            color: '#2A2118',
+            lineHeight: 1.25,
+            marginBottom: 10,
+            letterSpacing: '-0.02em',
+          }}>
+            {mod.title}
+          </h2>
+
+          {/* Description */}
+          <p style={{ fontSize: 13.5, color: '#6E6155', lineHeight: 1.65, marginBottom: 16 }}>
+            {mod.description}
           </p>
+
+          {/* Tags */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 20 }}>
+            {mod.tags.map(t => (
+              <span key={t} style={{ fontSize: 11, color: '#6E6155', background: '#FAF6EE', border: '1px solid rgba(42,33,24,.10)', padding: '3px 9px', borderRadius: 20 }}>
+                {t}
+              </span>
+            ))}
+          </div>
+
+          {/* Note si pas de vidéo YouTube */}
+          {!mod.youtubeId && (
+            <div style={{
+              background: '#FFF7E2',
+              border: '1px solid rgba(244,176,30,.30)',
+              borderRadius: 10,
+              padding: '10px 14px',
+              marginBottom: 16,
+              display: 'flex',
+              gap: 10,
+              alignItems: 'flex-start',
+            }}>
+              <span style={{ fontSize: 16, flexShrink: 0 }}>💡</span>
+              <p style={{ fontSize: 12, color: '#6E6155', lineHeight: 1.5, margin: 0 }}>
+                Ce module s'ouvre sur <strong>fr.khanacademy.org</strong> dans un nouvel onglet — contenu intégralement en français, gratuit et sans inscription obligatoire.
+              </p>
+            </div>
+          )}
+
+          {/* Actions */}
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button
+              onClick={onLaunch}
+              style={{
+                flex: 1,
+                padding: '13px 20px',
+                borderRadius: 12,
+                border: 'none',
+                cursor: 'pointer',
+                background: `linear-gradient(125deg,${dm.color},${dm.color}CC)`,
+                color: '#FFFFFF',
+                fontFamily: "'Hanken Grotesk', sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                boxShadow: `0 4px 16px ${dm.color}44`,
+                transition: 'all .2s',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 8,
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = '' }}
+            >
+              {mod.youtubeId ? '▶ Regarder la vidéo' : '🚀 Accéder au module'}
+            </button>
+            <button
+              onClick={onClose}
+              style={{
+                padding: '13px 20px',
+                borderRadius: 12,
+                border: '1px solid rgba(42,33,24,.15)',
+                cursor: 'pointer',
+                background: '#FAF6EE',
+                color: '#6E6155',
+                fontFamily: "'Hanken Grotesk', sans-serif",
+                fontWeight: 600,
+                fontSize: 14,
+              }}
+            >
+              Fermer
+            </button>
+          </div>
         </div>
       </div>
-
-      {/* ── Modal ── */}
-      {activeModule && (
-        <ModuleModal module={activeModule} onClose={() => setActiveModule(null)} />
-      )}
     </div>
   )
 }
