@@ -59,7 +59,7 @@ export default function KhanAcademyPage() {
     setLoading(true)
     try {
       const res = await fetch(
-        '/api/kolibri/api/content/contentnode/?channel_id=9a3a615f0501427baf1f17b08f196fd2&lang_id=fr&limit=200&available=true',
+        '/api/kolibri/api/content/contentnode/?channel_id=878ec2e6f88c5c268b1be6f202833cd4&lang_id=fr&limit=200&available=true',
         { cache: 'no-store' }
       )
       const data = await res.json()
