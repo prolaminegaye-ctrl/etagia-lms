@@ -8,24 +8,24 @@ function loadKAProgress(): Record<string, { domain: string; openedAt: string }> 
   if (typeof window === 'undefined') return {}
   try { return JSON.parse(localStorage.getItem(KA_STORAGE_KEY) ?? '{}') } catch { return {} }
 }
-const KA_TOTAL = 56  // total modules catalogue
+const KA_TOTAL = 50  // total modules catalogue (100% français)
 
-/* ── Tokens Genially ── */
+/* ── Tokens — Système chaud ETAGIA ── */
 const T = {
-  accent:      '#6C29FF',
-  accentLight: '#EDE8FF',
-  border:      '#EAE7F3',
-  bg:          '#F7F6FB',
+  accent:      '#F4B01E',       // or premium
+  accentLight: '#FFF7E2',       // gold-50
+  border:      'rgba(42,33,24,.10)',
+  bg:          '#FAF6EE',       // canvas crème
   surface:     '#FFFFFF',
-  subtle:      '#F0EEF8',
-  txt:         '#121212',
-  txtMuted:    '#625E6E',
-  inv:         '#F9F8FC',
-  success:     '#00B89C',
-  warning:     '#F0B429',
-  pink:        '#D63384',
-  fontDisplay: 'Unbounded, sans-serif',
-  fontBody:    'DM Sans, sans-serif',
+  subtle:      '#F5EEDF',       // surface-2
+  txt:         '#2A2118',       // ink
+  txtMuted:    '#6E6155',       // ink-mut
+  inv:         '#FAF6EE',
+  success:     '#0FB6CC',       // turquoise intelligence
+  warning:     '#F4B01E',       // gold
+  orange:      '#FB6514',       // orange énergie
+  fontDisplay: "'Newsreader', Georgia, serif",
+  fontBody:    "'Hanken Grotesk', sans-serif",
 }
 
 const card: React.CSSProperties = {
@@ -36,22 +36,22 @@ const card: React.CSSProperties = {
 }
 
 const kpis = [
-  { label: 'Cours en cours', value: '4',     color: T.accent,  bg: T.accentLight, delta: '+1 ce mois',   icon: '◈' },
-  { label: 'Progression',    value: '68%',   color: T.success, bg: '#E6F9F5',     delta: '+5% semaine',  icon: '↑' },
-  { label: 'Score moyen',    value: '82',    color: T.warning, bg: '#FEF7E0',     delta: 'Top 15%',      icon: '⭐' },
-  { label: 'Heures / sem.',  value: '12h',   color: T.pink,    bg: '#FDE8F3',     delta: 'Obj: 15h',     icon: '⏱' },
+  { label: 'Cours en cours', value: '4',   color: '#F4B01E', bg: '#FFF7E2', delta: '+1 ce mois',  icon: '◈' },
+  { label: 'Progression',    value: '68%', color: '#0FB6CC', bg: '#E6FBFD', delta: '+5% semaine', icon: '↑' },
+  { label: 'Score moyen',    value: '82',  color: '#C28705', bg: '#FFF7E2', delta: 'Top 15%',     icon: '⭐' },
+  { label: 'Heures / sem.',  value: '12h', color: '#FB6514', bg: '#FFF1E8', delta: 'Obj: 15h',    icon: '⏱' },
 ]
 
 const courses = [
-  { title: 'Data Science avec Python',    progress: 72, cat: 'Tech',        color: T.accent,  done: 17, total: 24 },
-  { title: 'Marketing Digital Afrique',   progress: 45, cat: 'Business',    color: T.success, done: 8,  total: 18 },
-  { title: 'Leadership & Management',     progress: 30, cat: 'Soft Skills', color: T.pink,    done: 4,  total: 12 },
+  { title: 'Data Science avec Python',    progress: 72, cat: 'Tech',        color: '#0FB6CC', done: 17, total: 24 },
+  { title: 'Marketing Digital Afrique',   progress: 45, cat: 'Business',    color: '#FB6514', done: 8,  total: 18 },
+  { title: 'Leadership & Management',     progress: 30, cat: 'Soft Skills', color: '#F4B01E', done: 4,  total: 12 },
 ]
 
 const reco = [
-  { title: 'IA Générative pour pros',   tag: 'Nouveau',   color: T.accent,  emoji: '🤖' },
-  { title: 'Comptabilité SME Afrique',  tag: 'Populaire', color: T.success, emoji: '💼' },
-  { title: 'Pitch & Fundraising',       tag: 'Tendance',  color: T.pink,    emoji: '🚀' },
+  { title: 'IA Générative pour pros',   tag: 'Nouveau',   color: '#0FB6CC', emoji: '🤖' },
+  { title: 'Comptabilité SME Afrique',  tag: 'Populaire', color: '#FB6514', emoji: '💼' },
+  { title: 'Pitch & Fundraising',       tag: 'Tendance',  color: '#F4B01E', emoji: '🚀' },
 ]
 
 export default function DashboardPage() {
@@ -78,13 +78,13 @@ export default function DashboardPage() {
         marginBottom: '2rem',
         padding: '1.75rem 2rem',
         borderRadius: '20px',
-        background: 'linear-gradient(135deg, #EDE8FF 0%, #F7F4FF 100%)',
-        border: '1px solid rgba(108,41,255,0.14)',
+        background: 'linear-gradient(135deg, #FFF7E2 0%, #FFF1E8 100%)',
+        border: '1px solid rgba(244,176,30,.20)',
         position: 'relative',
         overflow: 'hidden',
       }}>
-        <div style={{ position: 'absolute', top: '-50px', right: '-30px', width: '220px', height: '220px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(108,41,255,0.10), transparent 70%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: '-30px', left: '35%', width: '160px', height: '160px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,184,156,0.07), transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '-50px', right: '-30px', width: '220px', height: '220px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(244,176,30,.12), transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '-30px', left: '35%', width: '160px', height: '160px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(251,101,20,.07), transparent 70%)', pointerEvents: 'none' }} />
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
           <div>
@@ -122,17 +122,17 @@ export default function DashboardPage() {
       <div
         style={{ ...card, padding: '1.5rem', marginBottom: '2rem', cursor: 'pointer', transition: 'all .2s', position: 'relative', overflow: 'hidden' }}
         onClick={() => router.push('/apprenant/khan-academy')}
-        onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(27,170,142,0.40)'; el.style.boxShadow = '0 4px 20px rgba(27,170,142,0.10)'; el.style.transform = 'translateY(-1px)' }}
+        onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(244,176,30,0.40)'; el.style.boxShadow = '0 4px 20px rgba(244,176,30,0.10)'; el.style.transform = 'translateY(-1px)' }}
         onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = T.border; el.style.boxShadow = '0 1px 4px rgba(0,0,0,0.05)'; el.style.transform = 'translateY(0)' }}
       >
         {/* Bande décorative haut */}
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'linear-gradient(90deg, #1BAA8E, #6C29FF)', borderRadius: '16px 16px 0 0' }} />
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'linear-gradient(90deg, #F4B01E, #FB6514)', borderRadius: '16px 16px 0 0' }} />
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
 
           {/* Titre + description */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'linear-gradient(135deg, rgba(27,170,142,0.15), rgba(108,41,255,0.10))', border: '1px solid rgba(27,170,142,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', flexShrink: 0 }}>
+            <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'linear-gradient(135deg, rgba(244,176,30,0.15), rgba(244,176,30,.12))', border: '1px solid rgba(244,176,30,0.20)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', flexShrink: 0 }}>
               🎓
             </div>
             <div>
@@ -140,14 +140,14 @@ export default function DashboardPage() {
                 <span style={{ fontFamily: T.fontDisplay, fontWeight: '700', fontSize: '13px', color: T.txt, letterSpacing: '-0.02em' }}>
                   Khan Academy Français
                 </span>
-                <span style={{ fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '20px', background: 'rgba(27,170,142,0.12)', color: '#1BAA8E', border: '1px solid rgba(27,170,142,0.20)' }}>
+                <span style={{ fontSize: '10px', fontWeight: '700', padding: '2px 8px', borderRadius: '20px', background: 'rgba(244,176,30,0.12)', color: '#F4B01E', border: '1px solid rgba(244,176,30,0.20)' }}>
                   Gratuit
                 </span>
               </div>
               <div style={{ fontSize: '12px', color: T.txtMuted, fontFamily: T.fontBody }}>
                 {kaCount > 0
                   ? `${kaCount} module${kaCount > 1 ? 's' : ''} consulté${kaCount > 1 ? 's' : ''} · ${kaDomains} domaine${kaDomains > 1 ? 's' : ''} exploré${kaDomains > 1 ? 's' : ''}`
-                  : '56 modules de formation en français · Informatique, Finance, Sciences…'}
+                  : '50 modules de formation en français · Informatique, Finance, Sciences…'}
               </div>
             </div>
           </div>
@@ -156,13 +156,13 @@ export default function DashboardPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }}>
             {/* Modules vus */}
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: T.fontDisplay, fontSize: '22px', fontWeight: '800', color: '#1BAA8E', letterSpacing: '-0.03em', lineHeight: 1 }}>{kaCount}</div>
+              <div style={{ fontFamily: T.fontDisplay, fontSize: '22px', fontWeight: '800', color: '#F4B01E', letterSpacing: '-0.03em', lineHeight: 1 }}>{kaCount}</div>
               <div style={{ fontSize: '10px', color: T.txtMuted, fontFamily: T.fontBody, marginTop: '2px' }}>consultés</div>
             </div>
             <div style={{ width: '1px', height: '30px', background: T.border }} />
             {/* % progression */}
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: T.fontDisplay, fontSize: '22px', fontWeight: '800', color: '#6C29FF', letterSpacing: '-0.03em', lineHeight: 1 }}>{kaPct}%</div>
+              <div style={{ fontFamily: T.fontDisplay, fontSize: '22px', fontWeight: '800', color: '#FB6514', letterSpacing: '-0.03em', lineHeight: 1 }}>{kaPct}%</div>
               <div style={{ fontSize: '10px', color: T.txtMuted, fontFamily: T.fontBody, marginTop: '2px' }}>progression</div>
             </div>
             <div style={{ width: '1px', height: '30px', background: T.border }} />
@@ -178,16 +178,16 @@ export default function DashboardPage() {
         {kaPct > 0 && (
           <div style={{ marginTop: '14px' }}>
             <div style={{ height: '5px', background: T.subtle, borderRadius: '3px', overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${kaPct}%`, background: 'linear-gradient(90deg, #1BAA8E, #6C29FF)', borderRadius: '3px', transition: 'width 0.6s ease' }} />
+              <div style={{ height: '100%', width: `${kaPct}%`, background: 'linear-gradient(90deg, #F4B01E, #FB6514)', borderRadius: '3px', transition: 'width 0.6s ease' }} />
             </div>
             <div style={{ fontSize: '11px', color: T.txtMuted, marginTop: '5px', fontFamily: T.fontBody }}>
-              {kaCount} / 56 modules · Continuer →
+              {kaCount} / 50 modules · Continuer →
             </div>
           </div>
         )}
 
         {kaCount === 0 && (
-          <div style={{ marginTop: '12px', fontSize: '12px', color: '#1BAA8E', fontFamily: T.fontBody, fontWeight: '500' }}>
+          <div style={{ marginTop: '12px', fontSize: '12px', color: '#F4B01E', fontFamily: T.fontBody, fontWeight: '500' }}>
             Commencer ma formation Khan Academy →
           </div>
         )}
@@ -206,7 +206,7 @@ export default function DashboardPage() {
               key={c.title}
               onClick={() => router.push('/cours')}
               style={{ ...card, padding: '1.1rem 1.25rem', cursor: 'pointer', marginBottom: '0.75rem', transition: 'all .15s' }}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(108,41,255,0.25)'; el.style.transform = 'translateY(-1px)'; el.style.boxShadow = '0 4px 16px rgba(108,41,255,0.10)' }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(108,41,255,0.25)'; el.style.transform = 'translateY(-1px)'; el.style.boxShadow = '0 4px 16px rgba(244,176,30,.12)' }}
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = T.border; el.style.transform = 'translateY(0)'; el.style.boxShadow = '0 1px 4px rgba(0,0,0,0.05)' }}
             >
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '12px' }}>
