@@ -427,8 +427,8 @@ export default function LandingPage() {
               <p>La formation qui vous propulse — l&apos;avenir de l&apos;éducation africaine.</p>
             </div>
             <div><h5>Plateforme</h5><ul><li><a href="/cours">Cours</a></li><li><a href="/live">Classes live</a></li><li><a href="/tutor">AI Tutor</a></li><li><a href="/apprenant/passbac">Pass&apos;BAC</a></li></ul></div>
-            <div><h5>Ressources</h5><ul><li><a href="/market">Marketplace</a></li><li><a href="/dashboard">Certifications</a></li><li><a href="#">Blog</a></li><li><a href="#">Aide</a></li></ul></div>
-            <div><h5>EtagIA</h5><ul><li><a href="#">À propos</a></li><li><a href="#">Formateurs</a></li><li><a href="#">Contact</a></li><li><a href="#">Carrières</a></li></ul></div>
+            <div><h5>Ressources</h5><ul><li><a href="/market">Marketplace</a></li><li><a href="/dashboard">Certifications</a></li><li><a href="/guide">Guide</a></li><li><a href="mailto:admin@etagia-academie.com?subject=Aide">Aide</a></li></ul></div>
+            <div><h5>EtagIA</h5><ul><li><a href="/landing">À propos</a></li><li><a href="/formateur">Formateurs</a></li><li><a href="mailto:admin@etagia-academie.com">Contact</a></li><li><a href="mailto:admin@etagia-academie.com?subject=Carri%C3%A8res">Carrières</a></li></ul></div>
           </div>
           <div className="foot-bot">
             <span>© 2026 EtagIA Académie. Tous droits réservés.</span>
