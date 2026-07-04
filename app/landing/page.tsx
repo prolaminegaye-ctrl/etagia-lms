@@ -471,18 +471,36 @@ export default function LandingPage() {
               </p>
             </div>
             {[
-              { title:'Produit', links:['Fonctionnalités','Tarifs','White Label','Roadmap','Changelog'] },
-              { title:'Ressources', links:['Documentation','API','Guides','Webinaires','Blog'] },
-              { title:'Entreprise', links:['À propos','Contact','Partenaires','Presse','Confidentialité'] },
+              { title:'Produit', links:[
+                { label:'Fonctionnalités', href:'/' },
+                { label:'Tarifs', href:'/market' },
+                { label:'White Label', href:'mailto:admin@etagia-academie.com?subject=White%20Label' },
+                { label:'Cours', href:'/cours' },
+                { label:'Classes live', href:'/live' },
+              ] },
+              { title:'Ressources', links:[
+                { label:'Guide', href:'/guide' },
+                { label:'Marketplace', href:'/market' },
+                { label:'AI Tutor', href:'/tutor' },
+                { label:'Webinaires', href:'/live' },
+                { label:"Pass'BAC", href:'/apprenant/passbac' },
+              ] },
+              { title:'Entreprise', links:[
+                { label:'À propos', href:'/' },
+                { label:'Contact', href:'mailto:admin@etagia-academie.com' },
+                { label:'Partenaires', href:'mailto:admin@etagia-academie.com?subject=Partenariat' },
+                { label:'Presse', href:'mailto:admin@etagia-academie.com?subject=Presse' },
+                { label:'Carrières', href:'mailto:admin@etagia-academie.com?subject=Carri%C3%A8res' },
+              ] },
             ].map(col => (
               <div key={col.title}>
                 <div style={{ fontSize:'11px', fontWeight:'800', color:'rgba(245,240,232,0.30)', letterSpacing:'2px', textTransform:'uppercase', marginBottom:'12px' }}>{col.title}</div>
                 {col.links.map(l => (
-                  <div key={l} style={{ marginBottom:'8px' }}>
-                    <a href="#" style={{ fontSize:'13px', color:'rgba(245,240,232,0.50)', textDecoration:'none', transition:'color .15s' }}
+                  <div key={l.label} style={{ marginBottom:'8px' }}>
+                    <a href={l.href} style={{ fontSize:'13px', color:'rgba(245,240,232,0.50)', textDecoration:'none', transition:'color .15s' }}
                       onMouseEnter={e=>(e.currentTarget.style.color=C.orange)}
                       onMouseLeave={e=>(e.currentTarget.style.color='rgba(245,240,232,0.50)')}>
-                      {l}
+                      {l.label}
                     </a>
                   </div>
                 ))}
@@ -493,7 +511,7 @@ export default function LandingPage() {
             <div style={{ fontSize:'12px', color:'rgba(245,240,232,0.30)' }}>© 2026 ETAGIA LMS — Propulsé par l&apos;IA · Made in Africa 🌍</div>
             <div style={{ display:'flex', gap:'16px' }}>
               {['Confidentialité','CGU','Cookies'].map(l => (
-                <a key={l} href="#" style={{ fontSize:'12px', color:'rgba(245,240,232,0.30)', textDecoration:'none' }}>{l}</a>
+                <a key={l} href={`mailto:admin@etagia-academie.com?subject=${encodeURIComponent(l)}`} style={{ fontSize:'12px', color:'rgba(245,240,232,0.30)', textDecoration:'none' }}>{l}</a>
               ))}
             </div>
           </div>

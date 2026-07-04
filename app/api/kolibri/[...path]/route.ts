@@ -11,6 +11,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { sameOriginOnly, rateLimit } from '@/lib/security'
 
 // Canal KA Français correct : 878ec2e6f88c5c268b1be6f202833cd4
 const KOLIBRI_URL   = process.env.KOLIBRI_SERVER_URL ?? 'https://kolibri-v2-production.up.railway.app'
@@ -55,7 +56,7 @@ function kolibriHeaders(): HeadersInit {
 }
 
 /* ── Helper : transformer un nœud Kolibri pour ETAGIA ───────────────────── */
-export function transformNode(node: KolibriNode) {
+function transformNode(node: KolibriNode) {
   const videoFile = node.files?.find(f => f.extension === 'mp4' && !f.thumbnail && !f.supplementary)
   const thumbFile = node.files?.find(f => f.thumbnail)
 
@@ -81,9 +82,10 @@ export function transformNode(node: KolibriNode) {
 /* ── GET handler ─────────────────────────────────────────────────────────── */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
-  const pathSegments = params.path
+  const { path } = await params
+  const pathSegments = path
   const searchParams = request.nextUrl.searchParams.toString()
   const upstreamPath = pathSegments.join('/')
   const upstreamUrl  = `${KOLIBRI_URL}/${upstreamPath}${searchParams ? `?${searchParams}` : ''}`
@@ -148,10 +150,15 @@ export async function GET(
 /* ── POST handler (progression xAPI) ────────────────────────────────────── */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
-  const pathSegments = params.path
-  const upstreamUrl  = `${KOLIBRI_URL}/${pathSegments.join('/')}`
+  // Le POST est relayé avec le token admin Kolibri : on ne l'accepte que
+  // depuis le site lui-même, sinon n'importe qui piloterait l'API Kolibri.
+  const guard = sameOriginOnly(request) ?? rateLimit(request, 60)
+  if (guard) return guard
+
+  const { path } = await params
+  const upstreamUrl  = `${KOLIBRI_URL}/${path.join('/')}`
   const body         = await request.text()
 
   try {

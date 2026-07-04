@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
+import { sameOriginOnly, rateLimit } from '@/lib/security'
 
 // ⚠️  NE JAMAIS mettre de secret en fallback hardcodé dans le code source
 // Configurer BBB_URL et BBB_SECRET dans Vercel Settings > Environment Variables
@@ -34,6 +35,9 @@ function parseXML(xml: string): Record<string, string> {
 }
 
 export async function POST(req: NextRequest) {
+  const guard = sameOriginOnly(req) ?? rateLimit(req, 30)
+  if (guard) return guard
+
   // Guard : BBB non configuré
   if (!BBB_URL || !BBB_SECRET) {
     return NextResponse.json({

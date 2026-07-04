@@ -1,15 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { renvoyerFacture } from '@/lib/facturation/sender'
+import { safeEqual } from '@/lib/security'
 import type { Facture } from '@/lib/facturation/types'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// Client créé à la demande : évite un crash au build quand les variables
+// d'environnement ne sont pas définies.
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
 
 async function verifierAdmin(req: NextRequest): Promise<boolean> {
-  return req.headers.get('x-admin-token') === process.env.ADMIN_TOKEN
+  const attendu = process.env.ADMIN_TOKEN
+  const fourni  = req.headers.get('x-admin-token')
+  return !!attendu && !!fourni && safeEqual(fourni, attendu)
 }
 
 export async function GET(req: NextRequest) {
@@ -25,6 +32,7 @@ export async function GET(req: NextRequest) {
   const from    = (page - 1) * limit
   const to      = from + limit - 1
 
+  const supabase = getSupabase()
   let query = supabase
     .from('factures')
     .select('*', { count: 'exact' })
@@ -52,6 +60,7 @@ export async function POST(req: NextRequest) {
   const { factureId, action } = await req.json() as { factureId: string; action: string }
   if (!factureId) return NextResponse.json({ error: 'factureId requis' }, { status: 400 })
 
+  const supabase = getSupabase()
   const { data: facture, error } = await supabase
     .from('factures')
     .select('*')

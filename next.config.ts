@@ -1,8 +1,6 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  // Build permissif — TypeScript strict après avoir tout corrigé
-  typescript: { ignoreBuildErrors: true },
 
   // Headers de sécurité sur toutes les routes
   async headers() {
