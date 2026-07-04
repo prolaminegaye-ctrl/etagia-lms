@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { sameOriginOnly, rateLimit } from '@/lib/security'
 
 export async function POST(req: NextRequest) {
+  const guard = sameOriginOnly(req) ?? rateLimit(req, 20)
+  if (guard) return guard
+
   try {
     const apiKey = process.env.ANTHROPIC_API_KEY
     if (!apiKey) return NextResponse.json({ error: 'ANTHROPIC_API_KEY manquante' }, { status: 500 })

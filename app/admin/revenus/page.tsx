@@ -42,7 +42,7 @@ export default function RevenusPage() {
       <div style={{ display: 'flex', gap: 8, marginBottom: '1.5rem' }}>
         {['semaine','mois','trimestre','année'].map(p => (
           <button key={p} onClick={() => setPeriode(p)} style={{
-            padding: '7px 18px', borderRadius: '99px', border: 'none', cursor: 'pointer',
+            padding: '7px 18px', borderRadius: '99px', cursor: 'pointer',
             fontSize: '12px', fontWeight: '700', textTransform: 'capitalize',
             background: periode === p ? 'var(--orange-700)' : 'var(--surface)',
             color: periode === p ? '#fff' : 'var(--ink-mut)',

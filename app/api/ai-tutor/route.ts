@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { sameOriginOnly, rateLimit } from '@/lib/security'
 
 export async function POST(req: NextRequest) {
+  const guard = sameOriginOnly(req) ?? rateLimit(req, 20)
+  if (guard) return guard
+
   try {
     const apiKey = process.env.ANTHROPIC_API_KEY
     if (!apiKey) {
@@ -8,7 +12,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json()
-    const raw = Array.isArray(body?.messages) ? body.messages : []
+    const raw = (Array.isArray(body?.messages) ? body.messages : []).slice(-30)
 
     // Build messages - support text and document (PDF) content
     const messages = raw

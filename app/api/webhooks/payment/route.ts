@@ -6,20 +6,24 @@ import { NextRequest, NextResponse } from 'next/server'
 import { creerFactureDepuisEvenement } from '@/lib/facturation/generator'
 import { envoyerFactureParEmail }      from '@/lib/facturation/sender'
 import { createClient }                from '@supabase/supabase-js'
+import { safeEqual }                    from '@/lib/security'
 import type { EvenementPaiement }      from '@/lib/facturation/types'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-)
+// Client créé à la demande : évite un crash au build sans variables d'env.
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  )
+}
 
 async function getProchainNumeroSequence(): Promise<number> {
-  const { count } = await supabase.from('factures').select('*', { count: 'exact', head: true })
+  const { count } = await getSupabase().from('factures').select('*', { count: 'exact', head: true })
   return (count ?? 0) + 1
 }
 
 async function sauvegarderFacture(facture: ReturnType<typeof creerFactureDepuisEvenement>) {
-  await supabase.from('factures').insert({
+  await getSupabase().from('factures').insert({
     id:                    facture.id,
     numero:                facture.numero,
     type:                  facture.type,
@@ -44,7 +48,7 @@ async function sauvegarderFacture(facture: ReturnType<typeof creerFactureDepuisE
 }
 
 async function marquerEmailEnvoye(factureId: string) {
-  await supabase.from('factures').update({
+  await getSupabase().from('factures').update({
     email_envoye:     true,
     date_envoi_email: new Date().toISOString(),
   }).eq('id', factureId)
@@ -96,6 +100,16 @@ function normaliserEvenement(type: string, event: Record<string, unknown>): Even
 }
 
 export async function POST(req: NextRequest) {
+  // ── Authentification du webhook ─────────────────────────────────────────
+  // Sans secret partagé, n'importe qui pourrait créer de fausses factures.
+  // Configurer PAYMENT_WEBHOOK_SECRET dans Vercel et le transmettre dans le
+  // header `x-webhook-secret` depuis la passerelle de paiement.
+  const secret = process.env.PAYMENT_WEBHOOK_SECRET
+  const fourni = req.headers.get('x-webhook-secret')
+  if (!secret || !fourni || !safeEqual(fourni, secret)) {
+    return NextResponse.json({ error: 'Webhook non autorisé' }, { status: 401 })
+  }
+
   const payload = await req.text()
   let event: Record<string, unknown>
   try { event = JSON.parse(payload) } catch {
