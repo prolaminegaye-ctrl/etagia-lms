@@ -239,6 +239,7 @@ export default function LandingPage() {
             <a href="#parcours">Parcours</a>
             <a href="#ia">AI Tutor</a>
             <a href="#formations">Formations</a>
+            <Link href="/blog">Blog</Link>
           </div>
           <div className="nav-cta">
             <Link className="login" href="/auth">Se connecter</Link>
@@ -397,6 +398,26 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* LIVRE — Manuel du formateur augmenté */}
+      <section className="sec">
+        <div className="lp-wrap rev">
+          <div className="book-promo">
+            <div className="book-promo-glow" />
+            <div className="book-promo-badge">✦ Notre blog des formateurs augmentés</div>
+            <h3>Manuel du formateur augmenté</h3>
+            <p>
+              La méthode complète pour intégrer l&apos;IA générative dans votre pratique de formateur,
+              par l&apos;équipe EtagIA. Retrouvez aussi nos articles bimensuels et notre veille IA &amp;
+              Éducation hebdomadaire sur le blog.
+            </p>
+            <div style={{ position: 'relative', display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <a href="https://manuel-formateur-augmente.netlify.app" target="_blank" rel="noopener noreferrer" className="book-promo-cta">Découvrir le manuel →</a>
+              <Link href="/blog" className="lp-btn btn-light">Lire le blog</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* FINAL CTA */}
       <section className="final">
         <div className="lp-wrap">
@@ -427,7 +448,7 @@ export default function LandingPage() {
               <p>La formation qui vous propulse — l&apos;avenir de l&apos;éducation africaine.</p>
             </div>
             <div><h5>Plateforme</h5><ul><li><a href="/cours">Cours</a></li><li><a href="/live">Classes live</a></li><li><a href="/tutor">AI Tutor</a></li><li><a href="/apprenant/passbac">Pass&apos;BAC</a></li></ul></div>
-            <div><h5>Ressources</h5><ul><li><a href="/market">Marketplace</a></li><li><a href="/dashboard">Certifications</a></li><li><a href="/guide">Guide</a></li><li><a href="mailto:admin@etagia-academie.com?subject=Aide">Aide</a></li></ul></div>
+            <div><h5>Ressources</h5><ul><li><a href="/blog">Blog</a></li><li><a href="/market">Marketplace</a></li><li><a href="/dashboard">Certifications</a></li><li><a href="/guide">Guide</a></li><li><a href="https://manuel-formateur-augmente.netlify.app" target="_blank" rel="noopener noreferrer">Manuel du formateur augmenté</a></li></ul></div>
             <div><h5>EtagIA</h5><ul><li><a href="/landing">À propos</a></li><li><a href="/formateur">Formateurs</a></li><li><a href="mailto:admin@etagia-academie.com">Contact</a></li><li><a href="mailto:admin@etagia-academie.com?subject=Carri%C3%A8res">Carrières</a></li></ul></div>
           </div>
           <div className="foot-bot">
