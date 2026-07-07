@@ -1,4 +1,13 @@
+import type { Metadata } from 'next'
 import Sidebar from '@/components/Sidebar'
+
+export const metadata: Metadata = {
+  title: 'Marketplace de formations certifiantes — EtagIA',
+  description:
+    "Explorez le catalogue de formations certifiantes EtagIA : Data Science, Marketing Digital, Leadership et bien plus, pensées pour l'Afrique francophone.",
+  alternates: { canonical: '/market' },
+}
+
 export default function MarketLayout({ children }: { children: React.ReactNode }) {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--canvas)' }}>

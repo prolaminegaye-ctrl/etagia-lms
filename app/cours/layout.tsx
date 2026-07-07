@@ -1,4 +1,12 @@
+import type { Metadata } from 'next'
 import Sidebar from '@/components/Sidebar'
+
+export const metadata: Metadata = {
+  title: 'Nos cours et formations en ligne — EtagIA',
+  description:
+    "Cours interactifs, classes en direct et évaluations certifiantes sur EtagIA, la plateforme LMS augmentée par l'IA pour l'Afrique francophone.",
+  alternates: { canonical: '/cours' },
+}
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
