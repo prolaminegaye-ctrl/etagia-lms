@@ -46,6 +46,24 @@ export function rateLimit(req: NextRequest, limit = 20, windowMs = 60_000): Next
   return null
 }
 
+/**
+ * Coupe-circuit global pour les fonctionnalités IA (AI Tutor, chat marketplace,
+ * générateur de cours). Mettre à `false` pour les réactiver.
+ * Objectif : éviter toute consommation de crédits Anthropic/OpenAI tant que
+ * l'accès n'est pas restreint aux utilisateurs authentifiés + quotas.
+ */
+export const AI_FEATURES_DISABLED = true
+
+export function aiDisabledResponse(): NextResponse {
+  return NextResponse.json(
+    {
+      error: "Cette fonctionnalité IA est temporairement indisponible.",
+      code: 'AI_TEMPORARILY_DISABLED',
+    },
+    { status: 503 },
+  )
+}
+
 /** Comparaison à temps constant (évite les attaques par timing sur les tokens). */
 export function safeEqual(a: string, b: string): boolean {
   const ha = crypto.createHash('sha256').update(a).digest()

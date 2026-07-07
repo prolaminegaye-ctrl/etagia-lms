@@ -204,6 +204,7 @@ export default function CreerCours() {
   const [courseData, setCourseData] = useState<CourseData | null>(null)
   const [busy, setBusy]             = useState(false)
   const [aiError, setAiError]       = useState('')
+  const [aiBlocked, setAiBlocked]   = useState(false)
   const [aiLog, setAiLog]           = useState('')
   const [open, setOpen]             = useState<string | null>(null)
   const [addBlk, setAddBlk]         = useState<string | null>(null)
@@ -215,13 +216,14 @@ export default function CreerCours() {
 
   const genAI = async () => {
     if (!info.title) return
-    setBusy(true); setAiError(''); setAiLog('Génération de la structure pédagogique…')
+    setBusy(true); setAiError(''); setAiBlocked(false); setAiLog('Génération de la structure pédagogique…')
     try {
       const res = await fetch('/api/generate-course', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: info.title, level: info.level, duration: info.duration, audience: info.audience, category: info.category })
       })
       const data = await res.json()
+      if (data.code === 'AI_TEMPORARILY_DISABLED') { setAiBlocked(true); throw new Error("Le générateur IA n'est pas inclus dans votre accès actuel. Consultez nos plans ou contactez-nous.") }
       if (!res.ok) throw new Error(data.error || `Erreur ${res.status}`)
       if (!data.modules) throw new Error('Structure invalide')
       setCourseData(data)
@@ -359,7 +361,13 @@ export default function CreerCours() {
                 {!busy && !aiError && <div style={{ fontSize: '48px', marginBottom: '1rem' }}>✅</div>}
                 {aiError && <div style={{ fontSize: '48px', marginBottom: '1rem' }}>❌</div>}
                 <div style={{ fontSize: '15px', fontWeight: '700', color: 'var(--canvas)', marginBottom: '8px' }}>{aiLog || aiError || 'Structure générée !'}</div>
-                {aiError && <button style={{ ...S.btn, marginTop: '1rem' }} onClick={() => setStep(0)}>← Retour</button>}
+                {aiError && (
+                  <div style={{ display: 'flex', gap: '10px', marginTop: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                    {aiBlocked && <a href="/landing#tarifs" style={{ ...S.btn, textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>Voir les plans</a>}
+                    {aiBlocked && <a href="mailto:admin@etagia-academie.com?subject=Acc%C3%A8s%20g%C3%A9n%C3%A9rateur%20IA" style={{ ...S.btn, textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>Nous contacter</a>}
+                    <button style={{ ...S.btn, marginTop: 0 }} onClick={() => setStep(0)}>← Retour</button>
+                  </div>
+                )}
               </div>
             </div>
           )}

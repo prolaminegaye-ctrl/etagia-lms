@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { sameOriginOnly, rateLimit } from '@/lib/security'
+import { sameOriginOnly, rateLimit, AI_FEATURES_DISABLED, aiDisabledResponse } from '@/lib/security'
 
 export async function POST(req: NextRequest) {
+  if (AI_FEATURES_DISABLED) return aiDisabledResponse()
+
   const guard = sameOriginOnly(req) ?? rateLimit(req, 10)
   if (guard) return guard
 

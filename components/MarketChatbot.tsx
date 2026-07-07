@@ -58,7 +58,14 @@ export default function MarketChatbot({ products, userProfile, onProductClick }:
         })
       })
       const data = await res.json()
-      setMessages(prev => [...prev, { role: 'assistant', content: data.reply || 'Désolé, erreur de communication.', mentionedIds: data.mentionedIds || [] }])
+      if (data.code === 'AI_TEMPORARILY_DISABLED') {
+        setMessages(prev => [...prev, {
+          role: 'assistant',
+          content: "🔒 L'assistante IA n'est pas incluse dans votre accès actuel.\n\n[Voir les plans disponibles](/landing#tarifs) · [Nous contacter](mailto:admin@etagia-academie.com?subject=Acc%C3%A8s%20assistant%20IA%20marketplace)"
+        }])
+      } else {
+        setMessages(prev => [...prev, { role: 'assistant', content: data.reply || 'Désolé, erreur de communication.', mentionedIds: data.mentionedIds || [] }])
+      }
     } catch {
       setMessages(prev => [...prev, { role: 'assistant', content: '⚠️ Erreur de connexion. Réessayez dans un instant.' }])
     } finally { setLoading(false) }
@@ -67,6 +74,7 @@ export default function MarketChatbot({ products, userProfile, onProductClick }:
   const renderMsg = (content: string) => {
     return content
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\[([^\]]+)\]\((https?:[^)]+|mailto:[^)]+|\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener" style="color:#e07828;font-weight:700;text-decoration:underline;">$1</a>')
       .replace(/\n/g, '<br/>')
       .replace(/\[([a-z]\d+)\]/g, '')
   }
