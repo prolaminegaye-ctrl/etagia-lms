@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Newsreader, Hanken_Grotesk } from 'next/font/google'
+import PresenceHeartbeat from '@/components/PresenceHeartbeat'
 import './globals.css'
 
 const newsreader = Newsreader({
@@ -122,6 +123,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="fr" className={`${newsreader.variable} ${hankenGrotesk.variable}`}>
       <body>
         {children}
+        <PresenceHeartbeat />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}

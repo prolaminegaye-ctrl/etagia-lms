@@ -2,15 +2,9 @@
 export const dynamic = 'force-dynamic'
 
 import { useState } from 'react'
-import { createClient } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
-
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
-  )
-}
+import { getSupabase } from '@/lib/supabase/client'
+import { logActivity } from '@/lib/activity'
 
 type Statut = 'apprenant' | 'formateur' | 'consultant' | 'autre'
 type Tab = 'login' | 'register'
@@ -84,6 +78,7 @@ export default function AuthPage() {
         id: data.user.id, nom, prenom, statut, email,
         created_at: new Date().toISOString()
       })
+      await logActivity('signup', { statut })
       setSuccess('Compte créé ! Vérifiez votre email pour confirmer votre inscription.')
       setTimeout(() => router.push('/onboarding'), 1800)
     }
@@ -98,6 +93,7 @@ export default function AuthPage() {
     })
     if (err) { setError(err.message); setLoading(false); return }
     if (data.user) {
+      await logActivity('login')
       const meta = data.user.user_metadata
       const role = meta?.statut || 'apprenant'
       const onb  = meta?.onboarding_done

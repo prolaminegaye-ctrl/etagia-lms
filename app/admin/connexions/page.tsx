@@ -1,130 +1,167 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import PageHero from '@/components/PageHero'
+import { getSupabase, isSupabaseConfigured } from '@/lib/supabase/client'
 
-const sessions = [
-  { nom: 'Aminata Mbaye',   email: 'a.mbaye@email.com',    role: 'Apprenant',  pays: '🇸🇳', ville: 'Dakar',   appareil: '📱', connecte: 'Il y a 3 min',  duree: '47 min', sessions: 28, statut: 'actif',    actif: true },
-  { nom: 'Kofi Diabaté',    email: 'k.diabate@corp.ci',    role: 'Formateur',  pays: '🇨🇮', ville: 'Abidjan', appareil: '💻', connecte: 'Il y a 12 min', duree: '1h 22',  sessions: 41, statut: 'actif',    actif: true },
-  { nom: 'Fatou Traoré',    email: 'f.traore@gmail.com',   role: 'Apprenant',  pays: '🇲🇱', ville: 'Bamako',  appareil: '📱', connecte: 'Auj. 09:14',    duree: '18 min', sessions: 14, statut: 'actif',    actif: false },
-  { nom: 'Oumar Ba',        email: 'o.ba@organisation.sn', role: 'Manager',    pays: '🇸🇳', ville: 'Dakar',   appareil: '💻', connecte: 'Hier 17:38',     duree: '34 min', sessions: 7,  statut: 'inactif',  actif: false },
-  { nom: 'Nadia Konaté',    email: 'n.konate@email.com',   role: 'Apprenant',  pays: '🇬🇳', ville: 'Conakry', appareil: '📱', connecte: 'Il y a 2j',      duree: '—',      sessions: 2,  statut: 'risque',   actif: false },
-  { nom: 'Inconnu (VPN)',   email: 'admin@test.hack',      role: 'Suspect',    pays: '🌐', ville: '?',       appareil: '🖥', connecte: 'Auj. 02:17',     duree: 'Bloqué', sessions: 5,  statut: 'bloque',   actif: false },
-]
-
-const STATUS_STYLE: Record<string, { bg: string; color: string; label: string }> = {
-  actif:   { bg: 'var(--turq-50)',    color: 'var(--turq-700)',   label: '● Actif' },
-  inactif: { bg: '#F5F5F4',          color: '#78716C',            label: '● Inactif' },
-  risque:  { bg: 'var(--gold-50)',    color: 'var(--gold-700)',    label: '⚠ À risque' },
-  bloque:  { bg: 'var(--orange-50)', color: 'var(--orange-700)',  label: '✕ Bloqué' },
+type ActivityRow = {
+  id: string
+  user_id: string
+  email: string | null
+  event: string
+  metadata: Record<string, unknown> | null
+  user_agent: string | null
+  created_at: string
 }
 
-const HEATMAP = [
-  [0,0,0,0,0,1,1,2,3,4,4,3,2,2,3,4,3,2,1,1,0,0,0,0],
-  [0,0,0,0,0,1,2,3,4,4,4,3,3,3,4,4,3,2,1,1,0,0,0,0],
-  [0,0,0,0,0,1,1,2,3,4,3,2,2,3,3,3,2,2,1,0,0,0,0,0],
-  [0,0,0,0,0,1,2,3,4,4,4,3,3,3,4,4,3,2,2,1,0,0,0,0],
-  [0,0,0,0,0,2,2,3,4,4,3,3,2,2,3,3,2,1,1,0,0,0,0,0],
-  [0,0,0,0,0,0,0,1,1,2,2,2,1,1,1,1,1,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0],
-]
-const JOURS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim']
-const heatColor = (v: number) => ['#E7E5E4','#FED7AA','#FB923C','#F97316','#EA580C'][v]
+const EVENT_LABEL: Record<string, { label: string; color: string }> = {
+  login: { label: '🔑 Connexion', color: 'var(--turq-700)' },
+  signup: { label: '✨ Inscription', color: 'var(--gold-700)' },
+  logout: { label: '🚪 Déconnexion', color: 'var(--ink-mut)' },
+  course_started: { label: '📘 Cours démarré', color: 'var(--orange-700)' },
+  course_completed: { label: '✅ Cours terminé', color: 'var(--turq-700)' },
+  order_created: { label: '🛒 Commande créée', color: 'var(--gold-700)' },
+  order_confirmed: { label: '💳 Paiement confirmé', color: 'var(--turq-700)' },
+  session_created: { label: '📅 Session créée', color: 'var(--orange-700)' },
+  session_member_added: { label: '👤 Apprenant affecté', color: 'var(--orange-700)' },
+  attendance_marked: { label: '📋 Présence marquée', color: 'var(--turq-700)' },
+}
+
+function deviceOf(userAgent: string | null): string {
+  if (!userAgent) return '❓'
+  if (/mobile/i.test(userAgent)) return '📱'
+  if (/tablet|ipad/i.test(userAgent)) return '📱'
+  return '💻'
+}
 
 export default function ConnexionsPage() {
+  const [rows, setRows] = useState<ActivityRow[]>([])
+  const [onlineCount, setOnlineCount] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [denied, setDenied] = useState(false)
   const [filtre, setFiltre] = useState('')
 
-  const filtered = sessions.filter(s =>
-    s.nom.toLowerCase().includes(filtre.toLowerCase()) ||
-    s.email.toLowerCase().includes(filtre.toLowerCase())
+  useEffect(() => {
+    if (!isSupabaseConfigured) { setLoading(false); return }
+    const supabase = getSupabase()
+    ;(async () => {
+      const since = new Date(Date.now() - 5 * 60 * 1000).toISOString()
+      const [{ data: activity, error }, { count: online }] = await Promise.all([
+        supabase.from('activity_log').select('id, user_id, email, event, metadata, user_agent, created_at').order('created_at', { ascending: false }).limit(300),
+        supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('last_active', since),
+      ])
+      if (error) setDenied(true)
+      setRows(activity ?? [])
+      setOnlineCount(online ?? 0)
+      setLoading(false)
+    })()
+  }, [])
+
+  const filtered = rows.filter((r) =>
+    (r.email ?? '').toLowerCase().includes(filtre.toLowerCase()) ||
+    r.event.toLowerCase().includes(filtre.toLowerCase())
   )
+
+  const todayCount = rows.filter((r) => new Date(r.created_at).toDateString() === new Date().toDateString()).length
+  const loginCount = rows.filter((r) => r.event === 'login' || r.event === 'signup').length
+
+  // Heatmap réelle : connexions par jour de semaine × tranche de 3h, à partir du journal
+  const heatmap = Array.from({ length: 7 }, () => Array(8).fill(0))
+  for (const r of rows) {
+    if (r.event !== 'login' && r.event !== 'signup') continue
+    const d = new Date(r.created_at)
+    const day = (d.getDay() + 6) % 7 // lundi=0
+    const slot = Math.floor(d.getHours() / 3)
+    heatmap[day][slot]++
+  }
+  const maxHeat = Math.max(1, ...heatmap.flat())
+  const heatColor = (v: number) => {
+    if (v === 0) return '#E7E5E4'
+    const ratio = v / maxHeat
+    if (ratio > 0.75) return '#EA580C'
+    if (ratio > 0.5) return '#F97316'
+    if (ratio > 0.25) return '#FB923C'
+    return '#FED7AA'
+  }
+  const JOURS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
 
   return (
     <div>
       <PageHero
         eyebrow="Administration"
         title="Connexions & Activité"
-        subtitle="Suivi en temps réel de toutes les sessions — qui s'est connecté, quand, depuis où."
+        subtitle="Journal réel — qui s'est connecté, qui a fait quoi, quand."
         stats={[
-          { value: '12',    label: 'Connectés maintenant' },
-          { value: '347',   label: 'Sessions aujourd\'hui' },
-          { value: '24 min', label: 'Durée moyenne' },
-          { value: '2',     label: 'Tentatives suspectes' },
+          { value: String(onlineCount), label: 'Connectés maintenant' },
+          { value: String(todayCount), label: 'Événements aujourd\'hui' },
+          { value: String(loginCount), label: 'Connexions (300 derniers événements)' },
         ]}
       />
 
-      {/* Heatmap */}
+      {denied && (
+        <div style={{ padding: '1rem 1.25rem', borderRadius: '12px', background: 'var(--orange-50)', color: 'var(--orange-700)', fontSize: '13px', marginBottom: '1.5rem' }}>
+          ⚠️ Ce compte n&apos;a pas le rôle admin ou n&apos;est pas connecté : le journal complet est réservé aux administrateurs.
+        </div>
+      )}
+
+      {/* Heatmap réelle */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '16px', padding: '1.5rem', marginBottom: '1.5rem' }}>
-        <div style={{ fontSize: '14px', fontWeight: '700', color: 'var(--ink)', marginBottom: '4px' }}>Heatmap hebdomadaire</div>
-        <div style={{ fontSize: '12px', color: 'var(--ink-mut)', marginBottom: '12px' }}>Intensité des connexions — heure 0h → 23h</div>
-        {HEATMAP.map((row, i) => (
+        <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--ink)', marginBottom: '4px' }}>Heatmap des connexions</div>
+        <div style={{ fontSize: '12px', color: 'var(--ink-mut)', marginBottom: '12px' }}>Basée sur le journal réel — tranches de 3h, 0h → 24h</div>
+        {heatmap.map((row, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '3px', marginBottom: '3px' }}>
             <span style={{ fontSize: '10px', color: 'var(--ink-mut)', width: '26px', flexShrink: 0 }}>{JOURS[i]}</span>
             {row.map((v, h) => (
-              <div key={h} style={{ flex: 1, height: '13px', borderRadius: '2px', background: heatColor(v) }} />
+              <div key={h} title={`${v} connexion(s)`} style={{ flex: 1, height: '16px', borderRadius: '2px', background: heatColor(v) }} />
             ))}
           </div>
         ))}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '10px', fontSize: '11px', color: 'var(--ink-mut)' }}>
-          <span>Moins</span>
-          {['#E7E5E4','#FED7AA','#FB923C','#F97316','#EA580C'].map(c => (
-            <div key={c} style={{ width: '12px', height: '12px', borderRadius: '2px', background: c }} />
-          ))}
-          <span>Plus</span>
-        </div>
       </div>
 
-      {/* Tableau */}
+      {/* Journal */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '16px', overflow: 'hidden' }}>
         <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid var(--line)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
-          <h3 style={{ fontSize: '15px', fontWeight: '700', color: 'var(--ink)', margin: 0 }}>
-            Journal des connexions <span style={{ fontSize: '12px', color: 'var(--ink-mut)', fontWeight: '400' }}>({sessions.length} entrées)</span>
+          <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--ink)', margin: 0 }}>
+            Journal d&apos;activité <span style={{ fontSize: '12px', color: 'var(--ink-mut)', fontWeight: 400 }}>({filtered.length} entrées)</span>
           </h3>
-          <input
-            value={filtre} onChange={e => setFiltre(e.target.value)}
-            placeholder="🔍 Rechercher…"
-            style={{ padding: '7px 13px', border: '1px solid var(--line)', borderRadius: '9px', fontSize: '13px', outline: 'none', background: 'var(--canvas)', color: 'var(--ink)' }}
-          />
+          <input value={filtre} onChange={e => setFiltre(e.target.value)} placeholder="🔍 Rechercher…"
+            style={{ padding: '7px 13px', border: '1px solid var(--line)', borderRadius: '9px', fontSize: '13px', outline: 'none', background: 'var(--canvas)', color: 'var(--ink)' }} />
         </div>
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr>
-                {['Utilisateur','Rôle','Dernière connexion','Durée','Appareil','Localisation','Sessions/mois','Statut'].map(h => (
-                  <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontSize: '10px', fontWeight: '700', color: 'var(--ink-mut)', textTransform: 'uppercase', letterSpacing: '.06em', background: '#FAFAF9', borderBottom: '1px solid var(--line)' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((s, i) => {
-                const st = STATUS_STYLE[s.statut]
-                return (
-                  <tr key={i} style={{ borderBottom: '1px solid #F5F5F4' }}>
-                    <td style={{ padding: '12px 14px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-                        <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'var(--orange-50)', color: 'var(--orange-700)', fontWeight: '800', fontSize: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{s.nom[0]}</div>
-                        <div>
-                          <div style={{ fontWeight: '600', fontSize: '13px', color: 'var(--ink)' }}>{s.nom}</div>
-                          <div style={{ fontSize: '11px', color: 'var(--ink-mut)' }}>{s.email}</div>
+        <div style={{ overflowX: 'auto', maxHeight: '600px', overflowY: 'auto' }}>
+          {loading ? (
+            <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--ink-soft)' }}>Chargement…</div>
+          ) : filtered.length === 0 ? (
+            <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--ink-soft)' }}>Aucun événement pour l&apos;instant. Le journal se remplit à mesure que les comptes s&apos;utilisent.</div>
+          ) : (
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  {['Utilisateur', 'Événement', 'Appareil', 'Date'].map(h => (
+                    <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontSize: '10px', fontWeight: 700, color: 'var(--ink-mut)', textTransform: 'uppercase', letterSpacing: '.06em', background: '#FAFAF9', borderBottom: '1px solid var(--line)' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((r) => {
+                  const meta = EVENT_LABEL[r.event] ?? { label: r.event, color: 'var(--ink-mut)' }
+                  return (
+                    <tr key={r.id} style={{ borderBottom: '1px solid #F5F5F4' }}>
+                      <td style={{ padding: '12px 14px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+                          <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--orange-50)', color: 'var(--orange-700)', fontWeight: 800, fontSize: '11px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            {(r.email || '?')[0].toUpperCase()}
+                          </div>
+                          <span style={{ fontSize: '12px', color: 'var(--ink)' }}>{r.email || r.user_id.slice(0, 8)}</span>
                         </div>
-                      </div>
-                    </td>
-                    <td style={{ padding: '12px 14px', fontSize: '12px', color: 'var(--ink-mut)' }}>{s.role}</td>
-                    <td style={{ padding: '12px 14px', fontSize: '12px', color: 'var(--ink)' }}>
-                      {s.actif && <span style={{ display: 'inline-block', width: 7, height: 7, borderRadius: '50%', background: '#16A34A', marginRight: 5 }} />}
-                      {s.connecte}
-                    </td>
-                    <td style={{ padding: '12px 14px', fontSize: '12px', color: 'var(--ink)' }}>{s.duree}</td>
-                    <td style={{ padding: '12px 14px', fontSize: '14px' }}>{s.appareil}</td>
-                    <td style={{ padding: '12px 14px', fontSize: '13px' }}>{s.pays} {s.ville}</td>
-                    <td style={{ padding: '12px 14px', fontSize: '13px', fontWeight: '700', color: 'var(--ink)' }}>{s.sessions}</td>
-                    <td style={{ padding: '12px 14px' }}>
-                      <span style={{ fontSize: '11px', fontWeight: '700', padding: '3px 10px', borderRadius: '99px', background: st.bg, color: st.color }}>{st.label}</span>
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+                      </td>
+                      <td style={{ padding: '12px 14px', fontSize: '12px', fontWeight: 600, color: meta.color }}>{meta.label}</td>
+                      <td style={{ padding: '12px 14px', fontSize: '14px' }}>{deviceOf(r.user_agent)}</td>
+                      <td style={{ padding: '12px 14px', fontSize: '12px', color: 'var(--ink)' }}>{new Date(r.created_at).toLocaleString('fr-FR')}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>

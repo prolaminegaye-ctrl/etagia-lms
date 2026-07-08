@@ -1,139 +1,165 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { getSupabase, isSupabaseConfigured } from '@/lib/supabase/client'
 
-const apprenants = [
-  { id:'1', name:'Fatou Diallo', email:'fatou@sjt.sn', cours:'Data Science Python', progress:72, score:85, lastSeen:'Aujourd\'hui', status:'Actif', streak:5 },
-  { id:'2', name:'Moussa Koné', email:'moussa@example.com', cours:'Marketing Digital', progress:45, score:78, lastSeen:'Hier', status:'Actif', streak:3 },
-  { id:'3', name:'Aïda Traoré', email:'aida@example.com', cours:'Data Science Python', progress:90, score:92, lastSeen:'Aujourd\'hui', status:'Actif', streak:12 },
-  { id:'4', name:'Ibrahim Sow', email:'ibrahim@example.com', cours:'Leadership', progress:20, score:60, lastSeen:'Il y a 5 jours', status:'Inactif', streak:0 },
-  { id:'5', name:'Aminata Diop', email:'aminata@example.com', cours:'Marketing Digital', progress:88, score:91, lastSeen:'Aujourd\'hui', status:'Actif', streak:8 },
-  { id:'6', name:'Cheikh Ba', email:'cheikh@example.com', cours:'Leadership', progress:55, score:74, lastSeen:'Il y a 2 jours', status:'Actif', streak:2 },
-]
+type Row = {
+  learnerId: string
+  name: string
+  sessionTitle: string
+  sessionId: string
+  progress: number
+  attendanceRate: number | null
+  lastMarked: string | null
+}
 
-export default function ApprenantPage() {
+export default function ApprenantsPage() {
+  const [rows, setRows] = useState<Row[]>([])
+  const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
-  const [sel, setSel] = useState<typeof apprenants[0]|null>(null)
 
-  const filtered = apprenants.filter(a =>
-    a.name.toLowerCase().includes(search.toLowerCase()) ||
-    a.cours.toLowerCase().includes(search.toLowerCase())
-  )
+  useEffect(() => {
+    if (!isSupabaseConfigured) { setLoading(false); return }
+    const supabase = getSupabase()
+    ;(async () => {
+      const { data: auth } = await supabase.auth.getUser()
+      if (!auth.user) { setLoading(false); return }
 
-  const avg = (arr: number[]) => Math.round(arr.reduce((a,b)=>a+b,0)/arr.length)
+      const { data: sessions } = await supabase.from('training_sessions').select('id, title, course_id').eq('formateur_id', auth.user.id)
+      if (!sessions?.length) { setRows([]); setLoading(false); return }
+
+      const sessionIds = sessions.map((s) => s.id)
+      const sessionMap = new Map(sessions.map((s) => [s.id, s]))
+
+      const [{ data: members }, { data: attendance }] = await Promise.all([
+        supabase.from('session_members').select('session_id, learner_id').in('session_id', sessionIds),
+        supabase.from('session_attendance').select('session_id, learner_id, status').in('session_id', sessionIds),
+      ])
+
+      const learnerIds = Array.from(new Set((members ?? []).map((m) => m.learner_id)))
+      if (!learnerIds.length) { setRows([]); setLoading(false); return }
+
+      const [{ data: profiles }, { data: enrollments }] = await Promise.all([
+        supabase.from('profiles').select('id, full_name').in('id', learnerIds),
+        supabase.from('enrollments').select('user_id, course_id, progress').in('user_id', learnerIds),
+      ])
+      const profileMap = new Map((profiles ?? []).map((p) => [p.id, p.full_name]))
+
+      const attendanceByPair = new Map<string, { present: number; total: number }>()
+      for (const a of attendance ?? []) {
+        const key = `${a.session_id}:${a.learner_id}`
+        const cur = attendanceByPair.get(key) ?? { present: 0, total: 0 }
+        cur.total++
+        if (a.status === 'present' || a.status === 'late') cur.present++
+        attendanceByPair.set(key, cur)
+      }
+
+      const built: Row[] = (members ?? []).map((m) => {
+        const session = sessionMap.get(m.session_id)!
+        const stat = attendanceByPair.get(`${m.session_id}:${m.learner_id}`)
+        const enrollment = enrollments?.find((e) => e.user_id === m.learner_id && e.course_id === session.course_id)
+        return {
+          learnerId: m.learner_id,
+          name: profileMap.get(m.learner_id) || 'Apprenant sans nom',
+          sessionTitle: session.title,
+          sessionId: m.session_id,
+          progress: enrollment ? Math.round(Number(enrollment.progress) || 0) : 0,
+          attendanceRate: stat && stat.total > 0 ? Math.round((stat.present / stat.total) * 100) : null,
+          lastMarked: null,
+        }
+      })
+      setRows(built)
+      setLoading(false)
+    })()
+  }, [])
+
+  const filtered = rows.filter((r) => r.name.toLowerCase().includes(search.toLowerCase()) || r.sessionTitle.toLowerCase().includes(search.toLowerCase()))
+  const avg = (arr: number[]) => (arr.length ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length) : 0)
 
   return (
     <div>
-      {/* Hero orange */}
-      <div style={{ borderRadius: '20px', padding: '1.75rem 2rem', marginBottom: '2rem', background: 'linear-gradient(135deg, #F4591F 0%, #FF8C42 50%, #FFB347 100%)', boxShadow: '0 6px 24px rgba(244,89,31,0.25)', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: -50, right: -30, width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
-        <div style={{ fontSize: '10px', fontWeight: '800', color: 'rgba(255,255,255,0.7)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Apprenants</div>
-        <h1 style={{ fontSize: '1.4rem', fontWeight: '900', color: '#fff', letterSpacing: '-0.3px', marginBottom: '3px' }}>Mes Apprenants</h1>
-        <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '13px' }}>Suivez la progression de vos apprenants.</p>
-      </div>
-      <div style={{marginBottom:'2rem',padding:'1.5rem',background:'linear-gradient(135deg,rgba(28,25,23,0.06),rgba(34,212,168,0.05))',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'20px'}}>
-        <h1 style={{fontSize:'24px',fontWeight:'800',background:'linear-gradient(135deg,#1C1917,#E8651A)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Mes apprenants</h1>
-        <p style={{color:'#A8A29E',fontSize:'13px',marginTop:'3px'}}>{apprenants.length} apprenants · Progression moyenne {avg(apprenants.map(a=>a.progress))}% · Score moyen {avg(apprenants.map(a=>a.score))}/100</p>
+      <div style={{ borderRadius: '20px', padding: '1.75rem 2rem', marginBottom: '1.25rem', background: 'linear-gradient(135deg, #F4591F 0%, #FF8C42 50%, #FFB347 100%)', boxShadow: '0 6px 24px rgba(244,89,31,0.25)', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ fontSize: '10px', fontWeight: 800, color: 'rgba(255,255,255,0.7)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>Apprenants</div>
+        <h1 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#fff', letterSpacing: '-0.3px', marginBottom: '3px' }}>Vue d&apos;ensemble de vos apprenants</h1>
+        <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '13px' }}>Agrégée depuis toutes vos sessions actives.</p>
       </div>
 
-      {/* KPIs */}
-      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1rem',marginBottom:'2rem'}}>
-        {[
-          {l:'Actifs cette semaine',v:apprenants.filter(a=>a.status==='Actif').length,c:'#E8651A'},
-          {l:'Progression moyenne',v:`${avg(apprenants.map(a=>a.progress))}%`,c:'#00BFA5'},
-          {l:'Score moyen',v:`${avg(apprenants.map(a=>a.score))}/100`,c:'#FFB300'},
-          {l:'Streak moyen',v:`${avg(apprenants.map(a=>a.streak))}j 🔥`,c:'#FFB300'},
-        ].map(k=>(
-          <div key={k.l} style={{background:'#FFFFFF',border:'1px solid rgba(28,25,23,0.07)',borderRadius:'14px',padding:'1.25rem',position:'relative',overflow:'hidden'}}>
-            <div style={{position:'absolute',top:0,left:0,right:0,height:'2px',background:k.c}} />
-            <div style={{fontSize:'26px',fontWeight:'800',color:k.c,fontFamily:'Syne,sans-serif',marginTop:'4px',marginBottom:'4px'}}>{k.v}</div>
-            <div style={{fontSize:'11px',color:'#57534E'}}>{k.l}</div>
-          </div>
-        ))}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '14px', padding: '14px 18px', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', flexWrap: 'wrap' }}>
+        <p style={{ fontSize: '13px', color: 'var(--ink-mut)', margin: 0 }}>
+          👥 Pour affecter de nouveaux apprenants, créez ou ouvrez une session — l&apos;affectation, l&apos;assiduité et la progression se gèrent désormais par session.
+        </p>
+        <Link href="/formateur/sessions" style={{ padding: '9px 18px', background: 'var(--grad-signature)', color: '#fff', borderRadius: '10px', fontWeight: 700, fontSize: '12px', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+          Gérer mes sessions →
+        </Link>
       </div>
 
-      <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="🔍 Rechercher un apprenant ou un cours..."
-        style={{width:'100%',background:'rgba(232,101,26,0.06)',color:'#1C1917',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'12px',padding:'11px 16px',fontSize:'14px',fontFamily:'inherit',outline:'none',marginBottom:'1.5rem'}} />
-
-      <div style={{background:'#FFFFFF',border:'1px solid rgba(28,25,23,0.07)',borderRadius:'16px',overflow:'hidden'}}>
-        <table style={{width:'100%',borderCollapse:'collapse'}}>
-          <thead>
-            <tr style={{borderBottom:'1px solid rgba(28,25,23,0.06)',background:'#FAF9F7'}}>
-              {['Apprenant','Cours','Progression','Score','Streak','Dernière activité','Statut','Action'].map(h=>(
-                <th key={h} style={{padding:'11px 14px',textAlign:'left',fontSize:'10px',fontWeight:'700',color:'#57534E',textTransform:'uppercase',letterSpacing:'0.8px'}}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((a,i)=>(
-              <tr key={a.id} style={{borderBottom:i<filtered.length-1?'1px solid rgba(28,25,23,0.07)':'none',transition:'background .15s'}}
-                onMouseEnter={e=>(e.currentTarget as HTMLElement).style.background='rgba(232,101,26,0.04)'}
-                onMouseLeave={e=>(e.currentTarget as HTMLElement).style.background='transparent'}>
-                <td style={{padding:'13px 14px'}}>
-                  <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
-                    <div style={{width:'32px',height:'32px',borderRadius:'50%',background:'linear-gradient(135deg,#E8651A,#D4A017)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'12px',fontWeight:'800',color:'#fff',flexShrink:0}}>{a.name[0]}</div>
-                    <div>
-                      <div style={{fontWeight:'500',fontSize:'13px',color:'#1C1917'}}>{a.name}</div>
-                      <div style={{fontSize:'11px',color:'#57534E'}}>{a.email}</div>
-                    </div>
-                  </div>
-                </td>
-                <td style={{padding:'13px 14px',fontSize:'12px',color:'#A8A29E',maxWidth:'140px'}}><div style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{a.cours}</div></td>
-                <td style={{padding:'13px 14px'}}>
-                  <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
-                    <div style={{width:'60px',height:'4px',background:'rgba(28,25,23,0.06)',borderRadius:'2px',overflow:'hidden'}}>
-                      <div style={{height:'100%',width:`${a.progress}%`,background:'linear-gradient(90deg,#E8651A,#FFB300)',borderRadius:'2px'}} />
-                    </div>
-                    <span style={{fontSize:'12px',color:'#E8651A',fontWeight:'600'}}>{a.progress}%</span>
-                  </div>
-                </td>
-                <td style={{padding:'13px 14px',fontSize:'13px',fontWeight:'700',color:a.score>=80?'#00BFA5':a.score>=60?'#FFB300':'#F05A5A'}}>{a.score}/100</td>
-                <td style={{padding:'13px 14px',fontSize:'12px',color:'#FFB300'}}>{a.streak>0?`🔥 ${a.streak}j`:'—'}</td>
-                <td style={{padding:'13px 14px',fontSize:'12px',color:'#A8A29E'}}>{a.lastSeen}</td>
-                <td style={{padding:'13px 14px'}}>
-                  <span style={{fontSize:'11px',fontWeight:'600',padding:'3px 8px',borderRadius:'20px',background:a.status==='Actif'?'rgba(34,212,168,0.12)':'rgba(240,90,90,0.1)',color:a.status==='Actif'?'#00BFA5':'#F05A5A'}}>{a.status}</span>
-                </td>
-                <td style={{padding:'13px 14px'}}>
-                  <button onClick={()=>setSel(a)} style={{background:'rgba(28,25,23,0.06)',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'6px',padding:'5px 10px',color:'#E8651A',fontSize:'11px',fontWeight:'600',cursor:'pointer'}}>Détails</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Detail modal */}
-      {sel&&(
-        <div style={{position:'fixed',inset:0,background:'#FAF9F7',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100,padding:'1rem'}}>
-          <div style={{background:'#FFFFFF',border:'1px solid rgba(28,25,23,0.10)',borderRadius:'20px',padding:'2rem',width:'100%',maxWidth:'480px'}}>
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'1.5rem'}}>
-              <div style={{display:'flex',gap:'12px',alignItems:'center'}}>
-                <div style={{width:'48px',height:'48px',borderRadius:'50%',background:'linear-gradient(135deg,#E8651A,#D4A017)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px',fontWeight:'800',color:'#fff'}}>{sel.name[0]}</div>
-                <div>
-                  <div style={{fontWeight:'700',fontSize:'16px',color:'#1C1917'}}>{sel.name}</div>
-                  <div style={{fontSize:'12px',color:'#57534E'}}>{sel.email}</div>
-                </div>
-              </div>
-              <button onClick={()=>setSel(null)} style={{background:'none',border:'none',color:'#57534E',fontSize:'18px',cursor:'pointer'}}>✕</button>
+      {!loading && rows.length > 0 && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1rem', marginBottom: '1.5rem' }}>
+          {[
+            { l: 'Apprenants suivis', v: rows.length, c: '#E8651A' },
+            { l: 'Progression moyenne', v: `${avg(rows.map((r) => r.progress))}%`, c: '#00BFA5' },
+            { l: 'Assiduité moyenne', v: rows.some((r) => r.attendanceRate !== null) ? `${avg(rows.filter((r) => r.attendanceRate !== null).map((r) => r.attendanceRate!))}%` : '—', c: '#FFB300' },
+          ].map((k) => (
+            <div key={k.l} style={{ background: '#FFFFFF', border: '1px solid rgba(28,25,23,0.07)', borderRadius: '14px', padding: '1.25rem' }}>
+              <div style={{ fontSize: '26px', fontWeight: 800, color: k.c }}>{k.v}</div>
+              <div style={{ fontSize: '11px', color: '#57534E' }}>{k.l}</div>
             </div>
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem',marginBottom:'1.5rem'}}>
-              {[
-                {l:'Cours',v:sel.cours,c:'#E8651A'},{l:'Progression',v:`${sel.progress}%`,c:'#00BFA5'},
-                {l:'Score',v:`${sel.score}/100`,c:'#FFB300'},{l:'Streak',v:`${sel.streak} jours 🔥`,c:'#FFB300'},
-                {l:'Dernière activité',v:sel.lastSeen,c:'#A8A29E'},{l:'Statut',v:sel.status,c:sel.status==='Actif'?'#00BFA5':'#F05A5A'},
-              ].map(s=>(
-                <div key={s.l} style={{background:'#FAF9F7',borderRadius:'10px',padding:'12px'}}>
-                  <div style={{fontSize:'10px',color:'#57534E',textTransform:'uppercase',letterSpacing:'0.5px',marginBottom:'4px'}}>{s.l}</div>
-                  <div style={{fontSize:'14px',fontWeight:'700',color:s.c}}>{s.v}</div>
-                </div>
-              ))}
-            </div>
-            <div style={{background:'rgba(232,101,26,0.06)',border:'1px solid rgba(28,25,23,0.08)',borderRadius:'12px',padding:'14px',marginBottom:'1rem'}}>
-              <div style={{fontSize:'12px',color:'#A8A29E',marginBottom:'8px',fontWeight:'600'}}>MESSAGE PERSONNALISÉ</div>
-              <textarea placeholder={`Envoyer un message de suivi à ${sel.name}...`} rows={3} style={{width:'100%',background:'#FAF9F7',color:'#1C1917',border:'1px solid rgba(28,25,23,0.08)',borderRadius:'8px',padding:'8px 12px',fontSize:'13px',fontFamily:'inherit',outline:'none',resize:'none'}} />
-              <button style={{marginTop:'8px',background:'linear-gradient(135deg,#E8651A,#D4A017)',border:'none',borderRadius:'8px',padding:'8px 16px',color:'#fff',fontSize:'12px',fontWeight:'700',cursor:'pointer'}}>Envoyer le message</button>
-            </div>
-          </div>
+          ))}
         </div>
+      )}
+
+      {loading ? (
+        <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--ink-soft)' }}>Chargement…</div>
+      ) : rows.length === 0 ? (
+        <div style={{ padding: '3rem', textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '16px', color: 'var(--ink-soft)' }}>
+          Aucun apprenant affecté pour l&apos;instant. Créez une session pour commencer.
+        </div>
+      ) : (
+        <>
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="🔍 Rechercher un apprenant ou une session..."
+            style={{ width: '100%', background: 'rgba(232,101,26,0.06)', color: '#1C1917', border: '1px solid rgba(28,25,23,0.09)', borderRadius: '12px', padding: '11px 16px', fontSize: '14px', outline: 'none', marginBottom: '1.5rem', boxSizing: 'border-box' }} />
+
+          <div style={{ background: '#FFFFFF', border: '1px solid rgba(28,25,23,0.07)', borderRadius: '16px', overflow: 'hidden' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid rgba(28,25,23,0.06)', background: '#FAF9F7' }}>
+                  {['Apprenant', 'Session', 'Progression', 'Assiduité', ''].map((h) => (
+                    <th key={h} style={{ padding: '11px 14px', textAlign: 'left', fontSize: '10px', fontWeight: 700, color: '#57534E', textTransform: 'uppercase', letterSpacing: '0.8px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((r, i) => (
+                  <tr key={`${r.sessionId}-${r.learnerId}`} style={{ borderBottom: i < filtered.length - 1 ? '1px solid rgba(28,25,23,0.07)' : 'none' }}>
+                    <td style={{ padding: '13px 14px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'linear-gradient(135deg,#E8651A,#D4A017)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 800, color: '#fff', flexShrink: 0 }}>{r.name[0]?.toUpperCase()}</div>
+                        <div style={{ fontWeight: 500, fontSize: '13px', color: '#1C1917' }}>{r.name}</div>
+                      </div>
+                    </td>
+                    <td style={{ padding: '13px 14px', fontSize: '12px', color: '#A8A29E' }}>
+                      <Link href={`/formateur/sessions/${r.sessionId}`} style={{ color: '#E8651A', fontWeight: 600, textDecoration: 'none' }}>{r.sessionTitle}</Link>
+                    </td>
+                    <td style={{ padding: '13px 14px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ width: '60px', height: '4px', background: 'rgba(28,25,23,0.06)', borderRadius: '2px', overflow: 'hidden' }}>
+                          <div style={{ height: '100%', width: `${r.progress}%`, background: 'linear-gradient(90deg,#E8651A,#FFB300)', borderRadius: '2px' }} />
+                        </div>
+                        <span style={{ fontSize: '12px', color: '#E8651A', fontWeight: 600 }}>{r.progress}%</span>
+                      </div>
+                    </td>
+                    <td style={{ padding: '13px 14px', fontSize: '13px', fontWeight: 700, color: r.attendanceRate === null ? '#A8A29E' : r.attendanceRate >= 75 ? '#00BFA5' : r.attendanceRate >= 50 ? '#FFB300' : '#F05A5A' }}>
+                      {r.attendanceRate === null ? '—' : `${r.attendanceRate}%`}
+                    </td>
+                    <td style={{ padding: '13px 14px' }}>
+                      <Link href={`/formateur/sessions/${r.sessionId}`} style={{ background: 'rgba(28,25,23,0.06)', border: '1px solid rgba(28,25,23,0.09)', borderRadius: '6px', padding: '5px 10px', color: '#E8651A', fontSize: '11px', fontWeight: 600, textDecoration: 'none' }}>Ouvrir la session</Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   )

@@ -4,6 +4,15 @@ import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 const MarketChatbot = dynamic(() => import('@/components/MarketChatbot'), { ssr: false })
 import { ETAGIA_CATALOG, EtProduct } from '@/lib/market-catalog'
+import { getSupabase, isSupabaseConfigured } from '@/lib/supabase/client'
+import { logActivity } from '@/lib/activity'
+
+type PaymentMethod = 'wave' | 'orange_money' | 'stripe'
+const PAYMENT_METHODS: { id: PaymentMethod; label: string; icon: string; needsPhone: boolean }[] = [
+  { id: 'wave', label: 'Wave', icon: '🌊', needsPhone: true },
+  { id: 'orange_money', label: 'Orange Money', icon: '🟠', needsPhone: true },
+  { id: 'stripe', label: 'Carte bancaire (Stripe)', icon: '💳', needsPhone: false },
+]
 
 type ProductType = 'livre' | 'cours' | 'logiciel' | 'ressource'
 
@@ -33,10 +42,34 @@ export default function MarketPage() {
   const [userProfile, setUserProfile] = useState<any>(null)
   const [catalogProducts, setCatalogProducts] = useState<EtProduct[]>(ETAGIA_CATALOG)
   const [highlightId, setHighlightId] = useState<string>('')
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('wave')
+  const [payerPhone, setPayerPhone] = useState('')
+  const [lastOrderRef, setLastOrderRef] = useState('')
+  const [buyerId, setBuyerId] = useState<string | null>(null)
 
   // ─── Charger catalogue (localStorage + ETAGIA_CATALOG mergé) ───
   useEffect(() => {
-    try { setPurchases(JSON.parse(localStorage.getItem('etagia_purchases') || '[]')) } catch {}
+    let local: string[] = []
+    try { local = JSON.parse(localStorage.getItem('etagia_purchases') || '[]') } catch {}
+    setPurchases(local)
+
+    if (isSupabaseConfigured) {
+      const supabase = getSupabase()
+      supabase.auth.getUser().then(async ({ data }) => {
+        if (!data.user) return
+        setBuyerId(data.user.id)
+        const { data: orders } = await supabase
+          .from('orders')
+          .select('item_id')
+          .eq('buyer_id', data.user.id)
+          .eq('item_type', 'market_product')
+          .in('status', ['paid', 'pending'])
+        if (orders?.length) {
+          const remoteIds = orders.map((o) => o.item_id)
+          setPurchases((current) => Array.from(new Set([...current, ...remoteIds])))
+        }
+      })
+    }
     try {
       const stored = localStorage.getItem('etagia_market_products')
       if (stored) {
@@ -62,10 +95,32 @@ export default function MarketPage() {
   }
 
   // ─── ACHAT ───
-  const startBuy = (p: EtProduct) => { setModal(p); setBuyStep('form') }
+  const startBuy = (p: EtProduct) => { setModal(p); setBuyStep('form'); setPaymentMethod('wave'); setPayerPhone('') }
   const confirmBuy = async () => {
+    const method = PAYMENT_METHODS.find((m) => m.id === paymentMethod)!
+    if (method.needsPhone && !payerPhone.trim()) {
+      showToast('⚠️ Indiquez votre numéro pour le paiement mobile money')
+      return
+    }
     setBuyStep('loading')
-    await new Promise(r => setTimeout(r, 2200))
+
+    if (isSupabaseConfigured && buyerId) {
+      const supabase = getSupabase()
+      const { data: order } = await supabase.from('orders').insert({
+        buyer_id: buyerId,
+        item_type: 'market_product',
+        item_id: modal!.id,
+        item_title: modal!.title,
+        amount_fcfa: Math.round(modal!.price / 100),
+        payment_method: paymentMethod,
+        payer_phone: method.needsPhone ? payerPhone.trim() : null,
+        status: 'pending',
+      }).select('id').single()
+      setLastOrderRef(order?.id?.slice(0, 8) ?? '')
+      await logActivity('order_created', { item_id: modal!.id, payment_method: paymentMethod, amount_fcfa: Math.round(modal!.price / 100) })
+    }
+
+    await new Promise(r => setTimeout(r, 1200))
     const updated = [...purchases, modal!.id]
     setPurchases(updated)
     localStorage.setItem('etagia_purchases', JSON.stringify(updated))
@@ -441,29 +496,39 @@ export default function MarketPage() {
                   ))}
                 </div>
 
-                {/* Fake payment form */}
+                {/* Choix du moyen de paiement */}
                 <div style={{ marginBottom: '1rem' }}>
-                  <label style={labelS}>Nom sur la carte</label>
-                  <input defaultValue="Lamine Gaye" style={inputS} />
-                </div>
-                <div style={{ marginBottom: '1rem' }}>
-                  <label style={labelS}>Numéro de carte</label>
-                  <input defaultValue="4242 4242 4242 4242" style={inputS} />
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '1.5rem' }}>
-                  <div>
-                    <label style={labelS}>Expiration</label>
-                    <input defaultValue="12/27" style={inputS} />
-                  </div>
-                  <div>
-                    <label style={labelS}>CVV</label>
-                    <input defaultValue="•••" style={inputS} type="password" />
+                  <label style={labelS}>Moyen de paiement</label>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
+                    {PAYMENT_METHODS.map(m => (
+                      <button key={m.id} type="button" onClick={() => setPaymentMethod(m.id)} style={{
+                        padding: '10px 6px', borderRadius: '10px', cursor: 'pointer', textAlign: 'center',
+                        border: paymentMethod === m.id ? '2px solid var(--orange)' : '1px solid var(--line)',
+                        background: paymentMethod === m.id ? 'rgba(232,101,26,0.08)' : 'var(--bg-secondary)',
+                        color: 'var(--ink)',
+                      }}>
+                        <div style={{ fontSize: '20px', marginBottom: '4px' }}>{m.icon}</div>
+                        <div style={{ fontSize: '11px', fontWeight: 700 }}>{m.label}</div>
+                      </button>
+                    ))}
                   </div>
                 </div>
+
+                {PAYMENT_METHODS.find(m => m.id === paymentMethod)?.needsPhone && (
+                  <div style={{ marginBottom: '1rem' }}>
+                    <label style={labelS}>Numéro {paymentMethod === 'wave' ? 'Wave' : 'Orange Money'}</label>
+                    <input value={payerPhone} onChange={e => setPayerPhone(e.target.value)} placeholder="+221 77 000 00 00" style={inputS} />
+                  </div>
+                )}
+
+                {paymentMethod === 'stripe' && (
+                  <div style={{ background: 'rgba(232,101,26,0.06)', borderRadius: '10px', padding: '10px 12px', marginBottom: '1rem', fontSize: '12px', color: 'var(--ink-mut)' }}>
+                    💳 Vous serez redirigé vers un paiement sécurisé par carte après confirmation.
+                  </div>
+                )}
+
                 <div style={{ display: 'flex', gap: '8px', marginBottom: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                  {['🔒 SSL sécurisé', '💳 Visa / MC', '📱 Orange Money', '🏦 Wave'].map(b => (
-                    <span key={b} style={{ fontSize: '11px', color: 'var(--text-muted)', background: 'var(--bg-secondary)', borderRadius: '5px', padding: '3px 8px' }}>{b}</span>
-                  ))}
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)', background: 'var(--bg-secondary)', borderRadius: '5px', padding: '3px 8px' }}>🔒 Commande sécurisée et tracée</span>
                 </div>
                 <button onClick={confirmBuy} style={{ width: '100%', background: 'linear-gradient(135deg,var(--orange),#D4A017)', border: 'none', borderRadius: '10px', padding: '13px', color: '#fff', fontWeight: '800', fontSize: '15px', cursor: 'pointer', fontFamily: 'var(--font-display)' }}>
                   ✓ Confirmer l&apos;achat — {fmt(modal.price)}
@@ -486,9 +551,14 @@ export default function MarketPage() {
               <div style={{ textAlign: 'center', padding: '1rem' }}>
                 <div style={{ fontSize: '64px', marginBottom: '1rem' }}>🎉</div>
                 <h2 style={{ fontFamily: 'var(--font-display)', margin: '0 0 8px', fontSize: '22px' }}>Achat confirmé !</h2>
-                <p style={{ color: 'var(--ink-mut)', fontSize: '14px', marginBottom: '1.5rem' }}>
+                <p style={{ color: 'var(--ink-mut)', fontSize: '14px', marginBottom: '0.5rem' }}>
                   <strong>{modal.title}</strong> est maintenant débloqué dans votre espace.
                 </p>
+                {lastOrderRef && (
+                  <p style={{ color: 'var(--ink-soft)', fontSize: '12px', marginBottom: '1.5rem' }}>
+                    Paiement {PAYMENT_METHODS.find(m => m.id === paymentMethod)?.label} en cours de vérification · Réf. commande <code>{lastOrderRef}</code>
+                  </p>
+                )}
                 <div style={{ background: 'rgba(74,127,245,0.08)', border: '1px solid rgba(74,127,245,0.2)', borderRadius: '12px', padding: '12px', marginBottom: '1.5rem', textAlign: 'left' }}>
                   <div style={{ fontSize: '12px', fontWeight: '700', color: '#4A7FF5', marginBottom: '8px' }}>Vos 3 options d&apos;accès :</div>
                   {[
