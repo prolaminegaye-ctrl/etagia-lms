@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { renvoyerFacture } from '@/lib/facturation/sender'
-import { safeEqual } from '@/lib/security'
+import { estRequeteAdmin } from '@/lib/adminAuth'
 import type { Facture } from '@/lib/facturation/types'
 
 // Client créé à la demande : évite un crash au build quand les variables
@@ -14,9 +14,7 @@ function getSupabase() {
 }
 
 async function verifierAdmin(req: NextRequest): Promise<boolean> {
-  const attendu = process.env.ADMIN_TOKEN
-  const fourni  = req.headers.get('x-admin-token')
-  return !!attendu && !!fourni && safeEqual(fourni, attendu)
+  return estRequeteAdmin(req)
 }
 
 export async function GET(req: NextRequest) {

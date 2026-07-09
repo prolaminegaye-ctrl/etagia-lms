@@ -1,6 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import PageHero from '@/components/PageHero'
+import { getSupabase, isSupabaseConfigured } from '@/lib/supabase/client'
 
 type AdminUser = {
   id: string
@@ -29,8 +31,8 @@ function timeAgo(iso: string | null): string {
 }
 
 export default function UsersPage() {
-  const [token, setToken] = useState('')
-  const [tokenInput, setTokenInput] = useState('')
+  const [accessToken, setAccessToken] = useState<string | null>(null)
+  const [sessionChecked, setSessionChecked] = useState(false)
   const [users, setUsers] = useState<AdminUser[]>([])
   const [loading, setLoading] = useState(false)
   const [unauthorized, setUnauthorized] = useState(false)
@@ -38,33 +40,38 @@ export default function UsersPage() {
   const [filterRole, setFilterRole] = useState('Tous')
   const [savingId, setSavingId] = useState<string | null>(null)
 
+  // La connexion au site suffit : on récupère la session Supabase du navigateur.
   useEffect(() => {
-    const saved = localStorage.getItem('etagia_admin_token')
-    if (saved) setToken(saved)
+    if (!isSupabaseConfigured) { setSessionChecked(true); return }
+    const supabase = getSupabase()
+    supabase.auth.getSession().then(({ data }) => {
+      setAccessToken(data.session?.access_token ?? null)
+      setSessionChecked(true)
+    })
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      setAccessToken(session?.access_token ?? null)
+    })
+    return () => sub.subscription.unsubscribe()
   }, [])
 
-  const load = async (t: string) => {
+  const load = async (jwt: string) => {
     setLoading(true)
     setUnauthorized(false)
-    const res = await fetch('/api/admin/users', { headers: { 'x-admin-token': t } })
+    const res = await fetch('/api/admin/users', { headers: { Authorization: `Bearer ${jwt}` } })
     if (res.status === 401) { setUnauthorized(true); setLoading(false); return }
     const data = await res.json()
     setUsers(data.users ?? [])
     setLoading(false)
   }
 
-  useEffect(() => { if (token) load(token) }, [token])
-
-  const saveToken = () => {
-    localStorage.setItem('etagia_admin_token', tokenInput)
-    setToken(tokenInput)
-  }
+  useEffect(() => { if (accessToken) load(accessToken) }, [accessToken])
 
   const changeRole = async (u: AdminUser, role: string) => {
+    if (!accessToken) return
     setSavingId(u.id)
     await fetch('/api/admin/users', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
       body: JSON.stringify({ userId: u.id, role }),
     })
     setUsers((prev) => prev.map((x) => (x.id === u.id ? { ...x, role } : x)))
@@ -77,16 +84,38 @@ export default function UsersPage() {
     return ms && mr
   })
 
-  if (!token || unauthorized) {
+  if (!sessionChecked) {
     return (
       <div>
-        <PageHero eyebrow="Administration" title="Utilisateurs" subtitle="Authentification requise pour accéder aux données réelles des comptes." />
-        <div style={{ maxWidth: '420px', background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '16px', padding: '1.5rem' }}>
-          {unauthorized && <p style={{ color: 'var(--orange-700)', fontSize: '13px', marginBottom: '10px' }}>⚠️ Jeton invalide.</p>}
-          <label style={{ fontSize: '11px', color: 'var(--ink-mut)', fontWeight: 700, textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>Jeton admin (ADMIN_TOKEN)</label>
-          <input type="password" value={tokenInput} onChange={(e) => setTokenInput(e.target.value)} placeholder="••••••••"
-            style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid var(--line)', marginBottom: '10px', boxSizing: 'border-box' }} />
-          <button onClick={saveToken} style={{ width: '100%', padding: '10px', background: 'var(--grad-signature)', color: '#fff', border: 'none', borderRadius: '10px', fontWeight: 700, cursor: 'pointer' }}>Accéder</button>
+        <PageHero eyebrow="Administration" title="Utilisateurs" subtitle="Vérification de votre session…" />
+      </div>
+    )
+  }
+
+  if (!accessToken || unauthorized) {
+    return (
+      <div>
+        <PageHero eyebrow="Administration" title="Utilisateurs" subtitle="Réservé au compte administrateur de la plateforme." />
+        <div style={{ maxWidth: '460px', background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: '16px', padding: '1.75rem' }}>
+          {unauthorized ? (
+            <>
+              <p style={{ fontWeight: 700, marginBottom: '8px' }}>⚠️ Ce compte n&apos;est pas administrateur</p>
+              <p style={{ fontSize: '13.5px', color: 'var(--ink-mut)', lineHeight: 1.6 }}>
+                Vous êtes connecté, mais ce compte n&apos;a pas les droits d&apos;administration.
+                Connectez-vous avec le compte propriétaire de la plateforme.
+              </p>
+            </>
+          ) : (
+            <>
+              <p style={{ fontWeight: 700, marginBottom: '8px' }}>Connectez-vous pour continuer</p>
+              <p style={{ fontSize: '13.5px', color: 'var(--ink-mut)', lineHeight: 1.6, marginBottom: '14px' }}>
+                Cette page s&apos;ouvre automatiquement quand vous êtes connecté avec votre compte administrateur — aucun code à saisir.
+              </p>
+              <Link href="/auth" style={{ display: 'block', textAlign: 'center', padding: '11px', background: 'var(--grad-signature)', color: '#fff', borderRadius: '10px', fontWeight: 700, textDecoration: 'none' }}>
+                Se connecter
+              </Link>
+            </>
+          )}
         </div>
       </div>
     )

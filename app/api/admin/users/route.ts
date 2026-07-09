@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { safeEqual } from '@/lib/security'
+import { estRequeteAdmin } from '@/lib/adminAuth'
 
 function getSupabase() {
   return createClient(
@@ -10,9 +10,7 @@ function getSupabase() {
 }
 
 async function verifierAdmin(req: NextRequest): Promise<boolean> {
-  const attendu = process.env.ADMIN_TOKEN
-  const fourni = req.headers.get('x-admin-token')
-  return !!attendu && !!fourni && safeEqual(fourni, attendu)
+  return estRequeteAdmin(req)
 }
 
 export async function GET(req: NextRequest) {
