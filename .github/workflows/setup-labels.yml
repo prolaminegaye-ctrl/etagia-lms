@@ -1,0 +1,38 @@
+# Création (ou mise à jour) en un clic des labels GitHub requis par le système d'agents.
+# À exécuter UNE FOIS manuellement : Actions > "Agents - Creer les labels" > Run workflow.
+
+name: "Agents - Creer les labels"
+
+on:
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  labels:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Créer les labels
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          create() {
+            gh label create "$1" --color "$2" --description "$3" --force -R "$REPO"
+          }
+          create "agent:incident"     "D93F0B" "Incident détecté et documenté par l'Incident Watcher"
+          create "agent:test"         "C5DEF5" "Incident simulé (test du système d'agents)"
+          create "agent:debug"        "1D76DB" "AUTORISATION HUMAINE : le Debug Engineer peut traiter cette issue"
+          create "agent:pr"           "0052CC" "Pull request produite par le Debug Engineer"
+          create "agent:qa-approved"  "0E8A16" "Validée par le QA & Security Reviewer (la fusion reste humaine)"
+          create "agent:qa-blocked"   "B60205" "Bloquée par le QA & Security Reviewer — voir la revue"
+          create "agent:release-done" "5319E7" "Déploiement vérifié par le Release Manager"
+          create "agent:needs-human"  "FBCA04" "Décision humaine requise — les agents se sont arrêtés"
+          create "agent:duplicate"    "CFD3D7" "Occurrence d'un incident déjà suivi ailleurs"
+          create "severity:critical"  "B60205" "Production indisponible, paiement ou authentification cassés"
+          create "severity:high"      "D93F0B" "Fonctionnalité majeure cassée pour les utilisateurs"
+          create "severity:medium"    "FBCA04" "CI cassée sur la branche principale, sans impact utilisateur direct"
+          create "severity:low"       "0E8A16" "Dégradation mineure, test ou signal incertain"
+          echo "13 labels créés ou mis à jour." >> "$GITHUB_STEP_SUMMARY"

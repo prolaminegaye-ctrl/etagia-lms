@@ -1,0 +1,27 @@
+# Environnement de test de l'Incident Watcher.
+# Déclenchement MANUEL uniquement. Ce workflow échoue volontairement : son échec est capté
+# par l'Incident Watcher (workflow_run), qui doit alors créer une issue d'incident de test.
+# Aucun impact sur le code, le build ou la production.
+
+name: "Test incident simule"
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: "Message d'erreur simulé"
+        required: false
+        default: "Panne simulée pour valider la chaîne de détection d'incidents"
+
+permissions: {}
+
+jobs:
+  fail-on-purpose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Échec volontaire
+        run: |
+          echo "::error::[SIMULATION] ${{ inputs.message }}"
+          echo "Ce job échoue volontairement pour tester l'Incident Watcher." >> "$GITHUB_STEP_SUMMARY"
+          exit 1

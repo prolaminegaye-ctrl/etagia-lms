@@ -1,0 +1,53 @@
+# Contrôles d'intégration continue : typecheck + build bloquants, lint informatif.
+# C'est ce workflow que l'Incident Watcher surveille (échecs sur main) et sur lequel
+# s'appuient le Debug Engineer et le QA Reviewer.
+#
+# Le lint est NON bloquant pour l'instant : ~94 erreurs préexistantes au moment de la mise
+# en place (2026-07-10). Les résorber est une mission idéale pour l'agent Debug, par petites
+# PR ; le lint deviendra bloquant ensuite.
+
+name: "CI"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installation
+        run: npm ci
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build
+
+      - name: Lint (informatif — erreurs préexistantes)
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Audit des dépendances runtime (informatif)
+        run: npm audit --omit=dev --audit-level=high
+        continue-on-error: true
