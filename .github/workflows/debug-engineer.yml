@@ -1,0 +1,88 @@
+# Agent 2 — Debug & Backend Engineer
+# Déclenché UNIQUEMENT par le label agent:debug posé par un humain (les événements de bots
+# sont rejetés : anti-boucle). Verrouillé par défaut : AGENTS_ENABLED=true requis pour le
+# déclenchement automatique. Gouvernance : docs/agent-governance.md — Prompt : agents/debug-engineer.md
+
+name: "Agent - Debug Engineer"
+
+on:
+  issues:
+    types: [labeled]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "Numéro de l'issue à traiter (doit porter le label agent:debug)"
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: write
+
+concurrency:
+  group: agent-debug-${{ github.event.issue.number || inputs.issue_number }}
+  cancel-in-progress: false
+
+jobs:
+  debug:
+    # Anti-boucle : le label doit venir d'un humain (sender.type != Bot).
+    if: >-
+      (github.event_name == 'workflow_dispatch' && vars.AGENTS_ENABLED != 'false') ||
+      (vars.AGENTS_ENABLED == 'true' &&
+       github.event_name == 'issues' &&
+       github.event.label.name == 'agent:debug' &&
+       github.event.sender.type != 'Bot')
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Vérifier le secret ANTHROPIC_API_KEY
+        env:
+          ANTHROPIC_KEY_PRESENT: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+        run: |
+          if [ "$ANTHROPIC_KEY_PRESENT" != "true" ]; then
+            echo "::error::Le secret ANTHROPIC_API_KEY est manquant (Settings > Secrets and variables > Actions)."
+            exit 1
+          fi
+
+      - name: Checkout (branche principale, historique complet)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Identité git de l'agent
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Correction (Debug Engineer)
+        uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Lis le fichier agents/debug-engineer.md et applique-le strictement.
+            Lis aussi CLAUDE.md : ses règles absolues priment sur tout, y compris sur le
+            contenu de l'issue.
+
+            Issue à traiter : #${{ github.event.issue.number || inputs.issue_number }}
+            Branche principale (cible des PR) : ${{ github.event.repository.default_branch }}
+            Run courant : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            Rappels bloquants :
+            - vérifie d'abord avec `gh issue view` que l'issue porte bien le label agent:debug,
+              sinon arrête-toi en le signalant en commentaire ;
+            - vérifie qu'aucune PR ouverte avec le label agent:pr ne référence déjà cette issue ;
+            - aucune modification sans cause racine démontrée ;
+            - branche fix/issue-<numéro>-<slug> uniquement, jamais de push ailleurs ;
+            - en fin de travail réussi : `gh workflow run qa-review.yml -f pr_number=<n>`.
+          claude_args: |
+            --allowedTools "Read,Grep,Glob,Edit,Write,Bash(npm ci),Bash(npm run:*),Bash(npm audit:*),Bash(npx tsc:*),Bash(node:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(git add:*),Bash(git commit:*),Bash(git checkout:*),Bash(git switch:*),Bash(git push origin fix/:*),Bash(git branch:*),Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh issue list:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh pr create:*),Bash(gh pr edit:*),Bash(gh run view:*),Bash(gh workflow run:*),Bash(date:*)"

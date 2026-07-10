@@ -1,0 +1,87 @@
+# Agent 4 — Release & Recovery Manager
+# Intervient UNIQUEMENT après la fusion (humaine) d'une PR du circuit agents, ou à la demande.
+# Vérifie le déploiement et la disponibilité ; prépare un rollback documenté en cas d'échec.
+# Verrouillé par défaut. Gouvernance : docs/agent-governance.md — Prompt : agents/release-manager.md
+
+name: "Agent - Release Manager"
+
+on:
+  pull_request:
+    types: [closed]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Numéro de la PR fusionnée à vérifier (vide = simple contrôle de santé)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: write
+
+concurrency:
+  group: agent-release
+  cancel-in-progress: false
+
+jobs:
+  verify-release:
+    # Uniquement les PR fusionnées du circuit agents (label agent:pr ou branche fix/*).
+    if: >-
+      (github.event_name == 'workflow_dispatch' && vars.AGENTS_ENABLED != 'false') ||
+      (vars.AGENTS_ENABLED == 'true' &&
+       github.event_name == 'pull_request' &&
+       github.event.pull_request.merged == true &&
+       (contains(github.event.pull_request.labels.*.name, 'agent:pr') ||
+        startsWith(github.event.pull_request.head.ref, 'fix/')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Vérifier le secret ANTHROPIC_API_KEY
+        env:
+          ANTHROPIC_KEY_PRESENT: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+        run: |
+          if [ "$ANTHROPIC_KEY_PRESENT" != "true" ]; then
+            echo "::error::Le secret ANTHROPIC_API_KEY est manquant (Settings > Secrets and variables > Actions)."
+            exit 1
+          fi
+
+      - name: Checkout (historique complet)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+
+      - name: Identité git de l'agent
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Vérification du déploiement (Release Manager)
+        uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Lis le fichier agents/release-manager.md et applique-le strictement.
+            Lis aussi CLAUDE.md et docs/rollback-procedure.md.
+
+            Contexte :
+            - event_name : ${{ github.event_name }}
+            - PR fusionnée : #${{ github.event.pull_request.number || inputs.pr_number }}
+            - commit de fusion : ${{ github.event.pull_request.merge_commit_sha }}
+            - branche source : ${{ github.event.pull_request.head.ref }}
+            - URL de production (variable PRODUCTION_URL) : ${{ vars.PRODUCTION_URL }}
+            - branche principale : ${{ github.event.repository.default_branch }}
+            - run courant : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            Rappels bloquants :
+            - si PRODUCTION_URL est vide : documente-le en commentaire de la PR et arrête-toi ;
+            - sondes en LECTURE SEULE uniquement (GET), fenêtre d'observation de 10 minutes max
+              (utilise `sleep` entre les tentatives) ;
+            - en cas d'échec : issue d'incident critical + PR de revert sur une branche
+              fix/rollback-<n>, jamais de fusion par toi-même.
+          claude_args: |
+            --allowedTools "Read,Grep,Glob,Bash(curl:*),Bash(sleep:*),Bash(date:*),Bash(git status:*),Bash(git log:*),Bash(git diff:*),Bash(git revert:*),Bash(git checkout:*),Bash(git switch:*),Bash(git branch:*),Bash(git push origin fix/:*),Bash(gh pr view:*),Bash(gh pr list:*),Bash(gh pr create:*),Bash(gh pr edit:*),Bash(gh pr comment:*),Bash(gh issue create:*),Bash(gh issue view:*),Bash(gh issue list:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh run list:*),Bash(gh run view:*),Bash(gh workflow run:*)"
