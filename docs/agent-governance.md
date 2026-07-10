@@ -117,13 +117,14 @@ Checklist d'activation (dans l'ordre) :
 2. **Fortement recommandé** : protéger la branche `main` (Settings → Branches →
    require a pull request before merging) pour rendre la règle « aucun push direct » effective.
 3. Créer le secret `ANTHROPIC_API_KEY` (Settings → Secrets and variables → Actions → Secrets).
-4. Créer la variable `PRODUCTION_URL` (même écran, onglet Variables) avec l'URL publique du site.
-5. Exécuter une fois « Agents - Creer les labels ».
-6. Tester : Actions → « Agent - Incident Watcher » → Run workflow (simulation, sans la variable
-   `AGENTS_ENABLED`) → vérifier l'issue `[TEST]` créée.
-7. Armer les déclencheurs automatiques : créer la variable `AGENTS_ENABLED` = `true`.
-8. Test de bout en bout : Actions → « Test incident simule » → Run workflow → le Watcher doit
-   créer l'issue d'incident automatiquement.
+4. Variable `PRODUCTION_URL` : optionnelle — l'URL de production est intégrée par défaut dans
+   les workflows ; ne créer la variable que si l'URL change un jour.
+5. Labels : créés automatiquement (le workflow « Agents - Creer les labels » se déclenche à
+   chaque fusion modifiant son propre fichier) ; relançable à la main au besoin.
+6. Armer les déclencheurs automatiques : créer la variable `AGENTS_ENABLED` = `true`.
+7. Test de bout en bout : modifier le fichier `.github/agents-test-request` via une PR ; sa
+   fusion déclenche « Test incident simule » (échec volontaire), que l'Incident Watcher doit
+   transformer en issue d'incident.
 
 ## 10. Désactivation immédiate de tous les agents
 

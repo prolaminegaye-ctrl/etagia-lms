@@ -47,7 +47,7 @@ jobs:
         id: probe
         if: github.event_name == 'schedule'
         env:
-          PRODUCTION_URL: ${{ vars.PRODUCTION_URL }}
+          PRODUCTION_URL: ${{ vars.PRODUCTION_URL || 'https://etagia-lms-hxy8.vercel.app' }}
         run: |
           if [ -z "$PRODUCTION_URL" ]; then
             echo "status=skip" >> "$GITHUB_OUTPUT"
@@ -104,7 +104,7 @@ jobs:
             - id du run (pour `gh run view <id> --log-failed`) : ${{ github.event.workflow_run.id }}
 
             Si event_name == schedule (sonde en échec) :
-            - url sondée : ${{ vars.PRODUCTION_URL }}
+            - url sondée : ${{ vars.PRODUCTION_URL || 'https://etagia-lms-hxy8.vercel.app' }}
             - code HTTP : ${{ steps.probe.outputs.http_code }}
 
             Si event_name == repository_dispatch (alerte externe) :
