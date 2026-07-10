@@ -5,6 +5,11 @@ name: "Agents - Creer les labels"
 
 on:
   workflow_dispatch:
+  # Se relance automatiquement à chaque fusion modifiant ce fichier
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/setup-labels.yml"
 
 permissions:
   issues: write

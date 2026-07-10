@@ -12,6 +12,11 @@ on:
         description: "Message d'erreur simulé"
         required: false
         default: "Panne simulée pour valider la chaîne de détection d'incidents"
+  # Déclenchable aussi en modifiant le fichier .github/agents-test-request (via PR fusionnée)
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/agents-test-request"
 
 permissions: {}
 
@@ -22,6 +27,6 @@ jobs:
     steps:
       - name: Échec volontaire
         run: |
-          echo "::error::[SIMULATION] ${{ inputs.message }}"
+          echo "::error::[SIMULATION] ${{ inputs.message || 'Panne simulée déclenchée via .github/agents-test-request' }}"
           echo "Ce job échoue volontairement pour tester l'Incident Watcher." >> "$GITHUB_STEP_SUMMARY"
           exit 1
