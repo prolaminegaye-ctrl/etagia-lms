@@ -84,6 +84,12 @@ jobs:
             - vérifie qu'aucune PR ouverte avec le label agent:pr ne référence déjà cette issue ;
             - aucune modification sans cause racine démontrée ;
             - branche fix/issue-<numéro>-<slug> uniquement, jamais de push ailleurs ;
-            - en fin de travail réussi : `gh workflow run qa-review.yml -f pr_number=<n>`.
+            - en fin de travail réussi : `gh workflow run qa-review.yml -f pr_number=<n>` ;
+            - commence par `npx eslint . --fix` pour les corrections mécaniques, puis traite le
+              reliquat à la main ; pousse avec `git push origin <nom-de-branche>` ;
+            - si une commande t'est refusée par la liste d'outils, ne la retente pas plus d'une
+              fois : trouve une commande autorisée équivalente, ou commente l'issue avec le
+              blocage rencontré et arrête-toi proprement (la branche principale est de toute
+              façon protégée côté GitHub).
           claude_args: |
-            --allowedTools "Read,Grep,Glob,Edit,Write,Bash(npm ci),Bash(npm run:*),Bash(npm audit:*),Bash(npx tsc:*),Bash(npx eslint:*),Bash(node:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(git add:*),Bash(git commit:*),Bash(git checkout:*),Bash(git switch:*),Bash(git push origin fix/:*),Bash(git branch:*),Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh issue list:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh pr create:*),Bash(gh pr edit:*),Bash(gh run view:*),Bash(gh workflow run:*),Bash(date:*)"
+            --allowedTools "Read,Grep,Glob,Edit,Write,Bash(npm ci),Bash(npm run:*),Bash(npm audit:*),Bash(npx tsc:*),Bash(npx eslint:*),Bash(node:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(git add:*),Bash(git commit:*),Bash(git checkout:*),Bash(git switch:*),Bash(git push:*),Bash(git branch:*),Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh issue list:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh pr create:*),Bash(gh pr edit:*),Bash(gh pr comment:*),Bash(gh run view:*),Bash(gh workflow run:*),Bash(date:*)"
