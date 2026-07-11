@@ -60,6 +60,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         with:
+          github_token: ${{ github.token }}
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
             Lis le fichier agents/qa-security-reviewer.md et applique-le strictement.
