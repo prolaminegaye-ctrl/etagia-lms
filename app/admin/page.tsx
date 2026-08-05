@@ -15,6 +15,7 @@ const kpis = [
 
 const adminLinks = [
   { label: 'Demandes d’accès', href: '/admin/demandes',  bg: 'var(--orange-50)', color: 'var(--orange-700)', icon: '🔑' },
+  { label: 'Audience',       href: '/admin/audience',    bg: 'var(--violet-50)', color: 'var(--violet)', icon: '👁' },
   { label: 'Utilisateurs',   href: '/admin/users',       bg: 'var(--turq-50)', color: 'var(--turq-700)', icon: '◎' },
   { label: 'Marketplace',    href: '/admin/market',      bg: 'var(--turq-50)', color: 'var(--turq-700)', icon: '🏪' },
   { label: 'Analytics',      href: '/admin/analytics',   bg: 'var(--violet-50)', color: 'var(--violet)', icon: '〜' },
