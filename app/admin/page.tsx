@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/Sidebar'
 import PageHero from '@/components/PageHero'
+import { BandeauDemandes } from '@/components/admin/BandeauDemandes'
 
 const kpis = [
   { label: 'Utilisateurs',    value: '1 284', bg: 'var(--turq-50)', color: 'var(--turq-700)', icon: '👥', delta: '+12 ce mois' },
@@ -50,6 +51,8 @@ export default function AdminPage() {
           subtitle="Gérez la plateforme ETAGIA LMS depuis ce tableau de bord central."
           stats={[{value:'1 284',label:'Utilisateurs'},{value:'94',label:'Cours actifs'},{value:'4.2M',label:'FCFA revenus'},{value:'4.7/5',label:'Satisfaction'}]}
         />
+
+        <BandeauDemandes />
 
         {/* KPIs */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>

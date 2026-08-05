@@ -5,8 +5,20 @@
 // dans un email agit au nom du propriétaire sans authentification — si la
 // boîte mail est compromise ou l'email transféré, l'accès l'est aussi.
 
-const DESTINATAIRE_ADMIN = 'info@edpedago.com'
-const EXPEDITEUR = 'EtagIA Académie <notifications@etagia-academie.com>'
+const DESTINATAIRE_ADMIN = process.env.ACCESS_REQUEST_TO ?? 'info@edpedago.com'
+
+/**
+ * Expéditeur.
+ *
+ * Par défaut, le domaine partagé de Resend : il fonctionne sans vérifier
+ * de domaine ni toucher au DNS. C'est volontaire — l'email ne doit pas
+ * être un préalable à la mise en service.
+ *
+ * Le jour où `etagia-academie.com` sera vérifié chez Resend, il suffira de
+ * définir ACCESS_REQUEST_FROM pour améliorer la délivrabilité et l'image :
+ *   ACCESS_REQUEST_FROM="EtagIA Académie <notifications@etagia-academie.com>"
+ */
+const EXPEDITEUR = process.env.ACCESS_REQUEST_FROM ?? 'EtagIA Académie <onboarding@resend.dev>'
 const URL_APP = process.env.NEXT_PUBLIC_APP_URL ?? 'https://etagia-academie.com'
 
 export type DemandeEmail = {
@@ -38,8 +50,10 @@ function horodatage(d: Date): string {
 }
 
 async function envoyer(to: string, subject: string, html: string): Promise<boolean> {
+  // L'email est un confort, pas le canal de référence : sans clé, la
+  // demande reste visible dans /admin/demandes, qui fait autorité.
   if (!process.env.RESEND_API_KEY) {
-    console.error('[access-requests] RESEND_API_KEY absente : email non envoyé.', { to, subject })
+    console.warn('[access-requests] RESEND_API_KEY absente : notification par email ignorée.', { to, subject })
     return false
   }
   try {
