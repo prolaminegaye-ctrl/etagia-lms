@@ -83,8 +83,15 @@ export default function SessionRosterPage({ params }: { params: Promise<{ id: st
     const supabase = getSupabase()
     const timer = setTimeout(async () => {
       const memberIds = members.map((m) => m.id)
-      const { data } = await supabase.from('profiles').select('id, full_name, role').ilike('full_name', `%${search.trim()}%`).limit(10)
-      setSearchResults((data ?? []).filter((p) => !memberIds.includes(p.id)))
+      // Recherche via une fonction serveur restreinte : elle ne renvoie que
+      // l'identifiant et le nom des apprenants, et seulement à un formateur
+      // ou un administrateur. Auparavant l'écran interrogeait directement
+      // `profiles`, ce qui exposait l'annuaire complet (audit V-02).
+      const { data } = await supabase.rpc('rechercher_apprenants', { recherche: search.trim() })
+      const rows = (data ?? []) as { id: string; full_name: string }[]
+      setSearchResults(
+        rows.filter((p) => !memberIds.includes(p.id)).map((p) => ({ ...p, role: 'apprenant' })),
+      )
       setSearching(false)
     }, 300)
     return () => clearTimeout(timer)

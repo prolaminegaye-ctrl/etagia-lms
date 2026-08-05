@@ -11,24 +11,40 @@ export type ActivityEvent =
   | 'session_created'
   | 'session_member_added'
   | 'attendance_marked'
+  | 'admin_access_requested'
+  | 'marketplace_access_requested'
+  | 'access_granted'
+  | 'access_denied'
+  | 'page_view'
 
 /**
- * Journalise un événement dans activity_log pour la traçabilité admin
- * ("qui a fait quoi, quand"). Best-effort : ne bloque jamais le flux
- * utilisateur si l'écriture échoue.
+ * Journalise un événement d'audit.
+ *
+ * L'écriture passe par `/api/journal`, jamais directement par Supabase :
+ * le serveur y rétablit l'identité depuis le jeton et y ajoute l'adresse IP,
+ * deux informations que le navigateur ne peut ni fournir honnêtement ni
+ * falsifier. Auparavant l'insertion se faisait côté client avec la clé
+ * publique et une politique sans condition, ce qui rendait le journal
+ * forgeable par n'importe qui (audit V-05).
+ *
+ * Best-effort : ne bloque jamais le flux utilisateur si l'écriture échoue.
  */
-export async function logActivity(event: ActivityEvent, metadata: Record<string, unknown> = {}) {
+export async function logActivity(
+  event: ActivityEvent,
+  metadata: Record<string, unknown> = {},
+) {
   try {
-    const supabase = getSupabase()
-    const { data } = await supabase.auth.getUser()
-    const user = data.user
-    if (!user) return
-    await supabase.from('activity_log').insert({
-      user_id: user.id,
-      email: user.email,
-      event,
-      metadata,
-      user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
+    const { data } = await getSupabase().auth.getSession()
+    const jeton = data.session?.access_token
+
+    await fetch('/api/journal', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(jeton ? { Authorization: `Bearer ${jeton}` } : {}),
+      },
+      body: JSON.stringify({ event, metadata }),
+      keepalive: true, // survit à une navigation immédiate (déconnexion)
     })
   } catch {
     // Le suivi d'activité ne doit jamais casser l'expérience utilisateur.
