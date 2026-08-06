@@ -1,8 +1,10 @@
 'use client'
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import { enregistrerFichier, messageErreurStockage } from '@/lib/import/bibliothequeFichiers'
 
 type FileInfo = { name: string; size: string; type: string; url: string; id: string; file: File }
+type EtatEnregistrement = 'encours' | 'enregistre' | 'erreur'
 const formatSize = (b: number) => b < 1024*1024 ? `${(b/1024).toFixed(0)} KB` : `${(b/1024/1024).toFixed(1)} MB`
 const getType = (name: string) => {
   const ext = name.split('.').pop()?.toLowerCase()
@@ -22,6 +24,8 @@ export default function ImportPage() {
   const [files, setFiles] = useState<FileInfo[]>([])
   const [progress, setProgress] = useState<Record<string,number>>({})
   const [done, setDone] = useState<Record<string,boolean>>({})
+  const [enregistrements, setEnregistrements] = useState<Record<string, EtatEnregistrement>>({})
+  const [erreurs, setErreurs] = useState<Record<string, string>>({})
   const inputRef = useRef<HTMLInputElement>(null)
 
   const processFile = async (file: File) => {
@@ -48,6 +52,61 @@ export default function ImportPage() {
     sessionStorage.setItem('viewer_file_url', f.url)
     sessionStorage.setItem('viewer_file_type', f.type)
     router.push('/formateur/viewer')
+  }
+
+  /**
+   * Enregistre le contenu importé pour le retrouver dans « Mes cours ».
+   *
+   * Jusqu'ici l'import ne conservait rien : le fichier n'était référencé que
+   * par une URL temporaire (`createObjectURL`), invalide dès la fermeture de
+   * l'onglet. Il n'y avait donc rien à retrouver.
+   *
+   * Le fichier lui-même va dans IndexedDB — seul stockage navigateur capable
+   * d'accueillir un paquet SCORM. Seules les métadonnées rejoignent
+   * `etagia_courses`, pour que la liste des cours reste légère.
+   */
+  const enregistrerDansMesCours = async (f: FileInfo) => {
+    setEnregistrements(prev => ({ ...prev, [f.id]: 'encours' }))
+    setErreurs(prev => { const n = { ...prev }; delete n[f.id]; return n })
+
+    try {
+      const fichierId = await enregistrerFichier(f.file)
+      const titre = f.name.replace(/\.[^.]+$/, '') || f.name
+
+      const existants = (() => {
+        try {
+          const brut = JSON.parse(localStorage.getItem('etagia_courses') || '[]')
+          return Array.isArray(brut) ? brut : []
+        } catch { return [] }
+      })()
+
+      const cours = {
+        id: `import_${fichierId}`,
+        title: titre,
+        description: `Contenu ${f.type} importé (${f.size})`,
+        level: 'intermédiaire',
+        category: 'Autre',
+        duration: '—',
+        modules: 0,
+        blocks: 0,
+        savedAt: new Date().toISOString(),
+        published: false,
+        hasYoutube: false,
+        hasScorm: f.type === 'SCORM',
+        // Marque ce cours comme un contenu importé : « Mes cours » l'ouvre
+        // alors dans le visualiseur, et non dans le lecteur de cours.
+        source: 'import' as const,
+        fichierId,
+        fichierNom: f.name,
+        fichierType: f.type,
+      }
+
+      localStorage.setItem('etagia_courses', JSON.stringify([cours, ...existants]))
+      setEnregistrements(prev => ({ ...prev, [f.id]: 'enregistre' }))
+    } catch (erreur) {
+      setEnregistrements(prev => ({ ...prev, [f.id]: 'erreur' }))
+      setErreurs(prev => ({ ...prev, [f.id]: messageErreurStockage(erreur) }))
+    }
   }
 
   const formats = [
@@ -97,7 +156,19 @@ export default function ImportPage() {
                 {done[f.id] ? (
                   <div style={{display:'flex',gap:'8px',alignItems:'center',flexWrap:'wrap'}}>
                     <span style={{color:'#00BFA5',fontWeight:'700',fontSize:'12px'}}>✓ Importé</span>
-                    <button onClick={()=>viewInBrowser(f)} style={{background:'linear-gradient(135deg,#E8651A,#D4A017)',border:'none',borderRadius:'8px',padding:'6px 14px',color:'#fff',fontSize:'12px',fontWeight:'700',cursor:'pointer'}}>
+                    {enregistrements[f.id]==='enregistre' ? (
+                      <button onClick={()=>router.push('/formateur/mes-cours')} style={{background:'rgba(0,191,165,0.12)',border:'1px solid rgba(0,191,165,0.3)',borderRadius:'8px',padding:'6px 14px',color:'#00A38C',fontSize:'12px',fontWeight:'700',cursor:'pointer'}}>
+                        ✓ Enregistré — voir dans Mes cours
+                      </button>
+                    ) : (
+                      <button
+                        onClick={()=>enregistrerDansMesCours(f)}
+                        disabled={enregistrements[f.id]==='encours'}
+                        style={{background:'linear-gradient(135deg,#E8651A,#D4A017)',border:'none',borderRadius:'8px',padding:'6px 14px',color:'#fff',fontSize:'12px',fontWeight:'700',cursor:enregistrements[f.id]==='encours'?'wait':'pointer',opacity:enregistrements[f.id]==='encours'?0.65:1}}>
+                        {enregistrements[f.id]==='encours' ? 'Enregistrement…' : '💾 Enregistrer dans mes cours'}
+                      </button>
+                    )}
+                    <button onClick={()=>viewInBrowser(f)} style={{background:'rgba(28,25,23,0.06)',border:'1px solid rgba(28,25,23,0.10)',borderRadius:'8px',padding:'6px 14px',color:'#E8651A',fontSize:'12px',fontWeight:'700',cursor:'pointer'}}>
                       👁 Visualiser
                     </button>
                     {f.type==='PDF'&&<a href={f.url} target="_blank" rel="noreferrer" style={{background:'rgba(240,90,90,0.1)',border:'1px solid rgba(240,90,90,0.2)',borderRadius:'8px',padding:'5px 12px',color:'#F08080',fontSize:'12px',fontWeight:'600'}}>📄 Ouvrir</a>}
@@ -105,6 +176,11 @@ export default function ImportPage() {
                   </div>
                 ) : <span style={{color:'#E8651A',fontSize:'13px',fontWeight:'600'}}>{progress[f.id]||0}%</span>}
               </div>
+              {erreurs[f.id] && (
+                <div style={{marginTop:'8px',background:'rgba(240,90,90,0.08)',border:'1px solid rgba(240,90,90,0.2)',borderRadius:'8px',padding:'8px 12px',fontSize:'12px',color:'#C0392B',fontWeight:'600'}}>
+                  {erreurs[f.id]}
+                </div>
+              )}
               {!done[f.id]&&(
                 <div style={{height:'4px',background:'rgba(28,25,23,0.06)',borderRadius:'2px',overflow:'hidden'}}>
                   <div style={{height:'100%',width:`${progress[f.id]||0}%`,background:'linear-gradient(90deg,#E8651A,#FFB300)',borderRadius:'2px',transition:'width .1s'}} />
@@ -117,7 +193,10 @@ export default function ImportPage() {
               <span style={{fontSize:'28px'}}>✅</span>
               <div style={{flex:1}}>
                 <div style={{fontWeight:'700',color:'#00BFA5',marginBottom:'3px'}}>{Object.values(done).filter(Boolean).length} fichier(s) importé(s)</div>
-                <div style={{fontSize:'13px',color:'#A8A29E'}}>Cliquez "Visualiser" pour lire le contenu directement dans le navigateur</div>
+                <div style={{fontSize:'13px',color:'#A8A29E'}}>
+                  <strong>Enregistrer</strong> conserve le contenu et le place dans « Mes cours ».
+                  <strong> Visualiser</strong> ne fait que l&apos;ouvrir : sans enregistrement, il est perdu en quittant la page.
+                </div>
               </div>
             </div>
           )}

@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import { supprimerFichier } from '@/lib/import/bibliothequeFichiers'
 
 type SavedCourse = {
   id: string
@@ -16,6 +17,12 @@ type SavedCourse = {
   hasYoutube: boolean
   hasScorm: boolean
   data: any
+  /** Renseigné pour un contenu importé (SCORM, H5P, PDF, vidéo). */
+  source?: 'import'
+  /** Clé du fichier conservé dans la bibliothèque IndexedDB. */
+  fichierId?: string
+  fichierNom?: string
+  fichierType?: string
 }
 
 const S = {
@@ -101,6 +108,11 @@ export default function MesCours() {
   }
 
   const deleteCourse = (id: string) => {
+    // Un contenu importé possède un fichier dans la bibliothèque : le laisser
+    // derrière occuperait l'espace du navigateur sans qu'on puisse plus y accéder.
+    const supprime = complets.current.find(c => c.id === id)
+    if (supprime?.fichierId) void supprimerFichier(supprime.fichierId)
+
     save(complets.current.filter(c => c.id !== id))
     setDelId(null)
   }
@@ -225,7 +237,17 @@ export default function MesCours() {
                 paramètre.
               */}
               <button style={{ ...S.btn, flex: 1, textAlign: 'center', fontSize: '12px', padding: '7px 12px' }}
-                onClick={() => router.push(`/formateur/player?id=${encodeURIComponent(course.id)}`)}>
+                onClick={() => {
+                  // Un contenu importé s'ouvre dans le visualiseur, qui sait
+                  // dérouler un paquet SCORM ou afficher un PDF. Un cours créé
+                  // dans l'application s'ouvre dans le lecteur de cours.
+                  if (course.source === 'import' && course.fichierId) {
+                    sessionStorage.setItem('viewer_fichier_id', course.fichierId)
+                    router.push('/formateur/viewer')
+                  } else {
+                    router.push(`/formateur/player?id=${encodeURIComponent(course.id)}`)
+                  }
+                }}>
                 ▶ Visualiser
               </button>
               <button style={{ ...S.ghost, fontSize: '12px', padding: '7px 12px' }}
