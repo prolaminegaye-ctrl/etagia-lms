@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import Sidebar from '@/components/Sidebar'
 import PageHero from '@/components/PageHero'
+import { DemandeAcces } from '@/components/access/DemandeAcces'
 
 const badges = [
   { label: '🔥 Streak 7j',  bg: 'var(--orange-100)', color: 'var(--orange-700)' },
@@ -116,6 +117,15 @@ export default function ProfilPage() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Accès réservés — aucun droit n'est accordé automatiquement */}
+        <div style={{ gridColumn: '1 / -1' }}>
+          <DemandeAcces
+            type="admin"
+            titre="Demander un accès administrateur"
+            description="L’accès administrateur ouvre le pilotage de la plateforme : utilisateurs, facturation, comptabilité et catalogue. Il n’est jamais accordé automatiquement — votre demande est examinée manuellement, et vous recevez un email dès qu’une décision est prise."
+          />
         </div>
       </main>
     </div>
