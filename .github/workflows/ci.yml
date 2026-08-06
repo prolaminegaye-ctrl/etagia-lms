@@ -41,6 +41,12 @@ jobs:
       - name: Typecheck
         run: npx tsc --noEmit
 
+      # Bloquant : ces tests gardent l'isolation des données entre comptes
+      # et la fermeture des accès réservés. Une régression ici rouvrirait
+      # une faille corrigée le 1er août 2026 (voir docs/recette-isolation.md).
+      - name: Tests
+        run: npm test
+
       - name: Build
         run: npm run build
 

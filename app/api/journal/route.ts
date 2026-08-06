@@ -14,6 +14,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { tronquerIp } from '@/lib/audience/anonymisation'
 
 /** Événements acceptés. Une valeur inconnue est refusée plutôt que journalisée. */
 const EVENEMENTS = [
@@ -37,22 +38,6 @@ const EVENEMENTS_SECURITE = new Set<Evenement>([
   'admin_access_requested', 'marketplace_access_requested',
   'access_granted', 'access_denied',
 ])
-
-/**
- * Tronque l'adresse pour qu'elle ne désigne plus une personne :
- * dernier octet en IPv4, 80 derniers bits en IPv6. Une IP est une donnée
- * personnelle au sens du RGPD ; la conserver en clair pour de la simple
- * navigation demanderait une base légale que nous n'avons pas.
- */
-function anonymiserIp(ip: string): string {
-  if (ip.includes(':')) {
-    const blocs = ip.split(':')
-    return blocs.slice(0, 3).join(':') + '::'
-  }
-  const octets = ip.split('.')
-  if (octets.length !== 4) return 'inconnue'
-  return `${octets[0]}.${octets[1]}.${octets[2]}.0`
-}
 
 function ipDeLaRequete(req: NextRequest): string {
   const brut = req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip') ?? ''
@@ -92,7 +77,7 @@ export async function POST(req: NextRequest) {
     }
 
     const ipReelle = ipDeLaRequete(req)
-    const ip = EVENEMENTS_SECURITE.has(event) ? ipReelle : anonymiserIp(ipReelle)
+    const ip = EVENEMENTS_SECURITE.has(event) ? ipReelle : tronquerIp(ipReelle)
 
     await clientService().from('activity_log').insert({
       user_id: userId,

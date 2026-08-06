@@ -11,6 +11,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { clientService, ipDeLaRequete } from '@/lib/serverAuth'
+import { cheminPropre, origineReferent, tronquerIp } from '@/lib/audience/anonymisation'
 
 /** Pages vues acceptées par minute et par adresse, pour éviter le gonflage artificiel. */
 const PLAFOND_PAR_MINUTE = 40
@@ -26,31 +27,6 @@ function trafficExcessif(ip: string): boolean {
   }
   seau.n++
   return seau.n > PLAFOND_PAR_MINUTE
-}
-
-/**
- * Retire ce qui identifie une personne : dernier octet en IPv4, 80
- * derniers bits en IPv6. Une adresse IP est une donnée personnelle au
- * sens du RGPD ; la conserver en clair pour de la simple navigation
- * demanderait un consentement que nous ne recueillons pas.
- */
-function tronquer(ip: string): string {
-  if (ip === 'inconnue') return ip
-  if (ip.includes(':')) return ip.split(':').slice(0, 3).join(':') + '::'
-  const octets = ip.split('.')
-  return octets.length === 4 ? `${octets[0]}.${octets[1]}.${octets[2]}.0` : 'inconnue'
-}
-
-/** Ne conserve que le chemin : jamais la chaîne de requête, qui peut porter un jeton. */
-function cheminPropre(brut: unknown): string | null {
-  if (typeof brut !== 'string' || !brut.startsWith('/')) return null
-  return brut.split('?')[0].split('#')[0].slice(0, 300)
-}
-
-/** Ne conserve que le domaine d'origine, pas l'URL complète. */
-function origineReferent(brut: unknown): string | null {
-  if (typeof brut !== 'string' || !brut) return null
-  try { return new URL(brut).hostname.slice(0, 200) } catch { return null }
 }
 
 export async function POST(req: NextRequest) {
@@ -83,7 +59,7 @@ export async function POST(req: NextRequest) {
       session_id: sessionId,
       path,
       referrer: origineReferent(corps.referrer),
-      ip_tronquee: tronquer(ipReelle),
+      ip_tronquee: tronquerIp(ipReelle),
       user_agent: (req.headers.get('user-agent') ?? '').slice(0, 400) || null,
       // En-tête géographique posé par Vercel ; absent en local.
       pays: req.headers.get('x-vercel-ip-country'),
