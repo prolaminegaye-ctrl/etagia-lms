@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 
 type SavedCourse = {
@@ -42,44 +42,90 @@ function timeAgo(iso: string): string {
   return `il y a ${Math.floor(h / 24)}j`
 }
 
+/**
+ * Version allégée d'un cours, pour l'affichage de la liste.
+ *
+ * Un cours acheté sur la Marketplace embarque son PDF entier encodé en
+ * base64 (`fileDataUrl`) : plusieurs mégaoctets par cours. Charger tout
+ * cela dans l'état React, puis le redessiner à chaque frappe dans le
+ * champ de recherche, saturait la mémoire de l'onglet jusqu'au plantage.
+ *
+ * Les cartes n'affichent aucun de ces contenus lourds : on n'en garde que
+ * les métadonnées. Les cours complets restent intacts dans une référence,
+ * pour que suppression et duplication continuent d'écrire des objets
+ * entiers — aucune donnée n'est perdue.
+ */
+type CourseCard = Omit<SavedCourse, 'data'>
+
+function versionLegere(c: SavedCourse): CourseCard {
+  const allege = { ...(c as SavedCourse & { fileDataUrl?: string }) }
+  delete (allege as { data?: unknown }).data
+  // `fileDataUrl` n'est pas déclaré dans le type mais bien présent sur les
+  // cours issus de la Marketplace : c'est lui qui pèse le plus lourd.
+  delete allege.fileDataUrl
+  return allege
+}
+
 export default function MesCours() {
   const router = useRouter()
-  const [courses, setCourses] = useState<SavedCourse[]>([])
+  const [courses, setCourses] = useState<CourseCard[]>([])
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('all')
   const [delId, setDelId] = useState<string | null>(null)
+  /** Cours complets, hors état React : jamais redessinés, jamais perdus. */
+  const complets = useRef<SavedCourse[]>([])
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem('etagia_courses')
-      if (raw) setCourses(JSON.parse(raw))
-    } catch {}
+      if (!raw) return
+      const parse = JSON.parse(raw)
+      // Une valeur qui n'est pas un tableau ferait échouer le rendu.
+      if (!Array.isArray(parse)) return
+      complets.current = parse
+      setCourses(parse.map(versionLegere))
+    } catch {
+      // Donnée illisible : liste vide plutôt qu'un écran blanc.
+    }
   }, [])
 
-  const save = (list: SavedCourse[]) => {
-    setCourses(list)
-    localStorage.setItem('etagia_courses', JSON.stringify(list))
+  /** Écrit la liste complète et rafraîchit l'affichage allégé. */
+  const save = (liste: SavedCourse[]) => {
+    complets.current = liste
+    setCourses(liste.map(versionLegere))
+    try {
+      localStorage.setItem('etagia_courses', JSON.stringify(liste))
+    } catch {
+      // Quota dépassé : l'affichage reste juste, seul l'enregistrement échoue.
+    }
   }
 
   const deleteCourse = (id: string) => {
-    save(courses.filter(c => c.id !== id))
+    save(complets.current.filter(c => c.id !== id))
     setDelId(null)
   }
 
-  const duplicate = (c: SavedCourse) => {
+  const duplicate = (carte: CourseCard) => {
+    // On repart du cours complet, pour ne pas perdre son contenu à la copie.
+    const source = complets.current.find(c => c.id === carte.id)
+    if (!source) return
     const copy: SavedCourse = {
-      ...c,
+      ...source,
       id: Math.random().toString(36).slice(2),
-      title: c.title + ' (copie)',
+      title: source.title + ' (copie)',
       savedAt: new Date().toISOString(),
       published: false,
     }
-    save([copy, ...courses])
+    save([copy, ...complets.current])
   }
 
   const filtered = courses.filter(c => {
     const q = search.toLowerCase()
-    const matchSearch = !q || c.title.toLowerCase().includes(q) || c.category.toLowerCase().includes(q)
+    // Un cours importé peut n'avoir ni titre ni catégorie : rechercher
+    // dessus faisait planter la page entière.
+    const titre = (c.title ?? '').toLowerCase()
+    const categorie = (c.category ?? '').toLowerCase()
+    const matchSearch = !q || titre.includes(q) || categorie.includes(q)
     const matchFilter = filter === 'all' || (filter === 'published' && c.published) || (filter === 'draft' && !c.published)
     return matchSearch && matchFilter
   })
@@ -171,13 +217,16 @@ export default function MesCours() {
 
             {/* Actions */}
             <div style={{ padding: '10px 1.25rem', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+              {/*
+                « Visualiser » ouvrait /formateur/viewer, qui est le lecteur de
+                paquets SCORM importés — et sans identifiant. Un cours créé dans
+                l'application ne pouvait donc jamais être consulté. Le lecteur
+                de cours, c'est /formateur/player, qui attend l'identifiant en
+                paramètre.
+              */}
               <button style={{ ...S.btn, flex: 1, textAlign: 'center', fontSize: '12px', padding: '7px 12px' }}
-                onClick={() => router.push(`/formateur/viewer`)}>
+                onClick={() => router.push(`/formateur/player?id=${encodeURIComponent(course.id)}`)}>
                 ▶ Visualiser
-              </button>
-              <button style={{ ...S.ghost, fontSize: '12px', padding: '7px 12px' }}
-                onClick={() => router.push(`/formateur/creer`)}>
-                ✏️ Éditer
               </button>
               <button style={{ ...S.ghost, fontSize: '12px', padding: '7px 12px' }}
                 onClick={() => duplicate(course)} title="Dupliquer">
