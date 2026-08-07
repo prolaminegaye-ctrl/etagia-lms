@@ -1,6 +1,7 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
 import JSZip from 'jszip'
+import { lireFichier } from '@/lib/import/bibliothequeFichiers'
 
 // ─── SCORM 1.2 + 2004 full API shim ──────────────────────────────────────────
 const SCORM_SHIM = `<script>
@@ -272,6 +273,35 @@ export default function ViewerPage(){
     }
     setLoading(false)
   }
+
+  /**
+   * Ouverture d'un contenu enregistré depuis « Mes cours ».
+   *
+   * La page appelante dépose l'identifiant du fichier ; on le relit ici dans
+   * la bibliothèque IndexedDB et on le confie au même traitement que pour un
+   * fichier fraîchement déposé. Sans cela, un import enregistré ne pouvait
+   * pas être rouvert : l'URL temporaire du fichier meurt avec l'onglet.
+   */
+  useEffect(()=>{
+    let annule=false
+    ;(async()=>{
+      let id:string|null=null
+      try{ id=sessionStorage.getItem('viewer_fichier_id') }catch{ return }
+      if(!id) return
+      try{ sessionStorage.removeItem('viewer_fichier_id') }catch{}
+
+      const fichier=await lireFichier(id)
+      if(annule) return
+      if(!fichier){
+        setError("Ce contenu n'est plus disponible sur cet appareil. Les fichiers importés restent dans le navigateur qui les a enregistrés.")
+        return
+      }
+      await process(fichier)
+    })()
+    return()=>{annule=true}
+    // Au montage uniquement : `process` est stable pour la durée de la page.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 
   const ytSrc=youtubeId
     ?`https://www.youtube-nocookie.com/embed/${youtubeId}${playlistId?`?list=${playlistId}&`:'?'}autoplay=0&rel=0&modestbranding=1&cc_load_policy=1`
