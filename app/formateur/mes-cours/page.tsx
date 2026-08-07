@@ -152,7 +152,18 @@ export default function MesCours() {
             {courses.length} cours enregistré{courses.length !== 1 ? 's' : ''} · {courses.filter(c => c.published).length} publié{courses.filter(c => c.published).length !== 1 ? 's' : ''}
           </p>
         </div>
-        <button style={S.btn} onClick={() => router.push('/formateur/creer')}>+ Créer un cours</button>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          {/*
+            Ces cours vivent dans le navigateur, pas sur le serveur. Quand
+            l'affichage se dégrade, personne d'autre que l'utilisateur ne peut
+            voir ce que contient son stockage : cet accès lui donne les moyens
+            de l'inspecter et de le réparer lui-même.
+          */}
+          <button style={S.ghost} onClick={() => router.push('/formateur/diagnostic')} title="Inspecter et réparer les données de ce navigateur">
+            🩺 Diagnostic
+          </button>
+          <button style={S.btn} onClick={() => router.push('/formateur/creer')}>+ Créer un cours</button>
+        </div>
       </div>
 
       {/* Search + filter */}
