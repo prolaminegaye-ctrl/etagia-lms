@@ -267,13 +267,20 @@ function PlayerInner() {
     </div>
   )
 
-  const modules: Module[] = course.data?.modules || []
+  // Un cours créé ici range ses modules sous `data`. Un cours acheté sur la
+  // Marketplace les range à la racine : sans ce repli, il s'ouvrait vide.
+  const racine = (course as unknown as { modules?: unknown }).modules
+  const modules: Module[] = Array.isArray(course.data?.modules)
+    ? course.data.modules
+    : Array.isArray(racine)
+      ? (racine as Module[])
+      : []
   const curMod  = modules[modIdx]
   const blocks  = curMod?.blocks || []
   const curBlk  = blocks[blkIdx]
 
   // Progress
-  const totalBlocks = modules.reduce((a, m) => a + m.blocks.length, 0)
+  const totalBlocks = modules.reduce((a, m) => a + (m.blocks?.length ?? 0), 0)
   const doneCount   = completed.size
   const progress    = totalBlocks > 0 ? Math.round((doneCount / totalBlocks) * 100) : 0
 

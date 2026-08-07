@@ -132,12 +132,30 @@ export default function MarketPage() {
     try {
       const existing = JSON.parse(localStorage.getItem('etagia_courses') || '[]')
       if (existing.find((c: any) => c.id === `market_${p.id}`)) return
+      // La forme écrite ici doit être celle qu'attend « Mes cours » : `modules`
+      // et `blocks` comptés, contenu rangé sous `data`. Écrire les modules à la
+      // racine plaçait un objet là où la liste affiche un nombre — React
+      // refusait alors de rendre la page, qui restait vide.
+      const contenu = [{
+        id: 'm1', title: 'Contenu principal', objectif: '', duration: p.duree || '',
+        blocks: [{
+          id: 'b1', type: 'text', title: p.title,
+          content: `**${p.title}**\n\n${p.longDesc || p.desc}\n\n_Ce contenu a été acheté sur la marketplace ETAGIA._`,
+        }],
+      }]
       const course = {
-        id: `market_${p.id}`, title: p.title, level: p.niveau || 'Intermédiaire',
+        id: `market_${p.id}`, title: p.title,
+        description: p.desc || '',
+        level: p.niveau || 'Intermédiaire',
+        category: p.tags?.[0] || 'Autre',
+        duration: p.duree || '—',
+        modules: contenu.length,
+        blocks: contenu.reduce((a, m) => a + m.blocks.length, 0),
+        savedAt: new Date().toISOString(),
+        published: true,
+        hasYoutube: false, hasScorm: false,
+        data: { info: { title: p.title, description: p.desc || '' }, modules: contenu },
         status: 'published', createdAt: Date.now(), updatedAt: Date.now(),
-        modules: [{ id: 'm1', title: 'Contenu principal', blocks: [
-          { id: 'b1', type: 'text', content: `**${p.title}**\n\n${p.longDesc || p.desc}\n\n_Ce contenu a été acheté sur la marketplace ETAGIA._` }
-        ]}],
         fromMarket: true, marketProductId: p.id,
         fileDataUrl: (p as any).fileDataUrl,
         fileName: (p as any).fileName,
