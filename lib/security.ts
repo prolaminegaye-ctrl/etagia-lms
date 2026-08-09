@@ -52,7 +52,7 @@ export function rateLimit(req: NextRequest, limit = 20, windowMs = 60_000): Next
  * Objectif : éviter toute consommation de crédits Anthropic/OpenAI tant que
  * l'accès n'est pas restreint aux utilisateurs authentifiés + quotas.
  */
-export const AI_FEATURES_DISABLED = true
+export const AI_FEATURES_DISABLED = false
 
 export function aiDisabledResponse(): NextResponse {
   return NextResponse.json(
