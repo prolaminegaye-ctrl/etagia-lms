@@ -316,7 +316,7 @@ function QcmMultiBlock({ block, onComplete }: { block: Block; onComplete: (opts?
       <div style={{ background: 'var(--surface)', borderRadius: '16px', border: '1px solid rgba(28,25,23,0.08)', padding: '1.5rem', textAlign: 'center', color: '#A8A29E' }}>
         🧩 Aucune question configurée pour ce QCM.
         <div style={{ marginTop: '1rem' }}>
-          <button onClick={onComplete} style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '9px', padding: '9px 20px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>Continuer →</button>
+          <button onClick={() => onComplete()} style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '9px', padding: '9px 20px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>Continuer →</button>
         </div>
       </div>
     )
