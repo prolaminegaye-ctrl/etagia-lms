@@ -23,7 +23,7 @@ function getYTEmbed(url: string): string | null {
 }
 
 // ── Quiz component ────────────────────────────────────────────────────────────
-function QuizBlock({ block, onComplete }: { block: Block; onComplete: () => void }) {
+function QuizBlock({ block, onComplete }: { block: Block; onComplete: (opts?: { points?: number; badge?: { id: string; label: string } }) => void }) {
   const [selected, setSelected] = useState<string | null>(null)
   const [validated, setValidated] = useState(false)
   let q: any = {}
@@ -68,7 +68,7 @@ function QuizBlock({ block, onComplete }: { block: Block; onComplete: () => void
               style={{ background: selected ? 'linear-gradient(135deg,#E8651A,#D4A017)' : 'rgba(28,25,23,0.08)', border: 'none', borderRadius: '9px', padding: '9px 20px', color: selected ? '#fff' : '#A8A29E', fontWeight: '700', fontSize: '13px', cursor: selected ? 'pointer' : 'not-allowed' }}>
               Valider ma réponse
             </button>
-          : <button onClick={onComplete}
+          : <button onClick={() => onComplete({ points: isRight ? 10 : 0 })}
               style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '9px', padding: '9px 20px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>
               Continuer →
             </button>
@@ -146,7 +146,7 @@ function ScormBlock({ block }: { block: Block }) {
 }
 
 // ── Block renderer ────────────────────────────────────────────────────────────
-function BlockRenderer({ block, onQuizComplete }: { block: Block; onQuizComplete: () => void }) {
+function BlockRenderer({ block, onQuizComplete }: { block: Block; onQuizComplete: (opts?: { points?: number; badge?: { id: string; label: string } }) => void }) {
   const ytEmbed = block.type === 'video' && block.videoSource === 'youtube' && block.youtubeUrl ? getYTEmbed(block.youtubeUrl) : null
 
   return (
@@ -169,6 +169,7 @@ function BlockRenderer({ block, onQuizComplete }: { block: Block; onQuizComplete
       {/* Activity */}
       {block.type === 'activity' && (() => {
         let a: any = {}; try { a = JSON.parse(block.content) } catch {}
+        const minutes = typeof a.contrainte_temps === 'object' && a.contrainte_temps?.minutes > 0 ? a.contrainte_temps.minutes : null
         return (
           <div style={{ background: 'linear-gradient(135deg,rgba(212,160,23,0.08),rgba(232,101,26,0.05))', border: '1.5px solid rgba(212,160,23,0.25)', borderRadius: '16px', padding: '1.5rem' }}>
             <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', marginBottom: '12px' }}>
@@ -178,11 +179,12 @@ function BlockRenderer({ block, onQuizComplete }: { block: Block; onQuizComplete
             </div>
             {a.description && <p style={{ fontSize: '14px', color: '#57534E', lineHeight: 1.6, marginBottom: '10px' }}>{a.description}</p>}
             {a.consigne && (
-              <div style={{ background: 'rgba(255,255,255,0.7)', borderRadius: '10px', padding: '12px', border: '1px solid rgba(212,160,23,0.2)' }}>
+              <div style={{ background: 'rgba(255,255,255,0.7)', borderRadius: '10px', padding: '12px', border: '1px solid rgba(212,160,23,0.2)', marginBottom: minutes ? '14px' : 0 }}>
                 <div style={{ fontSize: '11px', fontWeight: '800', color: '#D4A017', marginBottom: '4px', letterSpacing: '.5px' }}>CONSIGNE</div>
                 <div style={{ fontSize: '14px', color: '#1C1917', fontStyle: 'italic' }}>{a.consigne}</div>
               </div>
             )}
+            {minutes && <TimedChallenge minutes={minutes} onComplete={onQuizComplete} />}
           </div>
         )
       })()}
@@ -231,8 +233,74 @@ function BlockRenderer({ block, onQuizComplete }: { block: Block; onQuizComplete
   )
 }
 
-// ── QCM multi-questions component ────────────────────────────────────────────
-function QcmMultiBlock({ block, onComplete }: { block: Block; onComplete: () => void }) {
+// ── Compte à rebours pour défis chronométrés ─────────────────────────────────
+function Countdown({ minutes, onExpire }: { minutes: number; onExpire?: () => void }) {
+  const [secondsLeft, setSecondsLeft] = useState(minutes * 60)
+  const [running, setRunning] = useState(false)
+
+  useEffect(() => {
+    if (!running || secondsLeft <= 0) return
+    const t = setTimeout(() => setSecondsLeft(s => {
+      if (s <= 1) { onExpire?.(); return 0 }
+      return s - 1
+    }), 1000)
+    return () => clearTimeout(t)
+  }, [running, secondsLeft, onExpire])
+
+  const mm = String(Math.floor(secondsLeft / 60)).padStart(2, '0')
+  const ss = String(secondsLeft % 60).padStart(2, '0')
+  const pct = secondsLeft / (minutes * 60)
+  const urgent = pct < 0.2 && secondsLeft > 0
+  const expired = secondsLeft <= 0
+  const color = expired ? '#EF4444' : urgent ? '#F59E0B' : '#06B6D4'
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: `${color}0F`, border: `1.5px solid ${color}40`, borderRadius: '12px', padding: '10px 16px', marginBottom: '1rem' }}>
+      <div style={{ fontSize: '24px', fontWeight: '900', color, fontVariantNumeric: 'tabular-nums', minWidth: '70px' }}>
+        {expired ? '⏰' : `${mm}:${ss}`}
+      </div>
+      <div style={{ flex: 1, height: '6px', background: `${color}1A`, borderRadius: '3px', overflow: 'hidden' }}>
+        <div style={{ width: `${Math.max(pct, 0) * 100}%`, height: '100%', background: color, transition: 'width 1s linear, background .3s' }} />
+      </div>
+      {!running && !expired && (
+        <button onClick={() => setRunning(true)} style={{ background: `linear-gradient(135deg,${color},${color}CC)`, border: 'none', borderRadius: '8px', padding: '6px 14px', color: '#fff', fontWeight: '700', fontSize: '12px', cursor: 'pointer', flexShrink: 0 }}>
+          ▶ Démarrer
+        </button>
+      )}
+      {expired && <span style={{ fontSize: '12px', fontWeight: '700', color, flexShrink: 0 }}>Temps écoulé</span>}
+    </div>
+  )
+}
+
+
+// ── Défi chronométré : minuteur + bouton de complétion avec bonus ────────────
+function TimedChallenge({ minutes, onComplete }: { minutes: number; onComplete: (opts?: { points?: number; badge?: { id: string; label: string } }) => void }) {
+  const [expired, setExpired] = useState(false)
+  const [done, setDone] = useState(false)
+
+  if (done) return null
+
+  return (
+    <div>
+      <Countdown minutes={minutes} onExpire={() => setExpired(true)} />
+      <button
+        onClick={() => {
+          setDone(true)
+          onComplete(
+            expired
+              ? { points: 15 }
+              : { points: 25, badge: { id: 'contre_la_montre', label: '⚡ Contre la montre' } }
+          )
+        }}
+        style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '9px', padding: '9px 20px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>
+        ✓ J'ai terminé le défi
+      </button>
+    </div>
+  )
+}
+
+
+function QcmMultiBlock({ block, onComplete }: { block: Block; onComplete: (opts?: { points?: number; badge?: { id: string; label: string } }) => void }) {
   let questions: any[] = []
   try { questions = JSON.parse(block.content) } catch {}
   if (!Array.isArray(questions)) questions = []
@@ -248,7 +316,7 @@ function QcmMultiBlock({ block, onComplete }: { block: Block; onComplete: () => 
       <div style={{ background: 'var(--surface)', borderRadius: '16px', border: '1px solid rgba(28,25,23,0.08)', padding: '1.5rem', textAlign: 'center', color: '#A8A29E' }}>
         🧩 Aucune question configurée pour ce QCM.
         <div style={{ marginTop: '1rem' }}>
-          <button onClick={onComplete} style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '9px', padding: '9px 20px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>Continuer →</button>
+          <button onClick={() => onComplete()} style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '9px', padding: '9px 20px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>Continuer →</button>
         </div>
       </div>
     )
@@ -280,7 +348,7 @@ function QcmMultiBlock({ block, onComplete }: { block: Block; onComplete: () => 
         <div style={{ fontSize: '13px', color: good ? '#059669' : '#A8A29E', marginBottom: '1.5rem' }}>
           {good ? 'Excellent — les notions sont acquises.' : 'Encore un peu d\'entraînement sur ce module serait utile.'}
         </div>
-        <button onClick={onComplete} style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '9px', padding: '10px 24px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>Continuer →</button>
+        <button onClick={() => onComplete({ points: score * 5, badge: pct === 100 ? { id: 'sans_faute', label: '🧠 Sans faute' } : undefined })} style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '9px', padding: '10px 24px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>Continuer →</button>
       </div>
     )
   }
@@ -348,6 +416,11 @@ function PlayerInner() {
   const [blkIdx, setBlkIdx] = useState(0)
   const [completed, setCompleted] = useState<Set<string>>(new Set())
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [points, setPoints] = useState(0)
+  const [badges, setBadges] = useState<{ id: string; label: string }[]>([])
+  const [toast, setToast] = useState<string | null>(null)
+  const [finished, setFinished] = useState(false)
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const topRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -376,6 +449,31 @@ function PlayerInner() {
     </div>
   )
 
+  if (finished) return (
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FAF9F7', padding: '2rem' }}>
+      <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '3rem', textAlign: 'center', maxWidth: '460px', width: '100%' }}>
+        <div style={{ fontSize: '56px', marginBottom: '1rem' }}>🎓</div>
+        <h2 style={{ fontWeight: '900', color: '#1C1917', marginBottom: '4px', fontSize: '22px' }}>Cours terminé !</h2>
+        <p style={{ color: '#A8A29E', marginBottom: '1.5rem' }}>{course.title}</p>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(232,101,26,0.08)', border: '1px solid rgba(232,101,26,0.2)', borderRadius: '20px', padding: '8px 20px', marginBottom: '1.5rem' }}>
+          <span style={{ fontSize: '20px' }}>⭐</span>
+          <span style={{ fontWeight: '900', fontSize: '18px', color: '#E8651A' }}>{points} points</span>
+        </div>
+        {badges.length > 0 && (
+          <div style={{ marginBottom: '2rem' }}>
+            <div style={{ fontSize: '11px', fontWeight: '800', color: '#A8A29E', letterSpacing: '.5px', marginBottom: '10px' }}>BADGES DÉBLOQUÉS</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center' }}>
+              {badges.map(b => (
+                <span key={b.id} style={{ background: 'rgba(212,160,23,0.1)', border: '1px solid rgba(212,160,23,0.25)', borderRadius: '20px', padding: '6px 14px', fontSize: '12px', fontWeight: '700', color: '#B8860B' }}>{b.label}</span>
+              ))}
+            </div>
+          </div>
+        )}
+        <button onClick={() => router.push('/formateur/cours')} style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '10px', padding: '10px 24px', color: '#fff', fontWeight: '700', cursor: 'pointer' }}>← Mes cours</button>
+      </div>
+    </div>
+  )
+
   const modules: Module[] = course.data?.modules || []
   const curMod  = modules[modIdx]
   const blocks  = curMod?.blocks || []
@@ -387,11 +485,25 @@ function PlayerInner() {
   const progress    = totalBlocks > 0 ? Math.round((doneCount / totalBlocks) * 100) : 0
 
   const markDone = (id: string) => setCompleted(p => new Set([...p, id]))
-  const goNext = () => {
+  const unlockBadge = (b: { id: string; label: string }) => {
+    setBadges(prev => {
+      if (prev.some(x => x.id === b.id)) return prev
+      setToast(`Badge débloqué — ${b.label}`)
+      if (toastTimer.current) clearTimeout(toastTimer.current)
+      toastTimer.current = setTimeout(() => setToast(null), 3500)
+      return [...prev, b]
+    })
+  }
+  const goNext = (opts?: { points?: number; badge?: { id: string; label: string } }) => {
+    if (opts?.points) setPoints(p => p + opts.points!)
+    if (opts?.badge) unlockBadge(opts.badge)
     if (curBlk) markDone(curBlk.id)
     topRef.current?.scrollIntoView({ behavior: 'smooth' })
     if (blkIdx < blocks.length - 1) { setBlkIdx(b => b + 1); return }
-    if (modIdx < modules.length - 1) { setModIdx(m => m + 1); setBlkIdx(0) }
+    if (modIdx < modules.length - 1) {
+      setModIdx(m => m + 1); setBlkIdx(0)
+      unlockBadge({ id: `module_${modIdx}`, label: `🏁 Module ${modIdx + 1} terminé` })
+    }
   }
   const goPrev = () => {
     topRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -411,6 +523,13 @@ function PlayerInner() {
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontWeight: '800', fontSize: '15px', color: '#1C1917', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{course.title}</div>
         </div>
+        {/* Points */}
+        {points > 0 && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(212,160,23,0.1)', border: '1px solid rgba(212,160,23,0.25)', borderRadius: '20px', padding: '4px 12px', flexShrink: 0 }}>
+            <span style={{ fontSize: '13px' }}>⭐</span>
+            <span style={{ fontSize: '12px', fontWeight: '800', color: '#B8860B' }}>{points}</span>
+          </div>
+        )}
         {/* Progress bar */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
           <div style={{ width: '120px', height: '6px', background: 'rgba(28,25,23,0.08)', borderRadius: '3px', overflow: 'hidden' }}>
@@ -421,6 +540,12 @@ function PlayerInner() {
         <button onClick={() => setSidebarOpen(s => !s)} style={{ background: sidebarOpen ? 'rgba(232,101,26,0.1)' : 'rgba(28,25,23,0.05)', border: 'none', borderRadius: '8px', padding: '6px 10px', cursor: 'pointer', fontSize: '13px', color: '#E8651A' }}>☰</button>
       </div>
 
+      {/* Badge toast */}
+      {toast && (
+        <div style={{ position: 'fixed', top: '70px', left: '50%', transform: 'translateX(-50%)', zIndex: 200, background: 'linear-gradient(135deg,#D4A017,#E8651A)', color: '#fff', borderRadius: '12px', padding: '10px 20px', fontWeight: '700', fontSize: '13px', boxShadow: '0 8px 24px rgba(212,160,23,0.35)', animation: 'toastIn .3s ease' }}>
+          🏅 {toast}
+        </div>
+      )}
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
 
         {/* ── Sidebar ── */}
@@ -474,11 +599,11 @@ function PlayerInner() {
                 Bloc {modIdx > 0 ? modules.slice(0, modIdx).reduce((a, m) => a + m.blocks.length, 0) + blkIdx + 1 : blkIdx + 1} / {totalBlocks}
               </div>
               {isLast
-                ? <button onClick={() => { if (curBlk) markDone(curBlk.id); router.push('/formateur/cours') }}
+                ? <button onClick={() => { if (curBlk) markDone(curBlk.id); unlockBadge({ id: 'cours_termine', label: '🏆 Cours terminé' }); setFinished(true) }}
                     style={{ background: 'linear-gradient(135deg,#10B981,#059669)', border: 'none', borderRadius: '10px', padding: '10px 20px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>
                     🎓 Terminer le cours
                   </button>
-                : <button onClick={goNext}
+                : <button onClick={() => goNext()}
                     style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '10px', padding: '10px 20px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>
                     Suivant →
                   </button>
@@ -487,6 +612,7 @@ function PlayerInner() {
           </div>
         </div>
       </div>
+      <style>{`@keyframes toastIn{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translate(-50%,0)}}`}</style>
     </div>
   )
 }

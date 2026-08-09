@@ -509,10 +509,20 @@ export default function CreerCours() {
                                   let a: any = { titre: '', description: '', duree: '10min' }
                                   try { a = JSON.parse(blk.content) } catch {}
                                   const save = (upd: any) => updBlock(mod.id, blk.id, { content: JSON.stringify(upd) })
+                                  const chronoMinutes = typeof a.contrainte_temps === 'object' ? a.contrainte_temps?.minutes || '' : ''
+                                  const setChrono = (v: string) => {
+                                    const n = parseInt(v, 10)
+                                    save({ ...a, contrainte_temps: v && !isNaN(n) && n > 0 ? { minutes: n } : null })
+                                  }
                                   return (<div style={{ display: 'grid', gap: '8px' }}>
                                     <input style={S.inp} placeholder="Titre de l'activité" value={a.titre} onChange={e => save({ ...a, titre: e.target.value })} />
-                                    <textarea style={{ ...S.inp, minHeight: '60px', resize: 'vertical' }} placeholder="Consigne / description" value={a.description} onChange={e => save({ ...a, description: e.target.value })} />
-                                    <input style={S.inp} placeholder="Durée (ex: 15min)" value={a.duree} onChange={e => save({ ...a, duree: e.target.value })} />
+                                    <textarea style={{ ...S.inp, minHeight: '50px', resize: 'vertical' }} placeholder="Description / mise en situation" value={a.description} onChange={e => save({ ...a, description: e.target.value })} />
+                                    <textarea style={{ ...S.inp, minHeight: '40px', resize: 'vertical' }} placeholder="Consigne (ce que l'apprenant doit faire concrètement)" value={a.consigne || ''} onChange={e => save({ ...a, consigne: e.target.value })} />
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                                      <input style={S.inp} placeholder="Durée affichée (ex: 15min)" value={a.duree} onChange={e => save({ ...a, duree: e.target.value })} />
+                                      <input style={S.inp} type="number" min="1" placeholder="⏱ Défi chronométré (minutes)" value={chronoMinutes} onChange={e => setChrono(e.target.value)} />
+                                    </div>
+                                    {chronoMinutes && <div style={{ fontSize: '10px', color: '#06B6D4' }}>✅ Un minuteur de {chronoMinutes} min sera affiché à l'apprenant</div>}
                                   </div>)
                                 })()}
                               </div>
