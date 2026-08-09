@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 type VideoSource = 'file' | 'youtube' | 'heygen'
 type Block = {
   id: string
-  type: 'text'|'video'|'pdf'|'quiz'|'html'|'h5p'|'activity'|'scorm'
+  type: 'text'|'video'|'pdf'|'quiz'|'qcm_multi'|'html'|'h5p'|'activity'|'scorm'
   title: string; content: string
   url?: string; fileData?: string; fileName?: string
   videoSource?: VideoSource; youtubeUrl?: string
@@ -34,6 +34,7 @@ const blockTypes = [
   { t: 'html',     icon: '💻', label: 'HTML',     color: '#F43F5E' },
   { t: 'pdf',      icon: '📄', label: 'PDF',      color: '#0EA5E9' },
   { t: 'quiz',     icon: '❓', label: 'Quiz',     color: '#10B981' },
+  { t: 'qcm_multi',icon: '🧩', label: 'QCM multi',color: '#06B6D4' },
 ]
 
 function parseYouTubeId(url: string): string | null {
@@ -189,6 +190,7 @@ function BlockPreview({ block }: { block: Block }) {
         {block.type === 'html' && <div style={{ background: 'rgba(244,63,94,0.08)', border: '1px dashed rgba(244,63,94,0.3)', borderRadius: '6px', padding: '14px', textAlign: 'center', fontSize: '11px', color: '#F43F5E' }}>💻 HTML · {block.fileName || '—'} {block.fileName ? '✅' : '⏳ Aucun fichier'}</div>}
         {block.type === 'pdf' && <div style={{ background: 'rgba(14,165,233,0.08)', border: '1px dashed rgba(14,165,233,0.3)', borderRadius: '6px', padding: '14px', textAlign: 'center', fontSize: '11px', color: '#0EA5E9' }}>📄 PDF · {block.fileName || '—'} {block.fileName ? '✅' : '⏳ Aucun fichier'}</div>}
         {block.type === 'quiz' && (() => { try { const q = JSON.parse(block.content); return (<div style={{ fontSize: '12px', color: '#D4D0CA' }}><div style={{ fontWeight: '700', marginBottom: '6px', color: '#FCD34D' }}>❓ {q.question}</div>{q.options?.map((o: string, i: number) => <div key={i} style={{ padding: '5px 8px', margin: '3px 0', background: 'rgba(255,255,255,0.04)', borderRadius: '5px', display: 'flex', gap: '5px' }}><span style={{ color: o === q.reponse ? '#10B981' : '#666' }}>{o === q.reponse ? '✓' : '○'}</span>{o}</div>)}</div>) } catch { return <div style={{ color: '#666', fontSize: '12px' }}>{block.content}</div> } })()}
+        {block.type === 'qcm_multi' && (() => { try { const qs = JSON.parse(block.content); if (!Array.isArray(qs)) return null; return (<div style={{ fontSize: '12px', color: '#D4D0CA' }}><div style={{ fontWeight: '700', marginBottom: '8px', color: '#22D3EE' }}>🧩 {qs.length} question{qs.length > 1 ? 's' : ''}</div>{qs.map((q: any, qi: number) => (<div key={qi} style={{ marginBottom: '8px', paddingBottom: '8px', borderBottom: qi < qs.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}><div style={{ fontWeight: '600', marginBottom: '4px' }}>{qi + 1}. {q.question || <span style={{ color: '#555', fontStyle: 'italic' }}>Question vide</span>}</div>{q.options?.map((o: string, i: number) => <div key={i} style={{ padding: '3px 6px', margin: '2px 0', background: 'rgba(255,255,255,0.03)', borderRadius: '4px', display: 'flex', gap: '5px', fontSize: '11px' }}><span style={{ color: o === q.reponse ? '#10B981' : '#666' }}>{o === q.reponse ? '✓' : '○'}</span>{o}</div>)}</div>))}</div>) } catch { return <div style={{ color: '#666', fontSize: '12px' }}>{block.content}</div> } })()}
         {block.type === 'activity' && (() => { try { const a = JSON.parse(block.content); return (<div style={{ fontSize: '12px', color: '#D4D0CA' }}><div style={{ fontWeight: '700', marginBottom: '5px', color: '#FCD34D' }}>🎯 {a.titre || 'Activité'}</div><div style={{ color: '#A8A29E' }}>{a.description || ''}</div></div>) } catch { return <div style={{ fontSize: '12px', color: '#D4D0CA' }}>{block.content}</div> } })()}
       </div>
     </div>
@@ -233,6 +235,7 @@ export default function CreerCours() {
         blocks.push({ id: g(), type: 'text', title: 'Contenu', content: m.contenu || '' })
         if (m.activite) blocks.push({ id: g(), type: 'activity', title: m.activite.titre || 'Activité', content: JSON.stringify(m.activite) })
         if (m.quiz) blocks.push({ id: g(), type: 'quiz', title: m.quiz.question || 'Quiz', content: JSON.stringify(m.quiz) })
+        if (Array.isArray(m.qcm_multi) && m.qcm_multi.length > 0) blocks.push({ id: g(), type: 'qcm_multi', title: `QCM — ${m.qcm_multi.length} questions`, content: JSON.stringify(m.qcm_multi) })
         return { id: g(), title: m.titre || 'Module', objectif: m.objectif || '', duration: m.duree || '45min', intro: m.introduction || '', blocks, ressources: m.ressources || [] }
       }))
       setAiLog(''); setStep(2)
@@ -469,6 +472,38 @@ export default function CreerCours() {
                                     ))}
                                     <div style={{ fontSize: '10px', color: '#A8A29E', marginTop: '4px' }}>Cliquez ✓ pour désigner la bonne réponse</div>
                                   </div>)
+                                })()}
+                                {blk.type === 'qcm_multi' && (() => {
+                                  let questions: any[] = []
+                                  try { questions = JSON.parse(blk.content) } catch {}
+                                  if (!Array.isArray(questions)) questions = []
+                                  const save = (upd: any[]) => updBlock(mod.id, blk.id, { content: JSON.stringify(upd) })
+                                  const addQ = () => save([...questions, { question: '', options: ['', '', '', ''], reponse: '', explication: '' }])
+                                  const delQ = (qi: number) => save(questions.filter((_, i) => i !== qi))
+                                  const updQ = (qi: number, patch: any) => save(questions.map((q, i) => i === qi ? { ...q, ...patch } : q))
+                                  return (
+                                    <div>
+                                      {questions.map((q, qi) => (
+                                        <div key={qi} style={{ background: 'rgba(6,182,212,0.05)', border: '1px solid rgba(6,182,212,0.15)', borderRadius: '10px', padding: '10px', marginBottom: '10px' }}>
+                                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                                            <span style={{ fontSize: '10px', fontWeight: '900', color: '#06B6D4', background: 'rgba(6,182,212,0.12)', padding: '2px 7px', borderRadius: '5px', flexShrink: 0 }}>Q{qi + 1}</span>
+                                            <input style={{ ...S.inp, flex: 1 }} placeholder="Question…" value={q.question} onChange={e => updQ(qi, { question: e.target.value })} />
+                                            <button style={{ background: 'none', border: 'none', color: '#D4CBC4', cursor: 'pointer', fontSize: '16px', flexShrink: 0 }} onClick={() => delQ(qi)}>×</button>
+                                          </div>
+                                          {(q.options || ['', '', '', '']).map((opt: string, oi: number) => (
+                                            <div key={oi} style={{ display: 'flex', gap: '6px', marginBottom: '5px', alignItems: 'center' }}>
+                                              <button style={{ width: '24px', height: '24px', borderRadius: '50%', border: `2px solid ${opt && opt === q.reponse ? '#10B981' : 'rgba(28,25,23,0.15)'}`, background: opt && opt === q.reponse ? '#10B981' : 'transparent', color: opt && opt === q.reponse ? '#fff' : '#A8A29E', cursor: 'pointer', fontSize: '10px', flexShrink: 0 }}
+                                                onClick={() => updQ(qi, { reponse: opt })}>✓</button>
+                                              <input style={S.inp} placeholder={`Option ${oi + 1}`} value={opt} onChange={e => { const opts = [...(q.options || ['', '', '', ''])]; opts[oi] = e.target.value; updQ(qi, { options: opts }) }} />
+                                            </div>
+                                          ))}
+                                          <input style={{ ...S.inp, marginTop: '4px' }} placeholder="Explication de la réponse (optionnel)" value={q.explication || ''} onChange={e => updQ(qi, { explication: e.target.value })} />
+                                        </div>
+                                      ))}
+                                      <button style={{ ...S.ghost, width: '100%', textAlign: 'center', border: '1px dashed rgba(6,182,212,0.3)', color: '#06B6D4', background: 'rgba(6,182,212,0.04)' }} onClick={addQ}>+ Ajouter une question</button>
+                                      {questions.length === 0 && <div style={{ fontSize: '10px', color: '#A8A29E', marginTop: '4px' }}>Aucune question — ajoutez-en au moins une</div>}
+                                    </div>
+                                  )
                                 })()}
                                 {blk.type === 'activity' && (() => {
                                   let a: any = { titre: '', description: '', duree: '10min' }

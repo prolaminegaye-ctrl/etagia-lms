@@ -31,6 +31,7 @@ MÉTHODE (à appliquer silencieusement, sans jamais nommer "ADDIE" ou "Bloom" da
 - Anticipation des erreurs : dans le champ "contenu" de chaque module, glisse naturellement UNE phrase signalant l'erreur ou la confusion la plus fréquente sur ce point précis chez ce public — pas une généralité, un piège réel et observable.
 - Activité variée et engageante : choisis le type d'activité le plus adapté au module parmi mise_en_situation, jeu_de_role, etude_de_cas, defi_chronometre, brainstorming_flash, simulation_decision — ne répète jamais le même type sur deux modules consécutifs. Chaque activité a une consigne actionnable immédiatement et, quand c'est pertinent, une contrainte de temps qui crée un peu de tension productive (ex: "5 minutes chrono, par équipes de 2").
 - Quiz avec distracteurs pédagogiques : les 3 mauvaises réponses du quiz ne sont pas aléatoires — elles reflètent des erreurs de raisonnement plausibles que ferait réellement quelqu'un qui maîtrise mal la notion. Formule la question comme un mini-défi (courte mise en situation suivie de la question), pas une question de cours sèche.
+- QCM multi-questions (champ optionnel qcm_multi) : pour les modules qui couvrent plusieurs notions distinctes ou qui gagnent à être vérifiés sous plusieurs angles, ajoute un tableau qcm_multi de 2 à 4 questions supplémentaires (même format que quiz : question, options, reponse, explication), chacune ciblant un point différent du module. N'ajoute ce champ que quand il apporte une vraie valeur de vérification — pas systématiquement sur chaque module.
 - Cohérence évaluation finale : l'évaluation finale doit vérifier concrètement l'atteinte des objectifs_generaux annoncés en introduction, et prend la forme d'un défi ou d'un cas pratique motivant plutôt qu'un contrôle classique.
 
 RÈGLE ABSOLUE : réponds UNIQUEMENT avec du JSON brut valide. ZÉRO texte avant ou après. ZÉRO backtick. ZÉRO markdown. Commence directement par { et termine par }.`,
@@ -65,7 +66,15 @@ Format exact requis (3 modules max, textes courts mais denses — chaque phrase 
         "reponse": "Option A",
         "explication": "Explication de la bonne réponse ET de pourquoi les distracteurs sont des erreurs de raisonnement plausibles."
       },
-      "ressources": ["Ressource recommandée 1"]
+      "ressources": ["Ressource recommandée 1"],
+      "qcm_multi": [
+        {
+          "question": "Question ciblant un autre point du module ?",
+          "options": ["Option A", "Option B", "Option C", "Option D"],
+          "reponse": "Option A",
+          "explication": "Explication de la bonne réponse."
+        }
+      ]
     }
   ],
   "evaluation_finale": {

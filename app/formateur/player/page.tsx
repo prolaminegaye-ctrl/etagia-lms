@@ -152,7 +152,7 @@ function BlockRenderer({ block, onQuizComplete }: { block: Block; onQuizComplete
   return (
     <div style={{ marginBottom: '1.5rem' }}>
       {/* Block label */}
-      {block.type !== 'quiz' && (
+      {block.type !== 'quiz' && block.type !== 'qcm_multi' && (
         <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#1C1917', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span>{{ text:'📝', video:'🎬', scorm:'📦', h5p:'🎮', html:'💻', pdf:'📄', activity:'🎯' }[block.type] || '📌'}</span>
           {block.title}
@@ -224,11 +224,120 @@ function BlockRenderer({ block, onQuizComplete }: { block: Block; onQuizComplete
 
       {/* Quiz */}
       {block.type === 'quiz' && <QuizBlock block={block} onComplete={onQuizComplete} />}
+
+      {/* QCM multi-questions */}
+      {block.type === 'qcm_multi' && <QcmMultiBlock block={block} onComplete={onQuizComplete} />}
     </div>
   )
 }
 
-// ── Main player (wrapped) ─────────────────────────────────────────────────────
+// ── QCM multi-questions component ────────────────────────────────────────────
+function QcmMultiBlock({ block, onComplete }: { block: Block; onComplete: () => void }) {
+  let questions: any[] = []
+  try { questions = JSON.parse(block.content) } catch {}
+  if (!Array.isArray(questions)) questions = []
+
+  const [qi, setQi] = useState(0)
+  const [selected, setSelected] = useState<string | null>(null)
+  const [validated, setValidated] = useState(false)
+  const [score, setScore] = useState(0)
+  const [finished, setFinished] = useState(false)
+
+  if (questions.length === 0) {
+    return (
+      <div style={{ background: 'var(--surface)', borderRadius: '16px', border: '1px solid rgba(28,25,23,0.08)', padding: '1.5rem', textAlign: 'center', color: '#A8A29E' }}>
+        🧩 Aucune question configurée pour ce QCM.
+        <div style={{ marginTop: '1rem' }}>
+          <button onClick={onComplete} style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '9px', padding: '9px 20px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>Continuer →</button>
+        </div>
+      </div>
+    )
+  }
+
+  const q = questions[qi]
+  const opts: string[] = q.options || []
+  const correct: string = q.reponse || opts[0] || ''
+  const isRight = selected === correct
+  const isLast = qi === questions.length - 1
+
+  const validate = () => {
+    setValidated(true)
+    if (isRight) setScore(s => s + 1)
+  }
+
+  const next = () => {
+    if (isLast) { setFinished(true); return }
+    setQi(i => i + 1); setSelected(null); setValidated(false)
+  }
+
+  if (finished) {
+    const pct = Math.round((score / questions.length) * 100)
+    const good = pct >= 70
+    return (
+      <div style={{ background: 'var(--surface)', borderRadius: '16px', border: '1px solid rgba(28,25,23,0.08)', padding: '2rem', textAlign: 'center' }}>
+        <div style={{ fontSize: '44px', marginBottom: '0.5rem' }}>{good ? '🎉' : '💪'}</div>
+        <div style={{ fontSize: '20px', fontWeight: '900', color: '#1C1917', marginBottom: '4px' }}>{score} / {questions.length} bonnes réponses</div>
+        <div style={{ fontSize: '13px', color: good ? '#059669' : '#A8A29E', marginBottom: '1.5rem' }}>
+          {good ? 'Excellent — les notions sont acquises.' : 'Encore un peu d\'entraînement sur ce module serait utile.'}
+        </div>
+        <button onClick={onComplete} style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '9px', padding: '10px 24px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>Continuer →</button>
+      </div>
+    )
+  }
+
+  return (
+    <div style={{ background: 'var(--surface)', borderRadius: '16px', border: '1px solid rgba(28,25,23,0.08)', padding: '1.5rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
+        <span style={{ fontSize: '11px', fontWeight: '800', color: '#06B6D4', background: 'rgba(6,182,212,0.1)', padding: '3px 9px', borderRadius: '20px' }}>Question {qi + 1} / {questions.length}</span>
+        <div style={{ flex: 1, height: '4px', background: 'rgba(28,25,23,0.06)', borderRadius: '2px', overflow: 'hidden' }}>
+          <div style={{ width: `${(qi / questions.length) * 100}%`, height: '100%', background: 'linear-gradient(90deg,#06B6D4,#22D3EE)', transition: 'width .2s' }} />
+        </div>
+      </div>
+      <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
+        <span style={{ fontSize: '24px', flexShrink: 0 }}>🧩</span>
+        <div style={{ fontSize: '17px', fontWeight: '700', color: '#1C1917', lineHeight: 1.4 }}>{q.question}</div>
+      </div>
+      <div style={{ display: 'grid', gap: '10px', marginBottom: '1.25rem' }}>
+        {opts.map((opt, i) => {
+          let bg = 'rgba(28,25,23,0.04)', border = '1px solid rgba(28,25,23,0.1)', color = '#1C1917'
+          if (validated) {
+            if (opt === correct) { bg = 'rgba(16,185,129,0.1)'; border = '1.5px solid #10B981'; color = '#059669' }
+            else if (opt === selected) { bg = 'rgba(239,68,68,0.08)'; border = '1.5px solid #EF4444'; color = 'var(--orange)' }
+          } else if (opt === selected) { bg = 'rgba(6,182,212,0.1)'; border = '1.5px solid #06B6D4'; color = '#06B6D4' }
+          return (
+            <div key={i} onClick={() => !validated && setSelected(opt)}
+              style={{ padding: '12px 16px', borderRadius: '10px', background: bg, border, color, cursor: validated ? 'default' : 'pointer', transition: 'all .15s', display: 'flex', alignItems: 'center', gap: '10px', fontWeight: '500' }}>
+              <span style={{ width: '24px', height: '24px', borderRadius: '50%', border: `2px solid currentColor`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', flexShrink: 0 }}>
+                {validated && opt === correct ? '✓' : validated && opt === selected && !isRight ? '✕' : String.fromCharCode(65 + i)}
+              </span>
+              {opt}
+            </div>
+          )
+        })}
+      </div>
+      {validated && (
+        <div style={{ background: isRight ? 'rgba(16,185,129,0.08)' : 'rgba(239,68,68,0.06)', border: `1px solid ${isRight ? 'rgba(16,185,129,0.25)' : 'rgba(239,68,68,0.2)'}`, borderRadius: '10px', padding: '12px 16px', marginBottom: '1rem', fontSize: '14px', color: isRight ? '#059669' : 'var(--orange)' }}>
+          {isRight ? '🎉 Bonne réponse !' : `❌ Réponse correcte : ${correct}`}
+          {q.explication && <div style={{ marginTop: '6px', color: '#57534E', fontSize: '13px' }}>{q.explication}</div>}
+        </div>
+      )}
+      <div style={{ display: 'flex', gap: '8px' }}>
+        {!validated
+          ? <button disabled={!selected} onClick={validate}
+              style={{ background: selected ? 'linear-gradient(135deg,#06B6D4,#22D3EE)' : 'rgba(28,25,23,0.08)', border: 'none', borderRadius: '9px', padding: '9px 20px', color: selected ? '#fff' : '#A8A29E', fontWeight: '700', fontSize: '13px', cursor: selected ? 'pointer' : 'not-allowed' }}>
+              Valider ma réponse
+            </button>
+          : <button onClick={next}
+              style={{ background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '9px', padding: '9px 20px', color: '#fff', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>
+              {isLast ? 'Voir mon score →' : 'Question suivante →'}
+            </button>
+        }
+      </div>
+    </div>
+  )
+}
+
+
 function PlayerInner() {
   const router  = useRouter()
   const params  = useSearchParams()
