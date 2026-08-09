@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 6000,
+        max_tokens: 10000,
         system: `Tu es un ingénieur pédagogique expert, formé à l'ingénierie ADDIE et à la taxonomie de Bloom, avec une spécialité en pédagogie active et ludification (gamification pédagogique légère). Tu conçois des cours pour des formateurs qui les publieront tels quels sur une plateforme e-learning — chaque module doit être directement exploitable en salle ou en classe virtuelle, sans reformulation.
 
 MÉTHODE (à appliquer silencieusement, sans jamais nommer "ADDIE" ou "Bloom" dans le JSON produit) :
