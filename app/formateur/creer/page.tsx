@@ -14,16 +14,35 @@ type Module = { id: string; title: string; objectif: string; duration: string; i
 type Info = { title: string; description: string; level: string; category: string; duration: string; audience: string }
 type CourseData = { modules: any[]; evaluation_finale?: any }
 
+const BUSY_PHRASES = [
+  'Analyse du sujet…',
+  'Construction des objectifs pédagogiques…',
+  'Rédaction des modules…',
+  'Conception des activités…',
+  'Préparation des quiz…',
+]
+
 const g = () => Math.random().toString(36).slice(2, 8)
 
 const S = {
-  card:  { background: 'var(--surface)', border: '1px solid rgba(28,25,23,0.07)', borderRadius: '16px' } as React.CSSProperties,
-  inp:   { background: 'rgba(232,101,26,0.06)', color: 'var(--canvas)', border: '1px solid rgba(28,25,23,0.09)', borderRadius: '10px', padding: '10px 14px', width: '100%', fontSize: '14px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' as const } as React.CSSProperties,
-  btn:   { background: 'linear-gradient(135deg,#E8651A,#D4A017)', border: 'none', borderRadius: '10px', padding: '10px 20px', color: '#fff', fontWeight: '700', fontSize: '14px', cursor: 'pointer' } as React.CSSProperties,
-  ghost: { background: '#FAF9F7', border: '1px solid rgba(28,25,23,0.09)', borderRadius: '10px', padding: '10px 18px', color: '#78716C', fontSize: '13px', cursor: 'pointer', fontWeight: '600' as const } as React.CSSProperties,
-  lbl:   { fontSize: '11px', color: '#A8A29E', display: 'block', marginBottom: '5px', fontWeight: '700', textTransform: 'uppercase' as const, letterSpacing: '0.7px' },
-  upload:{ background: 'rgba(232,101,26,0.06)', border: '1.5px dashed rgba(232,101,26,0.35)', borderRadius: '10px', padding: '14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', transition: 'all .15s' } as React.CSSProperties,
+  card:  { background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: 'var(--r-lg)', boxShadow: 'var(--sh-1)' } as React.CSSProperties,
+  inp:   { background: 'var(--gold-50)', color: 'var(--ink)', border: '1px solid var(--line)', borderRadius: 'var(--r-sm)', padding: '10px 14px', width: '100%', fontSize: '14px', fontFamily: 'var(--sans)', outline: 'none', boxSizing: 'border-box' as const } as React.CSSProperties,
+  btn:   { background: 'var(--grad-signature)', border: 'none', borderRadius: 'var(--r-sm)', padding: '10px 20px', color: '#fff', fontWeight: '700', fontSize: '14px', cursor: 'pointer', boxShadow: 'var(--sh-1)' } as React.CSSProperties,
+  ghost: { background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: 'var(--r-sm)', padding: '10px 18px', color: 'var(--ink-mut)', fontSize: '13px', cursor: 'pointer', fontWeight: '600' as const } as React.CSSProperties,
+  lbl:   { fontSize: '11px', color: 'var(--ink-soft)', display: 'block', marginBottom: '5px', fontWeight: '700', textTransform: 'uppercase' as const, letterSpacing: '0.7px' },
+  upload:{ background: 'var(--gold-50)', border: '1.5px dashed var(--orange-300)', borderRadius: 'var(--r-sm)', padding: '14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', transition: 'all .15s' } as React.CSSProperties,
 }
+
+const CATEGORIES = [
+  { label: 'Tech',       icon: '💻' },
+  { label: 'Vente',      icon: '🤝' },
+  { label: 'Management', icon: '🧭' },
+  { label: 'RH',         icon: '👥' },
+  { label: 'Marketing',  icon: '📣' },
+  { label: 'Finance',    icon: '💰' },
+  { label: 'Design',     icon: '🎨' },
+  { label: 'Autre',      icon: '✨' },
+]
 
 const blockTypes = [
   { t: 'text',     icon: '📝', label: 'Contenu',  color: '#E8651A' },
@@ -205,6 +224,13 @@ export default function CreerCours() {
   const [modules, setModules]       = useState<Module[]>([])
   const [courseData, setCourseData] = useState<CourseData | null>(null)
   const [busy, setBusy]             = useState(false)
+  const [busyPhraseIdx, setBusyPhraseIdx] = useState(0)
+
+  useEffect(() => {
+    if (!busy) { setBusyPhraseIdx(0); return }
+    const t = setInterval(() => setBusyPhraseIdx(i => (i + 1) % BUSY_PHRASES.length), 1800)
+    return () => clearInterval(t)
+  }, [busy])
   const [aiError, setAiError]       = useState('')
   const [aiBlocked, setAiBlocked]   = useState(false)
   const [aiLog, setAiLog]           = useState('')
@@ -294,40 +320,40 @@ export default function CreerCours() {
   const previewMod = modules.find(m => m.id === previewModId) || modules[0]
 
   if (saved) return (
-    <div style={{ minHeight: '100vh', background: '#FAF9F7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ ...S.card, padding: '3rem', textAlign: 'center', maxWidth: '480px', width: '100%' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--canvas)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ ...S.card, padding: '3rem', textAlign: 'center', maxWidth: '480px', width: '100%' }} className="etg-fade-up">
         <div style={{ fontSize: '64px', marginBottom: '1rem' }}>🎉</div>
-        <h2 style={{ fontSize: '22px', fontWeight: '900', color: 'var(--canvas)', marginBottom: '8px' }}>Cours sauvegardé !</h2>
-        <p style={{ color: '#A8A29E', marginBottom: '2rem' }}>{info.title} · {modules.length} modules</p>
+        <h2 style={{ fontFamily: 'var(--serif)', fontSize: '24px', fontWeight: '600', color: 'var(--ink)', marginBottom: '8px' }}>Cours sauvegardé !</h2>
+        <p style={{ color: 'var(--ink-mut)', marginBottom: '2rem' }}>{info.title} · {modules.length} modules</p>
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <button style={S.ghost} onClick={() => { setSaved(false); setStep(0); setModules([]); setInfo({ title: '', description: '', level: 'débutant', category: 'Tech', duration: '3h', audience: '' }) }}>+ Nouveau cours</button>
-          <button style={S.ghost} onClick={() => router.push('/formateur/cours')}>📚 Mes cours</button>
-          <button style={S.btn} onClick={() => router.push('/formateur')}>← Dashboard</button>
+          <button className="etg-btn-lift" style={S.ghost} onClick={() => { setSaved(false); setStep(0); setModules([]); setInfo({ title: '', description: '', level: 'débutant', category: 'Tech', duration: '3h', audience: '' }) }}>+ Nouveau cours</button>
+          <button className="etg-btn-lift" style={S.ghost} onClick={() => router.push('/formateur/cours')}>📚 Mes cours</button>
+          <button className="etg-btn-lift" style={S.btn} onClick={() => router.push('/formateur')}>← Dashboard</button>
         </div>
       </div>
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FAF9F7' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--canvas)' }}>
       {/* Sticky header */}
-      <div style={{ background: 'var(--surface)', borderBottom: '1px solid rgba(28,25,23,0.07)', padding: '0 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '58px', position: 'sticky', top: 0, zIndex: 50 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <button style={S.ghost} onClick={() => router.push('/formateur')}>← Retour</button>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+      <div style={{ background: 'var(--surface)', borderBottom: '1px solid var(--line)', padding: '0 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '62px', position: 'sticky', top: 0, zIndex: 50, boxShadow: 'var(--sh-1)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
+          <button className="etg-btn-lift" style={S.ghost} onClick={() => router.push('/formateur')}>← Retour</button>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             {['Infos', 'Structure', 'Contenu', 'Publier'].map((s, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
                 <button onClick={() => { if (i <= step || modules.length > 0) setStep(i) }}
-                  style={{ padding: '5px 12px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '12px', fontWeight: '700', background: step === i ? 'linear-gradient(135deg,#E8651A,#D4A017)' : 'transparent', color: step === i ? '#fff' : step > i ? '#E8651A' : '#A8A29E', transition: 'all .15s' }}>
+                  style={{ padding: '6px 14px', borderRadius: '20px', border: 'none', cursor: 'pointer', fontSize: '12.5px', fontWeight: '700', background: step === i ? 'var(--grad-signature)' : 'transparent', color: step === i ? '#fff' : step > i ? 'var(--orange-700)' : 'var(--ink-soft)', boxShadow: step === i ? 'var(--sh-1)' : 'none', transition: 'all .2s' }}>
                   {step > i ? '✓ ' : ''}{s}
                 </button>
-                {i < 3 && <div style={{ width: '14px', height: '1px', background: 'rgba(28,25,23,0.1)' }} />}
+                {i < 3 && <div style={{ width: '18px', height: '1.5px', background: step > i ? 'var(--orange-300)' : 'var(--line)', transition: 'background .2s' }} />}
               </div>
             ))}
           </div>
         </div>
         {step === 2 && (
-          <button style={{ ...S.ghost, fontSize: '12px' }} onClick={() => setShowPreview(p => !p)}>
+          <button className="etg-btn-lift" style={{ ...S.ghost, fontSize: '12px' }} onClick={() => setShowPreview(p => !p)}>
             {showPreview ? '◀ Masquer' : '▶ Aperçu live'}
           </button>
         )}
@@ -338,37 +364,127 @@ export default function CreerCours() {
 
           {/* STEP 0 */}
           {step === 0 && (
-            <div style={{ maxWidth: '680px', margin: '0 auto' }}>
-              <h1 style={{ fontSize: '24px', fontWeight: '900', color: 'var(--canvas)', marginBottom: '6px' }}>Créer un cours</h1>
-              <p style={{ color: '#A8A29E', fontSize: '13px', marginBottom: '2rem' }}>L'IA génère la structure — vous personnalisez le contenu.</p>
-              <div style={{ ...S.card, padding: '2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-                <div style={{ gridColumn: '1/-1' }}><label style={S.lbl}>Titre *</label><input style={S.inp} value={info.title} onChange={e => setInfo({ ...info, title: e.target.value })} placeholder="Ex: Maîtriser l'art de la vente consultative" /></div>
-                <div style={{ gridColumn: '1/-1' }}><label style={S.lbl}>Description</label><textarea style={{ ...S.inp, minHeight: '72px', resize: 'vertical' }} value={info.description} onChange={e => setInfo({ ...info, description: e.target.value })} placeholder="Ce que les apprenants vont acquérir…" /></div>
-                <div><label style={S.lbl}>Niveau</label><select style={S.inp} value={info.level} onChange={e => setInfo({ ...info, level: e.target.value })}>{['débutant', 'intermédiaire', 'avancé', 'expert'].map(l => <option key={l}>{l}</option>)}</select></div>
-                <div><label style={S.lbl}>Catégorie</label><select style={S.inp} value={info.category} onChange={e => setInfo({ ...info, category: e.target.value })}>{['Tech', 'Vente', 'Management', 'RH', 'Marketing', 'Finance', 'Design', 'Autre'].map(c => <option key={c}>{c}</option>)}</select></div>
-                <div><label style={S.lbl}>Durée</label><select style={S.inp} value={info.duration} onChange={e => setInfo({ ...info, duration: e.target.value })}>{['30min', '1h', '2h', '3h', '5h', '8h', '10h+'].map(d => <option key={d}>{d}</option>)}</select></div>
-                <div><label style={S.lbl}>Public cible</label><input style={S.inp} value={info.audience} onChange={e => setInfo({ ...info, audience: e.target.value })} placeholder="Ex: Commerciaux débutants" /></div>
+            <div style={{ maxWidth: '980px', margin: '0 auto' }} className="etg-fade-up">
+              <div style={{ marginBottom: '2rem' }}>
+                <div style={{ fontSize: '11px', fontWeight: '800', color: 'var(--orange-700)', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: '6px' }}>Nouveau cours</div>
+                <h1 style={{ fontFamily: 'var(--serif)', fontSize: '34px', fontWeight: '600', color: 'var(--ink)', marginBottom: '8px', letterSpacing: '-0.01em' }}>Donnez vie à votre cours</h1>
+                <p style={{ color: 'var(--ink-mut)', fontSize: '14px' }}>L'IA construit la structure pédagogique — vous personnalisez chaque détail ensuite.</p>
               </div>
-              <div style={{ marginTop: '1.5rem', display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-                <button style={S.ghost} onClick={() => { setModules([]); setStep(2) }}>Structurer manuellement →</button>
-                <button style={{ ...S.btn, opacity: !info.title || busy ? 0.5 : 1 }} onClick={() => { setStep(1); setTimeout(genAI, 200) }} disabled={!info.title || busy}>✨ Générer avec l'IA →</button>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 300px', gap: '1.75rem', alignItems: 'start' }}>
+                {/* Formulaire */}
+                <div style={{ ...S.card, padding: '2rem', display: 'grid', gap: '18px' }}>
+                  <div>
+                    <label style={S.lbl}>Titre *</label>
+                    <input className="etg-input" style={{ ...S.inp, fontSize: '16px', fontWeight: '600', padding: '12px 16px' }} value={info.title} onChange={e => setInfo({ ...info, title: e.target.value })} placeholder="Ex : Maîtriser l'art de la vente consultative" />
+                  </div>
+                  <div>
+                    <label style={S.lbl}>Description</label>
+                    <textarea className="etg-input" style={{ ...S.inp, minHeight: '72px', resize: 'vertical' }} value={info.description} onChange={e => setInfo({ ...info, description: e.target.value })} placeholder="Ce que les apprenants vont acquérir…" />
+                  </div>
+
+                  <div>
+                    <label style={S.lbl}>Niveau</label>
+                    <div style={{ display: 'flex', gap: '6px', background: 'var(--gold-50)', padding: '4px', borderRadius: 'var(--r-sm)', border: '1px solid var(--line)' }}>
+                      {['débutant', 'intermédiaire', 'avancé', 'expert'].map(l => (
+                        <button key={l} type="button" className="etg-chip" onClick={() => setInfo({ ...info, level: l })}
+                          style={{ flex: 1, border: 'none', borderRadius: '7px', padding: '8px 6px', fontSize: '12.5px', fontWeight: '700', background: info.level === l ? 'var(--surface)' : 'transparent', color: info.level === l ? 'var(--orange-700)' : 'var(--ink-mut)', boxShadow: info.level === l ? 'var(--sh-1)' : 'none', textTransform: 'capitalize' }}>
+                          {l}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label style={S.lbl}>Catégorie</label>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      {CATEGORIES.map(c => (
+                        <button key={c.label} type="button" className="etg-chip" onClick={() => setInfo({ ...info, category: c.label })}
+                          style={{ display: 'flex', alignItems: 'center', gap: '6px', border: `1.5px solid ${info.category === c.label ? 'var(--orange)' : 'var(--line)'}`, borderRadius: '20px', padding: '7px 14px', fontSize: '13px', fontWeight: '600', background: info.category === c.label ? 'var(--orange-50)' : 'var(--surface)', color: info.category === c.label ? 'var(--orange-700)' : 'var(--ink-mut)' }}>
+                          <span>{c.icon}</span>{c.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+                    <div>
+                      <label style={S.lbl}>Durée</label>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                        {['30min', '1h', '2h', '3h', '5h', '8h', '10h+'].map(d => (
+                          <button key={d} type="button" className="etg-chip" onClick={() => setInfo({ ...info, duration: d })}
+                            style={{ border: `1.5px solid ${info.duration === d ? 'var(--turq)' : 'var(--line)'}`, borderRadius: '8px', padding: '6px 10px', fontSize: '12px', fontWeight: '700', background: info.duration === d ? 'var(--turq-50)' : 'var(--surface)', color: info.duration === d ? 'var(--turq-700)' : 'var(--ink-mut)' }}>
+                            {d}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <label style={S.lbl}>Public cible</label>
+                      <input className="etg-input" style={S.inp} value={info.audience} onChange={e => setInfo({ ...info, audience: e.target.value })} placeholder="Ex : Commerciaux débutants" />
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '4px', paddingTop: '18px', borderTop: '1px solid var(--line)' }}>
+                    <button className="etg-btn-lift" style={S.ghost} onClick={() => { setModules([]); setStep(2) }}>Structurer manuellement →</button>
+                    <button className="etg-btn-lift" style={{ ...S.btn, opacity: !info.title || busy ? 0.5 : 1 }} onClick={() => { setStep(1); setTimeout(genAI, 200) }} disabled={!info.title || busy}>✨ Générer avec l'IA</button>
+                  </div>
+                </div>
+
+                {/* Aperçu live */}
+                <div style={{ position: 'sticky', top: '0' }}>
+                  <div style={{ fontSize: '11px', fontWeight: '800', color: 'var(--ink-soft)', letterSpacing: '.7px', marginBottom: '10px', textTransform: 'uppercase' }}>Aperçu</div>
+                  <div style={{ background: 'var(--surface)', borderRadius: 'var(--r-lg)', border: '1px solid var(--line)', boxShadow: 'var(--sh-2)', overflow: 'hidden' }}>
+                    <div style={{ height: '6px', background: 'var(--grad-signature)' }} />
+                    <div style={{ padding: '1.25rem' }}>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', fontWeight: '700', color: 'var(--orange-700)', background: 'var(--orange-50)', borderRadius: '20px', padding: '3px 10px', marginBottom: '10px' }}>
+                        {(CATEGORIES.find(c => c.label === info.category) || CATEGORIES[0]).icon} {info.category || 'Tech'}
+                      </div>
+                      <div style={{ fontFamily: 'var(--serif)', fontSize: '19px', fontWeight: '600', color: 'var(--ink)', lineHeight: 1.3, marginBottom: '8px', minHeight: '50px' }}>
+                        {info.title || <span style={{ color: 'var(--ink-soft)', fontStyle: 'italic' }}>Le titre de votre cours apparaîtra ici…</span>}
+                      </div>
+                      {info.description && <div style={{ fontSize: '12.5px', color: 'var(--ink-mut)', lineHeight: 1.5, marginBottom: '12px' }}>{info.description}</div>}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', paddingTop: '12px', borderTop: '1px dashed var(--line)' }}>
+                        <span style={{ fontSize: '11px', fontWeight: '700', color: 'var(--turq-700)', background: 'var(--turq-50)', borderRadius: '6px', padding: '3px 8px' }}>⏱ {info.duration}</span>
+                        <span style={{ fontSize: '11px', fontWeight: '700', color: 'var(--ink-mut)', background: 'var(--gold-50)', borderRadius: '6px', padding: '3px 8px', textTransform: 'capitalize' }}>🎓 {info.level}</span>
+                      </div>
+                      {info.audience && <div style={{ fontSize: '11px', color: 'var(--ink-soft)', marginTop: '10px' }}>👤 {info.audience}</div>}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
 
           {/* STEP 1 */}
           {step === 1 && (
-            <div style={{ maxWidth: '480px', margin: '4rem auto', textAlign: 'center' }}>
+            <div style={{ maxWidth: '480px', margin: '4rem auto', textAlign: 'center' }} className="etg-fade-up">
               <div style={{ ...S.card, padding: '3rem' }}>
-                {busy && <div style={{ fontSize: '48px', marginBottom: '1rem', display: 'inline-block', animation: 'spin 1.2s linear infinite' }}>⚙️</div>}
+                {busy && (
+                  <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
+                    <svg width="64" height="64" viewBox="0 0 64 64" className="etg-spin-ring">
+                      <circle cx="32" cy="32" r="26" fill="none" stroke="var(--gold-100)" strokeWidth="6" />
+                      <circle cx="32" cy="32" r="26" fill="none" stroke="url(#etgSpinGrad)" strokeWidth="6" strokeLinecap="round" strokeDasharray="90 90" />
+                      <defs>
+                        <linearGradient id="etgSpinGrad" x1="0" y1="0" x2="1" y2="1">
+                          <stop offset="0%" stopColor="var(--gold)" />
+                          <stop offset="100%" stopColor="var(--orange)" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
+                )}
                 {!busy && !aiError && <div style={{ fontSize: '48px', marginBottom: '1rem' }}>✅</div>}
                 {aiError && <div style={{ fontSize: '48px', marginBottom: '1rem' }}>❌</div>}
-                <div style={{ fontSize: '15px', fontWeight: '700', color: 'var(--canvas)', marginBottom: '8px' }}>{aiLog || aiError || 'Structure générée !'}</div>
+                <div style={{ fontFamily: busy ? 'var(--serif)' : 'inherit', fontSize: busy ? '17px' : '15px', fontWeight: busy ? '600' : '700', color: 'var(--ink)', marginBottom: '8px', minHeight: '24px' }}>
+                  {busy ? BUSY_PHRASES[busyPhraseIdx] : (aiError || 'Structure générée !')}
+                </div>
+                {busy && <div style={{ fontSize: '12px', color: 'var(--ink-soft)' }}>Quelques secondes suffisent…</div>}
                 {aiError && (
                   <div style={{ display: 'flex', gap: '10px', marginTop: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-                    {aiBlocked && <a href="/landing#tarifs" style={{ ...S.btn, textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>Voir les plans</a>}
-                    {aiBlocked && <a href="mailto:admin@etagia-academie.com?subject=Acc%C3%A8s%20g%C3%A9n%C3%A9rateur%20IA" style={{ ...S.btn, textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>Nous contacter</a>}
-                    <button style={{ ...S.btn, marginTop: 0 }} onClick={() => setStep(0)}>← Retour</button>
+                    {aiBlocked && <a href="/landing#tarifs" className="etg-btn-lift" style={{ ...S.btn, textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>Voir les plans</a>}
+                    {aiBlocked && <a href="mailto:admin@etagia-academie.com?subject=Acc%C3%A8s%20g%C3%A9n%C3%A9rateur%20IA" className="etg-btn-lift" style={{ ...S.btn, textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>Nous contacter</a>}
+                    <button className="etg-btn-lift" style={{ ...S.btn, marginTop: 0 }} onClick={() => setStep(0)}>← Retour</button>
                   </div>
                 )}
               </div>
@@ -377,55 +493,58 @@ export default function CreerCours() {
 
           {/* STEP 2 */}
           {step === 2 && (
-            <div style={{ maxWidth: '760px', margin: '0 auto' }}>
+            <div style={{ maxWidth: '760px', margin: '0 auto' }} className="etg-fade-up">
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
                 <div>
-                  <h2 style={{ fontSize: '20px', fontWeight: '900', color: 'var(--canvas)', margin: '0 0 3px' }}>{info.title || 'Nouveau cours'}</h2>
-                  <p style={{ color: '#A8A29E', fontSize: '12px', margin: 0 }}>{modules.length} modules · {modules.reduce((a, m) => a + m.blocks.length, 0)} blocs</p>
+                  <h2 style={{ fontFamily: 'var(--serif)', fontSize: '22px', fontWeight: '600', color: 'var(--ink)', margin: '0 0 3px' }}>{info.title || 'Nouveau cours'}</h2>
+                  <p style={{ color: 'var(--ink-soft)', fontSize: '12px', margin: 0 }}>{modules.length} modules · {modules.reduce((a, m) => a + m.blocks.length, 0)} blocs</p>
                 </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  <button style={S.ghost} onClick={addModule}>+ Module</button>
-                  <button style={S.btn} onClick={() => setStep(3)}>Publier →</button>
+                  <button className="etg-btn-lift" style={S.ghost} onClick={addModule}>+ Module</button>
+                  <button className="etg-btn-lift" style={S.btn} onClick={() => setStep(3)}>Publier →</button>
                 </div>
               </div>
 
-              {modules.map((mod, mi) => (
-                <div key={mod.id} style={{ ...S.card, marginBottom: '1.5rem', overflow: 'hidden' }}>
-                  <div style={{ padding: '1rem 1.25rem', background: 'linear-gradient(135deg,rgba(232,101,26,0.06),rgba(212,160,23,0.04))', borderBottom: '1px solid rgba(28,25,23,0.05)', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span style={{ fontSize: '11px', fontWeight: '900', color: '#E8651A', background: 'rgba(232,101,26,0.1)', padding: '2px 8px', borderRadius: '6px', flexShrink: 0 }}>M{mi + 1}</span>
-                    <input style={{ ...S.inp, flex: 1, background: 'transparent', border: 'none', padding: '3px 0', fontWeight: '700', fontSize: '15px', width: 'auto' }} value={mod.title} onChange={e => updModule(mod.id, { title: e.target.value })} />
-                    <button style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.15)', color: '#F87171', borderRadius: '8px', padding: '4px 10px', cursor: 'pointer', fontSize: '12px', flexShrink: 0 }} onClick={() => delModule(mod.id)}>×</button>
-                    <button style={{ background: open === mod.id ? 'rgba(232,101,26,0.1)' : 'rgba(28,25,23,0.04)', border: '1px solid rgba(28,25,23,0.09)', borderRadius: '8px', padding: '4px 10px', cursor: 'pointer', fontSize: '12px', color: '#78716C', flexShrink: 0 }} onClick={() => setOpen(p => p === mod.id ? null : mod.id)}>{open === mod.id ? '▲' : '▼'}</button>
+              {modules.map((mod, mi) => {
+                const accents = ['var(--orange)', 'var(--turq)', 'var(--gold)']
+                const accent = accents[mi % accents.length]
+                return (
+                <div key={mod.id} style={{ ...S.card, marginBottom: '1.5rem', overflow: 'hidden', borderLeft: `3px solid ${accent}` }}>
+                  <div style={{ padding: '1rem 1.25rem', background: 'var(--gold-50)', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: '900', color: '#fff', background: accent, padding: '3px 9px', borderRadius: '20px', flexShrink: 0 }}>M{mi + 1}</span>
+                    <input className="etg-input" style={{ ...S.inp, flex: 1, background: 'transparent', border: 'none', padding: '3px 0', fontWeight: '700', fontSize: '15px', width: 'auto' }} value={mod.title} onChange={e => updModule(mod.id, { title: e.target.value })} />
+                    <button className="etg-btn-lift" style={{ background: 'var(--orange-50)', border: '1px solid var(--orange-100)', color: 'var(--orange-700)', borderRadius: '8px', padding: '4px 10px', cursor: 'pointer', fontSize: '12px', flexShrink: 0 }} onClick={() => delModule(mod.id)}>×</button>
+                    <button className="etg-btn-lift" style={{ background: open === mod.id ? 'var(--orange-50)' : 'var(--surface)', border: '1px solid var(--line)', borderRadius: '8px', padding: '4px 10px', cursor: 'pointer', fontSize: '12px', color: 'var(--ink-mut)', flexShrink: 0 }} onClick={() => setOpen(p => p === mod.id ? null : mod.id)}>{open === mod.id ? '▲' : '▼'}</button>
                   </div>
 
                   {open === mod.id && (
-                    <div style={{ padding: '1.25rem' }}>
+                    <div style={{ padding: '1.25rem' }} className="etg-fade-up">
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '1.25rem' }}>
-                        <div><label style={S.lbl}>Objectif</label><input style={S.inp} value={mod.objectif} onChange={e => updModule(mod.id, { objectif: e.target.value })} placeholder="L'apprenant saura…" /></div>
-                        <div><label style={S.lbl}>Durée</label><input style={S.inp} value={mod.duration} onChange={e => updModule(mod.id, { duration: e.target.value })} placeholder="45min" /></div>
+                        <div><label style={S.lbl}>Objectif</label><input className="etg-input" style={S.inp} value={mod.objectif} onChange={e => updModule(mod.id, { objectif: e.target.value })} placeholder="L'apprenant saura…" /></div>
+                        <div><label style={S.lbl}>Durée</label><input className="etg-input" style={S.inp} value={mod.duration} onChange={e => updModule(mod.id, { duration: e.target.value })} placeholder="45min" /></div>
                       </div>
 
                       <div onDragOver={e => e.preventDefault()} onDrop={() => onDrop(mod.id)}>
-                        {mod.blocks.length === 0 && <div style={{ textAlign: 'center', color: '#D4CBC4', fontSize: '13px', padding: '1.5rem', border: '1px dashed rgba(28,25,23,0.1)', borderRadius: '8px' }}>Ajoutez votre premier bloc ↓</div>}
+                        {mod.blocks.length === 0 && <div style={{ textAlign: 'center', color: 'var(--ink-soft)', fontSize: '13px', padding: '1.5rem', border: '1px dashed var(--line)', borderRadius: 'var(--r-sm)' }}>Ajoutez votre premier bloc ↓</div>}
                         {mod.blocks.map(blk => {
                           const bt = blockTypes.find(b => b.t === blk.type)
                           return (
                             <div key={blk.id} draggable onDragStart={() => onDragStart(mod.id, blk.id)} onDragOver={e => onDragOver(e, mod.id, blk.id)}
-                              style={{ background: '#FAFAF8', border: '1px solid rgba(28,25,23,0.08)', borderRadius: '12px', marginBottom: '10px', overflow: 'hidden', cursor: 'grab', transition: 'box-shadow .15s' }}
-                              onMouseEnter={e => (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 16px rgba(232,101,26,0.1)'}
+                              style={{ background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: 'var(--r-md)', marginBottom: '10px', overflow: 'hidden', cursor: 'grab', transition: 'box-shadow .15s' }}
+                              onMouseEnter={e => (e.currentTarget as HTMLElement).style.boxShadow = 'var(--sh-2)'}
                               onMouseLeave={e => (e.currentTarget as HTMLElement).style.boxShadow = 'none'}>
                               {/* Block header */}
-                              <div style={{ padding: '8px 12px', display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(28,25,23,0.05)', background: 'rgba(255,255,255,0.6)' }}>
-                                <span style={{ color: '#C4B5A4', fontSize: '14px', userSelect: 'none' }} title="Glisser pour réordonner">⠿</span>
+                              <div style={{ padding: '8px 12px', display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid var(--line)', background: 'var(--gold-50)' }}>
+                                <span style={{ color: 'var(--ink-soft)', fontSize: '14px', userSelect: 'none' }} title="Glisser pour réordonner">⠿</span>
                                 <span style={{ fontSize: '14px' }}>{bt?.icon}</span>
-                                <input style={{ ...S.inp, background: 'transparent', border: 'none', padding: '2px 0', fontWeight: '600', fontSize: '13px', flex: 1, width: 'auto', minWidth: 0 }}
+                                <input className="etg-input" style={{ ...S.inp, background: 'transparent', border: 'none', padding: '2px 0', fontWeight: '600', fontSize: '13px', flex: 1, width: 'auto', minWidth: 0 }}
                                   value={blk.title} onChange={e => updBlock(mod.id, blk.id, { title: e.target.value })} />
                                 <span style={{ fontSize: '10px', color: bt?.color, background: `${bt?.color}15`, border: `1px solid ${bt?.color}30`, padding: '2px 7px', borderRadius: '4px', fontWeight: '700', flexShrink: 0 }}>{blk.type.toUpperCase()}</span>
-                                <button style={{ background: 'none', border: 'none', color: '#D4CBC4', cursor: 'pointer', fontSize: '18px', lineHeight: 1, flexShrink: 0 }} onClick={() => delBlock(mod.id, blk.id)}>×</button>
+                                <button style={{ background: 'none', border: 'none', color: 'var(--ink-soft)', cursor: 'pointer', fontSize: '18px', lineHeight: 1, flexShrink: 0 }} onClick={() => delBlock(mod.id, blk.id)}>×</button>
                               </div>
                               {/* Block content */}
                               <div style={{ padding: '12px' }}>
-                                {blk.type === 'text' && <textarea style={{ ...S.inp, minHeight: '72px', resize: 'vertical' }} placeholder="Rédigez le contenu…" value={blk.content} onChange={e => updBlock(mod.id, blk.id, { content: e.target.value })} />}
+                                {blk.type === 'text' && <textarea className="etg-input" style={{ ...S.inp, minHeight: '72px', resize: 'vertical' }} placeholder="Rédigez le contenu…" value={blk.content} onChange={e => updBlock(mod.id, blk.id, { content: e.target.value })} />}
                                 {blk.type === 'video' && <VideoEditor block={blk} onChange={b => setModules(p => p.map(m => m.id !== mod.id ? m : { ...m, blocks: m.blocks.map(bk => bk.id !== blk.id ? bk : b) }))} />}
                                 {blk.type === 'scorm' && (
                                   <div>
@@ -550,7 +669,8 @@ export default function CreerCours() {
                     </div>
                   )}
                 </div>
-              ))}
+                )
+              })}
 
               {modules.length === 0 && (
                 <div style={{ ...S.card, padding: '3rem', textAlign: 'center' }}>
@@ -567,24 +687,32 @@ export default function CreerCours() {
 
           {/* STEP 3 */}
           {step === 3 && (
-            <div style={{ maxWidth: '560px', margin: '0 auto' }}>
-              <div style={{ ...S.card, padding: '2.5rem', textAlign: 'center' }}>
-                <div style={{ fontSize: '48px', marginBottom: '1rem' }}>🚀</div>
-                <h2 style={{ fontSize: '22px', fontWeight: '800', marginBottom: '8px', color: 'var(--canvas)' }}>Prêt à publier !</h2>
-                <p style={{ color: '#A8A29E', marginBottom: '4px', fontSize: '15px', fontWeight: '600' }}>{info.title}</p>
-                <p style={{ color: '#57534E', fontSize: '13px', marginBottom: '2rem' }}>
-                  {modules.length} modules · {modules.reduce((a, m) => a + m.blocks.length, 0)} blocs · Niveau {info.level} · {info.duration}
-                </p>
-                {courseData?.evaluation_finale && (
-                  <div style={{ background: 'rgba(240,180,41,0.08)', border: '1px solid rgba(240,180,41,0.2)', borderRadius: '12px', padding: '12px', marginBottom: '1.5rem', textAlign: 'left' }}>
-                    <div style={{ fontSize: '12px', color: '#FFB300', fontWeight: '700', marginBottom: '4px' }}>📝 ÉVALUATION FINALE</div>
-                    <div style={{ fontSize: '13px', color: '#A8A29E' }}>{courseData.evaluation_finale.description}</div>
+            <div style={{ maxWidth: '580px', margin: '0 auto' }} className="etg-fade-up">
+              <div style={{ ...S.card, padding: 0, overflow: 'hidden' }}>
+                <div style={{ height: '8px', background: 'var(--grad-signature)' }} />
+                <div style={{ padding: '2.5rem', textAlign: 'center' }}>
+                  <div style={{ fontSize: '52px', marginBottom: '0.75rem' }}>🚀</div>
+                  <h2 style={{ fontFamily: 'var(--serif)', fontSize: '26px', fontWeight: '600', marginBottom: '6px', color: 'var(--ink)' }}>Prêt à publier !</h2>
+                  <p style={{ color: 'var(--ink-mut)', marginBottom: '1.5rem', fontSize: '15px', fontWeight: '600' }}>{info.title}</p>
+
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                    <span style={{ fontSize: '12px', fontWeight: '700', color: 'var(--orange-700)', background: 'var(--orange-50)', borderRadius: '20px', padding: '5px 12px' }}>📦 {modules.length} modules</span>
+                    <span style={{ fontSize: '12px', fontWeight: '700', color: 'var(--turq-700)', background: 'var(--turq-50)', borderRadius: '20px', padding: '5px 12px' }}>🧩 {modules.reduce((a, m) => a + m.blocks.length, 0)} blocs</span>
+                    <span style={{ fontSize: '12px', fontWeight: '700', color: 'var(--ink-mut)', background: 'var(--gold-50)', borderRadius: '20px', padding: '5px 12px', textTransform: 'capitalize' }}>🎓 {info.level}</span>
+                    <span style={{ fontSize: '12px', fontWeight: '700', color: 'var(--ink-mut)', background: 'var(--gold-50)', borderRadius: '20px', padding: '5px 12px' }}>⏱ {info.duration}</span>
                   </div>
-                )}
-                <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                  <button onClick={() => setStep(2)} style={S.ghost}>← Modifier</button>
-                  <button onClick={() => publishCourse(true)} style={{ ...S.btn, background: 'rgba(240,180,41,0.15)', color: '#FFB300', border: '1px solid rgba(240,180,41,0.3)' }}>💾 Sauvegarder brouillon</button>
-                  <button onClick={() => publishCourse(false)} style={S.btn}>✅ Publier le cours</button>
+
+                  {courseData?.evaluation_finale && (
+                    <div style={{ background: 'var(--gold-50)', border: '1px solid var(--gold-100)', borderRadius: 'var(--r-md)', padding: '14px', marginBottom: '1.5rem', textAlign: 'left' }}>
+                      <div style={{ fontSize: '12px', color: 'var(--gold-700)', fontWeight: '700', marginBottom: '4px' }}>📝 ÉVALUATION FINALE</div>
+                      <div style={{ fontSize: '13px', color: 'var(--ink-mut)' }}>{courseData.evaluation_finale.description}</div>
+                    </div>
+                  )}
+                  <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                    <button className="etg-btn-lift" onClick={() => setStep(2)} style={S.ghost}>← Modifier</button>
+                    <button className="etg-btn-lift" onClick={() => publishCourse(true)} style={{ ...S.btn, background: 'var(--gold-100)', color: 'var(--gold-900)', boxShadow: 'none' }}>💾 Sauvegarder brouillon</button>
+                    <button className="etg-btn-lift" onClick={() => publishCourse(false)} style={S.btn}>✅ Publier le cours</button>
+                  </div>
                 </div>
               </div>
             </div>
