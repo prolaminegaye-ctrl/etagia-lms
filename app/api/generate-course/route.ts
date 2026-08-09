@@ -23,7 +23,16 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 6000,
-        system: `Tu es un ingénieur pédagogique expert. Tu génères des structures de cours JSON concises et directement utilisables.
+        system: `Tu es un ingénieur pédagogique expert, formé à l'ingénierie ADDIE et à la taxonomie de Bloom, avec une spécialité en pédagogie active et ludification (gamification pédagogique légère). Tu conçois des cours pour des formateurs qui les publieront tels quels sur une plateforme e-learning — chaque module doit être directement exploitable en salle ou en classe virtuelle, sans reformulation.
+
+MÉTHODE (à appliquer silencieusement, sans jamais nommer "ADDIE" ou "Bloom" dans le JSON produit) :
+- Objectifs gradués : chaque objectif d'un module utilise un verbe d'action observable et mesurable (identifier, appliquer, analyser, produire, comparer...). Jamais "comprendre", "connaître" ou "savoir" — trop flous pour être évalués.
+- Ancrage réel : le contenu de chaque module s'appuie sur un exemple concret du domaine et du public déclarés, jamais une explication abstraite et générique.
+- Anticipation des erreurs : dans le champ "contenu" de chaque module, glisse naturellement UNE phrase signalant l'erreur ou la confusion la plus fréquente sur ce point précis chez ce public — pas une généralité, un piège réel et observable.
+- Activité variée et engageante : choisis le type d'activité le plus adapté au module parmi mise_en_situation, jeu_de_role, etude_de_cas, defi_chronometre, brainstorming_flash, simulation_decision — ne répète jamais le même type sur deux modules consécutifs. Chaque activité a une consigne actionnable immédiatement et, quand c'est pertinent, une contrainte de temps qui crée un peu de tension productive (ex: "5 minutes chrono, par équipes de 2").
+- Quiz avec distracteurs pédagogiques : les 3 mauvaises réponses du quiz ne sont pas aléatoires — elles reflètent des erreurs de raisonnement plausibles que ferait réellement quelqu'un qui maîtrise mal la notion. Formule la question comme un mini-défi (courte mise en situation suivie de la question), pas une question de cours sèche.
+- Cohérence évaluation finale : l'évaluation finale doit vérifier concrètement l'atteinte des objectifs_generaux annoncés en introduction, et prend la forme d'un défi ou d'un cas pratique motivant plutôt qu'un contrôle classique.
+
 RÈGLE ABSOLUE : réponds UNIQUEMENT avec du JSON brut valide. ZÉRO texte avant ou après. ZÉRO backtick. ZÉRO markdown. Commence directement par { et termine par }.`,
         messages: [{
           role: 'user',
@@ -31,39 +40,40 @@ RÈGLE ABSOLUE : réponds UNIQUEMENT avec du JSON brut valide. ZÉRO texte avant
 Titre: "${title}"
 Niveau: ${level} | Durée: ${duration} | Public: ${audience || 'professionnels'} | Catégorie: ${category}
 
-Format exact requis (3 modules max, textes courts) :
+Format exact requis (3 modules max, textes courts mais denses — chaque phrase doit apporter une information réelle, pas du remplissage) :
 {
-  "introduction": "phrase d'accroche",
-  "objectifs_generaux": ["objectif 1", "objectif 2", "objectif 3"],
-  "prerequis": ["prérequis 1", "prérequis 2"],
+  "introduction": "phrase d'accroche ancrée dans un enjeu concret du public visé",
+  "objectifs_generaux": ["objectif avec verbe d'action mesurable", "objectif 2", "objectif 3"],
+  "prerequis": ["prérequis réaliste et vérifiable 1", "prérequis 2"],
   "modules": [
     {
       "titre": "Titre du module",
-      "objectif": "L'apprenant sera capable de...",
+      "objectif": "L'apprenant sera capable de [verbe d'action mesurable]...",
       "duree": "45min",
-      "introduction": "Mise en contexte en 1 phrase.",
-      "contenu": "Explication du contenu en 3-4 phrases avec exemples.",
+      "introduction": "Mise en contexte ancrée dans un cas concret, en 1 phrase.",
+      "contenu": "Explication du contenu en 3-4 phrases avec un exemple concret, incluant une phrase signalant l'erreur ou la confusion la plus fréquente sur ce point.",
       "activite": {
-        "titre": "Titre activité",
-        "type": "mise_en_situation",
-        "description": "Description courte de l'activité.",
-        "consigne": "Consigne claire pour l'apprenant."
+        "titre": "Titre activité (accrocheur)",
+        "type": "mise_en_situation | jeu_de_role | etude_de_cas | defi_chronometre | brainstorming_flash | simulation_decision",
+        "description": "Mise en situation ancrée dans le métier/contexte réel du public.",
+        "consigne": "Consigne actionnable immédiatement, sans ambiguïté.",
+        "contrainte_temps": "ex: 5 minutes chrono, par équipes de 2 (laisser vide si non pertinent)"
       },
       "quiz": {
-        "question": "Question de vérification ?",
+        "question": "Mini mise en situation suivie d'une question ciblant le point de confusion le plus probable ?",
         "options": ["Option A", "Option B", "Option C", "Option D"],
         "reponse": "Option A",
-        "explication": "Explication de la bonne réponse."
+        "explication": "Explication de la bonne réponse ET de pourquoi les distracteurs sont des erreurs de raisonnement plausibles."
       },
       "ressources": ["Ressource recommandée 1"]
     }
   ],
   "evaluation_finale": {
-    "titre": "Évaluation finale",
+    "titre": "Évaluation finale (formulée comme un défi ou un cas pratique)",
     "type": "cas_pratique",
-    "description": "Description de l'évaluation."
+    "description": "Description d'une évaluation qui vérifie concrètement les objectifs_generaux annoncés — pas une évaluation générique."
   },
-  "conclusion": "Synthèse et prochaines étapes."
+  "conclusion": "Synthèse actionnable et prochaines étapes concrètes pour l'apprenant."
 }`
         }]
       })
