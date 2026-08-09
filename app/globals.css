@@ -101,7 +101,26 @@
   --line-hair:      rgba(42,33,24,.05);
 }
 
-/* ── Reset & base ── */
+/* ── Créer un cours — interactions ── */
+@keyframes etgFadeUp { from { opacity:0; transform: translateY(8px);} to {opacity:1; transform:translateY(0);} }
+@keyframes etgSpin { to { transform: rotate(360deg); } }
+@keyframes etgDash { to { stroke-dashoffset: 0; } }
+
+.etg-fade-up { animation: etgFadeUp .5s cubic-bezier(.16,1,.3,1) both; }
+
+.etg-input { transition: border-color .15s ease, box-shadow .15s ease; }
+.etg-input:focus { outline: none; border-color: var(--orange) !important; box-shadow: 0 0 0 3px var(--orange-50); }
+
+.etg-chip { transition: transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease, color .15s ease; cursor: pointer; }
+.etg-chip:hover { transform: translateY(-1px); }
+.etg-chip:active { transform: translateY(0) scale(.98); }
+
+.etg-btn-lift { transition: transform .15s ease, box-shadow .15s ease, filter .15s ease; }
+.etg-btn-lift:hover:not(:disabled) { transform: translateY(-2px); box-shadow: var(--sh-2); }
+.etg-btn-lift:active:not(:disabled) { transform: translateY(0); }
+
+.etg-spin-ring { animation: etgSpin 1s linear infinite; transform-origin: center; }
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { font-size: 16px; -webkit-font-smoothing: antialiased; }
