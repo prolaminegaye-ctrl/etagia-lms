@@ -2,28 +2,16 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { supprimerFichier } from '@/lib/import/bibliothequeFichiers'
+import { normaliserCours, lireListeCours, type CarteCours } from '@/lib/cours/normaliser'
 
-type SavedCourse = {
-  id: string
-  title: string
-  description: string
-  level: string
-  category: string
-  duration: string
-  modules: number
-  blocks: number
-  savedAt: string
-  published: boolean
-  hasYoutube: boolean
-  hasScorm: boolean
-  data: any
-  /** Renseigné pour un contenu importé (SCORM, H5P, PDF, vidéo). */
-  source?: 'import'
-  /** Clé du fichier conservé dans la bibliothèque IndexedDB. */
-  fichierId?: string
-  fichierNom?: string
-  fichierType?: string
-}
+/**
+ * Une entrée telle qu'elle est réellement enregistrée.
+ *
+ * Volontairement non typée : trois écrans écrivent dans `etagia_courses` et
+ * n'écrivent pas la même forme. Prétendre le contraire est exactement ce qui
+ * a fait tomber cette page. Tout ce qui s'affiche passe par `normaliserCours`.
+ */
+type CoursEnregistre = Record<string, unknown> & { id?: unknown }
 
 const S = {
   card: { background: 'var(--surface)', border: '1px solid rgba(28,25,23,0.08)', borderRadius: '16px' } as React.CSSProperties,
@@ -40,7 +28,11 @@ const CAT_ICONS: Record<string, string> = {
 }
 
 function timeAgo(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime()
+  // Les cours achetés n'enregistrent pas toujours de date : mieux vaut ne rien
+  // afficher qu'un « il y a NaNmin ».
+  const instant = iso ? new Date(iso).getTime() : NaN
+  if (Number.isNaN(instant)) return 'récemment'
+  const diff = Date.now() - instant
   const m = Math.floor(diff / 60000)
   if (m < 1) return 'à l\'instant'
   if (m < 60) return `il y a ${m}min`
@@ -49,57 +41,33 @@ function timeAgo(iso: string): string {
   return `il y a ${Math.floor(h / 24)}j`
 }
 
-/**
- * Version allégée d'un cours, pour l'affichage de la liste.
- *
- * Un cours acheté sur la Marketplace embarque son PDF entier encodé en
- * base64 (`fileDataUrl`) : plusieurs mégaoctets par cours. Charger tout
- * cela dans l'état React, puis le redessiner à chaque frappe dans le
- * champ de recherche, saturait la mémoire de l'onglet jusqu'au plantage.
- *
- * Les cartes n'affichent aucun de ces contenus lourds : on n'en garde que
- * les métadonnées. Les cours complets restent intacts dans une référence,
- * pour que suppression et duplication continuent d'écrire des objets
- * entiers — aucune donnée n'est perdue.
- */
-type CourseCard = Omit<SavedCourse, 'data'>
-
-function versionLegere(c: SavedCourse): CourseCard {
-  const allege = { ...(c as SavedCourse & { fileDataUrl?: string }) }
-  delete (allege as { data?: unknown }).data
-  // `fileDataUrl` n'est pas déclaré dans le type mais bien présent sur les
-  // cours issus de la Marketplace : c'est lui qui pèse le plus lourd.
-  delete allege.fileDataUrl
-  return allege
-}
-
 export default function MesCours() {
   const router = useRouter()
-  const [courses, setCourses] = useState<CourseCard[]>([])
+  const [courses, setCourses] = useState<CarteCours[]>([])
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('all')
   const [delId, setDelId] = useState<string | null>(null)
-  /** Cours complets, hors état React : jamais redessinés, jamais perdus. */
-  const complets = useRef<SavedCourse[]>([])
+  /**
+   * Cours complets, hors état React.
+   *
+   * Un cours acheté embarque son document entier ; un cours créé embarque
+   * tout son contenu. Les garder dans l'état React, puis les redessiner à
+   * chaque frappe dans le champ de recherche, était inutilement coûteux.
+   * Ils restent ici intacts, pour que suppression et duplication écrivent
+   * toujours des objets entiers — aucune donnée n'est perdue.
+   */
+  const complets = useRef<CoursEnregistre[]>([])
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem('etagia_courses')
-      if (!raw) return
-      const parse = JSON.parse(raw)
-      // Une valeur qui n'est pas un tableau ferait échouer le rendu.
-      if (!Array.isArray(parse)) return
-      complets.current = parse
-      setCourses(parse.map(versionLegere))
-    } catch {
-      // Donnée illisible : liste vide plutôt qu'un écran blanc.
-    }
+    const liste = lireListeCours(localStorage.getItem('etagia_courses'))
+    complets.current = liste as CoursEnregistre[]
+    setCourses(liste.map(normaliserCours))
   }, [])
 
   /** Écrit la liste complète et rafraîchit l'affichage allégé. */
-  const save = (liste: SavedCourse[]) => {
+  const save = (liste: CoursEnregistre[]) => {
     complets.current = liste
-    setCourses(liste.map(versionLegere))
+    setCourses(liste.map(normaliserCours))
     try {
       localStorage.setItem('etagia_courses', JSON.stringify(liste))
     } catch {
@@ -111,20 +79,20 @@ export default function MesCours() {
     // Un contenu importé possède un fichier dans la bibliothèque : le laisser
     // derrière occuperait l'espace du navigateur sans qu'on puisse plus y accéder.
     const supprime = complets.current.find(c => c.id === id)
-    if (supprime?.fichierId) void supprimerFichier(supprime.fichierId)
+    if (typeof supprime?.fichierId === 'string') void supprimerFichier(supprime.fichierId)
 
     save(complets.current.filter(c => c.id !== id))
     setDelId(null)
   }
 
-  const duplicate = (carte: CourseCard) => {
+  const duplicate = (carte: CarteCours) => {
     // On repart du cours complet, pour ne pas perdre son contenu à la copie.
     const source = complets.current.find(c => c.id === carte.id)
     if (!source) return
-    const copy: SavedCourse = {
+    const copy: CoursEnregistre = {
       ...source,
       id: Math.random().toString(36).slice(2),
-      title: source.title + ' (copie)',
+      title: carte.title + ' (copie)',
       savedAt: new Date().toISOString(),
       published: false,
     }
@@ -133,11 +101,8 @@ export default function MesCours() {
 
   const filtered = courses.filter(c => {
     const q = search.toLowerCase()
-    // Un cours importé peut n'avoir ni titre ni catégorie : rechercher
-    // dessus faisait planter la page entière.
-    const titre = (c.title ?? '').toLowerCase()
-    const categorie = (c.category ?? '').toLowerCase()
-    const matchSearch = !q || titre.includes(q) || categorie.includes(q)
+    // `normaliserCours` garantit des chaînes : la recherche ne peut plus échouer.
+    const matchSearch = !q || c.title.toLowerCase().includes(q) || c.category.toLowerCase().includes(q)
     const matchFilter = filter === 'all' || (filter === 'published' && c.published) || (filter === 'draft' && !c.published)
     return matchSearch && matchFilter
   })
@@ -152,7 +117,18 @@ export default function MesCours() {
             {courses.length} cours enregistré{courses.length !== 1 ? 's' : ''} · {courses.filter(c => c.published).length} publié{courses.filter(c => c.published).length !== 1 ? 's' : ''}
           </p>
         </div>
-        <button style={S.btn} onClick={() => router.push('/formateur/creer')}>+ Créer un cours</button>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          {/*
+            Ces cours vivent dans le navigateur, pas sur le serveur. Quand
+            l'affichage se dégrade, personne d'autre que l'utilisateur ne peut
+            voir ce que contient son stockage : cet accès lui donne les moyens
+            de l'inspecter et de le réparer lui-même.
+          */}
+          <button style={S.ghost} onClick={() => router.push('/formateur/diagnostic')} title="Inspecter et réparer les données de ce navigateur">
+            🩺 Diagnostic
+          </button>
+          <button style={S.btn} onClick={() => router.push('/formateur/creer')}>+ Créer un cours</button>
+        </div>
       </div>
 
       {/* Search + filter */}

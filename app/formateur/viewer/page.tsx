@@ -82,6 +82,7 @@ export default function ViewerPage(){
   const [pdfPage,setPdfPage]=useState(1)
   const inputRef=useRef<HTMLInputElement>(null)
   const iframeRef=useRef<HTMLIFrameElement>(null)
+  const containerRef=useRef<HTMLDivElement>(null)
   const blobUrls=useRef<string[]>([])
 
   useEffect(()=>{
@@ -303,6 +304,26 @@ export default function ViewerPage(){
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
+  // Le vrai plein écran (Fullscreen API) masque aussi les barres du
+  // navigateur ; on le tente en priorité et on retombe sur le mode
+  // « maximisé dans la page » (position fixed) si l'API est indisponible
+  // (contexte embarqué, permission refusée, etc.).
+  useEffect(()=>{
+    const sync=()=>setFullscreen(!!document.fullscreenElement)
+    document.addEventListener('fullscreenchange',sync)
+    return()=>document.removeEventListener('fullscreenchange',sync)
+  },[])
+
+  const toggleFullscreen=async()=>{
+    if(!document.fullscreenElement){
+      try{await containerRef.current?.requestFullscreen()}catch{}
+      setFullscreen(true)
+    }else{
+      try{await document.exitFullscreen()}catch{}
+      setFullscreen(false)
+    }
+  }
+
   const ytSrc=youtubeId
     ?`https://www.youtube-nocookie.com/embed/${youtubeId}${playlistId?`?list=${playlistId}&`:'?'}autoplay=0&rel=0&modestbranding=1&cc_load_policy=1`
     :playlistId?`https://www.youtube-nocookie.com/embed/videoseries?list=${playlistId}&rel=0&modestbranding=1`:null
@@ -316,7 +337,7 @@ export default function ViewerPage(){
   const hasContent=launchUrl||srcdocContent||ytSrc
 
   return(
-    <div style={{height:fullscreen?'100vh':'calc(100vh - 3rem)',display:'flex',flexDirection:'column',position:fullscreen?'fixed':'relative',inset:fullscreen?'0':'auto',zIndex:fullscreen?9999:'auto',background:'#FAF9F7',padding:fullscreen?'0.75rem':'0',gap:'0.75rem'}}>
+    <div ref={containerRef} style={{height:fullscreen?'100vh':'calc(100vh - 3rem)',display:'flex',flexDirection:'column',position:fullscreen?'fixed':'relative',inset:fullscreen?'0':'auto',zIndex:fullscreen?9999:'auto',background:fullscreen?'#000':'#FAF9F7',padding:fullscreen?'0.75rem':'0',gap:'0.75rem'}}>
 
       {/* ── Header ── */}
       <div style={{padding:'0.75rem 1.25rem',...S.card,display:'flex',alignItems:'center',gap:'10px',flexWrap:'wrap',flexShrink:0}}>
@@ -354,7 +375,7 @@ export default function ViewerPage(){
           ):(
             <button onClick={()=>setShowYtInput(true)} style={{background:'rgba(255,0,0,0.07)',border:'1px solid rgba(255,0,0,0.18)',borderRadius:'8px',padding:'6px 13px',color:'#c00',fontSize:'12px',fontWeight:'700',cursor:'pointer'}}>▶ YouTube</button>
           )}
-          {hasContent&&<button onClick={()=>setFullscreen(f=>!f)} style={{background:'rgba(28,25,23,0.05)',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'8px',padding:'6px 11px',color:'#E8651A',fontSize:'12px',fontWeight:'600',cursor:'pointer'}}>{fullscreen?'⤡':'⤢'}</button>}
+          {hasContent&&<button onClick={toggleFullscreen} title={fullscreen?'Quitter le plein écran':'Plein écran'} aria-label={fullscreen?'Quitter le plein écran':'Plein écran'} style={{background:'rgba(28,25,23,0.05)',border:'1px solid rgba(28,25,23,0.09)',borderRadius:'8px',padding:'6px 11px',color:'#E8651A',fontSize:'12px',fontWeight:'600',cursor:'pointer'}}>{fullscreen?'⤡ Quitter':'⤢ Plein écran'}</button>}
           {hasContent&&<button onClick={reset} style={{background:'rgba(239,68,68,0.06)',border:'1px solid rgba(239,68,68,0.15)',borderRadius:'8px',padding:'6px 11px',color:'#F87171',fontSize:'12px',fontWeight:'600',cursor:'pointer'}}>✕ Fermer</button>}
           <button onClick={()=>inputRef.current?.click()} style={S.btn}>{hasContent?'📁 Autre fichier':'📁 Ouvrir'}</button>
         </div>

@@ -422,6 +422,25 @@ function PlayerInner() {
   const [finished, setFinished] = useState(false)
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const topRef = useRef<HTMLDivElement>(null)
+  const pageRef = useRef<HTMLDivElement>(null)
+  const [fullscreen, setFullscreen] = useState(false)
+
+  // Plein écran natif (Fullscreen API) : masque les barres du navigateur
+  // pour une expérience immersive au lancement d'une formation.
+  useEffect(() => {
+    const sync = () => setFullscreen(!!document.fullscreenElement)
+    document.addEventListener('fullscreenchange', sync)
+    return () => document.removeEventListener('fullscreenchange', sync)
+  }, [])
+
+  const toggleFullscreen = async () => {
+    if (!document.fullscreenElement) {
+      try { await pageRef.current?.requestFullscreen() } catch {}
+    } else {
+      try { await document.exitFullscreen() } catch {}
+    }
+  }
+
 
   useEffect(() => {
     try {
@@ -474,13 +493,20 @@ function PlayerInner() {
     </div>
   )
 
-  const modules: Module[] = course.data?.modules || []
+  // Un cours créé ici range ses modules sous `data`. Un cours acheté sur la
+  // Marketplace les range à la racine : sans ce repli, il s'ouvrait vide.
+  const racine = (course as unknown as { modules?: unknown }).modules
+  const modules: Module[] = Array.isArray(course.data?.modules)
+    ? course.data.modules
+    : Array.isArray(racine)
+      ? (racine as Module[])
+      : []
   const curMod  = modules[modIdx]
   const blocks  = curMod?.blocks || []
   const curBlk  = blocks[blkIdx]
 
   // Progress
-  const totalBlocks = modules.reduce((a, m) => a + m.blocks.length, 0)
+  const totalBlocks = modules.reduce((a, m) => a + (m.blocks?.length ?? 0), 0)
   const doneCount   = completed.size
   const progress    = totalBlocks > 0 ? Math.round((doneCount / totalBlocks) * 100) : 0
 
@@ -515,7 +541,7 @@ function PlayerInner() {
   const isLast  = modIdx === modules.length - 1 && blkIdx === blocks.length - 1
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F5F4F2', display: 'flex', flexDirection: 'column' }}>
+    <div ref={pageRef} style={{ minHeight: '100vh', background: fullscreen ? '#000' : '#F5F4F2', display: 'flex', flexDirection: 'column' }}>
 
       {/* ── Top bar ── */}
       <div style={{ background: 'var(--surface)', borderBottom: '1px solid rgba(28,25,23,0.08)', padding: '0 1.5rem', height: '56px', display: 'flex', alignItems: 'center', gap: '12px', position: 'sticky', top: 0, zIndex: 100 }}>
@@ -538,6 +564,7 @@ function PlayerInner() {
           <span style={{ fontSize: '12px', fontWeight: '700', color: '#E8651A', minWidth: '32px' }}>{progress}%</span>
         </div>
         <button onClick={() => setSidebarOpen(s => !s)} style={{ background: sidebarOpen ? 'rgba(232,101,26,0.1)' : 'rgba(28,25,23,0.05)', border: 'none', borderRadius: '8px', padding: '6px 10px', cursor: 'pointer', fontSize: '13px', color: '#E8651A' }}>☰</button>
+        <button onClick={toggleFullscreen} title={fullscreen ? 'Quitter le plein écran' : 'Plein écran'} aria-label={fullscreen ? 'Quitter le plein écran' : 'Plein écran'} style={{ background: fullscreen ? 'rgba(232,101,26,0.1)' : 'rgba(28,25,23,0.05)', border: 'none', borderRadius: '8px', padding: '6px 10px', cursor: 'pointer', fontSize: '13px', color: '#E8651A' }}>{fullscreen ? '⤡' : '⤢'}</button>
       </div>
 
       {/* Badge toast */}
