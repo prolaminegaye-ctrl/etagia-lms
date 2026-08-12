@@ -1,8 +1,9 @@
 'use client'
 import PageHero from '@/components/PageHero'
+import PassBacDefi2026 from '@/components/PassBacDefi2026'
 import { useState } from 'react'
 
-type Tab = 'cours' | 'fiches' | 'flashcards' | 'quiz' | 'examens' | 'conseils'
+type Tab = 'cours' | 'bac2026' | 'fiches' | 'flashcards' | 'quiz' | 'examens' | 'conseils'
 type Subject = 'maths' | 'physique' | 'svt' | 'francais' | 'philosophie' | 'histoire' | 'geographie' | 'anglais'
 
 interface Chapter { id: string; title: string; summary: string; keyPoints: string[]; fiche?: string }
@@ -428,6 +429,7 @@ export default function PassBacPage() {
         <div style={{ display: 'flex', gap: '0.25rem', overflowX: 'auto', paddingBottom: 0 }}>
           {([
             ['cours', '📖 Cours & Résumés'],
+            ['bac2026', '🏆 Bac 2026 · Sujets & Corrigés'],
             ['fiches', '📌 Fiches Mémo'],
             ['flashcards', '🃏 Flashcards'],
             ['quiz', '✅ Quiz'],
@@ -440,7 +442,7 @@ export default function PassBacPage() {
       </div>
 
       <div style={{ padding: '2rem 2.5rem' }}>
-        {activeTab !== 'conseils' && activeTab !== 'examens' && (
+        {activeTab !== 'conseils' && activeTab !== 'examens' && activeTab !== 'bac2026' && (
           <div style={{ display: 'flex', gap: '0.55rem', flexWrap: 'wrap', marginBottom: '1.75rem' }}>
             {(Object.keys(curriculum) as Subject[]).map(key => {
               const sub = curriculum[key]
@@ -452,6 +454,8 @@ export default function PassBacPage() {
             })}
           </div>
         )}
+
+        {activeTab === 'bac2026' && <PassBacDefi2026 />}
 
         {/* COURS */}
         {activeTab === 'cours' && (
