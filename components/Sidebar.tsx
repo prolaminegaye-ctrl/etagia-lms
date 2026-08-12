@@ -25,6 +25,7 @@ const navFormateur = [
   { href: '/formateur',                icon: '⊞',  label: 'Dashboard' },
   { href: '/formateur/creer',          icon: '✦',  label: 'Créer un cours',     badge: 'IA',   badgeColor: '#0FB6CC' },
   { href: '/formateur/import',         icon: '↑',  label: 'Importer SCORM/H5P' },
+  { href: '/formateur/outils-ia',      icon: '🧰', label: 'Outils IA enseignant', badge: 'IA',   badgeColor: '#0FB6CC' },
   { href: '/formateur/mes-cours',      icon: '◈',  label: 'Mes cours' },
   { href: '/formateur/viewer',         icon: '👁',  label: 'Visualiseur' },
   { href: '/formateur/calendrier',     icon: '📅', label: 'Calendrier' },
